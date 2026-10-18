@@ -1009,4 +1009,398 @@ impl MemoryEngine {
             imports_synced,
         })
     }
+
+    // ==========================================
+    // Failures Memory
+    // ==========================================
+
+    pub fn insert_failure(&self, record: &FailureRecord) -> Result<i64> {
+        let conn = self.db.connection();
+        let status = record.status.as_deref().unwrap_or("unresolved");
+        conn.execute(
+            "INSERT INTO failures (error_type, message, file_id, symbol_id, fix_summary, status, resolved_at, created_at)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+            params![
+                record.error_type,
+                record.message,
+                record.file_id,
+                record.symbol_id,
+                record.fix_summary,
+                status,
+                record.resolved_at,
+                record.created_at,
+            ],
+        )
+        .map_err(|e| KaiokenError::MemoryError(format!("Failed to insert failure record: {}", e)))?;
+
+        Ok(conn.last_insert_rowid())
+    }
+
+    pub fn get_failures_for_file(&self, file_id: i64) -> Result<Vec<FailureRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, error_type, message, file_id, symbol_id, fix_summary, status, resolved_at, created_at
+                 FROM failures WHERE file_id = ?1 ORDER BY id DESC",
+            )
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to prepare failures query: {}", e)))?;
+
+        let rows = stmt
+            .query_map(params![file_id], |row| {
+                Ok(FailureRecord {
+                    id: Some(row.get(0)?),
+                    error_type: row.get(1)?,
+                    message: row.get(2)?,
+                    file_id: row.get(3)?,
+                    symbol_id: row.get(4)?,
+                    fix_summary: row.get(5)?,
+                    status: row.get(6)?,
+                    resolved_at: row.get(7)?,
+                    created_at: row.get(8)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query failures: {}", e)))?;
+
+        let mut results = Vec::new();
+        for r in rows {
+            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read failure record: {}", e)))?);
+        }
+        Ok(results)
+    }
+
+    pub fn get_failures_for_symbol(&self, symbol_id: i64) -> Result<Vec<FailureRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, error_type, message, file_id, symbol_id, fix_summary, status, resolved_at, created_at
+                 FROM failures WHERE symbol_id = ?1 ORDER BY id DESC",
+            )
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to prepare failures query: {}", e)))?;
+
+        let rows = stmt
+            .query_map(params![symbol_id], |row| {
+                Ok(FailureRecord {
+                    id: Some(row.get(0)?),
+                    error_type: row.get(1)?,
+                    message: row.get(2)?,
+                    file_id: row.get(3)?,
+                    symbol_id: row.get(4)?,
+                    fix_summary: row.get(5)?,
+                    status: row.get(6)?,
+                    resolved_at: row.get(7)?,
+                    created_at: row.get(8)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query failures: {}", e)))?;
+
+        let mut results = Vec::new();
+        for r in rows {
+            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read failure record: {}", e)))?);
+        }
+        Ok(results)
+    }
+
+    pub fn get_recent_failures(&self, limit: usize) -> Result<Vec<FailureRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, error_type, message, file_id, symbol_id, fix_summary, status, resolved_at, created_at
+                 FROM failures ORDER BY id DESC LIMIT ?1",
+            )
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to prepare recent failures query: {}", e)))?;
+
+        let rows = stmt
+            .query_map(params![limit as i64], |row| {
+                Ok(FailureRecord {
+                    id: Some(row.get(0)?),
+                    error_type: row.get(1)?,
+                    message: row.get(2)?,
+                    file_id: row.get(3)?,
+                    symbol_id: row.get(4)?,
+                    fix_summary: row.get(5)?,
+                    status: row.get(6)?,
+                    resolved_at: row.get(7)?,
+                    created_at: row.get(8)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query recent failures: {}", e)))?;
+
+        let mut results = Vec::new();
+        for r in rows {
+            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read failure record: {}", e)))?);
+        }
+        Ok(results)
+    }
+
+    pub fn count_failures(&self) -> Result<usize> {
+        let conn = self.db.connection();
+        let count: i64 = conn
+            .query_row("SELECT COUNT(*) FROM failures", [], |row| row.get(0))
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to count failures: {}", e)))?;
+        Ok(count as usize)
+    }
+
+    // ==========================================
+    // Architectural Decisions (ADRs)
+    // ==========================================
+
+    pub fn insert_decision(&self, record: &DecisionRecord) -> Result<i64> {
+        let conn = self.db.connection();
+        conn.execute(
+            "INSERT INTO decisions (title, description, status, created_at)
+             VALUES (?1, ?2, ?3, ?4)",
+            params![
+                record.title,
+                record.description,
+                record.status,
+                record.created_at,
+            ],
+        )
+        .map_err(|e| KaiokenError::MemoryError(format!("Failed to insert decision record: {}", e)))?;
+
+        Ok(conn.last_insert_rowid())
+    }
+
+    pub fn list_decisions(&self, status: Option<&str>) -> Result<Vec<DecisionRecord>> {
+        let conn = self.db.connection();
+        let mut results = Vec::new();
+
+        if let Some(s) = status {
+            let mut stmt = conn
+                .prepare("SELECT id, title, description, status, created_at FROM decisions WHERE status = ?1 ORDER BY id DESC")
+                .map_err(|e| KaiokenError::MemoryError(format!("Failed to prepare decisions query: {}", e)))?;
+            let rows = stmt
+                .query_map(params![s], |row| {
+                    Ok(DecisionRecord {
+                        id: Some(row.get(0)?),
+                        title: row.get(1)?,
+                        description: row.get(2)?,
+                        status: row.get(3)?,
+                        created_at: row.get(4)?,
+                    })
+                })
+                .map_err(|e| KaiokenError::MemoryError(format!("Failed to query decisions: {}", e)))?;
+            for r in rows {
+                results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read decision: {}", e)))?);
+            }
+        } else {
+            let mut stmt = conn
+                .prepare("SELECT id, title, description, status, created_at FROM decisions ORDER BY id DESC")
+                .map_err(|e| KaiokenError::MemoryError(format!("Failed to prepare decisions query: {}", e)))?;
+            let rows = stmt
+                .query_map([], |row| {
+                    Ok(DecisionRecord {
+                        id: Some(row.get(0)?),
+                        title: row.get(1)?,
+                        description: row.get(2)?,
+                        status: row.get(3)?,
+                        created_at: row.get(4)?,
+                    })
+                })
+                .map_err(|e| KaiokenError::MemoryError(format!("Failed to query decisions: {}", e)))?;
+            for r in rows {
+                results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read decision: {}", e)))?);
+            }
+        }
+
+        Ok(results)
+    }
+
+    pub fn count_decisions(&self) -> Result<usize> {
+        let conn = self.db.connection();
+        let count: i64 = conn
+            .query_row("SELECT COUNT(*) FROM decisions", [], |row| row.get(0))
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to count decisions: {}", e)))?;
+        Ok(count as usize)
+    }
+
+    // ==========================================
+    // Agent Runs & Tool Calls
+    // ==========================================
+
+    pub fn start_agent_run(&self, task: &str, model: &str) -> Result<i64> {
+        let conn = self.db.connection();
+        let now = chrono::Utc::now().to_rfc3339();
+        conn.execute(
+            "INSERT INTO agent_runs (task, status, model, started_at, total_tokens, estimated_cost)
+             VALUES (?1, 'running', ?2, ?3, 0, 0.0)",
+            params![task, model, now],
+        )
+        .map_err(|e| KaiokenError::MemoryError(format!("Failed to start agent run: {}", e)))?;
+
+        Ok(conn.last_insert_rowid())
+    }
+
+    pub fn finish_agent_run(
+        &self,
+        run_id: i64,
+        status: &str,
+        total_tokens: usize,
+        estimated_cost: f64,
+        error: Option<&str>,
+    ) -> Result<()> {
+        let conn = self.db.connection();
+        let now = chrono::Utc::now().to_rfc3339();
+        conn.execute(
+            "UPDATE agent_runs
+             SET status = ?1, finished_at = ?2, total_tokens = ?3, estimated_cost = ?4, error = ?5
+             WHERE id = ?6",
+            params![
+                status,
+                now,
+                total_tokens as i64,
+                estimated_cost,
+                error,
+                run_id,
+            ],
+        )
+        .map_err(|e| KaiokenError::MemoryError(format!("Failed to finish agent run: {}", e)))?;
+
+        Ok(())
+    }
+
+    pub fn get_agent_run(&self, run_id: i64) -> Result<Option<AgentRunRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, task, status, model, started_at, finished_at, total_tokens, estimated_cost, context_packet_id, error
+                 FROM agent_runs WHERE id = ?1",
+            )
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to prepare agent_runs query: {}", e)))?;
+
+        let res = stmt
+            .query_row(params![run_id], |row| {
+                let total_tokens_i64: i64 = row.get(6)?;
+                Ok(AgentRunRecord {
+                    id: Some(row.get(0)?),
+                    task: row.get(1)?,
+                    status: row.get(2)?,
+                    model: row.get(3)?,
+                    started_at: row.get(4)?,
+                    finished_at: row.get(5)?,
+                    total_tokens: total_tokens_i64 as usize,
+                    estimated_cost: row.get(7)?,
+                    context_packet_id: row.get(8)?,
+                    error: row.get(9)?,
+                })
+            })
+            .optional()
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query agent run: {}", e)))?;
+
+        Ok(res)
+    }
+
+    pub fn list_agent_runs(&self, limit: usize) -> Result<Vec<AgentRunRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, task, status, model, started_at, finished_at, total_tokens, estimated_cost, context_packet_id, error
+                 FROM agent_runs ORDER BY id DESC LIMIT ?1",
+            )
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to prepare agent_runs list query: {}", e)))?;
+
+        let rows = stmt
+            .query_map(params![limit as i64], |row| {
+                let total_tokens_i64: i64 = row.get(6)?;
+                Ok(AgentRunRecord {
+                    id: Some(row.get(0)?),
+                    task: row.get(1)?,
+                    status: row.get(2)?,
+                    model: row.get(3)?,
+                    started_at: row.get(4)?,
+                    finished_at: row.get(5)?,
+                    total_tokens: total_tokens_i64 as usize,
+                    estimated_cost: row.get(7)?,
+                    context_packet_id: row.get(8)?,
+                    error: row.get(9)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query agent runs list: {}", e)))?;
+
+        let mut results = Vec::new();
+        for r in rows {
+            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read agent run: {}", e)))?);
+        }
+        Ok(results)
+    }
+
+    pub fn record_tool_call(&self, record: &ToolCallRecord) -> Result<i64> {
+        let conn = self.db.connection();
+        conn.execute(
+            "INSERT INTO tool_calls (agent_run_id, tool_name, input_json, output_summary, status, duration_ms, error, created_at)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+            params![
+                record.agent_run_id,
+                record.tool_name,
+                record.input_json,
+                record.output_summary,
+                record.status,
+                record.duration_ms,
+                record.error,
+                record.created_at,
+            ],
+        )
+        .map_err(|e| KaiokenError::MemoryError(format!("Failed to insert tool_call record: {}", e)))?;
+
+        Ok(conn.last_insert_rowid())
+    }
+
+    pub fn get_tool_calls_for_run(&self, run_id: i64) -> Result<Vec<ToolCallRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, agent_run_id, tool_name, input_json, output_summary, status, duration_ms, error, created_at
+                 FROM tool_calls WHERE agent_run_id = ?1 ORDER BY id ASC",
+            )
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to prepare tool_calls query: {}", e)))?;
+
+        let rows = stmt
+            .query_map(params![run_id], |row| {
+                Ok(ToolCallRecord {
+                    id: Some(row.get(0)?),
+                    agent_run_id: row.get(1)?,
+                    tool_name: row.get(2)?,
+                    input_json: row.get(3)?,
+                    output_summary: row.get(4)?,
+                    status: row.get(5)?,
+                    duration_ms: row.get(6)?,
+                    error: row.get(7)?,
+                    created_at: row.get(8)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query tool_calls: {}", e)))?;
+
+        let mut results = Vec::new();
+        for r in rows {
+            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read tool call: {}", e)))?);
+        }
+        Ok(results)
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AgentRunRecord {
+    pub id: Option<i64>,
+    pub task: String,
+    pub status: String,
+    pub model: String,
+    pub started_at: String,
+    pub finished_at: Option<String>,
+    pub total_tokens: usize,
+    pub estimated_cost: f64,
+    pub context_packet_id: Option<String>,
+    pub error: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ToolCallRecord {
+    pub id: Option<i64>,
+    pub agent_run_id: i64,
+    pub tool_name: String,
+    pub input_json: String,
+    pub output_summary: Option<String>,
+    pub status: String,
+    pub duration_ms: i64,
+    pub error: Option<String>,
+    pub created_at: String,
 }

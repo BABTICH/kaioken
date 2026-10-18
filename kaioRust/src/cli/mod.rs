@@ -2,6 +2,8 @@ use clap::{Parser, Subcommand};
 
 pub mod docs;
 pub mod memory;
+pub mod retrieval;
+pub mod task;
 
 #[derive(Parser)]
 #[command(name = "kaioken")]
@@ -19,5 +21,10 @@ pub enum Commands {
     /// Manage mirrored documentation and frontmatter
     #[command(subcommand)]
     Docs(docs::DocsCommands),
-    // Task(task::TaskCommands),  // Phase 10
+    /// Retrieve context packets, graph impact, and failure memory
+    #[command(subcommand)]
+    Retrieval(retrieval::RetrievalCommands),
+    /// Execute autonomous coding tasks or generate plans
+    #[command(subcommand)]
+    Task(task::TaskCommands),
 }

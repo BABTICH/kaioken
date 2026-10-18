@@ -251,8 +251,8 @@ Phase 9 is complete when:
 
 - [x] Defined retrieval interfaces in `src/retrieval/mod.rs`.
 - [x] Defined `ContextPacket` schema and query contracts.
-- [ ] Phase 9: Implement `src/retrieval/context_packet.rs` and builders.
-- [ ] Phase 9: Implement `src/retrieval/graph_query.rs` edge traversals.
-- [ ] Phase 9: Implement `src/retrieval/failure_lookup.rs`.
-- [ ] Phase 9: Implement `src/retrieval/budget.rs` token truncation.
-- [ ] Phase 9: Implement `src/retrieval/cache.rs` SQLite cache.
+- [x] Phase 9: Implement `src/retrieval/context_packet.rs` and builders.
+- [x] Phase 9: Implement `src/retrieval/graph_query.rs` edge traversals.
+- [x] Phase 9: Implement `src/retrieval/failure_lookup.rs`.
+- [x] Phase 9: Implement `src/retrieval/budget.rs` token truncation.
+- [x] Phase 9: Implement `src/retrieval/cache.rs` SQLite cache.

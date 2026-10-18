@@ -8,5 +8,7 @@ pub struct FailureRecord {
     pub file_id: Option<i64>,
     pub symbol_id: Option<i64>,
     pub fix_summary: Option<String>,
+    pub status: Option<String>, // unresolved, resolved
+    pub resolved_at: Option<String>,
     pub created_at: String,
 }

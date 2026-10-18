@@ -21,6 +21,12 @@ async fn main() -> anyhow::Result<()> {
         Commands::Docs(docs_cmd) => {
             cli::docs::handle_docs_command(docs_cmd).await?;
         }
+        Commands::Retrieval(retrieval_cmd) => {
+            cli::retrieval::handle_retrieval_command(retrieval_cmd).await?;
+        }
+        Commands::Task(task_cmd) => {
+            cli::task::handle_task_command(task_cmd).await?;
+        }
     }
 
     Ok(())

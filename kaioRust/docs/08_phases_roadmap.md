@@ -40,11 +40,11 @@ To build the system layer-by-layer without rushing, development proceeds across 
   - *Goal*: Mark direct changed files stale immediately; mark direct dependents as maybe-stale; avoid cascading transitive updates. Implement `kaioken docs verify` to check broken links and orphaned docs.
   - *DOD*: `kaioken docs generate --stale` refreshes only stale entries within token budget limits.
 
-- [ ] **Phase 9: Retrieval Engine Layer (Mandatory Pre-requisite for Agent)**
+- [x] **Phase 9: Retrieval Engine Layer (Mandatory Pre-requisite for Agent)**
   - *Goal*: Assemble structured `ContextPacket` prioritizing exact paths -> changed files -> symbols -> graph neighbors -> failures -> docs. Implement token budgeting truncator, secret redaction, and `retrieval_cache`.
   - *DOD*: `kaioken retrieval context <task>` outputs a budgeted, redacted context packet in < 200ms.
 
-- [ ] **Phase 10: Basic Coding Agent with Active Safety & Audit Logging**
+- [x] **Phase 10: Basic Coding Agent with Active Safety & Audit Logging**
   - *Goal*: OpenRouter streaming client and ReAct loop with **active safety guards from day one**: path traversal blocking, command blocklist, 100 KB output truncation, 120s timeout, max iterations, and audit logging to `tool_calls` / `audit.log`.
   - *DOD*: Agent autonomously implements a single-file function or test within sandbox boundaries and logs all tool executions.
 

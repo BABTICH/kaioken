@@ -14,6 +14,12 @@ pub enum KaiokenError {
     #[error("Documentation error: {0}")]
     DocError(String),
 
+    #[error("Retrieval error: {0}")]
+    RetrievalError(String),
+
+    #[error("Safety error: {0}")]
+    SafetyError(String),
+
     #[error("Lock error: {0}")]
     LockError(String),
 
