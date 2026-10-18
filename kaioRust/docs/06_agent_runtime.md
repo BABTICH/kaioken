@@ -140,7 +140,7 @@ When the developer issues a SIGINT (Ctrl+C) or timeout triggers:
 
 - [x] Defined agent interfaces in `src/agent/mod.rs`.
 - [x] Defined tool interfaces and ReAct loop structure.
-- [ ] Phase 10: OpenRouter tool calling with runtime limits and safety interceptors.
-- [ ] Phase 10: Tool call logging to `tool_calls` table and output truncation.
-- [ ] Phase 11: Deterministic compiler/test critic with failure memory persistence.
+- [x] Phase 10: OpenRouter tool calling with runtime limits and safety interceptors.
+- [x] Phase 10: Tool call logging to `tool_calls` table and output truncation.
+- [x] Phase 11: Deterministic compiler/test critic with failure memory persistence and Gate 2 self-correction loop.
 - [ ] Phase 12: Wire Layer 4 `ContextPacket` into pre-planning prompt.

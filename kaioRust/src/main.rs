@@ -27,6 +27,9 @@ async fn main() -> anyhow::Result<()> {
         Commands::Task(task_cmd) => {
             cli::task::handle_task_command(task_cmd).await?;
         }
+        Commands::Critic(critic_cmd) => {
+            cli::critic::handle_critic_command(critic_cmd).await?;
+        }
     }
 
     Ok(())

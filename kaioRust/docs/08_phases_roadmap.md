@@ -48,7 +48,7 @@ To build the system layer-by-layer without rushing, development proceeds across 
   - *Goal*: OpenRouter streaming client and ReAct loop with **active safety guards from day one**: path traversal blocking, command blocklist, 100 KB output truncation, 120s timeout, max iterations, and audit logging to `tool_calls` / `audit.log`.
   - *DOD*: Agent autonomously implements a single-file function or test within sandbox boundaries and logs all tool executions.
 
-- [ ] **Phase 11: Deterministic Critic & Failure Memory**
+- [x] **Phase 11: Deterministic Critic & Failure Memory**
   - *Goal*: Automatic execution of `cargo check` / `test` after edit, feeding diagnostics back on failure. Write error signatures to `failures` table and log successful fixes upon self-correction.
   - *DOD*: Agent self-corrects a compiler error without human intervention and records the solution in failure memory.
 

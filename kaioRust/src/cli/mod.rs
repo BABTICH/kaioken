@@ -1,5 +1,6 @@
 use clap::{Parser, Subcommand};
 
+pub mod critic;
 pub mod docs;
 pub mod memory;
 pub mod retrieval;
@@ -27,4 +28,7 @@ pub enum Commands {
     /// Execute autonomous coding tasks or generate plans
     #[command(subcommand)]
     Task(task::TaskCommands),
+    /// Deterministic compiler verification and failure memory inspection
+    #[command(subcommand)]
+    Critic(critic::CriticCommands),
 }

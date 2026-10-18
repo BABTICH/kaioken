@@ -2,12 +2,13 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Instant;
 use crate::config::Config;
+use crate::critic::{Critic, CriticEngine};
 use crate::error::Result;
 use crate::llm::{
     ChatCompletionRequest, ChatMessage, FunctionDefinition,
     LlmProvider, ToolDefinition,
 };
-use crate::memory::{MemoryEngine, ToolCallRecord};
+use crate::memory::{FailureRecord, MemoryEngine, ToolCallRecord};
 use crate::safety::audit::AuditLogger;
 use crate::safety::command_guard::CommandGuard;
 use crate::agent::tools::{ToolContext, ToolRegistry, ToolResult};
@@ -32,16 +33,19 @@ pub struct AgentExecutionSummary {
     pub tool_calls_count: usize,
     pub total_tokens: usize,
     pub final_response: String,
+    pub critic_iterations: usize,
 }
 
 pub struct AgentLoop {
     tools: ToolRegistry,
     llm: Arc<dyn LlmProvider>,
     memory: Option<Arc<MemoryEngine>>,
+    critic: Arc<dyn Critic>,
     repo_root: PathBuf,
     config: Config,
     max_steps: usize,
     max_tool_calls: usize,
+    max_critic_retries: usize,
 }
 
 impl AgentLoop {
@@ -56,11 +60,18 @@ impl AgentLoop {
             tools,
             llm,
             memory,
+            critic: Arc::new(CriticEngine::new()),
             repo_root,
             config,
             max_steps: 20,
             max_tool_calls: 100,
+            max_critic_retries: 3,
         }
+    }
+
+    pub fn with_critic(mut self, critic: Arc<dyn Critic>) -> Self {
+        self.critic = critic;
+        self
     }
 
     pub fn with_max_steps(mut self, max_steps: usize) -> Self {
@@ -70,6 +81,11 @@ impl AgentLoop {
 
     pub fn with_max_tool_calls(mut self, max_tool_calls: usize) -> Self {
         self.max_tool_calls = max_tool_calls;
+        self
+    }
+
+    pub fn with_max_critic_retries(mut self, max_critic_retries: usize) -> Self {
+        self.max_critic_retries = max_critic_retries;
         self
     }
 
@@ -99,13 +115,14 @@ impl AgentLoop {
         let system_prompt = format!(
             "You are KAIOKEN Agent, an autonomous software engineering assistant.\n\
              Workspace Root: {}\n\
-             You solve programming tasks by thinking step-by-step and using available tools.\n\
+             You solve programming tasks by thinking step-by-step, using available tools, and adhering to strict compiler verification.\n\
              Guidelines:\n\
              - Use read_file to inspect code before modifying it.\n\
              - Use edit_file for precise search-and-replace edits.\n\
              - Use create_file to author new files.\n\
              - Use bash to run test suites or compile checks.\n\
-             - When your implementation is complete and verified, output a concise concluding summary without calling further tools.",
+             - When your implementation is complete and verified, output a concise concluding summary without calling further tools.\n\
+             - A deterministic critic will verify your changes. If verification fails, inspect the diagnostic errors and fix them.",
             self.repo_root.display()
         );
 
@@ -119,6 +136,8 @@ impl AgentLoop {
         let mut step = 0;
         let mut final_response = String::new();
         let mut final_status = "completed";
+        let mut critic_iterations = 0;
+        let mut active_failure_id: Option<i64> = None;
 
         // Convert registry tools to tool definitions
         let tool_definitions: Vec<ToolDefinition> = self.tools.list().iter().map(|t| {
@@ -168,79 +187,138 @@ impl AgentLoop {
 
             let assistant_msg = &choice.message;
 
-            // Check if assistant called any tools
-            if let Some(tool_calls) = &assistant_msg.tool_calls {
-                if tool_calls.is_empty() {
-                    // No tool calls -> task complete
-                    final_response = assistant_msg.content.clone().unwrap_or_default();
-                    break;
-                }
+            // Check if assistant called tools or believes task is complete
+            let is_conclusion = match &assistant_msg.tool_calls {
+                None => true,
+                Some(calls) => calls.is_empty(),
+            };
 
-                // Append assistant message with tool calls to conversation
-                messages.push(assistant_msg.clone());
+            if is_conclusion {
+                let conclusion = assistant_msg.content.clone().unwrap_or_default();
+                let critic_report = self.critic.evaluate(&self.repo_root).await?;
 
-                // Execute each tool call
-                for tc in tool_calls {
-                    tool_calls_count += 1;
-                    let tool_start = Instant::now();
-                    let tool_name = &tc.function.name;
-                    let tool_args = &tc.function.arguments;
-
-                    let tool_res = if let Some(tool) = self.tools.find(tool_name) {
-                        match tool.execute(tool_args, &tool_context).await {
-                            Ok(res) => res,
-                            Err(e) => ToolResult::error(format!("Tool execution error: {}", e)),
+                if critic_report.passed {
+                    // Critic passed -> resolve any tracked failure from this run
+                    if let Some(fid) = active_failure_id {
+                        if let Some(mem) = &self.memory {
+                            let fix_summary = format!("Resolved in step {}: {}", step, conclusion);
+                            let _ = mem.resolve_failure(fid, &fix_summary);
                         }
-                    } else {
-                        ToolResult::error(format!("Tool '{}' is not registered.", tool_name))
-                    };
+                    }
+                    final_response = conclusion;
+                    break;
+                } else {
+                    // Critic failed -> self-correction feedback loop
+                    critic_iterations += 1;
 
-                    let duration_ms = tool_start.elapsed().as_millis();
-
-                    // Record tool execution in SQLite
-                    if let Some(mem) = &self.memory {
-                        let _ = mem.record_tool_call(&ToolCallRecord {
-                            id: None,
-                            agent_run_id: run_id,
-                            tool_name: tool_name.clone(),
-                            input_json: tool_args.clone(),
-                            output_summary: Some(tool_res.output.chars().take(200).collect()),
-                            status: if tool_res.success { "success".to_string() } else { "error".to_string() },
-                            duration_ms: duration_ms as i64,
-                            error: if !tool_res.success { Some(tool_res.output.clone()) } else { None },
-                            created_at: chrono::Utc::now().to_rfc3339(),
-                        });
+                    // Log failure to SQLite failures table if not tracked yet
+                    if active_failure_id.is_none() {
+                        if let Some(mem) = &self.memory {
+                            let first_msg = critic_report.diagnostics.first()
+                                .map(|d| d.message.clone())
+                                .unwrap_or_else(|| "Compiler/test verification failed".to_string());
+                            let failure_record = FailureRecord {
+                                id: None,
+                                error_type: "compiler".to_string(),
+                                message: format!("{} failed: {}", critic_report.command, first_msg),
+                                file_id: None,
+                                symbol_id: None,
+                                fix_summary: None,
+                                status: Some("unresolved".to_string()),
+                                resolved_at: None,
+                                created_at: chrono::Utc::now().to_rfc3339(),
+                            };
+                            if let Ok(fid) = mem.insert_failure(&failure_record) {
+                                active_failure_id = Some(fid);
+                            }
+                        }
                     }
 
-                    // Notify listener
-                    if let Some(cb) = &listener {
-                        cb(&AgentStepNotification {
-                            step,
-                            max_steps: self.max_steps,
-                            tool_name: tool_name.clone(),
-                            arguments_summary: tool_args.chars().take(80).collect(),
-                            duration_ms,
-                            success: tool_res.success,
-                            output_snippet: tool_res.output.chars().take(120).collect(),
-                        });
-                    }
-
-                    // Append tool response to conversation
-                    messages.push(ChatMessage::tool_response(&tc.id, tool_name, tool_res.output));
-
-                    if tool_calls_count >= self.max_tool_calls {
-                        final_status = "aborted";
-                        final_response = format!("Max tool calls limit ({}) reached.", self.max_tool_calls);
+                    if critic_iterations >= self.max_critic_retries {
+                        final_status = "failed";
+                        final_response = format!(
+                            "Task aborted: Deterministic verification checks failed after {} attempts.\n{}",
+                            self.max_critic_retries,
+                            critic_report.feedback_message
+                        );
                         break;
                     }
+
+                    // Feed critic feedback back into conversation
+                    messages.push(assistant_msg.clone());
+                    let feedback = format!(
+                        "{}\n\n[Critic Attempt {} of {}]",
+                        critic_report.feedback_message,
+                        critic_iterations,
+                        self.max_critic_retries
+                    );
+                    messages.push(ChatMessage::user(feedback));
+                    continue;
+                }
+            }
+
+            // Assistant emitted tool calls -> execute them
+            let tool_calls = assistant_msg.tool_calls.as_ref().unwrap();
+
+            // Append assistant message with tool calls to conversation
+            messages.push(assistant_msg.clone());
+
+            for tc in tool_calls {
+                tool_calls_count += 1;
+                let tool_start = Instant::now();
+                let tool_name = &tc.function.name;
+                let tool_args = &tc.function.arguments;
+
+                let tool_res = if let Some(tool) = self.tools.find(tool_name) {
+                    match tool.execute(tool_args, &tool_context).await {
+                        Ok(res) => res,
+                        Err(e) => ToolResult::error(format!("Tool execution error: {}", e)),
+                    }
+                } else {
+                    ToolResult::error(format!("Tool '{}' is not registered.", tool_name))
+                };
+
+                let duration_ms = tool_start.elapsed().as_millis();
+
+                // Record tool execution in SQLite
+                if let Some(mem) = &self.memory {
+                    let _ = mem.record_tool_call(&ToolCallRecord {
+                        id: None,
+                        agent_run_id: run_id,
+                        tool_name: tool_name.clone(),
+                        input_json: tool_args.clone(),
+                        output_summary: Some(tool_res.output.chars().take(200).collect()),
+                        status: if tool_res.success { "success".to_string() } else { "error".to_string() },
+                        duration_ms: duration_ms as i64,
+                        error: if !tool_res.success { Some(tool_res.output.clone()) } else { None },
+                        created_at: chrono::Utc::now().to_rfc3339(),
+                    });
                 }
 
-                if final_status == "aborted" {
+                // Notify listener
+                if let Some(cb) = &listener {
+                    cb(&AgentStepNotification {
+                        step,
+                        max_steps: self.max_steps,
+                        tool_name: tool_name.clone(),
+                        arguments_summary: tool_args.chars().take(80).collect(),
+                        duration_ms,
+                        success: tool_res.success,
+                        output_snippet: tool_res.output.chars().take(120).collect(),
+                    });
+                }
+
+                // Append tool response to conversation
+                messages.push(ChatMessage::tool_response(&tc.id, tool_name, tool_res.output));
+
+                if tool_calls_count >= self.max_tool_calls {
+                    final_status = "aborted";
+                    final_response = format!("Max tool calls limit ({}) reached.", self.max_tool_calls);
                     break;
                 }
-            } else {
-                // Assistant responded with plain text / final conclusion
-                final_response = assistant_msg.content.clone().unwrap_or_default();
+            }
+
+            if final_status == "aborted" {
                 break;
             }
         }
@@ -265,6 +343,7 @@ impl AgentLoop {
             tool_calls_count,
             total_tokens,
             final_response,
+            critic_iterations,
         })
     }
 }

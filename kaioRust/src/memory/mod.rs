@@ -1140,6 +1140,85 @@ impl MemoryEngine {
         Ok(count as usize)
     }
 
+    pub fn resolve_failure(&self, failure_id: i64, fix_summary: &str) -> Result<()> {
+        let conn = self.db.connection();
+        let now = chrono::Utc::now().to_rfc3339();
+        let rows_affected = conn
+            .execute(
+                "UPDATE failures 
+                 SET status = 'resolved', fix_summary = ?1, resolved_at = ?2 
+                 WHERE id = ?3",
+                params![fix_summary, now, failure_id],
+            )
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to resolve failure record: {}", e)))?;
+
+        if rows_affected == 0 {
+            return Err(KaiokenError::MemoryError(format!("Failure record with id {} not found", failure_id)));
+        }
+        Ok(())
+    }
+
+    pub fn get_unresolved_failures(&self) -> Result<Vec<FailureRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, error_type, message, file_id, symbol_id, fix_summary, status, resolved_at, created_at
+                 FROM failures WHERE status = 'unresolved' ORDER BY id DESC",
+            )
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to prepare unresolved failures query: {}", e)))?;
+
+        let rows = stmt
+            .query_map([], |row| {
+                Ok(FailureRecord {
+                    id: Some(row.get(0)?),
+                    error_type: row.get(1)?,
+                    message: row.get(2)?,
+                    file_id: row.get(3)?,
+                    symbol_id: row.get(4)?,
+                    fix_summary: row.get(5)?,
+                    status: row.get(6)?,
+                    resolved_at: row.get(7)?,
+                    created_at: row.get(8)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query unresolved failures: {}", e)))?;
+
+        let mut results = Vec::new();
+        for r in rows {
+            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read failure record: {}", e)))?);
+        }
+        Ok(results)
+    }
+
+    pub fn get_failure_by_id(&self, id: i64) -> Result<Option<FailureRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, error_type, message, file_id, symbol_id, fix_summary, status, resolved_at, created_at
+                 FROM failures WHERE id = ?1",
+            )
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to prepare failure by id query: {}", e)))?;
+
+        let failure = stmt
+            .query_row(params![id], |row| {
+                Ok(FailureRecord {
+                    id: Some(row.get(0)?),
+                    error_type: row.get(1)?,
+                    message: row.get(2)?,
+                    file_id: row.get(3)?,
+                    symbol_id: row.get(4)?,
+                    fix_summary: row.get(5)?,
+                    status: row.get(6)?,
+                    resolved_at: row.get(7)?,
+                    created_at: row.get(8)?,
+                })
+            })
+            .optional()
+            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query failure by id: {}", e)))?;
+
+        Ok(failure)
+    }
+
     // ==========================================
     // Architectural Decisions (ADRs)
     // ==========================================

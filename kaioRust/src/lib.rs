@@ -8,3 +8,4 @@ pub mod safety;
 pub mod retrieval;
 pub mod agent;
 pub mod llm;
+pub mod critic;
