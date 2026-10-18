@@ -25,13 +25,16 @@ async fn main() -> anyhow::Result<()> {
             cli::retrieval::handle_retrieval_command(retrieval_cmd).await?;
         }
         Commands::Task(task_cmd) => {
-            cli::task::handle_task_command(task_cmd).await?;
+            cli::task::handle_task_command(task_cmd, cli.dry_run, cli.yes, cli.permission_mode).await?;
         }
         Commands::Critic(critic_cmd) => {
             cli::critic::handle_critic_command(critic_cmd).await?;
         }
         Commands::Schedule(schedule_cmd) => {
             cli::schedule::handle_schedule_command(schedule_cmd).await?;
+        }
+        Commands::Eval(eval_cmd) => {
+            cli::eval::handle_eval_command(eval_cmd).await?;
         }
     }
 

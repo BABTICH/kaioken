@@ -2,6 +2,7 @@ use clap::{Parser, Subcommand};
 
 pub mod critic;
 pub mod docs;
+pub mod eval;
 pub mod memory;
 pub mod retrieval;
 pub mod schedule;
@@ -11,6 +12,18 @@ pub mod task;
 #[command(name = "kaioken")]
 #[command(about = "KAIOKEN Agent - Repo-aware AI coding assistant", long_about = None)]
 pub struct Cli {
+    /// Run without making destructive filesystem modifications
+    #[arg(long, global = true)]
+    pub dry_run: bool,
+
+    /// Automatically approve prompts without interactive confirmation
+    #[arg(short = 'y', long, global = true)]
+    pub yes: bool,
+
+    /// Override the configured permission mode (read-only, edit-with-approval, auto-edit, safe-bash, full-auto)
+    #[arg(long, global = true)]
+    pub permission_mode: Option<String>,
+
     #[command(subcommand)]
     pub command: Commands,
 }
@@ -34,4 +47,7 @@ pub enum Commands {
     Critic(critic::CriticCommands),
     /// Run scheduled repository health audits and reports
     Schedule(schedule::ScheduleArgs),
+    /// Run quantitative evaluation benchmarks and emit scorecard
+    #[command(subcommand)]
+    Eval(eval::EvalCommands),
 }

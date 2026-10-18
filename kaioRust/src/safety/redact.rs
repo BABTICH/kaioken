@@ -5,12 +5,14 @@ use regex::Regex;
 /// and credentials before context packets or audit logs are stored or emitted.
 pub struct RedactionEngine {
     api_key_regex: Regex,
+    openrouter_key_regex: Regex,
     github_token_regex: Regex,
     aws_key_regex: Regex,
     bearer_token_regex: Regex,
     private_key_regex: Regex,
     slack_token_regex: Regex,
     uri_password_regex: Regex,
+    env_secret_regex: Regex,
 }
 
 impl Default for RedactionEngine {
@@ -23,12 +25,14 @@ impl RedactionEngine {
     pub fn new() -> Self {
         Self {
             api_key_regex: Regex::new(r"sk-[a-zA-Z0-9_\-]{20,}").unwrap(),
+            openrouter_key_regex: Regex::new(r"sk-or-v1-[a-zA-Z0-9]{20,}").unwrap(),
             github_token_regex: Regex::new(r"(ghp|gho|ghu|ghs|ghr|github_pat)_[a-zA-Z0-9_]{20,}").unwrap(),
             aws_key_regex: Regex::new(r"AKIA[0-9A-Z]{16}").unwrap(),
             bearer_token_regex: Regex::new(r"(?i)bearer\s+[a-zA-Z0-9_\-\.]{20,}").unwrap(),
-            private_key_regex: Regex::new(r"-----BEGIN [A-Z ]+ PRIVATE KEY-----[\s\S]*?-----END [A-Z ]+ PRIVATE KEY-----").unwrap(),
+            private_key_regex: Regex::new(r"-----BEGIN [A-Z0-9_ ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z0-9_ ]*PRIVATE KEY-----").unwrap(),
             slack_token_regex: Regex::new(r"xox[baprs]-[0-9a-zA-Z]{10,}").unwrap(),
             uri_password_regex: Regex::new(r"://([^:]+):([^@]+)@").unwrap(),
+            env_secret_regex: Regex::new(r#"([A-Z0-9_]*(?:KEY|SECRET|TOKEN|PASSWORD|AUTH|CREDENTIALS)[A-Z0-9_]*\s*=\s*)(['"][^'"\[]{6,}['"]|[^'"\s\r\n\[]{6,})"#).unwrap(),
         }
     }
 
@@ -37,12 +41,14 @@ impl RedactionEngine {
         let mut result = input.to_string();
 
         result = self.private_key_regex.replace_all(&result, "[REDACTED_PRIVATE_KEY]").to_string();
+        result = self.openrouter_key_regex.replace_all(&result, "[REDACTED_API_KEY]").to_string();
         result = self.api_key_regex.replace_all(&result, "[REDACTED_API_KEY]").to_string();
         result = self.github_token_regex.replace_all(&result, "[REDACTED_GITHUB_TOKEN]").to_string();
         result = self.aws_key_regex.replace_all(&result, "[REDACTED_AWS_KEY]").to_string();
         result = self.slack_token_regex.replace_all(&result, "[REDACTED_SLACK_TOKEN]").to_string();
         result = self.bearer_token_regex.replace_all(&result, "Bearer [REDACTED_BEARER_TOKEN]").to_string();
         result = self.uri_password_regex.replace_all(&result, "://$1:[REDACTED_PASSWORD]@").to_string();
+        result = self.env_secret_regex.replace_all(&result, "$1[REDACTED_SECRET]").to_string();
 
         result
     }
@@ -117,6 +123,15 @@ mod tests {
         assert!(!redacted.contains("ghp_123456"));
         assert!(redacted.contains("[REDACTED_API_KEY]"));
         assert!(redacted.contains("[REDACTED_GITHUB_TOKEN]"));
+
+        let openrouter_text = "OPENROUTER_API_KEY=sk-or-v1-abcdef1234567890abcdef1234567890";
+        let redacted_or = engine.redact(openrouter_text);
+        assert!(!redacted_or.contains("sk-or-v1-abcdef"));
+        assert!(redacted_or.contains("[REDACTED_SECRET]") || redacted_or.contains("[REDACTED_API_KEY]"));
+
+        let pem_text = "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0\n-----END RSA PRIVATE KEY-----";
+        let redacted_pem = engine.redact(pem_text);
+        assert!(redacted_pem.contains("[REDACTED_PRIVATE_KEY]"));
     }
 
     #[test]

@@ -50,9 +50,19 @@ pub struct PlanArgs {
     pub no_retrieval: bool,
 }
 
-pub async fn handle_task_command(cmd: TaskCommands) -> anyhow::Result<()> {
+pub async fn handle_task_command(
+    cmd: TaskCommands,
+    dry_run: bool,
+    yes: bool,
+    permission_mode_override: Option<String>,
+) -> anyhow::Result<()> {
     let repo_root = std::env::current_dir()?;
-    let config = Config::load(&repo_root).unwrap_or_else(|_| Config::default_config());
+    let mut config = Config::load(&repo_root).unwrap_or_else(|_| Config::default_config());
+    if let Some(mode_str) = permission_mode_override {
+        if let Ok(m) = mode_str.parse() {
+            config.permissions.mode = m;
+        }
+    }
     let db_path = repo_root.join(&config.memory.database);
     let memory = MemoryEngine::open(&db_path).ok().map(Arc::new);
 
@@ -60,6 +70,13 @@ pub async fn handle_task_command(cmd: TaskCommands) -> anyhow::Result<()> {
         TaskCommands::Run(args) => {
             println!("🤖 KAIOKEN Agent starting task: '{}'", args.prompt);
             println!("   Repository: {}", repo_root.display());
+            println!("   Permission Mode: {}", config.permissions.mode);
+            if dry_run {
+                println!("   [DRY-RUN Mode: mutations will be simulated without writing changes to disk]");
+            }
+            if yes {
+                println!("   [--yes active: automatic non-interactive approval]");
+            }
             let model_name = args.model.unwrap_or_else(|| config.llm.coder_model.clone());
             println!("   Model: {}", model_name);
 
@@ -74,11 +91,23 @@ pub async fn handle_task_command(cmd: TaskCommands) -> anyhow::Result<()> {
                 Arc::new(MockLlmClient::new())
             };
 
+            let safety_policy = Arc::new(crate::safety::SafetyPolicy::new(
+                repo_root.clone(),
+                config.permissions.mode,
+                dry_run,
+                yes,
+                config.permissions.allowed_commands.clone(),
+                config.permissions.blocked_commands.clone(),
+                None,
+                None,
+            ));
+
             let tools = ToolRegistry::default_registry();
             let agent_loop = AgentLoop::new(tools, llm, memory, repo_root, config)
                 .with_max_steps(args.max_steps)
                 .with_max_tool_calls(args.max_tool_calls)
-                .with_retrieval(!args.no_retrieval);
+                .with_retrieval(!args.no_retrieval)
+                .with_safety_policy(safety_policy);
 
             let listener = Arc::new(|n: &crate::agent::AgentStepNotification| {
                 let badge = if n.success { "✅ OK" } else { "❌ ERROR" };

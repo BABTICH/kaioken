@@ -31,6 +31,6 @@ regex = "1.10"
 rusqlite = { version = "0.32", features = ["bundled"] }
 tree-sitter = "0.27.1"
 tree-sitter-rust = "0.24.2"
+tempfile = "3.12"
 
 [dev-dependencies]
-tempfile = "3.12"

@@ -62,6 +62,19 @@ impl Tool for EditFileTool {
                 }
             };
 
+            let is_dry_run = if let Some(policy) = &ctx.safety_policy {
+                let details = format!("Replacing {} chars with {} chars", parsed.target_content.len(), parsed.replacement_content.len());
+                match policy.check_action("edit_file", &parsed.path, &details)? {
+                    crate::safety::PermissionDecision::Allowed => false,
+                    crate::safety::PermissionDecision::SimulatedDryRun => true,
+                    crate::safety::PermissionDecision::Denied(r) => {
+                        return Ok(ToolResult::error(format!("Edit blocked by safety policy: {}", r)));
+                    }
+                }
+            } else {
+                false
+            };
+
             if !validated_path.exists() {
                 let _ = audit_logger.log("agent", "edit_file", &parsed.path, false, Some("File not found"));
                 return Ok(ToolResult::error(format!("File '{}' does not exist. Use create_file to create new files.", parsed.path)));
@@ -96,6 +109,13 @@ impl Tool for EditFileTool {
 
             // Replace single exact occurrence
             let new_content = existing_content.replacen(&parsed.target_content, &parsed.replacement_content, 1);
+
+            if is_dry_run {
+                return Ok(ToolResult::success(format!(
+                    "[DRY-RUN SIMULATION] Would edit '{}' (replaced 1 occurrence, new length: {} bytes, no changes written to disk).",
+                    parsed.path, new_content.len()
+                )));
+            }
 
             if let Err(e) = std::fs::write(&validated_path, new_content) {
                 let _ = audit_logger.log("agent", "edit_file", &parsed.path, false, Some(&e.to_string()));

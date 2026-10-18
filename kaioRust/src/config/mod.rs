@@ -43,8 +43,55 @@ pub struct LlmConfig {
     pub temperature: f32,
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+pub enum PermissionMode {
+    ReadOnly,
+    EditWithApproval,
+    AutoEdit,
+    SafeBash,
+    FullAuto,
+}
+
+impl Default for PermissionMode {
+    fn default() -> Self {
+        PermissionMode::EditWithApproval
+    }
+}
+
+impl std::str::FromStr for PermissionMode {
+    type Err = String;
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "read-only" | "readonly" => Ok(PermissionMode::ReadOnly),
+            "edit-with-approval" => Ok(PermissionMode::EditWithApproval),
+            "auto-edit" => Ok(PermissionMode::AutoEdit),
+            "safe-bash" => Ok(PermissionMode::SafeBash),
+            "full-auto" => Ok(PermissionMode::FullAuto),
+            _ => Err(format!(
+                "Unknown permission mode '{}'. Valid modes: read-only, edit-with-approval, auto-edit, safe-bash, full-auto",
+                s
+            )),
+        }
+    }
+}
+
+impl std::fmt::Display for PermissionMode {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PermissionMode::ReadOnly => write!(f, "read-only"),
+            PermissionMode::EditWithApproval => write!(f, "edit-with-approval"),
+            PermissionMode::AutoEdit => write!(f, "auto-edit"),
+            PermissionMode::SafeBash => write!(f, "safe-bash"),
+            PermissionMode::FullAuto => write!(f, "full-auto"),
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PermissionsConfig {
+    #[serde(default)]
+    pub mode: PermissionMode,
     pub auto_edit: bool,
     pub auto_bash: bool,
     pub allowed_commands: Vec<String>,
@@ -84,6 +131,7 @@ impl Config {
                 temperature: 0.2,
             },
             permissions: PermissionsConfig {
+                mode: PermissionMode::EditWithApproval,
                 auto_edit: false,
                 auto_bash: false,
                 allowed_commands: vec![

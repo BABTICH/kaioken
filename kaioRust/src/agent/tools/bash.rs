@@ -43,8 +43,21 @@ impl Tool for BashTool {
                 Err(e) => return Ok(ToolResult::error(format!("Invalid arguments for bash: {}", e))),
             };
 
-            // 1. Blocklist inspection
-            if let Some(reason) = command_guard.is_blocked(&parsed.command) {
+            // 1. Safety Policy & Blocklist inspection
+            if let Some(policy) = &ctx.safety_policy {
+                match policy.check_action("bash", &parsed.command, "")? {
+                    crate::safety::PermissionDecision::Allowed => {}
+                    crate::safety::PermissionDecision::SimulatedDryRun => {
+                        return Ok(ToolResult::success(format!(
+                            "[DRY-RUN SIMULATION] Would execute command '{}' (execution skipped in dry-run mode).",
+                            parsed.command
+                        )));
+                    }
+                    crate::safety::PermissionDecision::Denied(r) => {
+                        return Ok(ToolResult::error(format!("Command execution blocked by safety policy: {}", r)));
+                    }
+                }
+            } else if let Some(reason) = command_guard.is_blocked(&parsed.command) {
                 let _ = audit_logger.log("agent", "bash", &parsed.command, false, Some(&reason));
                 return Ok(ToolResult::error(format!("Command execution blocked by safety policy: {}", reason)));
             }

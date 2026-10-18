@@ -20,6 +20,23 @@ pub struct ToolContext {
     pub repo_root: PathBuf,
     pub command_guard: std::sync::Arc<CommandGuard>,
     pub audit_logger: AuditLogger,
+    pub safety_policy: Option<std::sync::Arc<crate::safety::SafetyPolicy>>,
+}
+
+impl ToolContext {
+    pub fn new(repo_root: PathBuf, command_guard: std::sync::Arc<CommandGuard>, audit_logger: AuditLogger) -> Self {
+        Self {
+            repo_root,
+            command_guard,
+            audit_logger,
+            safety_policy: None,
+        }
+    }
+
+    pub fn with_safety_policy(mut self, policy: std::sync::Arc<crate::safety::SafetyPolicy>) -> Self {
+        self.safety_policy = Some(policy);
+        self
+    }
 }
 
 #[derive(Debug, Clone)]

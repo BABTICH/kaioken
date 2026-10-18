@@ -60,11 +60,11 @@ To build the system layer-by-layer without rushing, development proceeds across 
   - *Goal*: Off-peak scan auditing dead code, missing unit tests, stale docs, and broken graph links.
   - *DOD*: `kaioken schedule --daily` outputs a comprehensive Markdown repository health report.
 
-- [ ] **Phase 14: Advanced Safety & Enterprise Permission System**
+- [x] **Phase 14: Advanced Safety & Enterprise Permission System**
   - *Goal*: Full permission modes (`read-only`, `edit-with-approval`, `auto-edit`, `safe-bash`, `full-auto`), interactive approval prompts, `--dry-run`, `--yes`, and secret pattern sanitization.
   - *DOD*: Agent halts and prompts before executing actions outside configured permission policy.
 
-- [ ] **Phase 15: Quantitative Evaluation & Benchmark Suite**
+- [x] **Phase 15: Quantitative Evaluation & Benchmark Suite**
   - *Goal*: Evaluation harness (`kaioken eval run`) testing 8 standardized engineering benchmarks, tracking task success rate, edit validity, token cost, critic iterations, and regression prevention.
   - *DOD*: Benchmark harness executes testbed tasks and emits a quantitative evaluation scorecard.
 

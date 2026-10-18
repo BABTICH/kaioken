@@ -115,11 +115,7 @@ async fn test_tools_read_edit_create_file() {
 
     let guard = Arc::new(CommandGuard::default());
     let audit = AuditLogger::new(Some(&root));
-    let ctx = ToolContext {
-        repo_root: root.clone(),
-        command_guard: guard,
-        audit_logger: audit,
-    };
+    let ctx = ToolContext::new(root.clone(), guard, audit);
 
     let create_tool = CreateFileTool;
     let read_tool = ReadFileTool;

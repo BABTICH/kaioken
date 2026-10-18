@@ -188,8 +188,8 @@ src/eval/
 
 - [x] Defined permission models and blocked command lists in configuration.
 - [x] Defined safety guard architecture and evaluation metrics.
-- [ ] Phase 10: Implement `src/safety/path_guard.rs` and `command_guard.rs` basic guards.
-- [ ] Phase 10: Implement `src/safety/audit.rs` tool call logging.
-- [ ] Phase 14: Implement `src/safety/approval.rs` interactive prompts.
-- [ ] Phase 14: Implement `src/safety/redact.rs` secret sanitization.
-- [ ] Phase 15: Implement `src/eval/` benchmark suite and metric reporter.
+- [x] Phase 10: Implement `src/safety/path_guard.rs` and `command_guard.rs` basic guards.
+- [x] Phase 10: Implement `src/safety/audit.rs` tool call logging.
+- [x] Phase 14: Implement `src/safety/approval.rs` interactive prompts.
+- [x] Phase 14: Implement `src/safety/redact.rs` secret sanitization.
+- [x] Phase 15: Implement `src/eval/` benchmark suite and metric reporter.

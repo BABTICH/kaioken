@@ -55,6 +55,12 @@ impl Tool for ReadFileTool {
                 Err(e) => return Ok(ToolResult::error(format!("Invalid arguments for read_file: {}", e))),
             };
 
+            if let Some(policy) = &ctx.safety_policy {
+                if let crate::safety::PermissionDecision::Denied(r) = policy.check_action("read_file", &parsed.path, "")? {
+                    return Ok(ToolResult::error(format!("Access blocked by safety policy: {}", r)));
+                }
+            }
+
             let validated_path = match PathGuard::validate_path(Path::new(&parsed.path), &repo_root, false) {
                 Ok(p) => p,
                 Err(e) => {

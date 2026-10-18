@@ -14,7 +14,6 @@ use crate::llm::{
 use crate::memory::{FailureRecord, MemoryEngine, ToolCallRecord};
 use crate::retrieval::{RetrievalEngine, RetrievalOptions};
 use crate::safety::audit::AuditLogger;
-use crate::safety::command_guard::CommandGuard;
 use crate::agent::tools::{ToolContext, ToolRegistry, ToolResult};
 
 #[derive(Debug, Clone)]
@@ -54,6 +53,7 @@ pub struct AgentLoop {
     max_critic_retries: usize,
     retrieval_options: Option<RetrievalOptions>,
     enable_retrieval: bool,
+    safety_policy: Option<Arc<crate::safety::SafetyPolicy>>,
 }
 
 impl AgentLoop {
@@ -76,11 +76,17 @@ impl AgentLoop {
             max_critic_retries: 3,
             retrieval_options: None,
             enable_retrieval: true,
+            safety_policy: None,
         }
     }
 
     pub fn with_critic(mut self, critic: Arc<dyn Critic>) -> Self {
         self.critic = critic;
+        self
+    }
+
+    pub fn with_safety_policy(mut self, policy: Arc<crate::safety::SafetyPolicy>) -> Self {
+        self.safety_policy = Some(policy);
         self
     }
 
@@ -114,13 +120,27 @@ impl AgentLoop {
         task: &str,
         listener: Option<Arc<dyn Fn(&AgentStepNotification) + Send + Sync>>,
     ) -> Result<AgentExecutionSummary> {
-        let command_guard = Arc::new(CommandGuard::new(&self.config.permissions.blocked_commands));
         let audit_logger = AuditLogger::new(Some(&self.repo_root));
+        let safety_policy = self.safety_policy.clone().unwrap_or_else(|| {
+            let default_handler: Arc<dyn crate::safety::approval::ApprovalHandler> =
+                Arc::new(crate::safety::approval::AutoApprovalHandler);
+            Arc::new(crate::safety::SafetyPolicy::new(
+                self.repo_root.clone(),
+                self.config.permissions.mode,
+                false,
+                true,
+                self.config.permissions.allowed_commands.clone(),
+                self.config.permissions.blocked_commands.clone(),
+                Some(default_handler),
+                Some(audit_logger.clone()),
+            ))
+        });
 
         let tool_context = ToolContext {
             repo_root: self.repo_root.clone(),
-            command_guard,
+            command_guard: safety_policy.command_guard.clone(),
             audit_logger,
+            safety_policy: Some(safety_policy),
         };
 
         // 1. Initialize agent run in SQLite
