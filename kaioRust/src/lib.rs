@@ -9,3 +9,4 @@ pub mod retrieval;
 pub mod agent;
 pub mod llm;
 pub mod critic;
+pub mod health;

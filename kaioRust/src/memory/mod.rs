@@ -307,6 +307,37 @@ impl MemoryEngine {
         Ok(count as usize)
     }
 
+    pub fn get_all_symbols(&self) -> Result<Vec<SymbolRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn.prepare(
+            "SELECT id, file_id, name, kind, line_start, line_end, visibility, signature, summary, parent
+             FROM symbols ORDER BY id ASC;",
+        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let rows = stmt.query_map([], |row| {
+            let start: i64 = row.get(4)?;
+            let end: i64 = row.get(5)?;
+            Ok(SymbolRecord {
+                id: Some(row.get(0)?),
+                file_id: row.get(1)?,
+                name: row.get(2)?,
+                kind: row.get(3)?,
+                line_start: start as usize,
+                line_end: end as usize,
+                visibility: row.get(6)?,
+                signature: row.get(7)?,
+                summary: row.get(8)?,
+                parent: row.get(9)?,
+            })
+        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let mut list = Vec::new();
+        for r in rows {
+            list.push(r.map_err(|e| KaiokenError::MemoryError(e.to_string()))?);
+        }
+        Ok(list)
+    }
+
     // ==========================================
     // 3. Raw Imports CRUD
     // ==========================================
@@ -357,6 +388,27 @@ impl MemoryEngine {
         let count: i64 = conn.query_row("SELECT COUNT(*) FROM import_raw;", [], |r| r.get(0))
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         Ok(count as usize)
+    }
+
+    pub fn get_unresolved_imports(&self) -> Result<Vec<(String, String)>> {
+        let conn = self.db.connection();
+        let mut stmt = conn.prepare(
+            "SELECT f.path, r.raw_import
+             FROM import_raw r
+             JOIN files f ON f.id = r.file_id
+             WHERE r.status = 'unresolved'
+             ORDER BY f.path ASC, r.raw_import ASC;",
+        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let rows = stmt.query_map([], |row| {
+            Ok((row.get(0)?, row.get(1)?))
+        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let mut list = Vec::new();
+        for r in rows {
+            list.push(r.map_err(|e| KaiokenError::MemoryError(e.to_string()))?);
+        }
+        Ok(list)
     }
 
     // ==========================================
@@ -425,6 +477,29 @@ impl MemoryEngine {
         let count: i64 = conn.query_row("SELECT COUNT(*) FROM edges;", [], |r| r.get(0))
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         Ok(count as usize)
+    }
+
+    pub fn get_all_edges(&self) -> Result<Vec<EdgeRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn.prepare(
+            "SELECT id, source_symbol_id, target_symbol_id, edge_type
+             FROM edges ORDER BY id ASC;",
+        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let rows = stmt.query_map([], |row| {
+            Ok(EdgeRecord {
+                id: Some(row.get(0)?),
+                source_symbol_id: row.get(1)?,
+                target_symbol_id: row.get(2)?,
+                edge_type: row.get(3)?,
+            })
+        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let mut list = Vec::new();
+        for r in rows {
+            list.push(r.map_err(|e| KaiokenError::MemoryError(e.to_string()))?);
+        }
+        Ok(list)
     }
 
     // ==========================================

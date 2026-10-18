@@ -30,6 +30,9 @@ async fn main() -> anyhow::Result<()> {
         Commands::Critic(critic_cmd) => {
             cli::critic::handle_critic_command(critic_cmd).await?;
         }
+        Commands::Schedule(schedule_cmd) => {
+            cli::schedule::handle_schedule_command(schedule_cmd).await?;
+        }
     }
 
     Ok(())

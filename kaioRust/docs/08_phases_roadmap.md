@@ -56,7 +56,7 @@ To build the system layer-by-layer without rushing, development proceeds across 
   - *Goal*: Mandatory pre-planning retrieval of `ContextPacket`. Agent cites relevant symbol dependencies and past failures in plan, applies edits, and updates `agent_runs` and docs upon completion.
   - *DOD*: Agent cites past repository failures during planning and updates memory state after execution.
 
-- [ ] **Phase 13: Daily Scheduled Scanner & Health Audit**
+- [x] **Phase 13: Daily Scheduled Scanner & Health Audit**
   - *Goal*: Off-peak scan auditing dead code, missing unit tests, stale docs, and broken graph links.
   - *DOD*: `kaioken schedule --daily` outputs a comprehensive Markdown repository health report.
 

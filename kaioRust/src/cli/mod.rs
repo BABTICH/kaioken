@@ -4,6 +4,7 @@ pub mod critic;
 pub mod docs;
 pub mod memory;
 pub mod retrieval;
+pub mod schedule;
 pub mod task;
 
 #[derive(Parser)]
@@ -31,4 +32,6 @@ pub enum Commands {
     /// Deterministic compiler verification and failure memory inspection
     #[command(subcommand)]
     Critic(critic::CriticCommands),
+    /// Run scheduled repository health audits and reports
+    Schedule(schedule::ScheduleArgs),
 }
