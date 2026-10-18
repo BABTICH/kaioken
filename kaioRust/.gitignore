@@ -1,0 +1,13 @@
+# Rust build artifacts
+/target/
+Cargo.lock
+
+# KAIOKEN Agent local data
+.agent/
+.agent-docs/
+*.sqlite
+
+# IDE
+.idea/
+.vscode/
+*.swp

@@ -1,6 +1,8 @@
 # Build artifacts
 /dist/
 dist/
+target/
+**/target/
 kaioken v1/cli/kaioken.exe
 kaioken v1/cli/kaioken.exe.old
 kaioken v1/cli/kaioken.exe~
@@ -28,6 +30,13 @@ kaioken v1/.kaioken/research/
 .qoder/
 .claude/
 .ainow/
+.agent/
+.agent-docs/
+*.sqlite
+
+# Archived Kaioken workspaces and legacy trees
+/.kaio/
+.kaio/
 
 # Third-party source vendored for reading only, not built or shipped.
 # See .reference/README.md for what is here and why.
@@ -161,3 +170,24 @@ kaioken_bundle_test/
 
 .vercel
 .env*
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Build outputs
+/dist/
+/build/*.p12
+/build/*.pfx
+*.dmg
+*.exe
+*.AppImage
+*.deb
+*.snap
+
+# Electron Builder
+/electron-builder-debug.yml
+
+node_modules

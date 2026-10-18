@@ -6,15 +6,15 @@
 
 ## Table of Contents
 
-1. [Design Philosophy](#1-design-philosophy)
-2. [File Structure](#2-file-structure)
-3. [Images and Assets](#3-images-and-assets)
-4. [Fonts and Typography Scale](#4-fonts-and-typography-scale)
-5. [Color Palette Raw](#5-color-palette-raw)
-6. [Semantic Tokens Dark Mode Default](#6-semantic-tokens-dark-mode-default)
-7. [Semantic Tokens Light Mode](#7-semantic-tokens-light-mode)
-8. [Spacing System](#8-spacing-system)
-9. [Shape and Border Radius](#9-shape-and-border-radius)
+1.  [Design Philosophy](#1-design-philosophy)
+2.  [File Structure](#2-file-structure)
+3.  [Images and Assets](#3-images-and-assets)
+4.  [Fonts and Typography Scale](#4-fonts-and-typography-scale)
+5.  [Color Palette Raw](#5-color-palette-raw)
+6.  [Semantic Tokens Dark Mode Default](#6-semantic-tokens-dark-mode-default)
+7.  [Semantic Tokens Light Mode](#7-semantic-tokens-light-mode)
+8.  [Spacing System](#8-spacing-system)
+9.  [Shape and Border Radius](#9-shape-and-border-radius)
 10. [Motion System](#10-motion-system)
 11. [Layout Primitives](#11-layout-primitives)
 12. [Typography Utilities](#12-typography-utilities)
@@ -447,19 +447,33 @@ Usage rules:
 | --accent | #ff3b1f | #b81600 | Primary brand action color |
 | --accent-hov | #ff1e00 | #c01500 | Accent hover state |
 | --accent-fg | #ffffff | --paper-50 | Text on accent background |
-| --accent-soft | gba(255,59,31,0.09) | gba(184,22,0,0.07) | Soft tinted active nav bg |
-| --accent-line | gba(255,59,31,0.24) | gba(184,22,0,0.22) | Accent border variant |
+| --accent-soft | 
+gba(255,59,31,0.09) | 
+gba(184,22,0,0.07) | Soft tinted active nav bg |
+| --accent-line | 
+gba(255,59,31,0.24) | 
+gba(184,22,0,0.22) | Accent border variant |
 | --ember | #ff9500 | #9a5600 | Secondary/success indicator |
-| --ember-soft | gba(255,149,0,0.08) | gba(154,86,0,0.07) | Soft ember tint |
-| --select | gba(255,59,31,0.22) | gba(184,22,0,0.15) | Text selection highlight |
+| --ember-soft | 
+gba(255,149,0,0.08) | 
+gba(154,86,0,0.07) | Soft ember tint |
+| --select | 
+gba(255,59,31,0.22) | 
+gba(184,22,0,0.15) | Text selection highlight |
 
 ### Surface Layers (Glassmorphism)
 
 | Token | Dark Value | Light Value |
 |-------|-----------|-------------|
-| --surface-base | gba(14,14,18,0.72) | gba(255,255,255,0.7) |
-| --surface-1 | gba(20,20,25,0.82) | gba(255,255,255,0.85) |
-| --surface-2 | gba(28,28,34,0.9) | gba(245,245,243,0.95) |
+| --surface-base | 
+gba(14,14,18,0.72) | 
+gba(255,255,255,0.7) |
+| --surface-1 | 
+gba(20,20,25,0.82) | 
+gba(255,255,255,0.85) |
+| --surface-2 | 
+gba(28,28,34,0.9) | 
+gba(245,245,243,0.95) |
 
 ### Kai-Prefixed Aliases
 
@@ -603,8 +617,10 @@ Button properties: zero border-radius, Geist Mono font, transitions on backgroun
 | Class | Animation | Duration | Description |
 |-------|-----------|----------|-------------|
 | .animate-caret | caret-blink | 1.05s step-end | Blinking terminal cursor |
-| .animate-rise | ise-in |  .55s | Rise from below entrance |
-| .rule-sweep | ule-sweep | 6s linear | Sweeping accent horizontal rule |
+| .animate-rise | 
+ise-in |  .55s | Rise from below entrance |
+| .rule-sweep | 
+ule-sweep | 6s linear | Sweeping accent horizontal rule |
 | .animate-bloom | loom-drift | 26s | Slow decorative background drift |
 | .animate-float | loat | 5s | Float up/down (mascot, hero elements) |
 | .animate-shimmer | shimmer | 2.4s | Skeleton loader sweep |

@@ -13,9 +13,14 @@ export default function PreviewIndex() {
   return (
     <article className="min-w-0 pb-20">
       <header className="border-b border-border pb-6">
-        <p className="font-mono text-[11px] tracking-[0.25em] text-kai-dim uppercase">
-          <span className="text-kai-orange">▎</span> real output
-        </p>
+        <div className="flex items-center gap-3">
+          <p className="font-mono text-[11px] tracking-[0.25em] text-kai-dim uppercase">
+            <span className="text-kai-orange">▎</span> real output
+          </p>
+          <span className="rounded-sm border border-kai-orange/40 bg-kai-orange/10 px-2 py-0.5 font-mono text-[10.5px] tracking-wider text-kai-orange uppercase">
+            v1.3.3
+          </span>
+        </div>
         <h1 className="mt-3 font-sans text-3xl font-semibold tracking-[-0.03em] text-foreground sm:text-4xl">
           The wiki written <span className="serif">from source.</span>
         </h1>
