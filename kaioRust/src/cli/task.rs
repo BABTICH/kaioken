@@ -34,12 +34,20 @@ pub struct RunArgs {
     /// Run in offline mock mode without calling external LLM API
     #[arg(long)]
     pub mock: bool,
+
+    /// Disable automatic repository memory context retrieval
+    #[arg(long)]
+    pub no_retrieval: bool,
 }
 
 #[derive(Args, Debug)]
 pub struct PlanArgs {
     /// Task goal to plan without applying changes
     pub prompt: String,
+
+    /// Disable automatic repository memory context retrieval
+    #[arg(long)]
+    pub no_retrieval: bool,
 }
 
 pub async fn handle_task_command(cmd: TaskCommands) -> anyhow::Result<()> {
@@ -69,7 +77,8 @@ pub async fn handle_task_command(cmd: TaskCommands) -> anyhow::Result<()> {
             let tools = ToolRegistry::default_registry();
             let agent_loop = AgentLoop::new(tools, llm, memory, repo_root, config)
                 .with_max_steps(args.max_steps)
-                .with_max_tool_calls(args.max_tool_calls);
+                .with_max_tool_calls(args.max_tool_calls)
+                .with_retrieval(!args.no_retrieval);
 
             let listener = Arc::new(|n: &crate::agent::AgentStepNotification| {
                 let badge = if n.success { "✅ OK" } else { "❌ ERROR" };
@@ -89,16 +98,35 @@ pub async fn handle_task_command(cmd: TaskCommands) -> anyhow::Result<()> {
             println!("   Total Steps: {}", summary.total_steps);
             println!("   Total Tool Calls: {}", summary.tool_calls_count);
             println!("   Tokens Processed: {}", summary.total_tokens);
+            if summary.context_retrieved {
+                println!("   Memory Context: Retrieved and applied to prompt");
+            }
+            if !summary.touched_files.is_empty() {
+                println!("   Synchronized Files: {}", summary.touched_files.join(", "));
+            }
             if !summary.final_response.is_empty() {
                 println!("\nSummary Conclusion:\n{}", summary.final_response);
             }
         }
         TaskCommands::Plan(args) => {
-            let plan = Planner::create_plan(&args.prompt);
-            println!("Generated Execution Plan for: '{}'\n", plan.goal);
-            for step in plan.steps {
-                println!("  {}. {}", step.step_number, step.description);
-            }
+            let plan = if !args.no_retrieval {
+                if let Some(mem) = &memory {
+                    let engine = crate::retrieval::RetrievalEngine::new(mem, &config, &repo_root);
+                    match engine.retrieve_context(&args.prompt, &crate::retrieval::RetrievalOptions::default()) {
+                        Ok(ctx) => {
+                            println!("🧠 Retrieved Repository Memory Context ({} tokens budget used)\n", ctx.token_budget_report.total_tokens);
+                            Planner::create_plan_with_context(&args.prompt, &ctx)
+                        }
+                        Err(_) => Planner::create_plan(&args.prompt),
+                    }
+                } else {
+                    Planner::create_plan(&args.prompt)
+                }
+            } else {
+                Planner::create_plan(&args.prompt)
+            };
+
+            println!("{}", plan.format_markdown());
         }
     }
 

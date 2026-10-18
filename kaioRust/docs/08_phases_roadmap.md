@@ -52,7 +52,7 @@ To build the system layer-by-layer without rushing, development proceeds across 
   - *Goal*: Automatic execution of `cargo check` / `test` after edit, feeding diagnostics back on failure. Write error signatures to `failures` table and log successful fixes upon self-correction.
   - *DOD*: Agent self-corrects a compiler error without human intervention and records the solution in failure memory.
 
-- [ ] **Phase 12: Memory-Augmented Agent Runtime**
+- [x] **Phase 12: Memory-Augmented Agent Runtime**
   - *Goal*: Mandatory pre-planning retrieval of `ContextPacket`. Agent cites relevant symbol dependencies and past failures in plan, applies edits, and updates `agent_runs` and docs upon completion.
   - *DOD*: Agent cites past repository failures during planning and updates memory state after execution.
 

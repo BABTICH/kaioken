@@ -1,14 +1,18 @@
+use std::collections::HashSet;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Instant;
+use sha2::{Digest, Sha256};
 use crate::config::Config;
 use crate::critic::{Critic, CriticEngine};
+use crate::docs::cascade::StalenessCascadeEngine;
 use crate::error::Result;
 use crate::llm::{
     ChatCompletionRequest, ChatMessage, FunctionDefinition,
     LlmProvider, ToolDefinition,
 };
 use crate::memory::{FailureRecord, MemoryEngine, ToolCallRecord};
+use crate::retrieval::{RetrievalEngine, RetrievalOptions};
 use crate::safety::audit::AuditLogger;
 use crate::safety::command_guard::CommandGuard;
 use crate::agent::tools::{ToolContext, ToolRegistry, ToolResult};
@@ -34,6 +38,8 @@ pub struct AgentExecutionSummary {
     pub total_tokens: usize,
     pub final_response: String,
     pub critic_iterations: usize,
+    pub context_retrieved: bool,
+    pub touched_files: Vec<String>,
 }
 
 pub struct AgentLoop {
@@ -46,6 +52,8 @@ pub struct AgentLoop {
     max_steps: usize,
     max_tool_calls: usize,
     max_critic_retries: usize,
+    retrieval_options: Option<RetrievalOptions>,
+    enable_retrieval: bool,
 }
 
 impl AgentLoop {
@@ -66,6 +74,8 @@ impl AgentLoop {
             max_steps: 20,
             max_tool_calls: 100,
             max_critic_retries: 3,
+            retrieval_options: None,
+            enable_retrieval: true,
         }
     }
 
@@ -86,6 +96,16 @@ impl AgentLoop {
 
     pub fn with_max_critic_retries(mut self, max_critic_retries: usize) -> Self {
         self.max_critic_retries = max_critic_retries;
+        self
+    }
+
+    pub fn with_retrieval(mut self, enable: bool) -> Self {
+        self.enable_retrieval = enable;
+        self
+    }
+
+    pub fn with_retrieval_options(mut self, options: RetrievalOptions) -> Self {
+        self.retrieval_options = Some(options);
         self
     }
 
@@ -111,12 +131,34 @@ impl AgentLoop {
             0
         };
 
-        // 2. Build initial conversation prompt
+        // 2. Pre-Planning Context Retrieval (Layer 4 integration)
+        let mut context_retrieved = false;
+        let context_packet = if self.enable_retrieval {
+            if let Some(mem) = &self.memory {
+                let opts = self.retrieval_options.clone().unwrap_or_default();
+                let engine = RetrievalEngine::new(mem, &self.config, &self.repo_root);
+                match engine.retrieve_context(task, &opts) {
+                    Ok(packet) => {
+                        context_retrieved = true;
+                        Some(packet)
+                    }
+                    Err(_) => None,
+                }
+            } else {
+                None
+            }
+        } else {
+            None
+        };
+
+        // 3. Build initial conversation prompt
         let system_prompt = format!(
-            "You are KAIOKEN Agent, an autonomous software engineering assistant.\n\
+            "You are KAIOKEN Agent, an autonomous repo-aware software engineering assistant.\n\
              Workspace Root: {}\n\
              You solve programming tasks by thinking step-by-step, using available tools, and adhering to strict compiler verification.\n\
              Guidelines:\n\
+             - Inspect the provided Repository Context Packet before modifying code.\n\
+             - If past failures are noted, explain how you will avoid them in your plan.\n\
              - Use read_file to inspect code before modifying it.\n\
              - Use edit_file for precise search-and-replace edits.\n\
              - Use create_file to author new files.\n\
@@ -128,8 +170,17 @@ impl AgentLoop {
 
         let mut messages = vec![
             ChatMessage::system(system_prompt),
-            ChatMessage::user(task),
         ];
+
+        if let Some(packet) = &context_packet {
+            messages.push(ChatMessage::user(format!(
+                "Repository Context from Memory Layer:\n\n{}\n\nTask Goal:\n{}",
+                packet.to_markdown(),
+                task
+            )));
+        } else {
+            messages.push(ChatMessage::user(task));
+        }
 
         let mut total_tokens = 0;
         let mut tool_calls_count = 0;
@@ -138,6 +189,7 @@ impl AgentLoop {
         let mut final_status = "completed";
         let mut critic_iterations = 0;
         let mut active_failure_id: Option<i64> = None;
+        let mut touched_files: HashSet<String> = HashSet::new();
 
         // Convert registry tools to tool definitions
         let tool_definitions: Vec<ToolDefinition> = self.tools.list().iter().map(|t| {
@@ -280,6 +332,14 @@ impl AgentLoop {
 
                 let duration_ms = tool_start.elapsed().as_millis();
 
+                if tool_res.success && (tool_name == "create_file" || tool_name == "edit_file") {
+                    if let Ok(val) = serde_json::from_str::<serde_json::Value>(tool_args) {
+                        if let Some(p) = val.get("path").and_then(|s| s.as_str()) {
+                            touched_files.insert(p.replace('\\', "/"));
+                        }
+                    }
+                }
+
                 // Record tool execution in SQLite
                 if let Some(mem) = &self.memory {
                     let _ = mem.record_tool_call(&ToolCallRecord {
@@ -328,11 +388,32 @@ impl AgentLoop {
             final_response = format!("Max iterations limit ({}) reached without final answer.", self.max_steps);
         }
 
+        let touched_list: Vec<String> = touched_files.into_iter().collect();
+
         // 4. Update agent run in SQLite
         if let Some(mem) = &self.memory {
             let estimated_cost = (total_tokens as f64 / 1_000_000.0) * 3.0; // ~$3 per 1M tokens approximation
             let error_msg = if final_status != "completed" { Some(final_response.as_str()) } else { None };
             let _ = mem.finish_agent_run(run_id, final_status, total_tokens, estimated_cost, error_msg);
+
+            // 5. Post-task memory and doc staleness synchronization (Phase 12)
+            if final_status == "completed" && !touched_list.is_empty() {
+                // Cascade staleness to mirrored documentation
+                let _ = StalenessCascadeEngine::cascade_changes(&self.repo_root, &touched_list, mem);
+
+                // Update file inventory hashes in SQLite files table
+                for rel_path in &touched_list {
+                    let full_path = self.repo_root.join(rel_path);
+                    if full_path.exists() {
+                        if let Ok(bytes) = std::fs::read(&full_path) {
+                            let mut hasher = Sha256::new();
+                            hasher.update(&bytes);
+                            let new_hash = format!("{:x}", hasher.finalize());
+                            let _ = mem.update_file_hash(rel_path, &new_hash, bytes.len());
+                        }
+                    }
+                }
+            }
         }
 
         Ok(AgentExecutionSummary {
@@ -344,6 +425,8 @@ impl AgentLoop {
             total_tokens,
             final_response,
             critic_iterations,
+            context_retrieved,
+            touched_files: touched_list,
         })
     }
 }

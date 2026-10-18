@@ -143,4 +143,5 @@ When the developer issues a SIGINT (Ctrl+C) or timeout triggers:
 - [x] Phase 10: OpenRouter tool calling with runtime limits and safety interceptors.
 - [x] Phase 10: Tool call logging to `tool_calls` table and output truncation.
 - [x] Phase 11: Deterministic compiler/test critic with failure memory persistence and Gate 2 self-correction loop.
-- [ ] Phase 12: Wire Layer 4 `ContextPacket` into pre-planning prompt.
+- [x] Phase 12: Wire Layer 4 `ContextPacket` into pre-planning prompt and synchronize post-task memory/docs.
+- [ ] Phase 13: Daily scheduled scanner and health audit.

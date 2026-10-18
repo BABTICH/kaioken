@@ -92,6 +92,16 @@ impl MemoryEngine {
         Ok(id)
     }
 
+    pub fn update_file_hash(&self, path: &str, new_hash: &str, size_bytes: usize) -> Result<()> {
+        let conn = self.db.connection();
+        let now = chrono::Utc::now().to_rfc3339();
+        conn.execute(
+            "UPDATE files SET source_hash = ?1, size = ?2, last_modified = ?3 WHERE path = ?4;",
+            params![new_hash, size_bytes as i64, now, path],
+        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        Ok(())
+    }
+
     pub fn get_file_by_path(&self, path: &str) -> Result<Option<FileRecord>> {
         let conn = self.db.connection();
         let mut stmt = conn.prepare(
