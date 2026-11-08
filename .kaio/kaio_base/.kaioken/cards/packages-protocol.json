@@ -1,0 +1,140 @@
+{
+  "moduleId": "packages-protocol",
+  "name": "Packages Protocol",
+  "generatedAt": "2026-09-23T15:16:08.375Z",
+  "summary": "The packages/protocol module defines the wire protocol between client and server: message schemas validated at runtime, CBOR serialization, and length-prefixed frame decoding/encoding. It provides typed message abstractions (ClientMessage, ServerMessage) built on CBOR with strict validation, plus streaming decoders for framing.\n\nKey design: protocol.ts uses TypeBox schemas to define a strict, versioned message envelope (version 8). Messages are CBOR-encoded; framing.ts adds a 4-byte length prefix (big-endian uint32). codec.ts wraps framing and CBOR with validation/type-checking into a push-based decoder streaming interface. CBOR implementation is self-contained with safety limits (max depth 64, max byte length 16 MiB).\n\nPackages exchange: client sends hello/request/cancel; server sends hello/hello_error/response/service_update/attachment. Validation errors are surfaced as ProtocolValidationError or FrameError during decode. Constants like PROTOCOL_VERSION and DEFAULT_MAX_FRAME_LENGTH live in protocol.ts and framing.ts respectively.\n\nThe structured entry points are encodeCbor/decodeCbor (cbor), encodeFrame/FrameDecoder (framing), encodeClientMessage/encodeServerMessage and ClientMessageDecoder/ServerMessageDecoder (codec), and parseClientMessage/parseServerMessage (codec) — the latter produce typed, validated objects from raw decoded values.",
+  "keyPoints": [
+    "Defines a versioned protocol (PROTOCOL_VERSION=8) with strict message schemas in protocol.ts using TypeBox, validated at runtime against a union of client/server message variants (ClientMessage, ServerMessage).",
+    "CBOR codec implements full RFC 8949 with safety limits: max depth 64, max byte/container length 16 MiB, configurable via CborOptions; encodeCbor/decodeCbor are the primary entry points.",
+    "Framing adds a 4-byte length prefix; FrameDecoder handles incremental push of chunks, produces complete frames, enforces max frame length via FrameDecoderOptions; encodeFrame produces the prefixed bytes.",
+    "codec.ts separates concerns: parseClientMessage/parseServerMessage validate raw decoded values; ClientMessageDecoder/ServerMessageDecoder combine framing+CBOR parsing into a streaming API with push/end, raising ProtocolValidationError or FrameError on malformed data.",
+    "Test coverage confirms wire compatibility; tests include CBOR known-vector hex strings (e.g., empty array '80', map with a:1,b:[2,3] 'a26161016162820203') and protocol hello messages.",
+    "\n"
+  ],
+  "entryPoints": [],
+  "sources": [
+    {
+      "path": "packages/protocol/CHANGELOG.md",
+      "hash": "9648005632c1efabbd23d3b8cd91e17442792280b2998a61d08efb4fc0bd273e"
+    },
+    {
+      "path": "packages/protocol/README.md",
+      "hash": "0cb30b80c30fe195cf7f22fe3a3934cd13f365d33c10764132540e6b18ca9457"
+    },
+    {
+      "path": "packages/protocol/package.json",
+      "hash": "2c66d43574c6a7acb0645586bab02af24005dafb611f150fbad6d66cebeaf5ac"
+    },
+    {
+      "path": "packages/protocol/src/cbor/decoder.ts",
+      "hash": "47751a6b356d2b911de7887ec748a59be63d41d4a778ab5496043dd07d345744"
+    },
+    {
+      "path": "packages/protocol/src/cbor/encoder.ts",
+      "hash": "0777eb437cc4f954273e818b1d22825e2fd2264eace11cdf5433dc30174a198e"
+    },
+    {
+      "path": "packages/protocol/src/cbor/index.ts",
+      "hash": "604a0d1c3bfe00f4e0b19d07426c1904f2c4db12d1eac6c62ce7e413420107b2"
+    },
+    {
+      "path": "packages/protocol/src/cbor/options.ts",
+      "hash": "3e26072fd679ae28b7b4a0bb810fbb6adf144aaf50a873f0ee0f23b0fa1d3f6d"
+    },
+    {
+      "path": "packages/protocol/src/codec.ts",
+      "hash": "570397ea3d5df9924b0c31841a0da68543b338670f921e3fda2cbe17e34273e2"
+    },
+    {
+      "path": "packages/protocol/src/framing.ts",
+      "hash": "30214ce7400fc69be1a7571a3d1ebe7a25626a3f12aa73373a4bf28b0db26388"
+    },
+    {
+      "path": "packages/protocol/src/index.ts",
+      "hash": "cae1bd6aa5b9d449817ee53f3483a36dc6673136c364a93fbbecb12d34aaf434"
+    },
+    {
+      "path": "packages/protocol/src/protocol.ts",
+      "hash": "d91623d612ba23fdd2129bd58b661c7f3d5e1603030d3592f923a73263a349c3"
+    },
+    {
+      "path": "packages/protocol/test/cbor/cbor.test.ts",
+      "hash": "9e1edc0e0eb3b88a8e8df03fb9e29e57c68f285a77052165e21c0a363a7152c9"
+    },
+    {
+      "path": "packages/protocol/test/framing.test.ts",
+      "hash": "bd7a5f205ad8349123e2505fbaba526532bfca0060da8b9655044ec0e1770071"
+    },
+    {
+      "path": "packages/protocol/test/protocol.test.ts",
+      "hash": "b0205487bee8361a77bcceb71e3e7ca74dfa480b4c57cb8c7adb5e0ce49e4c92"
+    },
+    {
+      "path": "packages/protocol/tsconfig.build.json",
+      "hash": "5d1d8e87055b879ea8525af3d2061952705dac28f2a79450cc86b138828eff3f"
+    },
+    {
+      "path": "packages/protocol/tsconfig.test.json",
+      "hash": "6b556c407ba9a93babd6aa5600451a941e51cb72b2f9b906cf143914fea15874"
+    },
+    {
+      "path": "packages/protocol/vitest.config.ts",
+      "hash": "3a577790b763f5d771215ae8d637641bd05b327b42b67afceeb28c202a71d0bd"
+    }
+  ],
+  "verification": {
+    "grounded": 0,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "decodeCbor",
+      "encodeCbor",
+      "UINT32_BASE",
+      "MAX_UINT32",
+      "DEFAULT_MAX_CBOR_BYTE_LENGTH",
+      "DEFAULT_MAX_CBOR_CONTAINER_LENGTH",
+      "DEFAULT_MAX_CBOR_DEPTH",
+      "CborOptions",
+      "ResolvedCborOptions",
+      "CborError",
+      "constructor",
+      "textEncoder",
+      "textDecoder",
+      "resolveOptions",
+      "ProtocolValidationError",
+      "parseClientMessage",
+      "parseServerMessage",
+      "encodeClientMessage",
+      "encodeServerMessage",
+      "ClientMessageDecoder",
+      "push",
+      "end",
+      "ServerMessageDecoder",
+      "isSupportedProtocolVersion",
+      "DEFAULT_MAX_FRAME_LENGTH",
+      "FrameDecoderOptions",
+      "FrameError",
+      "encodeFrame",
+      "FrameDecoder",
+      "PROTOCOL_VERSION",
+      "ServerId",
+      "isServerId",
+      "ProtocolErrorCode",
+      "ProtocolError",
+      "ClientHello",
+      "SessionTarget",
+      "RpcTarget",
+      "RequestEnvelope",
+      "CancelEnvelope",
+      "ClientMessageSchema",
+      "ClientMessage",
+      "ServerMessageSchema",
+      "ServerHello",
+      "ServerHelloError",
+      "ResponseEnvelope",
+      "ServiceEventEnvelope",
+      "AttachmentEnvelope",
+      "ServerMessage"
+    ]
+  }
+}

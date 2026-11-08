@@ -1,0 +1,463 @@
+{
+  "moduleId": "packages-chord",
+  "name": "Packages Chord",
+  "generatedAt": "2026-09-23T15:14:09.039Z",
+  "summary": "Chord is the structural module for packages/chord, implementing a facet-based application architecture. It provides a delta-based state tracking system for JSON data, a dependency-injected service framework with local and remote instances, facet lifecycle management, bundling/loading of facet bundles for Node.js, and serialization/validation of service wire protocol messages. Includes an immutable delta application API, reactive subscriptions with context propagation for cancellation, and node-specific tooling to package facets into distributable bundles with integrity manifests.",
+  "keyPoints": [
+    "Provides delta-based state tracking: `track` observes mutations on JSON objects via proxies and emits compact operation lists (replace/set/delete/append/transform/patch) for efficient replication; `apply` applies ops to a target, `applyImmutable` creates new instances, and string diffs use suffix detection with configurable overlap scanning.",
+    "Facet lifecycle: `createFacetHost` in api.ts manages facets through states (setting_up → prepared → active → disposing → dead), topological ordering of dependencies, staged service activation, reload support detecting shape/reference changes, and disposal of owned resources.",
+    "Remote services: `RemoteServiceProvider` (provider.ts) classifies implementations into methods and replicated state members, validates them against RemoteServiceContract for JSON-compatible types, and supports singleton and keyed service instances with generation-based addresses, replacement (replacing implementations), spawning (creating keyed instances), subscriptions for state updates, and withdrawal.",
+    "Service wire encoding: `encoder`/`decoder` in delta/index.ts convert internal Ops to compact WireOps omitting implied paths during subscriptions; service-wire.ts defines wire snapshot/update formats with control calls (catalogue/subscribe/unsubscribe) and strict parsing/validation for cross-process communication.",
+    "Node bundling: `bundleFacets` (node/bundle.ts) uses esbuild to compile facet sources into a chord.facet-bundle format (version 2) with manifest chord-facets.json; `createFacetBundleLoader` loads and executes such bundles, resolving external imports via resolver or node require, verifying integrity hashes, and materializing artifact files.",
+    "Context system: context/index.ts provides immutable ContextKey/Context with BackgroundContext and TODO, value scoping, abort signal propagation/cancellation, and `awaitWithContext` to track pending operations; built-in ABORT_SIGNAL_CONTEXT_KEY integrates with cancellation flows."
+  ],
+  "entryPoints": [
+    {
+      "name": "track",
+      "file": "src/delta/index.ts",
+      "note": "Creates a Tracker wrapping a JSON object; mutations made through the returned proxy are recorded as delta Ops accessible via flush/rebase/discard. Used as the core change-tracking mechanism for replicated state."
+    },
+    {
+      "name": "apply",
+      "file": "src/delta/index.ts",
+      "note": "Applies an array of Ops to a target object, mutating it in place; supports all op types and validates path safety/index ranges."
+    },
+    {
+      "name": "applyImmutable",
+      "file": "src/delta/index.ts",
+      "note": "Applies Ops without mutating the input; copies containers along changed paths and returns a new object structure (for immutable state management)."
+    },
+    {
+      "name": "createFacetHost",
+      "file": "src/api.ts",
+      "note": "Async factory creating a FacetHost that manages facet lifecycles, service provision, and reloading; the main entry point for running facets."
+    },
+    {
+      "name": "defineService",
+      "file": "src/api.ts",
+      "note": "Defines a Service with an ID and optional local-only flag; used to declare service contracts consumed/provided across facets and remote hosts."
+    },
+    {
+      "name": "createRemoteServiceBinding",
+      "file": "src/api.ts",
+      "note": "Creates a RemoteServiceBinding that connects to a remote service provider via a transport, enabling use/observe of remote services with hydration and rebind support."
+    },
+    {
+      "name": "bundleFacets",
+      "file": "src/node/bundle.ts",
+      "note": "Node-specific bundling of facet sources into distributable bundle artifacts with manifest and integrity checks; primary tool for packaging facets for deployment."
+    },
+    {
+      "name": "createFacetBundleLoader",
+      "file": "src/node/bundle-loader.ts",
+      "note": "Creates a FacetLoader that loads a bundled facet artifact from disk, verifying manifest integrity and executing the bundle to extract facet definitions."
+    },
+    {
+      "name": "RemoteServiceProvider",
+      "file": "src/services/provider.ts",
+      "note": "Central class for providing remote services; provide/withdraw/replace/spawn manage service implementations, and invoke/subscribe handle calls and state updates for bound clients."
+    },
+    {
+      "name": "createLoopbackServiceTransport",
+      "file": "src/services/loopback.ts",
+      "note": "Creates a RemoteServiceTransport that routes calls/subscriptions directly to a given RemoteServiceProvider within the same process, used for testing and local facades."
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/chord/PLANNING.md",
+      "hash": "8320bebf61df84546768c7aec13af18ff6e93d23fdfdc1f345abac295d3d4802"
+    },
+    {
+      "path": "packages/chord/README.md",
+      "hash": "064c77a40e0d78077b74842a4d0612d4a75b7cbdc5f729d48bf2ce668523a5c3"
+    },
+    {
+      "path": "packages/chord/package.json",
+      "hash": "20e079a5eeeb420a23b4c23dde5b6ca7bdc9450dfccc08cd63160b8c74f800da"
+    },
+    {
+      "path": "packages/chord/src/api.ts",
+      "hash": "769a04a5f903bb53cc5b66e7353c69b02f12159d82f196a7894ceea5800ac201"
+    },
+    {
+      "path": "packages/chord/src/bundler.ts",
+      "hash": "c8a71296722b264f0361c2f051b55ade4c68ec46f968f6ae16c63324a94989cd"
+    },
+    {
+      "path": "packages/chord/src/context/index.ts",
+      "hash": "0f0925a896cf1e506d9495d929157347639e90da343bf28d7472ea645897e7d3"
+    },
+    {
+      "path": "packages/chord/src/delta/README.md",
+      "hash": "b2eac56607605dc59df10f39531e7ad709b5f08fbfc5d4b4ededb1860c1bc8d6"
+    },
+    {
+      "path": "packages/chord/src/delta/index.ts",
+      "hash": "b7957ff1cc71ccc9e358f5bb727e7e59bf3a42bf928df044b10f5cb02bb7d7cb"
+    },
+    {
+      "path": "packages/chord/src/facets/host.ts",
+      "hash": "a31983f78d4d0cb3a30cd5bbd796152078b71da37e9a69ab3c8b6d030b88f831"
+    },
+    {
+      "path": "packages/chord/src/facets/loader.ts",
+      "hash": "ea51215619f0a9ce6d7db5350ee2644e8522126f3cdb863e60c58d16bd0e4646"
+    },
+    {
+      "path": "packages/chord/src/index.ts",
+      "hash": "268b8d1b04340c5be7e6c7a1adc824f5f820d806719d02ca7eec4662683f4d5a"
+    },
+    {
+      "path": "packages/chord/src/json.ts",
+      "hash": "d94a2f33d6c83fc022580466700d34cd1bca21003d567522f58b38902e1806fa"
+    },
+    {
+      "path": "packages/chord/src/node.ts",
+      "hash": "6b2e9d201a21c4cd62171f5aa2c9d4b739b1b14c73d534a4630fd01cce77b4ee"
+    },
+    {
+      "path": "packages/chord/src/node/bundle-loader.ts",
+      "hash": "26800e73ee5ab25ccb4b3c769e102fdf48a4abddd67c8af27cc58c4225852ab1"
+    },
+    {
+      "path": "packages/chord/src/node/bundle.ts",
+      "hash": "c7a5009381af017322e4cbdd70f111b1c2d20fb37fbe22405b39015d1445c905"
+    },
+    {
+      "path": "packages/chord/src/node/manifest.ts",
+      "hash": "03169161da822cbe62fff71c0fe1a1e4ce04e4960691b20b6272d2042bc30037"
+    },
+    {
+      "path": "packages/chord/src/node/package.ts",
+      "hash": "7ba150d4dc2030e0a7b6771cf4c34dcc8b6f0e4e16e1d624a1facf0962579823"
+    },
+    {
+      "path": "packages/chord/src/services/consumer.ts",
+      "hash": "4d9781ecca6d77845ca52734165a0748ebd3f72ed02418d55c607416050a2eea"
+    },
+    {
+      "path": "packages/chord/src/services/errors.ts",
+      "hash": "487e73b60a1c69dd132cf6f4c4ec625e346b5cecc1cb890da25a5199a43798a8"
+    },
+    {
+      "path": "packages/chord/src/services/handle.ts",
+      "hash": "4c68a6dc8835e9ab2542523fce64076b3f63a1e6941b67c615056707ecc58f56"
+    },
+    {
+      "path": "packages/chord/src/services/instances.ts",
+      "hash": "5d77d7ac5d2b6d6859b209c9ab8203bc638b52bd4149aba1c16e6236935a1192"
+    },
+    {
+      "path": "packages/chord/src/services/loopback.ts",
+      "hash": "533ec7e5680090e4bcdade2b6ece9b39fba816acb72bc019ba0324af9beae9ad"
+    },
+    {
+      "path": "packages/chord/src/services/provider.ts",
+      "hash": "fe810eaa1eb8418025b2dd0d16bb049c8641fd1b864fbd31c8f8de031c563fcc"
+    },
+    {
+      "path": "packages/chord/src/services/state-codec.ts",
+      "hash": "4bebb2ffc7ed0ffd62933460d5a4a5733e3d7647294476c475cb9431f121f904"
+    },
+    {
+      "path": "packages/chord/src/services/state-internals.ts",
+      "hash": "61eddd39040760d06b6ce1562e7a07a46ca09b311e1785d99c3c058329a74fd5"
+    },
+    {
+      "path": "packages/chord/src/services/state.ts",
+      "hash": "4605021d763b5b82b99ebab783769640e61b19fb8f64082953b3d0c1be717319"
+    },
+    {
+      "path": "packages/chord/src/services/wire.ts",
+      "hash": "84ec6e3362ae3c5239b27b63be8e8377e1cf45c97088bb8d628c5e55458614b8"
+    },
+    {
+      "path": "packages/chord/src/types.ts",
+      "hash": "885283da0e2a60274e3bdfcd503ca15bd66a8a485e0963816684c1ab3586e2be"
+    },
+    {
+      "path": "packages/chord/test/boundary.test.ts",
+      "hash": "f719de5ff76358a6b2171b14f8c2f368c0057dfb860f87dcd37eda4baaece1f1"
+    },
+    {
+      "path": "packages/chord/test/bundle.test.ts",
+      "hash": "ed78ec76495b6ced68ab5437b670fdd2b52bd30ca6cbbf463bb452335c610e0e"
+    },
+    {
+      "path": "packages/chord/test/context.test.ts",
+      "hash": "8270a710fe003103141f1a72c01af0655a8863233f8cba3b96a041443e9cfe82"
+    },
+    {
+      "path": "packages/chord/test/delta-clone.test.ts",
+      "hash": "0ca90da58d5516239f729d3215e4b7af13e025f152b2e0c5b00f09ef79764683"
+    },
+    {
+      "path": "packages/chord/test/delta-retention.test.ts",
+      "hash": "eef13e41464c7713ba9420ef0d9ea896fe00bf2869b015da0d12660110caa96f"
+    },
+    {
+      "path": "packages/chord/test/delta-retention.worker.ts",
+      "hash": "e3372492f67eb4093878b84ca11a37a69870f2a4cf8f5d4f63e96c2ac4127f94"
+    },
+    {
+      "path": "packages/chord/test/delta-traversal.bench.ts",
+      "hash": "bc8eefd5c48e88ef8c3d0415d62093b51a555d5daa3d79e8a6e1078121d94875"
+    },
+    {
+      "path": "packages/chord/test/delta.test.ts",
+      "hash": "94bf8e1b881cbf14e0e94c88a3f52cafe3baf19869822863c13ebeff73d1d5db"
+    },
+    {
+      "path": "packages/chord/test/facet-loader.test.ts",
+      "hash": "ed4291b5e3f2c06bdeccaa18fd592227d2f926aa0f80f895ef78502eb392db12"
+    },
+    {
+      "path": "packages/chord/test/facets.test.ts",
+      "hash": "f49ce64d95acf84b937d4766400bba275417396629d820bf558ca052456521c4"
+    },
+    {
+      "path": "packages/chord/test/helpers.ts",
+      "hash": "331963e24367fea44d6d4ed0a809036789026a764ac4dbc23a8e584fa9f178c5"
+    },
+    {
+      "path": "packages/chord/test/json.test.ts",
+      "hash": "b9445861f55e89a5881c48af9225f6174303faafa7fd3edc223bb171ac0f907a"
+    },
+    {
+      "path": "packages/chord/test/service-wire.test.ts",
+      "hash": "8cd222f5031692392bb164fe01475113e04f8b419f4f53495b19046da7bb71a0"
+    },
+    {
+      "path": "packages/chord/test/services.test.ts",
+      "hash": "69bc7dd02529ecc660c74980549e333665ef6ef7d17f13c6e7cd8c37174fbe3f"
+    },
+    {
+      "path": "packages/chord/tsconfig.build.json",
+      "hash": "5d1d8e87055b879ea8525af3d2061952705dac28f2a79450cc86b138828eff3f"
+    }
+  ],
+  "verification": {
+    "grounded": 0,
+    "ungrounded": [
+      "track",
+      "apply",
+      "applyImmutable",
+      "createFacetHost",
+      "defineService",
+      "createRemoteServiceBinding",
+      "bundleFacets",
+      "createFacetBundleLoader",
+      "RemoteServiceProvider",
+      "createLoopbackServiceTransport"
+    ],
+    "unknownFiles": [
+      "src/delta/index.ts",
+      "src/api.ts",
+      "src/node/bundle.ts",
+      "src/node/bundle-loader.ts",
+      "src/services/provider.ts",
+      "src/services/loopback.ts"
+    ],
+    "uncovered": [
+      "createStaticFacetLoader",
+      "load",
+      "dispose",
+      "combineFacetLoaders",
+      "defineFacet",
+      "replicatedState",
+      "BACKGROUND_CONTEXT",
+      "TODO_CONTEXT",
+      "createContextKey",
+      "withContextValue",
+      "withAbortSignal",
+      "withoutAbortSignal",
+      "withCancel",
+      "awaitWithContext",
+      "Seg",
+      "Path",
+      "NonEmptyPath",
+      "PathRef",
+      "Op",
+      "WireOp",
+      "isReplace",
+      "isBase",
+      "overlap",
+      "TrackerOptions",
+      "Tracker",
+      "flush",
+      "rebase",
+      "discard",
+      "Slot",
+      "LogNode",
+      "Entry",
+      "Cell",
+      "EntrySlot",
+      "EntryCleanup",
+      "CellCleanup",
+      "EntryHandler",
+      "get",
+      "set",
+      "deleteProperty",
+      "defineProperty",
+      "setPrototypeOf",
+      "preventExtensions",
+      "proxyFor",
+      "state",
+      "target",
+      "dirty",
+      "RESERVED_SEGMENTS",
+      "UnsafePathError",
+      "segment",
+      "constructor",
+      "assertValidOp",
+      "assertValidWireOp",
+      "assertSafePath",
+      "PathError",
+      "path",
+      "Encoder",
+      "encode",
+      "encoder",
+      "Decoder",
+      "decode",
+      "decoder",
+      "FacetKernel",
+      "provider",
+      "activate",
+      "reload",
+      "disposeLoadedFacets",
+      "isJsonValue",
+      "FacetBundleExternalResolver",
+      "FacetBundleLoaderOptions",
+      "FacetBundleArtifactLoaderOptions",
+      "readFacetBundleManifest",
+      "readFacetBundleArtifact",
+      "createFacetBundleArtifactLoader",
+      "facets",
+      "FacetBundlePlatform",
+      "BundleFacetsOptions",
+      "BundleFacetsResult",
+      "FACET_BUNDLE_FORMAT",
+      "FACET_BUNDLE_FORMAT_VERSION",
+      "FACET_BUNDLE_MANIFEST_FILE",
+      "FACET_BUNDLE_ARTIFACT_FORMAT",
+      "FACET_BUNDLE_ARTIFACT_FORMAT_VERSION",
+      "FacetBundleEntry",
+      "FacetBundleManifest",
+      "FacetBundlePlugin",
+      "FacetBundleArtifact",
+      "BundleFacetPackageOptions",
+      "BundleFacetPackageResult",
+      "bundleFacetPackage",
+      "RemoteServiceBindingImpl",
+      "use",
+      "observe",
+      "ready",
+      "rebind",
+      "REMOTE_SERVICE_ERROR_CODES",
+      "RemoteServiceErrorCode",
+      "isRemoteServiceErrorCode",
+      "RemoteServiceError",
+      "code",
+      "ServiceSlot",
+      "view",
+      "bind",
+      "unbind",
+      "resolve",
+      "InstanceDirectoryEntry",
+      "deactivate",
+      "InstanceDirectory",
+      "observerCount",
+      "insert",
+      "replace",
+      "remove",
+      "reset",
+      "ServiceUpdatePublisher",
+      "RemoteServiceEndpoint",
+      "invoke",
+      "catalogue",
+      "provide",
+      "withdraw",
+      "validateReplacement",
+      "spawn",
+      "subscribe",
+      "createRemoteServiceEndpoint",
+      "validateRemoteServiceImplementation",
+      "ServiceStateEncoder",
+      "encodeSnapshot",
+      "encodeUpdate",
+      "ServiceStateDecoder",
+      "decodeSnapshot",
+      "decodeUpdate",
+      "createServiceStateEncoder",
+      "createServiceStateDecoder",
+      "ReplicatedStateInternals",
+      "publish",
+      "registerReplicatedStateInternals",
+      "getReplicatedStateInternals",
+      "MutableReplicatedStateImpl",
+      "sequence",
+      "value",
+      "ReplicatedStateReplica",
+      "hydrate",
+      "update",
+      "clear",
+      "serviceDeliveryContext",
+      "WireServiceMemberSnapshot",
+      "WireServiceInstanceSnapshot",
+      "WireServiceSubscriptionSnapshot",
+      "WireServiceProviderUpdate",
+      "ServiceControlCall",
+      "createServiceCatalogueCall",
+      "createServiceSubscribeCall",
+      "createServiceUnsubscribeCall",
+      "decodeServiceControlCall",
+      "parseServiceCall",
+      "parseServiceCatalogue",
+      "parseServiceSubscriptionSnapshot",
+      "parseWireServiceSubscriptionSnapshot",
+      "parseServiceProviderUpdate",
+      "parseWireServiceProviderUpdate",
+      "ContextKey",
+      "Context",
+      "toString",
+      "JsonValue",
+      "JsonRepresentation",
+      "ReplicatedStateDelivery",
+      "ReplicatedState",
+      "MutableReplicatedState",
+      "ServiceMode",
+      "Service",
+      "RemoteServiceContract",
+      "ServiceSpawner",
+      "RemoteServices",
+      "ServiceCatalogueEntry",
+      "ServiceInstanceAddress",
+      "ServiceMemberSnapshot",
+      "ServiceInstanceSnapshot",
+      "ServiceSubscriptionSnapshot",
+      "ServiceProviderUpdate",
+      "ServiceCall",
+      "ServiceSubscription",
+      "close",
+      "RemoteServiceTransport",
+      "RemoteServiceBindingOptions",
+      "RemoteServiceBinding",
+      "FacetEnvironment",
+      "provideMany",
+      "own",
+      "onActivate",
+      "onDeactivate",
+      "Facet",
+      "setup",
+      "RemoteServiceSource",
+      "open",
+      "assertAccess",
+      "onError",
+      "FacetOptions",
+      "FacetHost",
+      "LoadedFacets",
+      "FacetLoader"
+    ]
+  }
+}

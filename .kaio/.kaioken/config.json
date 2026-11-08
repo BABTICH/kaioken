@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "model": "z-ai/glm-5.3-flash",
+  "provider": "openrouter",
+  "base_url": "",
+  "concurrency": 4,
+  "effective_concurrency": 4,
+  "concurrency_clamped": false,
+  "max_module_tokens": 6000,
+  "max_tokens": 8192,
+  "scope": {
+    "include": [],
+    "exclude": [
+      "node_modules",
+      ".git",
+      "dist"
+    ]
+  },
+  "notes": [],
+  "allow_run": true
+}

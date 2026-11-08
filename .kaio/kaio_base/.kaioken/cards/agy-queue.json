@@ -1,0 +1,82 @@
+{
+  "moduleId": ".agy-queue",
+  "name": ".agy Queue",
+  "generatedAt": "2026-09-23T15:04:37.140Z",
+  "summary": "The .agy-queue module contains only empty text files (brief-04.txt through brief-18.txt) with no declarations or code. It is a structural placeholder with no functional content.",
+  "keyPoints": [
+    "All 15 files are empty (0 lines) and contain no declarations.",
+    "The files are named brief-04.txt to brief-18.txt.",
+    "No entry points or executable code exist in this module.",
+    "The module is purely structural, serving no runtime purpose.",
+    "This likely represents documentation fragments or a placeholder for a queue implementation that was never populated."
+  ],
+  "entryPoints": [],
+  "sources": [
+    {
+      "path": ".agy-queue/brief-04.txt",
+      "hash": "41b15b5406096a053e81aacad02a7546e7c7a419f4f6adf3f2fa20e1e9cb72da"
+    },
+    {
+      "path": ".agy-queue/brief-05.txt",
+      "hash": "639f35238647955e897e34e966fc12099b2a982e0d4f580992a8c2f632a76dbc"
+    },
+    {
+      "path": ".agy-queue/brief-06.txt",
+      "hash": "f16fe059c1ce7b33a379703b59b955cfb6ebc87499277bcfab2bcd8883dfb59a"
+    },
+    {
+      "path": ".agy-queue/brief-07.txt",
+      "hash": "b8b6e7b296ca253e9cb2e4875b5048b7e99452a7d7735637fba518edcea34667"
+    },
+    {
+      "path": ".agy-queue/brief-08.txt",
+      "hash": "243ef76ad0f1933664322f7a5a6b18523b15595ca0b3d600705ce437216dcdcf"
+    },
+    {
+      "path": ".agy-queue/brief-09.txt",
+      "hash": "f2e42759336b5dc5e9f71c573f0ce95533951c70ad87abe508e7d12c5e28b1fa"
+    },
+    {
+      "path": ".agy-queue/brief-10.txt",
+      "hash": "c947231c49481383b99f45976688be85d633051939063e80b1f80cfb69e72f91"
+    },
+    {
+      "path": ".agy-queue/brief-11.txt",
+      "hash": "96c4eeff15b24dda780e3c9a5f51518a03fce2ea82f0a75690b6729c406e12ab"
+    },
+    {
+      "path": ".agy-queue/brief-12.txt",
+      "hash": "ce123829c20ca840a70c3adf06e147c56238e00015441a6f517252b570c7afdf"
+    },
+    {
+      "path": ".agy-queue/brief-13.txt",
+      "hash": "f40cc27d55ef4a327710d43337ba30f277e53f5880d5b3c3a38d975afe25dd49"
+    },
+    {
+      "path": ".agy-queue/brief-14.txt",
+      "hash": "89fa4f9b47fbc0a18bb27b737bf922d899ba48820d8aa3252be4419a12ee31a0"
+    },
+    {
+      "path": ".agy-queue/brief-15.txt",
+      "hash": "2577977c27afc264356ab3e129d16631e538f0b672718927d4cd571b8a9dc930"
+    },
+    {
+      "path": ".agy-queue/brief-16.txt",
+      "hash": "bfe38941f99f9e9762731c36cec18aa5c2fc63cb13d3bd074b7f375b110a456d"
+    },
+    {
+      "path": ".agy-queue/brief-17.txt",
+      "hash": "9ddc321a234660d7562557c3fefe53e153745b9351c617d4104450c89c44cc99"
+    },
+    {
+      "path": ".agy-queue/brief-18.txt",
+      "hash": "43e090cb08490d6bff56e100f42bcce796952fc8d0347c071e81cb2fa0b654fb"
+    }
+  ],
+  "verification": {
+    "grounded": 0,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": []
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "moduleId": "root",
+  "name": "Root",
+  "generatedAt": "2026-09-23T15:04:50.064Z",
+  "summary": "Root module containing repository configuration, build tooling, and vitest workspace setup for a monorepo with packages for chord, telemetry, ai, agent, protocol, client, server, coding-agent, and tui.",
+  "keyPoints": [
+    "Monorepo root with at least 9 packages under `packages/` (chord, telemetry, ai, agent, protocol, client, server, coding-agent, tui), configured via vitest workspace paths.",
+    "Contains tooling configs: biome.json (lint/format), tsconfig.base.json (shared TypeScript), vitest.base.ts (test setup), plus package.json/.npmrc for dependency management.",
+    "Includes cross-platform test scripts: mini-test.sh, pi-test.bat (Windows batch), pi-test.ps1 (PowerShell), pi-test.sh (shell), and test.sh — indicating multi-OS CI/test support.",
+    "tui-plan.md suggests design planning for the TUI (terminal UI) package, which has a dedicated tsconfig.kaioken.json for the Kaioken framework.",
+    "AGENTS.md, CONTRIBUTING.md, SECURITY.md, LICENSE, README.md present — standard community/contribution docs.",
+    "vitest.base.ts exports `workspaceSourcePaths` — a const mapping package entry points (e.g., chordIndex, aiIndex, tuiIndex) to absolute file URLs, used for targeted test runs."
+  ],
+  "entryPoints": [
+    {
+      "name": "workspaceSourcePaths",
+      "file": "vitest.base.ts",
+      "note": "Const object mapping each package's source entry path (like chordIndex) to its absolute file URL via import.meta.url, used by vitest workspace config."
+    }
+  ],
+  "sources": [
+    {
+      "path": ".gitattributes",
+      "hash": "bdeaa42202295cf795f30f9a6fbe281fe594fdaf7eebde0b41d7568303973242"
+    },
+    {
+      "path": ".gitignore",
+      "hash": "53de77ce5409acea1c08a22f91b771519b7a52a2eb7ee4fc506a05383ff8bf6a"
+    },
+    {
+      "path": ".npmrc",
+      "hash": "d2c8ca514b23b7378b7ceb25e9599954e7c9d83328dc53185e2b69ba1b2dc146"
+    },
+    {
+      "path": "AGENTS.md",
+      "hash": "253b9077f02686d4ed56aab0cf67c34e8f49da2e05fa847e0b722853a0307db1"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "hash": "ce0c1456c55404c729c632221f9159ea3b463e6b3974a1c22446e9315388490c"
+    },
+    {
+      "path": "LICENSE",
+      "hash": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48"
+    },
+    {
+      "path": "README.md",
+      "hash": "d765d1da756246d3ec7eec03f33bb760c29d1586c33f0125f111e64458a8affd"
+    },
+    {
+      "path": "SECURITY.md",
+      "hash": "2d8b299904ce69d14b9378b643964d86f79fb619578cdc2ee390f843dab1b6cb"
+    },
+    {
+      "path": "biome.json",
+      "hash": "9fbed5ac7226f18f2d3dd4941d3b234d3cad1fd9f23e29a2a103478900a40ab3"
+    },
+    {
+      "path": "mini-test.sh",
+      "hash": "3b9f0f382429f58716acfff65c3a13966b5b1d256dc7ea4fc14df8218177fa7f"
+    },
+    {
+      "path": "package.json",
+      "hash": "fb93cbc7869eea561425c1d2a7465eb1c2f532c0053bff8ec6130546af27b113"
+    },
+    {
+      "path": "pi-test.bat",
+      "hash": "c9d3430a614cabfaae5a9e97259643ab9041629bc8253f58f22579a5b6d9c448"
+    },
+    {
+      "path": "pi-test.ps1",
+      "hash": "b7197e94a706f67b2fc1293916ff04715f6b9afb98be17458c57d75ad052250b"
+    },
+    {
+      "path": "pi-test.sh",
+      "hash": "32f4c1af38fe2af9b411a5c1bdac0dca8028a922000e2367a0f1f730bd20c1cb"
+    },
+    {
+      "path": "test.sh",
+      "hash": "36d56423d4e3ffecd42c2042a52316b69384e6326c6409ef7cd2c1ea27601b26"
+    },
+    {
+      "path": "tsconfig.base.json",
+      "hash": "2db314b2e40a37a94e7b1da0af3883b7dd0ef2a8abc4b22138ae1ceb7cc2375f"
+    },
+    {
+      "path": "tsconfig.json",
+      "hash": "da5dd36d49c4cb6ab41466e8e75e5b9048e46ee769b4a8daa896caa3019e6a56"
+    },
+    {
+      "path": "tsconfig.kaioken.json",
+      "hash": "fcb67873907a578dfebc9601de9e662057429f5ce80ba05636f284abbdde872f"
+    },
+    {
+      "path": "tui-plan.md",
+      "hash": "050bfff6f92f92be0ad724bfa28af428f879aa90a73a8f1b15e628384c9c68e4"
+    },
+    {
+      "path": "vitest.base.ts",
+      "hash": "ec2894cdd0d6bc5d3d4aecbbec7fa69dd388416bdec2c0f39e723b0e37479783"
+    }
+  ],
+  "verification": {
+    "grounded": 1,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": []
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "moduleId": "kaioken-plan",
+  "name": "Kaioken Plan",
+  "generatedAt": "2026-09-23T15:08:43.664Z",
+  "summary": "Structural module that decomposes a repository into modules, generates knowledge cards for each module using an LLM, and persists plans/cards as YAML/JSON artifacts for later pipeline stages.",
+  "keyPoints": [
+    "Module plan is a checkpoint artifact (module-plan.yaml) edited by humans and read back by later stages, not a derived output",
+    "Knowledge cards are generated per module via LLM, then verified against index/scan evidence to catch hallucinated declarations or files",
+    "Card generation supports incremental mode to only regenerate cards whose source files changed or are missing",
+    "Evidence gathering samples directives/files (max 12 symbols/dir, 120 dirs, 40 files/dir) to keep prompts bounded for large repos",
+    "Heuristic fallback (proposeHeuristicModules) exists for when no LLM client is provided, ensuring a plan can still be produced"
+  ],
+  "entryPoints": [
+    {
+      "name": "proposeModulePlan",
+      "file": "kaioken/plan/src/propose.ts",
+      "note": "Main entry to decompose a repository scan/index into a module plan, optionally via LLM with heuristic fallback"
+    },
+    {
+      "name": "generateCards",
+      "file": "kaioken/plan/src/cards.ts",
+      "note": "Main entry to generate knowledge cards for all modules in a plan, with verification and incremental support"
+    },
+    {
+      "name": "writeModulePlan",
+      "file": "kaioken/plan/src/artifact.ts",
+      "note": "Persists a module plan to module-plan.yaml in the kaioken directory"
+    },
+    {
+      "name": "readModulePlan",
+      "file": "kaioken/plan/src/artifact.ts",
+      "note": "Reads back a module plan from disk, returning null if absent"
+    },
+    {
+      "name": "validatePlan",
+      "file": "kaioken/plan/src/validate.ts",
+      "note": "Validates a module plan against the scan, expanding directories and checking file coverage"
+    },
+    {
+      "name": "gatherEvidence",
+      "file": "kaioken/plan/src/evidence.ts",
+      "note": "Collects bounded repository evidence (files, symbols, entry points) to feed prompts and verification"
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/plan/package.json",
+      "hash": "ec88a5618abb175dd52cb7c4d432128db25eb9a390174abeedaa5bd20bfaea32"
+    },
+    {
+      "path": "kaioken/plan/src/artifact.ts",
+      "hash": "d02da67e4097beb0f32ff25c4b8eef37145e0cb75fa25afb2bc1660a9a5bbe6d"
+    },
+    {
+      "path": "kaioken/plan/src/cards.ts",
+      "hash": "92d21073ef17eba768ac8110d11bcd644fec601f59e4a5b5e7c90644dd697247"
+    },
+    {
+      "path": "kaioken/plan/src/evidence.ts",
+      "hash": "16a3ce0455ee3f9e89e2a48edd4528ffaaee618c1aed13ecee9f508db49175c0"
+    },
+    {
+      "path": "kaioken/plan/src/index.ts",
+      "hash": "3900b27866136889fb83f83f0cbf7d5400adae578b8e3da6a9f7d7f5194ca2e1"
+    },
+    {
+      "path": "kaioken/plan/src/propose.ts",
+      "hash": "5b7830548464ab872e329332392ee7bb2d79b1b9bea5b7940c912956e1a46653"
+    },
+    {
+      "path": "kaioken/plan/src/types.ts",
+      "hash": "0be95bdd96a0742aba873996e1d19cd4589a00d19f54f23b29ef2abe53f48bba"
+    },
+    {
+      "path": "kaioken/plan/src/validate.ts",
+      "hash": "a8686342417648f3d4d3d5f034b3249d974724f9dc40fb51c0e913b43e8c21f4"
+    },
+    {
+      "path": "kaioken/plan/test/cards.test.ts",
+      "hash": "404532c9c5195f22750d7f3764025c2adef9929cc146fef1c937c18382f8dd19"
+    },
+    {
+      "path": "kaioken/plan/test/plan.test.ts",
+      "hash": "109b1e0d2be5089a5782e8a05db6dbdba68cb6441139409e88b83fdd53d98c30"
+    },
+    {
+      "path": "kaioken/plan/tsconfig.json",
+      "hash": "bd4429a3d2bcf6870a32c14c7e913489daeed4b1bb2be8e4f579d5acf8007817"
+    }
+  ],
+  "verification": {
+    "grounded": 6,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "MODULE_PLAN_ARTIFACT",
+      "CARDS_DIR",
+      "modulePlanPath",
+      "cardsDir",
+      "normalisePlan",
+      "writeCard",
+      "readCards",
+      "safeFileName",
+      "CardResult",
+      "generateCard",
+      "verifyCard",
+      "buildCardPrompt",
+      "DirectoryEvidence",
+      "RepositoryEvidence",
+      "ModuleEvidence",
+      "ModuleFileEvidence",
+      "gatherModuleEvidence",
+      "ProposeResult",
+      "proposeHeuristicModules",
+      "buildPrompt",
+      "Module",
+      "ModulePlan",
+      "Card",
+      "CardEntryPoint",
+      "CardVerification",
+      "PlanDefect",
+      "PlanValidation",
+      "expandDirectories",
+      "flatten",
+      "findModule",
+      "moduleScope"
+    ]
+  }
+}

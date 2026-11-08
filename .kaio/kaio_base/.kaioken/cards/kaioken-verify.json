@@ -1,0 +1,86 @@
+{
+  "moduleId": "kaioken-verify",
+  "name": "Kaioken Verify",
+  "generatedAt": "2026-09-23T15:11:00.876Z",
+  "summary": "Structural module for kaioken/verify, implementing a verification gate system that runs configured commands and reports pass/fail/unverifiable results. Includes package manager detection, command discovery from verify.json config, output parsing for test failures, and a repair protocol for iterative fixes.",
+  "keyPoints": [
+    "GateCommand defines a single verification command; GateResult extends it with actual execution outcome.",
+    "Package managers supported: pnpm, yarn, bun, npm, deno; detection scans lockfiles or config files.",
+    "runGate orchestrates commands, collects outcomes, and builds a GateReport with overall verdict (passed/failed/unverifiable).",
+    "Output processing: stripAnsi removes ANSI escapes; extractFailures parses test failure indicators; formatFailureSummary summarizes failed tests for output.",
+    "REPAIR_PROTOCOL constant instructs agents to read failures, apply minimal fixes, re-run up to 5 times, and never weaken tests.",
+    "runVerify is the main entry point: reads config, detects commands, runs gate, returns {pass, summary}.",
+    "Tests use ScriptedRunner to simulate command outcomes and repo() to create temporary project fixtures."
+  ],
+  "entryPoints": [
+    {
+      "name": "runVerify",
+      "file": "kaioken/verify/src/gate.ts",
+      "note": "Main entry point: verifies a project root; returns pass boolean and summary string."
+    },
+    {
+      "name": "runGate",
+      "file": "kaioken/verify/src/gate.ts",
+      "note": "Executes a list of gate commands with a runner and returns a GateReport."
+    },
+    {
+      "name": "detectCommands",
+      "file": "kaioken/verify/src/gate.ts",
+      "note": "Detects verification commands from verify.json config or falls back to package manager defaults."
+    },
+    {
+      "name": "detectPackageManager",
+      "file": "kaioken/verify/src/gate.ts",
+      "note": "Identifies the package manager used in a project root."
+    },
+    {
+      "name": "formatFailureSummary",
+      "file": "kaioken/verify/src/gate.ts",
+      "note": "Extracts and summarizes test failures from raw command output."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/verify/package.json",
+      "hash": "22e3d5b8a0cd7742474c38c4a11b6f6942d5035f9ee77b2cec493b91498a773b"
+    },
+    {
+      "path": "kaioken/verify/src/gate.ts",
+      "hash": "106f85c9403fb6b1ffb2f4769e32a73c3994f0b64206758eff3dfff1189b6127"
+    },
+    {
+      "path": "kaioken/verify/src/index.ts",
+      "hash": "97025b69a868b52f00de8046ccf41cbd49acdbfb491e5a87f640fe565642d246"
+    },
+    {
+      "path": "kaioken/verify/test/gate.test.ts",
+      "hash": "7d213d55256f07cce1d8da79c974d4d0fef2396ad24ff63da5523f9710d9665c"
+    },
+    {
+      "path": "kaioken/verify/tsconfig.json",
+      "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "GateCommand",
+      "RunOutcome",
+      "CommandRunner",
+      "run",
+      "GateResult",
+      "GateVerdict",
+      "GateReport",
+      "VERIFY_CONFIG",
+      "PackageManager",
+      "TestFailure",
+      "stripAnsi",
+      "extractFailures",
+      "SystemCommandRunner",
+      "tail",
+      "REPAIR_PROTOCOL"
+    ]
+  }
+}

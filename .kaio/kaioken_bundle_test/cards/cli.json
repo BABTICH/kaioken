@@ -1,0 +1,111 @@
+{
+  "moduleId": "cli",
+  "name": "CLI",
+  "generatedAt": "2026-08-30T16:17:27.950Z",
+  "summary": "CLI module is the kaioken command-line entry point: it parses argv into a Flags object, dispatches to one of fourteen subcommand runners (scan, symbols, search, serve, plan, cards, wiki, status, update, chat, verify, graph, export, research), and bundles its own model and web-search adapters so individual commands do not pick providers.",
+  "keyPoints": [
+    "main.ts owns the full UX surface: parseArgs(argv) returns a Flags interface (or null on --help), and the USAGE constant documents every command, flag and depth multiplier in one block — commands like scan, chat and research are plug-ins that just return Promise<number> exit codes.",
+    "Commands are isolated in apps/cli/src/commands/ and share no types beyond Flags; chat.ts owns a 400-line interactive loop (runChat, converse, ChatHooks, ChatSessionCache) with a session-level prompt/abort protocol, while scan.ts, research.ts and serve.ts are single-purpose runners (runScan, runResearch, runServe) that depend on knowledge.ts to load .kaioken/scan.json and .kaioken/index.json.",
+    "Model and web layers live next to the dispatcher, not in each command: model.ts resolves a provider/model via --model, .kaioken/model.json or $KAIOKEN_MODEL using @earendil-works/pi-ai, and web.ts exposes httpFetchPort plus Tavily/DuckDuckGo WebSearchPort factories (TAVILY_API_KEY else DuckDuckGo) — chat and research reuse these so a missing provider fails the command before any user-visible work."
+  ],
+  "entryPoints": [
+    {
+      "name": "main",
+      "file": "apps/cli/src/main.ts",
+      "note": "Top-level argv entry; calls parseArgs and routes to the matching runX command."
+    },
+    {
+      "name": "parseArgs",
+      "file": "apps/cli/src/main.ts",
+      "note": "Turns argv into a Flags object or null; encodes the option grammar shared with USAGE."
+    },
+    {
+      "name": "runChat",
+      "file": "apps/cli/src/commands/chat.ts",
+      "note": "Interactive chat agent; accepts ChatHooks for prompting/aborting and returns an exit code."
+    },
+    {
+      "name": "runResearch",
+      "file": "apps/cli/src/commands/research.ts",
+      "note": "Web-research command that fetches pages and verifies citations."
+    },
+    {
+      "name": "runScan",
+      "file": "apps/cli/src/commands/scan.ts",
+      "note": "Walks the repo, flags risky files and writes the declaration inventory consumed by every other command."
+    },
+    {
+      "name": "runServe",
+      "file": "apps/cli/src/commands/serve.ts",
+      "note": "Local browser UI for the indexed knowledge (port 7777 by default)."
+    },
+    {
+      "name": "loadKnowledge",
+      "file": "apps/cli/src/knowledge.ts",
+      "note": "Reads .kaioken/scan.json and .kaioken/index.json with an optional force reload."
+    },
+    {
+      "name": "resolveModelClient",
+      "file": "apps/cli/src/model.ts",
+      "note": "Picks a provider/model per Flags and returns a ResolvedClient with a human-readable describe string."
+    },
+    {
+      "name": "httpFetchPort",
+      "file": "apps/cli/src/web.ts",
+      "note": "Timeout/size-capped HTML fetch (20s, 2 MiB) used by research before sanitisation."
+    }
+  ],
+  "sources": [
+    {
+      "path": "apps/cli/src/commands/chat.ts",
+      "hash": "21ab086f4b581028184510b161c4d1a2b6739d82c000362054aaa7379e0cad4f"
+    },
+    {
+      "path": "apps/cli/src/commands/research.ts",
+      "hash": "9f4db386e8048e968335bfe045cb647019366e0cb5a63e03e66292e0b34ef7e5"
+    },
+    {
+      "path": "apps/cli/src/commands/scan.ts",
+      "hash": "561f9a3520931b71010c1e1d2c31582bd3bb88e4da683cc132c7c1abbd92dfb9"
+    },
+    {
+      "path": "apps/cli/src/commands/serve.ts",
+      "hash": "1f90cecbc5a1e65bcc2f2549bb54175739a3b9ed016885bba78f76d888817637"
+    },
+    {
+      "path": "apps/cli/src/knowledge.ts",
+      "hash": "e20412c9c1a8cc8189e94e611e59ece6684a389f21f991404dff63d3ae571be1"
+    },
+    {
+      "path": "apps/cli/src/main.ts",
+      "hash": "2f0f854c7c87342b38f2c575b29ad7f92cb7e5d2104aec81bc88695219d7bd83"
+    },
+    {
+      "path": "apps/cli/src/model.ts",
+      "hash": "ba0c7c89b992198db345e98ffbf3bbc3b19d9dc0fcf4a3e6cc3615de7caa57dc"
+    },
+    {
+      "path": "apps/cli/src/web.ts",
+      "hash": "fe232a36979ae65ebf273a558c4ae38411c39f0c7bd1daa017f802c607b23e83"
+    }
+  ],
+  "verification": {
+    "grounded": 9,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "ChatHooks",
+      "ChatSessionCache",
+      "LoadedKnowledge",
+      "Flags",
+      "ResolvedClient",
+      "ResolvedModel",
+      "complete",
+      "resolveModel",
+      "describeFailure",
+      "resolveSearchPort",
+      "parseDuckDuckGo",
+      "fetch"
+    ]
+  }
+}

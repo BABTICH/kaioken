@@ -1,0 +1,26 @@
+{
+  "moduleId": ".husky",
+  "name": ".husky",
+  "generatedAt": "2026-09-23T15:05:25.716Z",
+  "summary": "A single pre-commit hook script for the repository. It is empty (0 lines) as indexed, so it currently enforces no checks. The module exists to provide the conventional .husky directory structure for Git hooks; its behavior is defined entirely by this file's executable contents, which are not indexed.",
+  "keyPoints": [
+    "The module contains only one file, .husky/pre-commit, which has no indexed declarations and zero lines, indicating it is effectively a placeholder or minimalist script.",
+    "This file is a Git pre-commit hook executed automatically before each commit; its purpose is to run quality checks, but with no content, it performs no action.",
+    "The presence of the .husky directory signals the project uses Husky (or similar tooling) to manage Git hooks, but the actual hook is currently unpopulated.",
+    "The hook is not read by the application runtime—it only runs in the developer's local or CI Git workflow.",
+    "To add value, this file must be filled with a valid shell script (e.g., running linters or tests); entering those commands is a typical next step for an agent working here."
+  ],
+  "entryPoints": [],
+  "sources": [
+    {
+      "path": ".husky/pre-commit",
+      "hash": "0a02e3356b399905df543d2503f07ae9167999a2703f3e70ec3f234a9f9b2227"
+    }
+  ],
+  "verification": {
+    "grounded": 0,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": []
+  }
+}

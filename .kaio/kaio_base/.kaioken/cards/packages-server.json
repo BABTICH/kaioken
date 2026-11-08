@@ -1,0 +1,262 @@
+{
+  "moduleId": "packages-server",
+  "name": "Packages Server",
+  "generatedAt": "2026-09-23T15:16:13.164Z",
+  "summary": "This package implements a server for a remote procedure call (RPC) protocol. It manages client connections over a byte-oriented transport, processes incoming messages, and routes service calls to hosted sessions. The server tracks sessions, handles client attachment/detachment, and coordinates lifecycle events such as handshaking, closing, and error handling. It includes a Unix socket listener for transport and a testing harness for protocol verification.",
+  "keyPoints": [
+    "The server orchestrates connections via a `Server` class that accepts `ByteConnection`s, handles the handshake protocol, and dispatches messages to session/service logic.",
+    "Session routing is handled by `SessionRouter`, which manages hosted sessions, client attachments, and serializes operations per client to maintain consistency.",
+    "Errors are categorized using a `ServerError` hierarchy with specific codes like `SessionNotFoundError` and `ServerDrainingError` to signal protocol-appropriate failures.",
+    "The Unix listener (`UnixListener`) provides a socket-based transport with socket file management, stale socket cleanup, and configurable modes/timeouts.",
+    "A comprehensive testing layer (`TestHarness`, `ProtocolTestClient`) allows simulating client behavior and service responses to validate the server's protocol implementation."
+  ],
+  "entryPoints": [
+    {
+      "name": "Server",
+      "file": "packages/server/src/server.ts",
+      "note": "Core server class. Construct with a `ServerHost` and options, call `start()` to begin listening, and use `accept()` to handle incoming connections."
+    },
+    {
+      "name": "createUnixServer",
+      "file": "packages/server/src/transports/unix/preset.ts",
+      "note": "Factory function for creating a server that uses Unix socket listening. Takes a `ServerHost` and Unix-specific options."
+    },
+    {
+      "name": "SessionRouter",
+      "file": "packages/server/src/session-router.ts",
+      "note": "Manages session lifecycle including attach/detach, service call execution, and session removal. Used internally by `Server`."
+    },
+    {
+      "name": "createTestServer",
+      "file": "packages/server/src/testing/server.ts",
+      "note": "Testing utility to create a configured test server, useful for integration and protocol tests."
+    },
+    {
+      "name": "ProtocolTestClient",
+      "file": "packages/server/src/testing/client.ts",
+      "note": "Simulates a protocol client for testing, capable of sending raw bytes/fragmented messages and asserting server responses."
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/server/CHANGELOG.md",
+      "hash": "d928ef2cbce741e112a0fd1ec176e410a9b99810c55704ff071847ba650a60db"
+    },
+    {
+      "path": "packages/server/README.md",
+      "hash": "ed0733482685ca26731a64d6898e9360c69c471e16d7e20b545e696413d29c9c"
+    },
+    {
+      "path": "packages/server/package.json",
+      "hash": "a02564ee3f42057042599f1288b6e1957219f8dbcfa49c0747d30cb695ae913a"
+    },
+    {
+      "path": "packages/server/src/connection.ts",
+      "hash": "b13a4766dbbc2f10cbf316f1c1c003a75f854745b7c1d1f864bd0004ce1238fd"
+    },
+    {
+      "path": "packages/server/src/errors.ts",
+      "hash": "1ad450b65d0fb3de78628ec38584e87adb2d5d8b360f6afdc0b6966b9c2b3fce"
+    },
+    {
+      "path": "packages/server/src/index.ts",
+      "hash": "ebd84214dcf8626ac98b14c4ec4c866521c49328684612c751ab6bf711bdd6e9"
+    },
+    {
+      "path": "packages/server/src/listener.ts",
+      "hash": "5ef29dd5cf420b4119942b906dbf741bc9e20e6ea225e1292ae317c16170136c"
+    },
+    {
+      "path": "packages/server/src/server.ts",
+      "hash": "bd428151016734ddc1532b78c22d2c2ac539117d9d13a276928ce55c7b3d938d"
+    },
+    {
+      "path": "packages/server/src/session-router.ts",
+      "hash": "c9ea719130708e7d8f548e5b65f23afe0c8d96f0f87ae3e611bfde6ca3dad69b"
+    },
+    {
+      "path": "packages/server/src/testing/client.ts",
+      "hash": "2d240732193839d4105183a089d6b21e7170fff6c933b9a7e76832d0c960fedf"
+    },
+    {
+      "path": "packages/server/src/testing/host.ts",
+      "hash": "627979793dac2b98568c03d9ed6d57ee1d0c05cd77106808a4478a93836db14a"
+    },
+    {
+      "path": "packages/server/src/testing/index.ts",
+      "hash": "17f9d7db7663715b71eb18625ba76f98708b8a3dddb6b6980dc2edf6f3c07064"
+    },
+    {
+      "path": "packages/server/src/testing/server.ts",
+      "hash": "e1125bb07516ea9071483dec10b35397d6729c4247b5038a1108b64fd229a372"
+    },
+    {
+      "path": "packages/server/src/transports/unix/address.ts",
+      "hash": "2d307bb684e4a6296695ad0f921547c573bdbdb843001873aa37d129a535cf13"
+    },
+    {
+      "path": "packages/server/src/transports/unix/index.ts",
+      "hash": "db4fdbc5916b7d361f57c991450702b4271312051400a8021a88482b79ff3aca"
+    },
+    {
+      "path": "packages/server/src/transports/unix/listener.ts",
+      "hash": "de71c68354820cede8eb7aeebb4ebe525cd6f832ce1691b60b5279816fd646eb"
+    },
+    {
+      "path": "packages/server/src/transports/unix/preset.ts",
+      "hash": "6c0010fe5c9a49d2af6c2f6793cd36723061fc22b8400528ac15f970f85054e8"
+    },
+    {
+      "path": "packages/server/src/transports/unix/types.ts",
+      "hash": "067fff91eefffc09f1d7952cc8058d3333cee15f568a67711644550eba67423f"
+    },
+    {
+      "path": "packages/server/src/types.ts",
+      "hash": "cdec325901d0035ab381069e2dec9771027bde80025f4443c7fb87b145e46404"
+    },
+    {
+      "path": "packages/server/test/conformance.test.ts",
+      "hash": "849af98dab82de8be93e62ebfd67abdce4395781d928e0d51e5d5de5192d1174"
+    },
+    {
+      "path": "packages/server/test/fixtures/stale-socket-server.mjs",
+      "hash": "ee4ce29485368f6930936d2053b97d928c018e6b7dd60b5cb2ea01c7c93370d8"
+    },
+    {
+      "path": "packages/server/test/listener.test.ts",
+      "hash": "4cb835caa4f3d59e33dbcac31490e2d333b6741322a5f324a996a280a5bf1890"
+    },
+    {
+      "path": "packages/server/test/protocol.test.ts",
+      "hash": "33157c44d161baf8c4a838df7c5d852bbfdecb1b62da8cd7abc0a680cbbbac48"
+    },
+    {
+      "path": "packages/server/test/server.test.ts",
+      "hash": "468f0cf48a78449123b87a6c66ba5a6c18a6efb4fa0d678364611cf7dc5fdcfd"
+    },
+    {
+      "path": "packages/server/test/unix-connection.test.ts",
+      "hash": "93f52cbf853ea97ab39de6b5b2b16bef65e3850bb110854aeaa5967628851da3"
+    },
+    {
+      "path": "packages/server/test/unix.test.ts",
+      "hash": "86ca4b6d7ffc3d3e2c4eff60eaf260cc1a56aea995d46a09a9edf1a2e9f73eaf"
+    },
+    {
+      "path": "packages/server/tsconfig.build.json",
+      "hash": "5d1d8e87055b879ea8525af3d2061952705dac28f2a79450cc86b138828eff3f"
+    },
+    {
+      "path": "packages/server/tsconfig.test.json",
+      "hash": "6a3d381f293fe7a484faeb40a52186623f061cca6d561c0dc80f7e5253669a47"
+    },
+    {
+      "path": "packages/server/vitest.config.ts",
+      "hash": "096a0d52c1990c46993334a4383542840f6d40535a7fea1eb77765416918e411"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "ByteConnection",
+      "send",
+      "close",
+      "ByteConnectionHandler",
+      "onData",
+      "onClose",
+      "onError",
+      "ByteConnectionAcceptor",
+      "ConnectionStage",
+      "ConnectionState",
+      "isTerminalConnection",
+      "INTERNAL_SERVER_ERROR_MESSAGE",
+      "ServerError",
+      "code",
+      "constructor",
+      "WrongServerError",
+      "SessionNotFoundError",
+      "SessionAmbiguousError",
+      "SessionNotAttachedError",
+      "ServerDrainingError",
+      "ServerListener",
+      "start",
+      "serverId",
+      "closed",
+      "accept",
+      "executeServiceCall",
+      "attachClient",
+      "detachClient",
+      "removeSession",
+      "disconnect",
+      "WireChannel",
+      "sendFragmented",
+      "messages",
+      "hello",
+      "requestService",
+      "attach",
+      "requestSessionService",
+      "sendMessage",
+      "sendBytes",
+      "sendFragmentedMessage",
+      "next",
+      "nextFrom",
+      "waitForClose",
+      "receive",
+      "markClosed",
+      "fail",
+      "connectUnixTestClient",
+      "Deferred",
+      "promise",
+      "resolve",
+      "TestHarness",
+      "session",
+      "terminated",
+      "attachedClients",
+      "attachmentReleaseCount",
+      "closeCount",
+      "serviceCalls",
+      "failAttachmentRelease",
+      "failClose",
+      "nextServiceError",
+      "nextServiceResult",
+      "release",
+      "invokeService",
+      "terminate",
+      "gateNextClose",
+      "gateNextServiceCall",
+      "createTestServerServices",
+      "TestServerHost",
+      "serverServices",
+      "repo",
+      "harnesses",
+      "openSessionCount",
+      "nextOpenSessionError",
+      "nextHarnessCloseError",
+      "resolveSession",
+      "openSession",
+      "seed",
+      "gateNextOpenSession",
+      "latestHarness",
+      "TestServerOptions",
+      "TestServer",
+      "getUnixSocketPath",
+      "UnixByteConnection",
+      "createUnixListener",
+      "UnixListenerOptions",
+      "UnixServerOptions",
+      "ServerOptions",
+      "MaybePromise",
+      "RoutedSessionAttachment",
+      "RoutedServerPresentation",
+      "attachSession",
+      "detachSession",
+      "prepareSessionRemoval",
+      "RoutedServerServiceAttachment",
+      "RoutedServerServiceHost",
+      "RoutedSessionHandle",
+      "ServerHost"
+    ]
+  }
+}

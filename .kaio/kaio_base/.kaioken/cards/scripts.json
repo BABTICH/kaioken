@@ -1,0 +1,424 @@
+{
+  "moduleId": "scripts",
+  "name": "Scripts",
+  "generatedAt": "2026-09-23T15:17:58.357Z",
+  "summary": "This is the scripts module of a monorepo. It contains 46 files, mostly JavaScript (mjs) and TypeScript scripts, plus a few shell scripts. The scripts cover a wide range of repository operations: smoke tests for agents, release and publishing workflows, generation of install locks and shrinkwraps, analysis of session and cost data, validation checks for entry graphs and package dependencies, and utilities for syncing versions. The module is structural, meaning these scripts orchestrate or analyze other parts of the repository rather than forming a cohesive library. Most code is procedural, often run via CLI, with a few test files for verification.",
+  "keyPoints": [
+    "The module contains 46 files, mostly JavaScript (mjs) and TypeScript scripts, plus a few shell scripts, covering smoke tests, releases, dependency validation, and session analysis.",
+    "Several scripts handle release and publishing: `publish.mjs` checks and publishes workspace packages, `release.mjs` manages version bumps and changelogs, `publish-release-announcement.mjs` updates release pointers, and `local-release.mjs` builds package tarballs.",
+    "Dependency validation is a major theme: `check-pinned-deps.mjs` ensures exact versions, `check-runtime-deps.mjs` verifies runtime dependencies, `check-ts-relative-imports.mjs` enforces relative import rules, and `generate-coding-agent-install-lock.mjs` and `generate-coding-agent-shrinkwrap.mjs` create install locks to pin external dependencies.",
+    "Session analysis scripts (`edit-tool-stats.mjs`, `read-tool-stats.mjs`, `session-context-stats.mjs`, `tool-stats.ts`, `stats.ts`, `cost.ts`) parse JSONL session files from `~/.pi/agent/sessions` to produce reports on tool usage, token estimates, costs, and context window usage.",
+    "Some scripts are smoke tests (e.g., `agent-treeshake-smoke-entry.ts`, `browser-smoke-entry.ts`) that instantiate the Agent with a model and stream function, while others like `check-*` scripts validate internal consistency (e.g., entry graphs, kaioken barrels, offline compliance)."
+  ],
+  "entryPoints": [
+    {
+      "name": "main",
+      "file": "scripts/edit-tool-stats.mjs",
+      "note": "Entry point for the edit tool statistics analyzer; parses args, scans sessions, and prints reports."
+    },
+    {
+      "name": "main",
+      "file": "scripts/read-tool-stats.mjs",
+      "note": "Entry point for read tool statistics; generates human and HTML reports from session data."
+    },
+    {
+      "name": "main",
+      "file": "scripts/session-context-stats.mjs",
+      "note": "Entry point for context window analysis; loads model configs and scans sessions for usage."
+    },
+    {
+      "name": "main",
+      "file": "scripts/publish.mjs",
+      "note": "Main publish flow: validates and publishes public workspace packages to npm."
+    },
+    {
+      "name": "main",
+      "file": "scripts/release.mjs",
+      "note": "Handles version bumping, changelog updates, and git staging for a release."
+    },
+    {
+      "name": "main",
+      "file": "scripts/cost.ts",
+      "note": "Computes token and cost stats per day from session files."
+    },
+    {
+      "name": "main",
+      "file": "scripts/tool-stats.ts",
+      "note": "Generates an HTML report of tool and bash command usage from session JSONL files."
+    },
+    {
+      "name": "main",
+      "file": "scripts/session-transcripts.ts",
+      "note": "Exports session transcripts; parses session files and optionally runs a subagent to analyze them."
+    },
+    {
+      "name": "main",
+      "file": "scripts/stats.ts",
+      "note": "Aggregates usage and cost totals per day from session files."
+    },
+    {
+      "name": "generateInstallLock",
+      "file": "scripts/generate-coding-agent-install-lock.mjs",
+      "note": "Generates or checks the install lock file for the coding-agent package."
+    },
+    {
+      "name": "generateShrinkwrap",
+      "file": "scripts/generate-coding-agent-shrinkwrap.mjs",
+      "note": "Generates or checks the npm shrinkwrap for the coding-agent package."
+    },
+    {
+      "name": "main",
+      "file": "scripts/local-release.mjs",
+      "note": "Builds and packages all workspace packages into tarballs for local release."
+    },
+    {
+      "name": "main",
+      "file": "scripts/publish-model-catalog.mjs",
+      "note": "Validates and uploads the model catalog bundle to AWS storage."
+    },
+    {
+      "name": "main",
+      "file": "scripts/publish-release-announcement.mjs",
+      "note": "Publishes release announcements and updates installer pointers on AWS."
+    },
+    {
+      "name": "main",
+      "file": "scripts/release-notes.mjs",
+      "note": "Extracts, normalizes, and fixes release notes across GitHub releases."
+    },
+    {
+      "name": "check",
+      "file": "scripts/check-runtime-deps.test.mjs",
+      "note": "Test file verifying the behavior of check-runtime-deps.mjs."
+    },
+    {
+      "name": "runSyncVersions",
+      "file": "scripts/sync-versions.test.mjs",
+      "note": "Test runner for sync-versions.js, which syncs versions across workspace packages."
+    },
+    {
+      "name": "run",
+      "file": "scripts/diff-model-catalog.mjs",
+      "note": "Entry point for comparing model catalog changes between baseline and current worktree."
+    },
+    {
+      "name": "main",
+      "file": "scripts/profile-coding-agent-node.mjs",
+      "note": "Profiles the coding-agent CLI under various runtimes, outputting timing metrics."
+    },
+    {
+      "name": "findPackageDirectories",
+      "file": "scripts/package-workspaces.mjs",
+      "note": "Walks the packages directory to find package.json files, skipping dist and node_modules."
+    },
+    {
+      "name": "main",
+      "file": "scripts/edit-tool-stats.mjs",
+      "note": "Entry point for analyzing edit tool usage; includes functions for replacement analysis and inflation tracking."
+    },
+    {
+      "name": "main",
+      "file": "scripts/read-tool-stats.mjs",
+      "note": "Entry point for read tool analysis; also produces HTML output."
+    },
+    {
+      "name": "main",
+      "file": "scripts/session-context-stats.mjs",
+      "note": "Entry point for context window stats; uses models.generated.ts and .pi/agent/models.json for context windows."
+    },
+    {
+      "name": "main",
+      "file": "scripts/session-transcripts.ts",
+      "note": "Entry point for session transcript export; robust to binary files and truncation."
+    },
+    {
+      "name": "main",
+      "file": "scripts/tool-stats.ts",
+      "note": "Entry point for tool stats; outputs a self-contained HTML page with embedded data."
+    },
+    {
+      "name": "main",
+      "file": "scripts/stats.ts",
+      "note": "Entry point for stats; computes daily totals from the last day's sessions."
+    },
+    {
+      "name": "main",
+      "file": "scripts/cost.ts",
+      "note": "Entry point for cost analysis; similar to stats.ts but focuses on cost per provider and day."
+    },
+    {
+      "name": "agent",
+      "file": "scripts/agent-treeshake-smoke-entry.ts",
+      "note": "Smoke test entry that instantiates a minimal Agent to verify tree-shaking."
+    },
+    {
+      "name": "agent",
+      "file": "scripts/browser-smoke-entry.ts",
+      "note": "Smoke test entry that builds an Agent with browser-related tools and message handling."
+    },
+    {
+      "name": "commonBuildOptions",
+      "file": "scripts/build-coding-agent-bundle.mjs",
+      "note": "Defines esbuild options common to both the main bundle and lazy-loaded sub-bundles."
+    },
+    {
+      "name": "main",
+      "file": "scripts/check-lockfile-commit.mjs",
+      "note": "CLI entry for ensuring lockfiles weren't changed unintentionally; supports PI_ALLOW_LOCKFILE_CHANGE."
+    },
+    {
+      "name": "main",
+      "file": "scripts/check-kaioken-pi-package.mjs",
+      "note": "Validates the generated kaioken-pi package manifests, tools, commands, and hooks."
+    },
+    {
+      "name": "main",
+      "file": "scripts/generate-thinking-capabilities.mjs",
+      "note": "Entry point for generating thinking capabilities from the model catalog into providers dir."
+    },
+    {
+      "name": "main",
+      "file": "scripts/check-lockfile-commit.mjs",
+      "note": "CLI entry for ensuring lockfiles weren't changed unintentionally; supports PI_ALLOW_LOCKFILE_CHANGE."
+    },
+    {
+      "name": "packReleasePackages",
+      "file": "scripts/coding-agent-consumer.mjs",
+      "note": "Packs release packages into tarballs in a specified directory."
+    },
+    {
+      "name": "installCodingAgentConsumer",
+      "file": "scripts/coding-agent-consumer.mjs",
+      "note": "Installs the coding agent consumer with given tarballs, optionally using a specific package manager."
+    },
+    {
+      "name": "smokeTestCodingAgentConsumer",
+      "file": "scripts/coding-agent-consumer.mjs",
+      "note": "Runs a smoke test for the coding agent consumer using the given runtime."
+    },
+    {
+      "name": "compareReleaseVersions",
+      "file": "scripts/publish-release-announcement.mjs",
+      "note": "Compares two release version strings."
+    },
+    {
+      "name": "advanceLatestRelease",
+      "file": "scripts/publish-release-announcement.mjs",
+      "note": "Advances the latest release pointer by writing a new version if it is newer."
+    },
+    {
+      "name": "getPublicWorkspacePackages",
+      "file": "scripts/release-packages.mjs",
+      "note": "Returns the list of public workspace packages."
+    }
+  ],
+  "sources": [
+    {
+      "path": "scripts/agent-treeshake-smoke-entry.ts",
+      "hash": "c2f19bdf80451f2139070ef3619c6ea189fcfb0ee953c6df0de26d9505f98e86"
+    },
+    {
+      "path": "scripts/auto-pi.sh",
+      "hash": "88798ed7c875f78f8a5b72090629bde0635afad3bb59c4de3ae2919fd1125cf8"
+    },
+    {
+      "path": "scripts/browser-smoke-entry.ts",
+      "hash": "310814041af9bcd64eb80e6bce4d865c4e9dda38f4386d5a7e2dcf97a59c79ae"
+    },
+    {
+      "path": "scripts/build-binaries.sh",
+      "hash": "fd829b411b1ad34a320c611392e235d362c291856a753e9f98cd50a717575311"
+    },
+    {
+      "path": "scripts/build-coding-agent-bundle.mjs",
+      "hash": "d6f95da6fe6897ba5fcba8071a490ef0b5ceacff34f10208ee1e73150b87667f"
+    },
+    {
+      "path": "scripts/build-kaioken-pi.mjs",
+      "hash": "5c0cc3e09421822b5d8d3e67eea8e44d832b851439c4139be44372d74a7b3767"
+    },
+    {
+      "path": "scripts/check-browser-smoke.mjs",
+      "hash": "6ecaeed96e18041b971c16dbee66282e83291a7a6e193522a93d83d9a26b3e44"
+    },
+    {
+      "path": "scripts/check-entry-graphs.mjs",
+      "hash": "30b677a972ba6bd9e83d9d7fa772e0ec5e9c030dedee19b59b54b344a1ffe5dd"
+    },
+    {
+      "path": "scripts/check-kaioken-barrels.mjs",
+      "hash": "5e46c3625af983018021eda591448fc9d83b1a1540c72c840cf9a3be07021c8c"
+    },
+    {
+      "path": "scripts/check-kaioken-fresh.mjs",
+      "hash": "0c2a2a6abd11993acc75befb5cf009a40281e02d030eb294036ba5d860edd14e"
+    },
+    {
+      "path": "scripts/check-kaioken-offline.mjs",
+      "hash": "2f4ea5c70ac3357234e2d069ab8528304218fc2292ee35e62c2004bb4b4615f6"
+    },
+    {
+      "path": "scripts/check-kaioken-pi-package.mjs",
+      "hash": "9bc495262590a17e831e89f45eaf42f8a8e9edb0b91db6966ca8913f00ed7d3f"
+    },
+    {
+      "path": "scripts/check-lockfile-commit.mjs",
+      "hash": "b60cfca893e93011afb52034fa4ddb90092a6782262b41a108a284397fb73c58"
+    },
+    {
+      "path": "scripts/check-pinned-deps.mjs",
+      "hash": "593e17fc264b081ffaaace85e8105c662beaad6ac2c40cbb040458d74081a9e3"
+    },
+    {
+      "path": "scripts/check-runtime-deps.mjs",
+      "hash": "dcdd5a485bef34ae277b5b946746e7cd1c4199439e8300462b1e479aeb629fb0"
+    },
+    {
+      "path": "scripts/check-runtime-deps.test.mjs",
+      "hash": "3062058341eeca6c07bc67cf763edebccc5ca1b11932d54ae599f92573fa58a2"
+    },
+    {
+      "path": "scripts/check-ts-relative-imports.mjs",
+      "hash": "ae30d4ffe27d1d7aca48795618612f069c4f0a1607f83cef8836d852cae2991d"
+    },
+    {
+      "path": "scripts/coding-agent-consumer.mjs",
+      "hash": "fe947e1e9140ea33567b32705106ce3c725bd98fb024ace2ed8eafe795ac1580"
+    },
+    {
+      "path": "scripts/coding-agent-consumer.test.mjs",
+      "hash": "3c7f987614dcb89e1e789e2b76e9195d6f05f219cf28e45f0573780d1dbfa9eb"
+    },
+    {
+      "path": "scripts/cost.ts",
+      "hash": "36bbbeb1e935e30dfa4aed1d01ded19480fc3dd4a05cfd0d05879bbe4d80a537"
+    },
+    {
+      "path": "scripts/create-source-archive.sh",
+      "hash": "6253d01c82e9ee747b7647222ec5d6ecd1ab82af1d3a23526b95dd78b2ffc588"
+    },
+    {
+      "path": "scripts/diff-model-catalog.mjs",
+      "hash": "59c3003243aee439a4b192cf916779ebd11fb4b6c00ff2533d681189aac6d468"
+    },
+    {
+      "path": "scripts/edit-tool-stats.mjs",
+      "hash": "060b004977220017bfa06f5b00f30ddf71906f2b38ee5b7d3d7c02f0c939e00d"
+    },
+    {
+      "path": "scripts/generate-coding-agent-install-lock.mjs",
+      "hash": "2c54ec40323f56ac41fc1a4363a2c4dc852d658e8e47d78a9ac4dfa2586f5c5a"
+    },
+    {
+      "path": "scripts/generate-coding-agent-shrinkwrap.mjs",
+      "hash": "05c888aaf0f62666ba9a8ece1db61689962ea43fe43b9025bca5aef5f0a53502"
+    },
+    {
+      "path": "scripts/generate-thinking-capabilities.mjs",
+      "hash": "4d1b7de1073c5896ed210c7a42df30312dc219046d7f1d2761220fdace3ae1a6"
+    },
+    {
+      "path": "scripts/local-release.mjs",
+      "hash": "6bb032e5c4d16d373a0aa34d6be47e8a308e3d26ddbea14f7a83ff8609fef6b9"
+    },
+    {
+      "path": "scripts/package-workspaces.mjs",
+      "hash": "4214d03e1fdcbe245b903ff938da50c3ccf93a0aa762157f6d58f80e0d1ae955"
+    },
+    {
+      "path": "scripts/patch-kaioken-tests.mjs",
+      "hash": "34dd9b772021fd2ac8449ddf4080ae002d622608c2810872be0c2eb40f6386e7"
+    },
+    {
+      "path": "scripts/profile-coding-agent-node.mjs",
+      "hash": "579dd2945de01d4d3b11850f15f3712850dcbc80579256f0388f308a5c89c60c"
+    },
+    {
+      "path": "scripts/publish-model-catalog.mjs",
+      "hash": "85fdeea7259c832604e775ea12037dd918d92fa12d537911096329b5055efffb"
+    },
+    {
+      "path": "scripts/publish-release-announcement.mjs",
+      "hash": "baf5e0db6ed4a50ff6e89db7244c8b0b1e7281ad6d27ec79846911ff2c607def"
+    },
+    {
+      "path": "scripts/publish-release-announcement.test.mjs",
+      "hash": "68e9310e4a58d0c7f621b1efb7c3932e6ef4deb6ad1090dd7eeaa70ddd56de8e"
+    },
+    {
+      "path": "scripts/publish.mjs",
+      "hash": "6da02ba93608e95992a9c4aa2589a11391b93bd589050df6ff5149984795b333"
+    },
+    {
+      "path": "scripts/read-tool-stats.mjs",
+      "hash": "43fdde11a4012348dbb552ea840f9afbe2018a3fc30a3deed66e9cada3a4bbb6"
+    },
+    {
+      "path": "scripts/release-notes.mjs",
+      "hash": "b65da5ba4c900e58c5745ce4e7fe86887f8e14c0c6a143cc39b852ca1bb61d29"
+    },
+    {
+      "path": "scripts/release-packages.mjs",
+      "hash": "1e8f1e35011df54a790109fe42441523818d41e0f4815fe7011ffb14d8014827"
+    },
+    {
+      "path": "scripts/release.mjs",
+      "hash": "67c6741956553921013f6bd2e4c98b4dd6400fb5acee89fce9947975fddd6fe5"
+    },
+    {
+      "path": "scripts/repro-5893-wsl-bash.mjs",
+      "hash": "4747ccc4d941fbe2cef6b1aebd7970faa39b768afafa7a50ba60d53a6c6267a9"
+    },
+    {
+      "path": "scripts/session-context-stats.mjs",
+      "hash": "1514c139523aec7e0ab08d62ed5947c08da29ee99dd572272cc22df77fa5231c"
+    },
+    {
+      "path": "scripts/session-transcripts.ts",
+      "hash": "e914220044303236caa06018123f1ceac8f8f2acf5279d6b1ce716cab5af6bb4"
+    },
+    {
+      "path": "scripts/stats.ts",
+      "hash": "742549c85ba794bc790a2f49b16044adfaa60e5ada96aab2878858d4baff6f77"
+    },
+    {
+      "path": "scripts/sync-versions.js",
+      "hash": "63b127a5441b8beaee18c26416b01c5381b9b9efe3e1365aaa874c69215848db"
+    },
+    {
+      "path": "scripts/sync-versions.test.mjs",
+      "hash": "3e09cbe3cc6cc36f3dcb204b5ecf371ea47d02dc6406e13a4cc9af92b4cc94a2"
+    },
+    {
+      "path": "scripts/tool-stats.ts",
+      "hash": "e9a8ac643c9fa7ce51617e4bdd0f60e69a30ba26d6f368f75bd577c8c5b34e2d"
+    },
+    {
+      "path": "scripts/update-source-imports-to-ts.sh",
+      "hash": "4c1630efc3b7fc35710ebecc4bea0f5d9cf8f5d83d544a276a712327154978ae"
+    }
+  ],
+  "verification": {
+    "grounded": 26,
+    "ungrounded": [
+      "main",
+      "main",
+      "main",
+      "main",
+      "main",
+      "main",
+      "main",
+      "main",
+      "main",
+      "main",
+      "main",
+      "main",
+      "main",
+      "main"
+    ],
+    "unknownFiles": [],
+    "uncovered": [
+      "visit"
+    ]
+  }
+}

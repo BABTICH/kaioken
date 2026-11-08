@@ -34,9 +34,14 @@ kaioken v1/.kaioken/research/
 .agent-docs/
 *.sqlite
 
-# Archived Kaioken workspaces and legacy trees
-/.kaio/
-.kaio/
+# .kaio workspace IS tracked (docs, plans, kaiopi, kaio_base, assets, small
+# sites). Ignored inside it: node_modules (global rule at bottom), build
+# outputs (global dist/target rules), and these large vendored/library trees:
+.kaio/.old_studio/
+.kaio/inspire/
+.kaio/deepseek-harness/
+.kaio/.delta/
+.kaio/.kaioken_v1/
 
 # Third-party source vendored for reading only, not built or shipped.
 # See .reference/README.md for what is here and why.
@@ -137,6 +142,8 @@ pnpm-debug.log*
 !/assets/**
 !website/public/**
 !kaioken-site/public/**
+# Kaioken brand assets referenced by the root README (logo + pipeline diagram)
+!/.kaio/assets/**
 
 
 # IDE & Editor settings
@@ -146,27 +153,27 @@ pnpm-debug.log*
 
 # Vendored read-only reference checkouts (pi, opencode, hermes-agent).
 # ~1.6GB of third-party source kept locally for analysis; never committed.
-inspire/
+/inspire/
 
 # Kaioken Studio experiments and IDE worktrees (VS Code and Theia upstream clones)
-ide_kaioken/
-kaioken_studio/
-kaioken_studio_theia/
-kaioken_main_STUDIO/
+/ide_kaioken/
+/kaioken_studio/
+/kaioken_studio_theia/
+/kaioken_main_STUDIO/
 
 # Archived, superseded top-level projects, kept locally for reference but not
 # tracked going forward - same treatment as kaioken_studio/ above.
 #   .kaioken_v1/    - the original Go implementation (kaioken v1/, renamed).
 #   .kaio_site_old/ - the previous iteration of the marketing site.
-.kaioken_v1/
-.kaio_site_old/
+/.kaioken_v1/
+/.kaio_site_old/
 
 # Kaioken's own generated local state when run against this repo (index,
 # scan cache, search index) - not source.
 /.kaioken/
 
 # Scratch output from manually exercising the bundle/export command.
-kaioken_bundle_test/
+/kaioken_bundle_test/
 
 .vercel
 .env*

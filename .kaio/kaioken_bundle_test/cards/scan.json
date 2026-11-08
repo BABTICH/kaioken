@@ -1,0 +1,59 @@
+{
+  "moduleId": "scan",
+  "name": "Scanner",
+  "generatedAt": "2026-08-30T16:16:50.146Z",
+  "summary": "The Scanner walks a directory tree from a given root, reads each file within bounded size limits, classifies it against curated credential / private-key / generated-file heuristics, and returns a structured ScanResult. Risk classification is split across filename, path-segment, file-extension, and content regex signal sets defined as module-level constants in risk.ts.",
+  "keyPoints": [
+    "scan(root, options) is the public entry point; it invokes walk() to recurse directories and readFile() per file, propagating an IgnoreStack so nested ignores compose. readFile() gates reads by isBinary() and the size thresholds DEFAULT_MAX_READ_BYTES (4 MiB) and DETECTION_WINDOW (64 KiB) used for credential content inspection.",
+    "classifyRisk(RiskInput) fuses four orthogonal signal families: filename sets (PRIVATE_KEY_FILENAMES, CREDENTIAL_FILENAMES), path-segment / extension patterns (GENERATED_PATH_SEGMENTS, ENV_TEMPLATE_SUFFIXES, PRIVATE_KEY_EXTENSIONS), content regexes (PRIVATE_KEY_CONTENT, CREDENTIAL_CONTENT, GENERIC_SECRET), and banner detectors (GENERATED_CONTENT, GENERATED_FILENAME). Live-secret false positives are dampened by PLACEHOLDER_WORDS via looksLikeLiveSecret() and by isCertificateOnly().",
+    "Generated and lockfile artefacts are explicitly enumerated: GENERATED_PATH_SEGMENTS / GENERATED_FILENAME / GENERATED_CONTENT cover dist, build outputs, .min.js, sourcemaps, protobuf stubs, and 'DO NOT EDIT' banners; LOCKFILES collects 16 package-manager lock names (npm, yarn, pnpm, bun, go.sum, cargo.lock, poetry.lock, uv.lock, etc.) for separate handling."
+  ],
+  "entryPoints": [
+    {
+      "name": "scan",
+      "file": "packages/scan/src/scan.ts",
+      "note": "Public async entry point; traverses root, returns ScanResult with file records and risk classifications."
+    },
+    {
+      "name": "walk",
+      "file": "packages/scan/src/scan.ts",
+      "note": "Recursive directory walker carrying an IgnoreStack so ignore patterns inherit into subtrees."
+    },
+    {
+      "name": "readFile",
+      "file": "packages/scan/src/scan.ts",
+      "note": "Per-file reader; applies isBinary() and size limits, then calls classifyRisk() to attach Risk[] to the FileRecord."
+    },
+    {
+      "name": "classifyRisk",
+      "file": "packages/scan/src/risk.ts",
+      "note": "Central risk classifier combining filename, path, extension, and content signals into Risk[] output."
+    },
+    {
+      "name": "hasCredentialContent",
+      "file": "packages/scan/src/risk.ts",
+      "note": "Public helper that runs CREDENTIAL_CONTENT / GENERIC_SECRET regexes against file text."
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/scan/src/risk.ts",
+      "hash": "0812733a73488729c354cb22f33eab77cbc240b8937c44944669e56bcca25a30"
+    },
+    {
+      "path": "packages/scan/src/scan.ts",
+      "hash": "7a1c9a929ea29e3776071f9621853065e3bd3e6257bc1cdfb3cc344b8d5d86c0"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "RiskInput",
+      "looksLikeLiveSecret",
+      "isBinary",
+      "toPosix"
+    ]
+  }
+}

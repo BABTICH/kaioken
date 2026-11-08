@@ -1,0 +1,110 @@
+{
+  "moduleId": "kaioken-evals",
+  "name": "Kaioken Evals",
+  "generatedAt": "2026-09-23T15:06:33.091Z",
+  "summary": "Kaioken Evals is a structural evaluation harness for the Kaioken repository. It runs a suite of probes against a fixture of multi-language source files (TypeScript, Python, Go, Rust) to test an agent's ability to ground its work in real code: detecting hallucinations, verifying compliance, checking quotes, measuring impact, and catching ungrounded claims. The CLI (bin.mjs) accepts a multiplier and optional --repo flag, then invokes runEval which builds a fixture, runs probes, and produces a report with metrics and thresholds. The module is designed to catch when an agent invents symbols, misquotes code, or fails to detect drift, with strict thresholds on hallucinations and compliance violations but lenient on stale docs (which may legitimately be current).",
+  "keyPoints": [
+    "The eval fixture (src/fixture.ts) contains five hardcoded source snippets — SOURCE_A (TypeScript with interfaces/classes), SOURCE_B (TypeScript importing from A), SOURCE_PY, SOURCE_GO, SOURCE_RS — plus a createFixture() that materializes them and a readerFor() to read files back.",
+    "Probes (src/probes.ts) are ten targeted checks: negative guarantee (probe1), quote accuracy (probe2), compliance with tool-use rules (probe3), impact from index (probe4), catching invented symbols (probe5), recording ungrounded claims (probe6), drift detection (probe7), rename accuracy (probe8), padding rejection (probe9), and multi-language grounding (probe10).",
+    "runEval (src/run.ts) orchestrates: it takes RunOptions (multiplier, optional repo), builds a fixture, runs all probes via runProbes, counts hallucinations in a body string, and returns an EvalReport.",
+    "Thresholds (src/types.ts) are strict: zero hallucinations, zero compliance violations, zero quote mismatches, but staleDocuments is set to Infinity — meaning drift detection must work but a run may legitimately leave docs current.",
+    "The CLI (bin.mjs) parses a multiplier from --xN or --N flags (default 3) and an optional --repo path, then calls runEval and reports the result."
+  ],
+  "entryPoints": [
+    {
+      "name": "runEval",
+      "file": "kaioken/evals/src/run.ts",
+      "note": "Main entry point; takes RunOptions (multiplier, optional repo), runs probes and returns EvalReport."
+    },
+    {
+      "name": "createFixture",
+      "file": "kaioken/evals/src/fixture.ts",
+      "note": "Builds the multi-language fixture (TypeScript, Python, Go, Rust) used by all probes."
+    },
+    {
+      "name": "runProbes",
+      "file": "kaioken/evals/src/probes.ts",
+      "note": "Executes all ten probes against a ProbeFixture and returns ProbeOutcome[]."
+    },
+    {
+      "name": "evaluate",
+      "file": "kaioken/evals/src/types.ts",
+      "note": "Aggregates metrics and probe outcomes into an EvalReport, applying thresholds."
+    },
+    {
+      "name": "formatReport",
+      "file": "kaioken/evals/src/types.ts",
+      "note": "Formats an EvalReport as a human-readable string."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/evals/bin.mjs",
+      "hash": "0e86b78534f0083d4f32b54554540bc84300bf2fd19263958109e1eaa19373cc"
+    },
+    {
+      "path": "kaioken/evals/package.json",
+      "hash": "ddd2f9dd2a7d00d23f27d2d588941a04a05384769caec91bb2323a49db130fec"
+    },
+    {
+      "path": "kaioken/evals/probes.md",
+      "hash": "33fd94d597e77cc82e8a66133967e855797fd44e9a3a604a8b26df6e54f486da"
+    },
+    {
+      "path": "kaioken/evals/src/fixture.ts",
+      "hash": "5f1624c676643b6117802750a2c3c6d19f8c9f06637342e5495258782de68b10"
+    },
+    {
+      "path": "kaioken/evals/src/index.ts",
+      "hash": "afbe70fa69fd6bc7d49d3317d7ece972c7dceae58c83613e90f2bc21b043a9ce"
+    },
+    {
+      "path": "kaioken/evals/src/probes.ts",
+      "hash": "1d659826da20c4861b6941e6a2be9796a7c3ef24eef88a9cb1df5de1a7a3ccf4"
+    },
+    {
+      "path": "kaioken/evals/src/run.ts",
+      "hash": "27bf4315f7e11842acf8ea7d4f2e5760e3bce79b06b6328907ffd9ad10e684ba"
+    },
+    {
+      "path": "kaioken/evals/src/types.ts",
+      "hash": "22de68798f3d929f75f97d8589934b9cbb8421618ac5f5e5d633953d4a078274"
+    },
+    {
+      "path": "kaioken/evals/test/evals.test.ts",
+      "hash": "d2105a350a03fd6c1e7e17593049c20fea59f9ecc52ca7b898c7164b66e9304c"
+    },
+    {
+      "path": "kaioken/evals/tsconfig.json",
+      "hash": "bd4429a3d2bcf6870a32c14c7e913489daeed4b1bb2be8e4f579d5acf8007817"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "Fixture",
+      "dispose",
+      "readerFor",
+      "scriptedClient",
+      "complete",
+      "ProbeFixture",
+      "probe1NegativeGuarantee",
+      "probe2QuoteAccuracy",
+      "probe3VerifyCompliance",
+      "probe4ImpactFromIndex",
+      "probe5VerifierCatchesInvention",
+      "probe6CardRecordsUngrounded",
+      "probe7DriftDetection",
+      "probe8ImpactRenameAccuracy",
+      "probe9PaddingRejection",
+      "probe10MultiLanguageGrounding",
+      "RunOptions",
+      "ProbeOutcome",
+      "EvalMetrics",
+      "EvalReport",
+      "THRESHOLDS"
+    ]
+  }
+}

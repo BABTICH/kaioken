@@ -1,0 +1,137 @@
+{
+  "moduleId": "packages-telemetry",
+  "name": "Packages Telemetry",
+  "generatedAt": "2026-09-23T15:16:32.753Z",
+  "summary": "This package defines a telemetry abstraction centered on spans, and provides an in-memory implementation plus a conformance test suite. It ships type-level machinery to validate telemetry schemas so that span names and their attributes are checked at compile time. The API is intentionally minimal (startSpan, setAttributes, addEvent, setStatus) and framework-agnostic, so adapters (like OpenTelemetry) can implement the same interface and pass the same conformance tests.",
+  "keyPoints": [
+    "Defines a minimal TelemetryContext/TelemetrySpan interface with startSpan, setAttributes, addEvent, setStatus — no concrete adapter in this package, only an in-memory one.",
+    "The type system enforces telemetry schemas: defineTelemetrySchema() lets you describe spans, their start/end attributes, and events; derived types (TelemetrySchemaSpanStartAttributes, etc.) infer required vs optional attributes and reject unknown ones via ExactTelemetryAttributes.",
+    "createTypedSpanStarter() returns a typed starter that enforces the schema at compile time: the span name, its attributes, and the event names/attributes must match the declared schema, and it rejects duplicate span names across schemas.",
+    "InMemoryTelemetryContext records spans and events (with copied attribute values) so that tests can inspect them after execution; it also implements failure status propagation.",
+    "The package includes a conformance test generator (createTelemetryAdapterConformance) that any adapter can run to verify it behaves like the in-memory implementation — including error propagation and attribute handling.",
+    "NOOP_TELEMETRY_CONTEXT provides a no-op implementation for use when telemetry is disabled."
+  ],
+  "entryPoints": [
+    {
+      "name": "defineTelemetrySchema",
+      "file": "packages/telemetry/src/index.ts",
+      "note": "Entry point for declaring a telemetry schema that constrains span names, attributes, and events at the type level."
+    },
+    {
+      "name": "createTypedSpanStarter",
+      "file": "packages/telemetry/src/index.ts",
+      "note": "Creates a typed span starter bound to a TelemetryContext and a schema tuple, enforcing schema correctness at compile time."
+    },
+    {
+      "name": "InMemoryTelemetryContext",
+      "file": "packages/telemetry/src/memory.ts",
+      "note": "In-memory implementation of TelemetryContext that records spans and events for later inspection (used by tests and as a reference adapter)."
+    },
+    {
+      "name": "NOOP_TELEMETRY_CONTEXT",
+      "file": "packages/telemetry/src/noop.ts",
+      "note": "No-op TelemetryContext that swallows all telemetry calls; useful as a default when telemetry is disabled."
+    },
+    {
+      "name": "createTelemetryAdapterConformance",
+      "file": "packages/telemetry/src/testing/conformance.ts",
+      "note": "Generates a set of conformance tests that a telemetry adapter must pass to behave correctly (used to validate new adapters)."
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/telemetry/CHANGELOG.md",
+      "hash": "e8b647c0098a7101dec91678e016f8d15007856e4abdf2978743652c3d92e5f6"
+    },
+    {
+      "path": "packages/telemetry/README.md",
+      "hash": "d68b25b6d319c7a02b509c9ccf1bafea2cc1efa7f15af756fb59fa451b2fb4d7"
+    },
+    {
+      "path": "packages/telemetry/package.json",
+      "hash": "ef1fd481ce3c32458a6f4b41cf20dadf99765e9cbd31f44cc5a9ceabe4af8fcf"
+    },
+    {
+      "path": "packages/telemetry/src/index.ts",
+      "hash": "2f75b09f0e5b4bbb61f9ceae8411f9fccb1e08d7d94ed9ce2e4e296caac4047e"
+    },
+    {
+      "path": "packages/telemetry/src/memory.ts",
+      "hash": "d5d72e1a97ee1190c3a8e05ebff10a62568e3762ab8ace5095f966d50e0ef7e7"
+    },
+    {
+      "path": "packages/telemetry/src/noop.ts",
+      "hash": "b75fb8d4dd0eff94c4641f51ce9e0c22bd992c582a947050068985d48628fad8"
+    },
+    {
+      "path": "packages/telemetry/src/testing/conformance.ts",
+      "hash": "04a3ed06d5903d2a834590513fadb5435fe82938fba227e10e677847c8e50d8d"
+    },
+    {
+      "path": "packages/telemetry/src/testing/index.ts",
+      "hash": "5e00ef0c4f11a91a60794aab46ecb55ff1dccd49ee2692ec83bc5b5b5518544e"
+    },
+    {
+      "path": "packages/telemetry/src/testing/types.ts",
+      "hash": "ffcee78e5c20fb295e982a829c12fa856c4e809742453e4de63a8b0b5632d9ed"
+    },
+    {
+      "path": "packages/telemetry/test/conformance.test.ts",
+      "hash": "3ce5c7ec47fbd4055bae5cf54764bc989d4bc2543b4ba1842f3fc848bafaa6ca"
+    },
+    {
+      "path": "packages/telemetry/test/telemetry.test.ts",
+      "hash": "663e7d3b42332dccffc96c3b79c599918a67bd67dd8ae3f3d951ac12f21c1dad"
+    },
+    {
+      "path": "packages/telemetry/tsconfig.build.json",
+      "hash": "5d1d8e87055b879ea8525af3d2061952705dac28f2a79450cc86b138828eff3f"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "AttributeValue",
+      "SpanAttributes",
+      "SpanOptions",
+      "SpanStatus",
+      "TelemetryContext",
+      "startSpan",
+      "TelemetrySpan",
+      "addEvent",
+      "setAttributes",
+      "setStatus",
+      "TelemetryAttributeType",
+      "TelemetryAttributeMetadata",
+      "TelemetryAttributeDefinition",
+      "TelemetryStartAttributeDefinition",
+      "TelemetryEventAttributeDefinition",
+      "TelemetryEventDefinition",
+      "TelemetryParentDefinition",
+      "TelemetrySpanDefinition",
+      "TelemetrySchemaDefinition",
+      "InferRequiredAndOptionalAttributes",
+      "InferStartAttributes",
+      "InferOptionalAttributes",
+      "ExactTelemetryAttributes",
+      "InferEventAttributes",
+      "TelemetrySchemaSpanName",
+      "TelemetrySchemaSpanStartAttributes",
+      "TelemetrySchemaSpanEndAttributes",
+      "TelemetrySchemaSpanEventName",
+      "TelemetrySchemaSpanEventAttributes",
+      "SchemaTelemetrySpan",
+      "TelemetrySchemaSpanUnion",
+      "TypedSpanStarter",
+      "RecordedTelemetryEvent",
+      "RecordedTelemetrySpan",
+      "getSpans",
+      "TelemetryAdapterFixture",
+      "TelemetryAdapterFixtureFactory",
+      "TelemetryAdapterConformanceCase",
+      "run"
+    ]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "moduleId": "kaioken-skillgen",
+  "name": "Kaioken Skillgen",
+  "generatedAt": "2026-09-23T15:10:34.826Z",
+  "summary": "Kaioken/skillgen is a structural module that generates task-oriented skill documents for AI coding agents. It consists of a proposal stage that decides which skills to write based on repository evidence, a writing stage that produces grounded markdown checklists and verifies citations/commands, plus supporting tests.",
+  "keyPoints": [
+    "Two-stage pipeline: proposeSkills() in src/propose.ts uses a plan prompt to pick 5-12 kebab-case, verb-led skill names and descriptions; writeSkill() in src/write.ts turns each proposal into a concise markdown guide grounded in real repository files.",
+    "Grounded documentation: the WRITE_SYSTEM prompt insists each step names real files/functions, shows verbatim excerpts with paths, and avoids restating what code is; buildCorrectionPrompt() repairs citations to files that don't exist (citedButMissing).",
+    "Verification validation: extractPrescribedCommands() pulls commands like npm, pytest, cargo from skill bodies, then validateVerificationCommands() checks they exist as actual files in the repo, so purported verification steps are real.",
+    "Skill existence and naming: skillExists() prevents overwriting existing skills; slug() converts proposal names into safe identifiers for file paths.",
+    "Deliberately task-focused: both prompts warn against producing architecture-overview or project-structure skills (those belong to the wiki) and against generic knowledge like 'how to write Go'; descriptions must name concrete triggers for when to load the skill.",
+    "Tested via src/test/skillgen.test.ts with a scriptedClient that mocks model replies and a scanOf helper mimicking repository scans."
+  ],
+  "entryPoints": [
+    {
+      "name": "proposeSkills",
+      "file": "kaioken/skillgen/src/propose.ts",
+      "note": "Entry point for the proposal stage: takes ProposeInput (evidence, chapters, notes, commands) and returns a list of SkillProposal objects."
+    },
+    {
+      "name": "writeSkill",
+      "file": "kaioken/skillgen/src/write.ts",
+      "note": "Entry point for the writing stage: takes WriteSkillInput and returns a WrittenSkill markdown document, grounded in sources."
+    },
+    {
+      "name": "skillExists",
+      "file": "kaioken/skillgen/src/write.ts",
+      "note": "Checks whether a named skill already exists in the repo root before writing."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/skillgen/package.json",
+      "hash": "fb21794b78f417ed82f0f3dffe6df32812ced45467c20dc2497028c5720067d2"
+    },
+    {
+      "path": "kaioken/skillgen/src/index.ts",
+      "hash": "a7446d2e4831d13f4c5fae962b0b84cb7e2c5da4a7e79900e8bef73acb3c8937"
+    },
+    {
+      "path": "kaioken/skillgen/src/propose.ts",
+      "hash": "629f1bb6af7e386fc7b7d3524fee8ccfccf673fddec7ae8959fe9f61447a3ef5"
+    },
+    {
+      "path": "kaioken/skillgen/src/write.ts",
+      "hash": "b18091bf3832bbe30f5c165ed6bcc3cfc0c285db7fec327a77f5c2136a475837"
+    },
+    {
+      "path": "kaioken/skillgen/test/skillgen.test.ts",
+      "hash": "f9134929cf18b5d828be0c821e26da8fbc2a063ca98f9aa52dd2b87d43401e72"
+    },
+    {
+      "path": "kaioken/skillgen/tsconfig.json",
+      "hash": "bd4429a3d2bcf6870a32c14c7e913489daeed4b1bb2be8e4f579d5acf8007817"
+    }
+  ],
+  "verification": {
+    "grounded": 3,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "SkillProposal",
+      "ProposeInput",
+      "discoverRepoCommands",
+      "slug",
+      "WriteSkillInput",
+      "WrittenSkill",
+      "extractPrescribedCommands",
+      "validateVerificationCommands"
+    ]
+  }
+}

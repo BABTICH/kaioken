@@ -1,0 +1,117 @@
+{
+  "moduleId": "kaioken-modelport",
+  "name": "Kaioken Modelport",
+  "generatedAt": "2026-09-23T15:08:34.921Z",
+  "summary": "Kaioken Modelport is the structural module for kaioken/modelport, providing a portable model-client abstraction that decouples LLM calls from vendor-specific APIs. It defines a ModelClient interface with complete/completeStream methods, a PiAiClient implementation with retry logic and model resolution, concurrency-limiting utilities with free-tier enforcement, token and cost estimation, and JSON extraction helpers. The module is designed for multi-provider support, cost control, and resilience through retryable-error classification and bounded concurrency.",
+  "keyPoints": [
+    "Central abstraction: ModelClient interface (port.ts) with required complete() and optional completeStream(), implemented by PiAiClient (piai.ts) which adds model resolution, retry policy, and streaming with error classification via isRetryable().",
+    "Concurrency management (pool.ts): DEFAULT_CONCURRENCY=4, FREE_TIER_CONCURRENCY=2; isFreeModel() detects free-tier specs and clamps concurrency; mapLimit and mapLimitSettled provide bounded parallel execution.",
+    "Cost-aware estimation (spend.ts): token estimates per stage (plan: 25k, cards: 12k, wiki: 30k, update: 18k, research: 40k, skillgen: 15k), multiplier-based expansion, resolveRates() computes cost rates from ModelCost, and describeSpend() formats a human-readable summary.",
+    "Robust parsing utilities (port.ts): parseMultiplier() accepts string/number, clamped to [1,10]; depthFor() maps multiplier to a Depth; extractJson() uses balancedSpan() to handle nested JSON in LLM replies.",
+    "Extensive test coverage (test/): piai.test.ts stubs models and verifies client behavior, spend.test.ts validates cost calculations with a fixed flashCost, and port.test.ts exercises parsing functions; package.json and tsconfig.json mark the module structure."
+  ],
+  "entryPoints": [
+    {
+      "name": "ModelClient",
+      "file": "kaioken/modelport/src/port.ts",
+      "note": "Interface forcing complete(), optional completeStream(); the core contract for all model providers."
+    },
+    {
+      "name": "PiAiClient",
+      "file": "kaioken/modelport/src/piai.ts",
+      "note": "Concrete ModelClient implementation with model resolution, retry policy, and streaming."
+    },
+    {
+      "name": "estimateSpend",
+      "file": "kaioken/modelport/src/spend.ts",
+      "note": "Converts token estimates into cost using ModelCost rates; key for budgeting."
+    },
+    {
+      "name": "mapLimit",
+      "file": "kaioken/modelport/src/pool.ts",
+      "note": "Runs async operations with a concurrency limit; used to control parallel model calls."
+    },
+    {
+      "name": "extractJson",
+      "file": "kaioken/modelport/src/port.ts",
+      "note": "Parses JSON from model text output, handling nested structures via balancedSpan."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/modelport/package.json",
+      "hash": "603239787efb3feccc76a173c97046880c4dc2a3a16cde229902b62c53413892"
+    },
+    {
+      "path": "kaioken/modelport/src/index.ts",
+      "hash": "1ecf4c386aad269771bbee40ae6d40c0fcb5b5020454eec46bcbaa8a9739e86e"
+    },
+    {
+      "path": "kaioken/modelport/src/piai.ts",
+      "hash": "1867eeeb5e4e7c985ed646f373b42433c1755414f4a104cb9030b9f04d27e549"
+    },
+    {
+      "path": "kaioken/modelport/src/pool.ts",
+      "hash": "38ad5592c882dd5f896bc4803e9bd923201f5f13a02f79f9ebfb33a6a2a6a6cb"
+    },
+    {
+      "path": "kaioken/modelport/src/port.ts",
+      "hash": "3c5416055e024e1514e172be1f7aaa2c3d3ebf247387f3c7cbbac9ee9c56429d"
+    },
+    {
+      "path": "kaioken/modelport/src/spend.ts",
+      "hash": "995d1601404663adc26258d02f0cc4741ee8e65c46ba8b8d614581e2c5dba3f7"
+    },
+    {
+      "path": "kaioken/modelport/test/piai.test.ts",
+      "hash": "f57925b37ddea4ca7651f3d12bd06ba99a3fddfadc1491a06e02f279d3c07720"
+    },
+    {
+      "path": "kaioken/modelport/test/port.test.ts",
+      "hash": "03b457394e8f653df6f87fc3e8c3b72af7e75c0435004e63d4e5b2a50c0f204e"
+    },
+    {
+      "path": "kaioken/modelport/test/spend.test.ts",
+      "hash": "e90fd70088ab2a62991b1bfa510f95b93f3b14f9e7cbfd23c5ea3b8e05021fdf"
+    },
+    {
+      "path": "kaioken/modelport/tsconfig.json",
+      "hash": "bd4429a3d2bcf6870a32c14c7e913489daeed4b1bb2be8e4f579d5acf8007817"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "RetryPolicy",
+      "PiAiClientOptions",
+      "ModelUnavailableError",
+      "constructor",
+      "resolveModel",
+      "complete",
+      "completeStream",
+      "DEFAULT_CONCURRENCY",
+      "FREE_TIER_CONCURRENCY",
+      "isFreeModel",
+      "effectiveConcurrency",
+      "mapLimitSettled",
+      "ModelRequest",
+      "MIN_MULTIPLIER",
+      "MAX_MULTIPLIER",
+      "BREADTH_THRESHOLD",
+      "Depth",
+      "parseMultiplier",
+      "depthFor",
+      "TokenEstimate",
+      "SpendEstimate",
+      "STAGE_CONTEXT_TOKENS",
+      "DEFAULT_CONTEXT_TOKENS",
+      "contextTokensFor",
+      "estimateTokens",
+      "estimateStageTokens",
+      "resolveRates",
+      "describeSpend"
+    ]
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "moduleId": "docs",
+  "name": "Docs",
+  "generatedAt": "2026-09-23T15:06:14.260Z",
+  "summary": "This module is a structural container for project documentation, organized into two parallel tracks: a numbered series of phase documents (PHASE-0 through PHASE-9) outlining the overall build order, and an 'improvements' subfolder with 18 individually numbered documents (01-scan through 18-cli-bin) that appear to capture follow-up or enhancement notes. The collection is anchored by an index file (00-INDEX.md) and a README inside the improvements directory. No executable code or declarations are present — the module's value is purely organizational and informational, giving the repository a written record of its planned architecture, milestones, and iterative refinements. The file naming and numbering conventions suggest a deliberate, chronological or priority-ordered documentation structure that an agent or contributor can use to trace the project's evolution and intended roadmap.",
+  "keyPoints": [
+    "The docs module contains only markdown documentation files, with no code or indexed declarations — it is purely a structured knowledge base for the project's phases and planned improvements.",
+    "The top-level 'phases' directory holds ten phase documents (PHASE-0 to PHASE-9) that likely describe sequential development milestones, from foundation work through evaluation and release.",
+    "The 'improvements' subdirectory contains eighteen separately numbered documents (01-scan through 18-cli-bin), indicating a parallel series of follow-up or enhancement topics that complement the main phase plan.",
+    "A '00-INDEX.md' file at the top of the phases directory serves as the entry point/index for navigating the documentation, while an 'improvements/README.md' likely introduces that subsection.",
+    "The consistent numbering and clean separation suggest the documentation is maintained as a living roadmap, useful for orienting new contributors and tracking the project's evolving scope over time."
+  ],
+  "entryPoints": [
+    {
+      "name": "00-INDEX.md",
+      "file": "docs/phases/00-INDEX.md",
+      "note": "Index file for the documentation module; likely lists and links the phase and improvement documents."
+    },
+    {
+      "name": "improvements/README.md",
+      "file": "docs/phases/improvements/README.md",
+      "note": "Readme for the improvements subfolder, probably explaining the purpose and organization of the 18 numbered improvement documents."
+    }
+  ],
+  "sources": [
+    {
+      "path": "docs/phases/00-INDEX.md",
+      "hash": "d4a58849e757a0a41f14df372a3a9d49e60493df7a2722352730d5c72cef2c33"
+    },
+    {
+      "path": "docs/phases/PHASE-0-foundation.md",
+      "hash": "9fa69ba8d9ff1e88c0d329f9183c21432a4f167ed3f66c2a1953b2e5021f5b46"
+    },
+    {
+      "path": "docs/phases/PHASE-1-bridge-skeleton.md",
+      "hash": "45e783045c77a72eb35912baa050a21f095a386f2c62d7e48d4b9a0b51eb1dce"
+    },
+    {
+      "path": "docs/phases/PHASE-2-offline-core-port.md",
+      "hash": "4b5a1be85e91ff9cb435ca74babb86144d9a735d3eb2f0f4b66f19bdad064b4a"
+    },
+    {
+      "path": "docs/phases/PHASE-3-grounding-tools.md",
+      "hash": "1538bfcf1ca406605adb149c28b48f47bab8cf162cb2cd86e18691b95beac203"
+    },
+    {
+      "path": "docs/phases/PHASE-4-grounded-prompt-hooks.md",
+      "hash": "9cab1903375ff97769fc458d9be6a7ccf13de73179a21bde64bc30d65d9785c7"
+    },
+    {
+      "path": "docs/phases/PHASE-5-gates-repair-delegate.md",
+      "hash": "708b7c7b02dc6c3bf6b3117d8f342ce661c61af297c28d6cf0188bd8f6f13562"
+    },
+    {
+      "path": "docs/phases/PHASE-6-commands-hud.md",
+      "hash": "a82b7e71d44a06818d732f53872638984ce222a99256608a4381bd5d03a827b3"
+    },
+    {
+      "path": "docs/phases/PHASE-7-generative-pipeline.md",
+      "hash": "793cb2494b59653c11c27e63ebcfa82b7f8e93a53b45c9d5192c6382c04d8675"
+    },
+    {
+      "path": "docs/phases/PHASE-8-surfaces-packaging-ci.md",
+      "hash": "44b712dbc75f225dafdf7ac9e725df192e4bea3056554f6193f52081e2d73014"
+    },
+    {
+      "path": "docs/phases/PHASE-9-evals-release.md",
+      "hash": "d7eee45381d4b48766765bb790852d8ed516b2229bc6d7e3b7332752d565ecb9"
+    },
+    {
+      "path": "docs/phases/improvements/01-scan.md",
+      "hash": "2e3085c203192f82bced86fbc748f12c4a59d54f376972e58fc6aac3464c7c62"
+    },
+    {
+      "path": "docs/phases/improvements/02-index.md",
+      "hash": "22457f5144ba146f9c0c5afe861250a8756ef61d229d092b7ae72c60ddeeba9c"
+    },
+    {
+      "path": "docs/phases/improvements/03-search.md",
+      "hash": "701c2a906d837f38e8e6275b23fdbff6ef6888901d4a444eab00dc1f6bf11bed"
+    },
+    {
+      "path": "docs/phases/improvements/04-provenance.md",
+      "hash": "72f7318d9d97d0affa00b177ff0e89cac92578883ae64d8d87d3e9ec88a42b2a"
+    },
+    {
+      "path": "docs/phases/improvements/05-impact.md",
+      "hash": "7551d60541400a754d205871b4a40b5f9108b1f950adc5f9b7ec555d673e6c2c"
+    },
+    {
+      "path": "docs/phases/improvements/06-graph.md",
+      "hash": "e6648f19683e18f7fd0e2b04d0196ac5f4bc33df91877456c41a4ac3c84ef575"
+    },
+    {
+      "path": "docs/phases/improvements/07-gitops.md",
+      "hash": "957d23a94bb13a4fdc33825773eca9758db03121d150732f182993b096274cda"
+    },
+    {
+      "path": "docs/phases/improvements/08-verify.md",
+      "hash": "80492014ab4117f0c36de8694bb33acedcf14b45aaa90e7576ebad1cba788733"
+    },
+    {
+      "path": "docs/phases/improvements/09-verifycore.md",
+      "hash": "73b730c9087b283289f2115d14459b8dfb91e505a089f96078f8406386c7837e"
+    },
+    {
+      "path": "docs/phases/improvements/10-skills.md",
+      "hash": "54b018f7bc230b04011133a5b112b94e34916ccebf1156d79f4f31885a8208ea"
+    },
+    {
+      "path": "docs/phases/improvements/11-serve.md",
+      "hash": "ab6e9d55233d7d218be4bf158b2c99e4fe8b26482f3dedbd8b0e0bc496dddc07"
+    },
+    {
+      "path": "docs/phases/improvements/12-modelport.md",
+      "hash": "584fbe280929355d1ecc696e6b8d7e0468cf58e697c3f66574619b0246430de8"
+    },
+    {
+      "path": "docs/phases/improvements/13-plan.md",
+      "hash": "306a8491cdfeb1c65301096145859adb432e37c0fdfee7de95bc478bf0625f77"
+    },
+    {
+      "path": "docs/phases/improvements/14-wiki.md",
+      "hash": "758788f4bbbcb1e2fe7abdd5e5653ef41d0b9679f228294c1faa61c2ec3d0647"
+    },
+    {
+      "path": "docs/phases/improvements/15-research.md",
+      "hash": "1e293ca12532c04fc75dd32190df0a02eabb06db2229852124c1105ca2f32f63"
+    },
+    {
+      "path": "docs/phases/improvements/16-skillgen.md",
+      "hash": "e4f4251f1c69411b6bae0ac5742bafdc5fa086734182f6aabc648930c481edcb"
+    },
+    {
+      "path": "docs/phases/improvements/17-evals.md",
+      "hash": "e9225bb9ebf266d7fbb9b110c7d1268615f301b039b619ef0c2ac69d969830c2"
+    },
+    {
+      "path": "docs/phases/improvements/18-cli-bin.md",
+      "hash": "16c02d25b59df8eb38247c66e11c05ab92f18cc13e6dd68bf14531a5d2a090a8"
+    },
+    {
+      "path": "docs/phases/improvements/README.md",
+      "hash": "5d17363836535e71099ce812b892e4282216bd25b8dce174091b1d840f17121e"
+    }
+  ],
+  "verification": {
+    "grounded": 0,
+    "ungrounded": [
+      "00-INDEX.md",
+      "improvements/README.md"
+    ],
+    "unknownFiles": [],
+    "uncovered": []
+  }
+}

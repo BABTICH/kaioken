@@ -1,0 +1,238 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-30T16:59:42.863Z",
+  "nodes": [
+    {
+      "id": "card:cli",
+      "kind": "card",
+      "title": "CLI"
+    },
+    {
+      "id": "card:index",
+      "kind": "card",
+      "title": "Symbol Index"
+    },
+    {
+      "id": "card:scan",
+      "kind": "card",
+      "title": "Scanner"
+    },
+    {
+      "id": "cli/index.md",
+      "kind": "chapter",
+      "title": "The Command-Line Interface",
+      "path": "cli/index.md"
+    },
+    {
+      "id": "scanning/index.md",
+      "kind": "chapter",
+      "title": "Scanning the Repository",
+      "path": "scanning/index.md"
+    },
+    {
+      "id": "symbol-index/index.md",
+      "kind": "chapter",
+      "title": "The Symbol Index",
+      "path": "symbol-index/index.md"
+    }
+  ],
+  "edges": [
+    {
+      "from": "card:cli",
+      "to": "apps/cli/src/commands/chat.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/commands/chat.ts"
+      ]
+    },
+    {
+      "from": "card:cli",
+      "to": "apps/cli/src/commands/research.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/commands/research.ts"
+      ]
+    },
+    {
+      "from": "card:cli",
+      "to": "apps/cli/src/commands/scan.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/commands/scan.ts"
+      ]
+    },
+    {
+      "from": "card:cli",
+      "to": "apps/cli/src/commands/serve.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/commands/serve.ts"
+      ]
+    },
+    {
+      "from": "card:cli",
+      "to": "apps/cli/src/knowledge.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/knowledge.ts"
+      ]
+    },
+    {
+      "from": "card:cli",
+      "to": "apps/cli/src/main.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/main.ts"
+      ]
+    },
+    {
+      "from": "card:cli",
+      "to": "apps/cli/src/model.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/model.ts"
+      ]
+    },
+    {
+      "from": "card:cli",
+      "to": "apps/cli/src/web.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/web.ts"
+      ]
+    },
+    {
+      "from": "card:index",
+      "to": "packages/index/src/extract.ts",
+      "kind": "written_from",
+      "via": [
+        "packages/index/src/extract.ts"
+      ]
+    },
+    {
+      "from": "card:index",
+      "to": "packages/index/src/grammars.ts",
+      "kind": "written_from",
+      "via": [
+        "packages/index/src/grammars.ts"
+      ]
+    },
+    {
+      "from": "card:index",
+      "to": "packages/index/src/oracle.ts",
+      "kind": "written_from",
+      "via": [
+        "packages/index/src/oracle.ts"
+      ]
+    },
+    {
+      "from": "card:scan",
+      "to": "packages/scan/src/risk.ts",
+      "kind": "written_from",
+      "via": [
+        "packages/scan/src/risk.ts"
+      ]
+    },
+    {
+      "from": "card:scan",
+      "to": "packages/scan/src/scan.ts",
+      "kind": "written_from",
+      "via": [
+        "packages/scan/src/scan.ts"
+      ]
+    },
+    {
+      "from": "cli/index.md",
+      "to": "apps/cli/src/knowledge.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/knowledge.ts"
+      ]
+    },
+    {
+      "from": "cli/index.md",
+      "to": "apps/cli/src/main.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/main.ts"
+      ]
+    },
+    {
+      "from": "cli/index.md",
+      "to": "apps/cli/src/model.ts",
+      "kind": "written_from",
+      "via": [
+        "apps/cli/src/model.ts"
+      ]
+    },
+    {
+      "from": "cli/index.md",
+      "to": "card:cli",
+      "kind": "shared_source",
+      "via": [
+        "apps/cli/src/knowledge.ts",
+        "apps/cli/src/main.ts",
+        "apps/cli/src/model.ts"
+      ]
+    },
+    {
+      "from": "scanning/index.md",
+      "to": "card:scan",
+      "kind": "shared_source",
+      "via": [
+        "packages/scan/src/risk.ts",
+        "packages/scan/src/scan.ts"
+      ]
+    },
+    {
+      "from": "scanning/index.md",
+      "to": "packages/scan/src/risk.ts",
+      "kind": "written_from",
+      "via": [
+        "packages/scan/src/risk.ts"
+      ]
+    },
+    {
+      "from": "scanning/index.md",
+      "to": "packages/scan/src/scan.ts",
+      "kind": "written_from",
+      "via": [
+        "packages/scan/src/scan.ts"
+      ]
+    },
+    {
+      "from": "symbol-index/index.md",
+      "to": "card:index",
+      "kind": "shared_source",
+      "via": [
+        "packages/index/src/extract.ts",
+        "packages/index/src/grammars.ts",
+        "packages/index/src/oracle.ts"
+      ]
+    },
+    {
+      "from": "symbol-index/index.md",
+      "to": "packages/index/src/extract.ts",
+      "kind": "written_from",
+      "via": [
+        "packages/index/src/extract.ts"
+      ]
+    },
+    {
+      "from": "symbol-index/index.md",
+      "to": "packages/index/src/grammars.ts",
+      "kind": "written_from",
+      "via": [
+        "packages/index/src/grammars.ts"
+      ]
+    },
+    {
+      "from": "symbol-index/index.md",
+      "to": "packages/index/src/oracle.ts",
+      "kind": "written_from",
+      "via": [
+        "packages/index/src/oracle.ts"
+      ]
+    }
+  ]
+}

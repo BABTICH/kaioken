@@ -1,0 +1,287 @@
+{
+  "moduleId": "packages-session-backends",
+  "name": "Packages Session Backends",
+  "generatedAt": "2026-09-23T15:16:19.492Z",
+  "summary": "This module provides SQLite-backed session persistence for the agent runtime. It implements the session repository and storage abstractions using SQLite as the storage engine, supporting sessions, branches, values, entries, and usage tracking. The sqlite-node package contains the Node.js-specific SQLite adapter, SQL query helpers, repository implementation, and comprehensive tests including conformance and benchmark suites. Sessions are stored as individual SQLite database files (or shared database containers), with a schema covering sessions, entries, branch memberships, scalar/list values, and usage ledgers. The repository manages session lifecycle (create/open/list/delete/fork), and storage handles mutations, queries, and snapshots for forking. The module includes conformance tests to ensure behavior matches the session/storage abstractions, plus benchmarks for performance validation.",
+  "keyPoints": [
+    "SQLite-backed session persistence: each session stored as a separate .sqlite file (or shared database), with tables for sessions, entries, branch memberships, values (scalar/list), usage ledger, and sequence tracking.",
+    "Node.js adapter (createNodeSqliteFactory) wraps better-sqlite3 DatabaseSync into a SqliteDatabase interface supporting prepare/get/all/iterate, transactions, and open modes (create, existing, read-only).",
+    "SqliteSessionRepo implements the session lifecycle: create, open, list, delete, fork (with snapshot-based forking, copying entries/values to a new session), and close management with pending IDs and open storage tracking.",
+    "SqliteStorage implements the Storage interface: commit (transactional writes), getValue/scanValues/readList (typed value access), scanBranch (branch-aware entry queries with segment/compaction handling), snapshots for forking, and stats tracking.",
+    "Conformance and benchmark suites validate correctness against the session/storage contracts and performance targets, with dedicated benchmark scripts (session-repo.bench.ts, storage.bench.ts) exercising realistic workloads."
+  ],
+  "entryPoints": [
+    {
+      "name": "createNodeSqliteFactory",
+      "file": "packages/session-backends/sqlite-node/src/index.ts",
+      "note": "Factory returning SqliteDatabase instances (open, openExisting, openReadOnly) backed by better-sqlite3; entry point for Node.js SQLite access."
+    },
+    {
+      "name": "SqliteSessionRepo",
+      "file": "packages/session-backends/sqlite-node/src/sqlite/repo.ts",
+      "note": "Repository implementing session lifecycle (create/open/list/delete/fork/close) over SQLite files or shared databases; primary high-level entry point."
+    },
+    {
+      "name": "SqliteStorage",
+      "file": "packages/session-backends/sqlite-node/src/sqlite/storage.ts",
+      "note": "Storage implementation for a single session's data (entries, values, branches, usage), with commit, query, snapshot, and close operations."
+    },
+    {
+      "name": "SqliteOpenSession",
+      "file": "packages/session-backends/sqlite-node/src/sqlite/session.ts",
+      "note": "Session facade wrapping storage and delegating operations (mutations, reads, branches, labels) with concurrency admission control."
+    },
+    {
+      "name": "sql",
+      "file": "packages/session-backends/sqlite-node/src/sqlite/sql.ts",
+      "note": "Builder for parameterized SQL queries (SqlQuery) with exec/run/get/all/iterate helpers and fragment joining; used throughout storage internals."
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/session-backends/sqlite-node/CHANGELOG.md",
+      "hash": "a76b1e34c73092f7505edb72f7542e558fb49a7de608cdb9ab59eeb45876b4fb"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/README.md",
+      "hash": "95b85510009cf78a821cc2a0a90e3ea9d2a81ecaa03381fa297e6e7ed2932b30"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/benchmark/session/session-repo-targets.ts",
+      "hash": "8f4346b0dd52774ed3eb121dd956d07fd14d690192ea8b932c6f5ce63cbf3b42"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/benchmark/session/session-repo.bench.ts",
+      "hash": "fa6d8119ab9420b1768b3594982c87305dbb5a6d6e5f44b323605b3b0d63ddbd"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/benchmark/session/storage-targets.ts",
+      "hash": "df7888eec12f58fd3fbe857f078d69864cd541527eee43158c2b4b6225a9c95f"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/benchmark/session/storage.bench.ts",
+      "hash": "ca983e48c3c4f617ea3fd830266919a2eb57faeba529bceabe720b1b1562cbee"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/package.json",
+      "hash": "8cc25aa28cb56c94834e2808262bc0b0d34590d150f5e872fc0dbae3d83b8802"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/scripts/copy-migrations.mjs",
+      "hash": "42fbec66029a89433668ff6abce09fe12400fbadf64d3f7945ca4e49bfbe07d0"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/index.ts",
+      "hash": "4dc98e01385ea3a772f0f90734eeccc2b9595454120305b24ef1bd06ad6f6863"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/index.ts",
+      "hash": "f98f7e0d041d7495eb0df3a897bbed0276189dbf7a59a224cdbb501998156b11"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/migrations.ts",
+      "hash": "8e3c2ba2c85527d7ea6ad9e64f4ea8b2cb4c51b6b156fd825e7c331799868662"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/migrations/001_initial.sql",
+      "hash": "205223dbb07ae4550d5c4f777123d04e3051343a66c42d283fd8f59da57713e4"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/repo.ts",
+      "hash": "ff836a4923f22b41fd22ff381658f832cc58cfe88d5b2e157c172be2afd411ac"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/session.ts",
+      "hash": "46becfbfb6154653fafb1a9943362cd142fdd98814708e98c443d3b59b5dd8ed"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/session/branch-entries.ts",
+      "hash": "a2b32891c2ec094ed3b082d5df95ad0303c9ab5cd44e543c01a31b28d30a765f"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/session/entries.ts",
+      "hash": "3cfeba61833d0333629707832dfb499985e916267ab586a72fa810fbb7d4756d"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/session/session-row.ts",
+      "hash": "e220d81ae016ec83f15adf76d3286f85289d117a3a88881a0bab81deef12bcac"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/session/session-sequences.ts",
+      "hash": "3f8b1d29918b5fd8b291fccc3bc9041c6f04dab8495a69beba3be037395d574c"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/session/session-stats.ts",
+      "hash": "afac1d291f73adbac87996376893c590c173ec3910d24532bbdfc322c53ac40f"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/session/usage-ledger.ts",
+      "hash": "58528c7e9de1e8e322eb43951d0b8e4f792b68d36e7d920b97bc494dbf0e39df"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/session/values.ts",
+      "hash": "606921f194146ac9f58b861eb9434cfc924d25b26e5f4689433480eb9239979b"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/sql.ts",
+      "hash": "b9c8513348690bb5c43d7c405b16acea3453f44f7a4212332fcc84aeb5bb17fe"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/storage.ts",
+      "hash": "8ca45b99b73eef0419212db5e533597ef69ae54aafea4bc4d43dfd5258f73288"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/src/sqlite/types.ts",
+      "hash": "5cb5e123a75e70ebf4ab849fca4cf1d0b3515b39c8980ab96382371640807ef1"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/test/adapter.test.ts",
+      "hash": "f2606eccbd2c1e51dc353fb5acfbe90a8fa9e42fb28e00d06b7c45c0ff79f0fc"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/test/repo-conformance.test.ts",
+      "hash": "b984439e07fbd75aaffff4b29c6e931c37fe45c77461dadf8792b0e08f37c00c"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/test/repo.test.ts",
+      "hash": "3e46e07bc1446207274cb47ebea85c861ae94740479e97ce30cae6299e0f59e2"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/test/sql.test.ts",
+      "hash": "984ac5eb881adc015a6a26653f8a5102c53698b647279fc47e21a7c859650d7a"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/test/storage-conformance.test.ts",
+      "hash": "1e928afa13e0991f007c97869813c398b298e933dcd564e72287c8a026b21d45"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/test/storage.test.ts",
+      "hash": "cdf48a8a833edd49023422e429362a887f6dc92aa0958ea573738cfe280734ab"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/tsconfig.build.json",
+      "hash": "cb79361b9a66b258caa74e2bd3b3cc4184fbd1892f9e409a0bcd973d260a55aa"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/vitest.benchmark.config.ts",
+      "hash": "978f8216c5726034433cfde613abd02d1f559688dfcf10a0682816c7e8e4b14e"
+    },
+    {
+      "path": "packages/session-backends/sqlite-node/vitest.config.ts",
+      "hash": "dd6ae0a7857fafdd2954d2f36a410ea714d5188989a9d904fa58a15a254e3fdf"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "SessionRepoBenchmarkFixture",
+      "sessionRepoBenchmarkTargets",
+      "createFixture",
+      "storageBenchmarkTargets",
+      "wrapNodeSqliteDatabase",
+      "open",
+      "openExisting",
+      "openReadOnly",
+      "applyInitialSchema",
+      "SQLITE_STORAGE_VERSION",
+      "SQLITE_SESSION_EXTENSION",
+      "SqliteSessionCreateOptions",
+      "SqliteSessionRepoOptions",
+      "constructor",
+      "create",
+      "list",
+      "delete",
+      "fork",
+      "close",
+      "SqliteOpenSessionOptions",
+      "metadata",
+      "idGenerator",
+      "beginMutation",
+      "mutate",
+      "getEntries",
+      "getEntry",
+      "getValue",
+      "scanValues",
+      "readList",
+      "scanBranch",
+      "getStats",
+      "getName",
+      "getLabel",
+      "findEntries",
+      "findEntry",
+      "branch",
+      "createBranch",
+      "setValue",
+      "deleteValue",
+      "appendList",
+      "deleteList",
+      "setName",
+      "setLabel",
+      "appendEntryToBranchIndex",
+      "scanBranchEntries",
+      "scanBranchEntryStructures",
+      "EntryRow",
+      "EntryRowWriter",
+      "insert",
+      "insertEntryRow",
+      "decodeEntryRow",
+      "entryStructureFromRow",
+      "readEntryRows",
+      "readAllEntryRows",
+      "scanEntryRows",
+      "SessionRow",
+      "SqliteSessionMetadata",
+      "readSessionRow",
+      "readAllSessionRows",
+      "hasSessionRow",
+      "metadataFromSessionRow",
+      "insertSessionRow",
+      "deleteSessionRows",
+      "readNextSeq",
+      "advanceNextSeq",
+      "readSessionStats",
+      "incrementMessageCount",
+      "addUsageToSessionStats",
+      "UsageLedgerRow",
+      "UsageLedgerRowWriter",
+      "insertUsageLedgerRow",
+      "decodeUsageLedgerRow",
+      "scanUsageLedgerRows",
+      "ScalarValueRow",
+      "ListValueRow",
+      "setScalarValueRow",
+      "deleteScalarValueRow",
+      "appendListValueRow",
+      "deleteListValueRows",
+      "readScalarValueRow",
+      "readAllScalarValueRows",
+      "scanScalarValueRows",
+      "listValueReadQuery",
+      "readListValueRows",
+      "SqlQuery",
+      "queryText",
+      "params",
+      "exec",
+      "run",
+      "get",
+      "all",
+      "iterate",
+      "joinSqlFragments",
+      "SqliteStorageOptions",
+      "SqliteStorageSnapshot",
+      "commit",
+      "scanBranchStructure",
+      "scanEntries",
+      "scanUsage",
+      "snapshot",
+      "SqliteRunResult",
+      "SqliteStatement",
+      "SqliteDatabase",
+      "prepare",
+      "transaction",
+      "SqliteDatabaseFactory"
+    ]
+  }
+}

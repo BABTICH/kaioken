@@ -1,0 +1,231 @@
+{
+  "moduleId": "kaioken-index",
+  "name": "Kaioken Index",
+  "generatedAt": "2026-09-23T15:08:17.597Z",
+  "summary": "Structural module for kaioken/index that builds a language-agnostic symbol index from source files. It uses tree-sitter grammars to extract symbols (functions, classes, interfaces, etc.) from multiple languages (TypeScript, JavaScript, Python, Go, Rust, Java, C, C++, C#, Ruby), tracks re-exports and visibility, and provides a SymbolOracle for fast lookup by name or file. Also handles incremental updates and artifact persistence.",
+  "keyPoints": [
+    "Extracts symbols from source using tree-sitter with per-language query files (src/queries/*.scm) and manages grammar loading/parser pooling for performance",
+    "Indexes public/exported symbols primarily (private ones marked with - in fixtures) and collects re-exports across files",
+    "Build pipeline: extractFile → buildIndex → writeIndexArtifact/readIndexArtifact with JSON artifact at .kaioken/index.json",
+    "SymbolOracle provides name/path lookup, resolution across re-exports, and unknown-name detection for incremental builds",
+    "Supports incremental scans (test/incremental.test.ts) and has language-specific fixture tests (test/extract.test.ts with Go, JS, Python, Rust, TS samples)"
+  ],
+  "entryPoints": [
+    {
+      "name": "buildIndex",
+      "file": "kaioken/index/src/build.ts",
+      "note": "Main entry: takes ScanResult and produces IndexResult with stats"
+    },
+    {
+      "name": "extractFile",
+      "file": "kaioken/index/src/extract.ts",
+      "note": "Extracts symbols and re-exports from a single file into a FileMap"
+    },
+    {
+      "name": "SymbolOracle",
+      "file": "kaioken/index/src/oracle.ts",
+      "note": "Query interface: lookup by name/path, resolve imports, get exported symbols"
+    },
+    {
+      "name": "writeIndexArtifact",
+      "file": "kaioken/index/src/artifact.ts",
+      "note": "Persists IndexResult to .kaioken/index.json"
+    },
+    {
+      "name": "initParser",
+      "file": "kaioken/index/src/grammars.ts",
+      "note": "Initializes tree-sitter and loads WASM grammars for supported languages"
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/index/package.json",
+      "hash": "2d02dbbfc1d7105161ac609b3cbd017209094154231fc1f5d6ae1eeb8dfae1f5"
+    },
+    {
+      "path": "kaioken/index/scripts/copy-queries.mjs",
+      "hash": "669b6f9fe9db24e32ec8d54950003c0377ce4f701123b2e1d1e5e1b5139e8c8c"
+    },
+    {
+      "path": "kaioken/index/src/anchors.ts",
+      "hash": "0678b56a9a133e4eb1d3eb64e4dd1dea30faf0633edbc147c509829dbbdad5d3"
+    },
+    {
+      "path": "kaioken/index/src/artifact.ts",
+      "hash": "536ccf5e6ca40abdad0355514d9b2e8dff1698b883fa9425456fe490038086b0"
+    },
+    {
+      "path": "kaioken/index/src/build.ts",
+      "hash": "ecf5e5aa258fc043022279615c2825a45afa3b482f6abc95dbe0c215548d35bd"
+    },
+    {
+      "path": "kaioken/index/src/extract.ts",
+      "hash": "37de37514881c3d618e5602239a589232ac5ab9a62e476a95940fca2c0aa6443"
+    },
+    {
+      "path": "kaioken/index/src/grammars.ts",
+      "hash": "9b494084bd409eeeaf41239f85f2e7799dee32a525b00252a26a4b748d7bd091"
+    },
+    {
+      "path": "kaioken/index/src/index.ts",
+      "hash": "27bd37e2722233acc59442f02be3754f09b59be2633f7478d250578de3e5cba9"
+    },
+    {
+      "path": "kaioken/index/src/oracle.ts",
+      "hash": "4738f971d9a0cdc79ece89eddc8fb18683ddf115effdd0f460d531e56f0a1506"
+    },
+    {
+      "path": "kaioken/index/src/queries/c.scm",
+      "hash": "bb4313e9960906ac7e2e5a656e9ef33f65a61cf449ad126edfaf3da7c774564b"
+    },
+    {
+      "path": "kaioken/index/src/queries/c_sharp.scm",
+      "hash": "f691822f0161dac9d73650b076a7c288dda3f75bb5e3f77b86ef8984e44dc6b1"
+    },
+    {
+      "path": "kaioken/index/src/queries/cpp.scm",
+      "hash": "fc54171a6b59f5eb1d4ff5a9806d3297462096580f09594b63c7f3930fce33e5"
+    },
+    {
+      "path": "kaioken/index/src/queries/go.scm",
+      "hash": "097afa91c470f901135e709912ce6b483529562127011613d56733c18b2861f5"
+    },
+    {
+      "path": "kaioken/index/src/queries/java.scm",
+      "hash": "c8adbf9be7a90ec7ca00e79c5daacf836d669218dc5e9afcd63a9499c5cf9bfc"
+    },
+    {
+      "path": "kaioken/index/src/queries/javascript.scm",
+      "hash": "29520969e5516244e7c4e181cf9e1b610a660deba55e5c862a68f32754d8d08e"
+    },
+    {
+      "path": "kaioken/index/src/queries/python.scm",
+      "hash": "34ec21e90482d96e1273632eb1d7903b641a4e3448a44e8416619a48437314d6"
+    },
+    {
+      "path": "kaioken/index/src/queries/ruby.scm",
+      "hash": "df485e8bb182f8650642fecc7bb7e01b9c56f357319f1395072b9f4f8a2c81ec"
+    },
+    {
+      "path": "kaioken/index/src/queries/rust.scm",
+      "hash": "0d38279f800c4dffef2ad8b022dcb098381eb4532312a49880681b7c1f8d16e2"
+    },
+    {
+      "path": "kaioken/index/src/queries/typescript.scm",
+      "hash": "c88b3e2073a050c32a015ae58d177381eaaf7d65c52eb051c675228a5ebf788f"
+    },
+    {
+      "path": "kaioken/index/src/types.ts",
+      "hash": "f7a2146f36114e80ca8158b9fffa26e8e5f08584cc1bc3467dcb495c3a1bec4d"
+    },
+    {
+      "path": "kaioken/index/test/extract.test.ts",
+      "hash": "6c7293e57f20cb23f95cc4e729e3c6bf1dcf089f8095cf8193598b0da0d17fb0"
+    },
+    {
+      "path": "kaioken/index/test/fixtures/langrepo/sample.go",
+      "hash": "a1563c24fbe13ce83757084b44cbf9ea5655f552a2fad10435d15901e2941d4c"
+    },
+    {
+      "path": "kaioken/index/test/fixtures/langrepo/sample.js",
+      "hash": "ba244d3224e22fb1d9cca640df4e3d02ad7e5178598e284fcf0b14ec1565bb03"
+    },
+    {
+      "path": "kaioken/index/test/fixtures/langrepo/sample.py",
+      "hash": "1f598dd7c656fe638849d21f0b9b0a8c47a25244897f3804e5df077cf89d1c2e"
+    },
+    {
+      "path": "kaioken/index/test/fixtures/langrepo/sample.rs",
+      "hash": "244d5e1ea5a8dd1dbbae82e855588f6d7298361e9ab1079ab4c1e5be81f353f0"
+    },
+    {
+      "path": "kaioken/index/test/fixtures/langrepo/sample.ts",
+      "hash": "45d550a7052588c53fab9f01acc400ee2f175bd37ae3592d9106c287c2ddd6f0"
+    },
+    {
+      "path": "kaioken/index/test/incremental.test.ts",
+      "hash": "1d6fa36edf1950a2667b1a5c1368501e9bf1498184bb5a904bbcbee04337f604"
+    },
+    {
+      "path": "kaioken/index/test/oracle.test.ts",
+      "hash": "f21bdd4ab1693167fc8f2929c70b71d0227891742fa381d5223cb52e476264ec"
+    },
+    {
+      "path": "kaioken/index/tsconfig.json",
+      "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "Anchor",
+      "AnchorResolution",
+      "ResolveExcerptOptions",
+      "resolveExcerpt",
+      "resolveRange",
+      "enclosingSymbol",
+      "readExcerpt",
+      "INDEX_ARTIFACT",
+      "indexArtifactPath",
+      "readIndexArtifact",
+      "BuildOptions",
+      "BuildStats",
+      "BuildOutcome",
+      "ExtractInput",
+      "signatureOf",
+      "docOf",
+      "isExported",
+      "stripCommentMarkers",
+      "stripPythonString",
+      "collectReExports",
+      "extractFallbackDeclarations",
+      "registerGrammar",
+      "isSupportedLanguage",
+      "supportedLanguages",
+      "LoadedGrammar",
+      "loadGrammar",
+      "newParser",
+      "LanguageParserPool",
+      "constructor",
+      "acquire",
+      "release",
+      "availableCount",
+      "inUseCount",
+      "clear",
+      "getParserPool",
+      "withParser",
+      "clearParserPools",
+      "SymbolLocation",
+      "has",
+      "lookup",
+      "lookupIn",
+      "resolve",
+      "hasFile",
+      "file",
+      "unknownNames",
+      "exported",
+      "symbolCount",
+      "SymbolKind",
+      "SymbolRecord",
+      "ReExportRecord",
+      "FileMap",
+      "IndexResult",
+      "Add",
+      "Shape",
+      "Rect",
+      "Area",
+      "Pi",
+      "Registry",
+      "Alias",
+      "Kind",
+      "KindFunc",
+      "KindType",
+      "add",
+      "area",
+      "MAX",
+      "MAX_SIZE"
+    ]
+  }
+}

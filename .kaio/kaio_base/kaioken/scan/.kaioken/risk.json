@@ -1,0 +1,43 @@
+{
+  "generated": [
+    "dist/artifact.d.ts",
+    "dist/artifact.d.ts.map",
+    "dist/artifact.js",
+    "dist/artifact.js.map",
+    "dist/ignore.d.ts",
+    "dist/ignore.d.ts.map",
+    "dist/ignore.js",
+    "dist/ignore.js.map",
+    "dist/index.d.ts",
+    "dist/index.d.ts.map",
+    "dist/index.js",
+    "dist/index.js.map",
+    "dist/language.d.ts",
+    "dist/language.d.ts.map",
+    "dist/language.js",
+    "dist/language.js.map",
+    "dist/risk.d.ts",
+    "dist/risk.d.ts.map",
+    "dist/risk.js",
+    "dist/risk.js.map",
+    "dist/scan.d.ts",
+    "dist/scan.d.ts.map",
+    "dist/scan.js",
+    "dist/scan.js.map",
+    "dist/types.d.ts",
+    "dist/types.d.ts.map",
+    "dist/types.js",
+    "dist/types.js.map"
+  ],
+  "credentials": [
+    "test/entropy.test.ts",
+    "test/risk.test.ts",
+    "test/scan.test.ts",
+    "test/sliding-window.test.ts"
+  ],
+  "private_key": [
+    "test/quarantine.test.ts",
+    "test/risk.test.ts",
+    "test/scan.test.ts"
+  ]
+}

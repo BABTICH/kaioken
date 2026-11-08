@@ -1,0 +1,2615 @@
+{
+  "root": "D:\\project\\ai_now_know\\kaiopi\\kaioken\\scan",
+  "builtAt": "2026-09-23T23:48:41.653Z",
+  "fileCount": 30,
+  "symbolCount": 199,
+  "unparsedLanguages": {},
+  "files": [
+    {
+      "path": "dist/artifact.d.ts",
+      "language": "typescript",
+      "hash": "88e49df65ace09e29c2cbe17dd2688f443767bc9a752c81f4e85f7e8ea7e2913",
+      "lineCount": 13,
+      "unparsed": false,
+      "symbols": [],
+      "reexports": []
+    },
+    {
+      "path": "dist/artifact.js",
+      "language": "javascript",
+      "hash": "ef5ad4b75f59422a84700ef9de435a34306bc97e8e061f64cd7cad64e2f875f4",
+      "lineCount": 29,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "KAIOKEN_DIR",
+          "kind": "const",
+          "signature": "const KAIOKEN_DIR = \".kaioken\";",
+          "startLine": 4,
+          "endLine": 4,
+          "exported": true,
+          "doc": "Everything the pipeline derives lives here, at the repo root."
+        },
+        {
+          "name": "SCAN_ARTIFACT",
+          "kind": "const",
+          "signature": "const SCAN_ARTIFACT = join(KAIOKEN_DIR, \"scan.json\");",
+          "startLine": 5,
+          "endLine": 5,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "scanArtifactPath",
+          "kind": "function",
+          "signature": "function scanArtifactPath(root)",
+          "startLine": 6,
+          "endLine": 8,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "writeScanArtifact",
+          "kind": "function",
+          "signature": "async function writeScanArtifact(root, result)",
+          "startLine": 14,
+          "endLine": 19,
+          "exported": true,
+          "doc": "No stage is a black box: the scan writes an inspectable artifact before the\nnext stage reads it. Formatted, sorted and newline-terminated so a diff of two\nscans is readable by a person."
+        },
+        {
+          "name": "readScanArtifact",
+          "kind": "function",
+          "signature": "async function readScanArtifact(root)",
+          "startLine": 20,
+          "endLine": 28,
+          "exported": true,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "dist/ignore.d.ts",
+      "language": "typescript",
+      "hash": "55f83d56e395eb4660b921227e33d6089e151d68dabafb9ba20c94e18d435b55",
+      "lineCount": 41,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "IgnoreStackOptions",
+          "kind": "interface",
+          "signature": "interface IgnoreStackOptions",
+          "startLine": 6,
+          "endLine": 8,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "IgnoreStack",
+          "kind": "class",
+          "signature": "class IgnoreStack",
+          "startLine": 14,
+          "endLine": 34,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "layers",
+          "kind": "var",
+          "signature": "private readonly layers",
+          "startLine": 15,
+          "endLine": 15,
+          "exported": false,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "ignoreCase",
+          "kind": "var",
+          "signature": "private readonly ignoreCase",
+          "startLine": 16,
+          "endLine": 16,
+          "exported": false,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "constructor",
+          "kind": "method",
+          "signature": "private constructor()",
+          "startLine": 17,
+          "endLine": 17,
+          "exported": false,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "fromPatterns",
+          "kind": "method",
+          "signature": "static fromPatterns(rootPatterns: readonly string[], options?: IgnoreStackOptions): IgnoreStack",
+          "startLine": 18,
+          "endLine": 18,
+          "exported": true,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "withLayer",
+          "kind": "method",
+          "signature": "withLayer(base: string, patterns: string[]): IgnoreStack",
+          "startLine": 24,
+          "endLine": 24,
+          "exported": true,
+          "doc": "A stack with one more layer. Returning a new instance rather than mutating\nis what lets sibling directories inherit the same parent rules without one\nof them leaking its own into the other.",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "ignores",
+          "kind": "method",
+          "signature": "ignores(relPath: string): boolean",
+          "startLine": 32,
+          "endLine": 32,
+          "exported": true,
+          "doc": "`relPath` is repo-relative POSIX. Directories must be passed with a trailing\nslash so directory-only patterns (`build/`) match.\n\nLater rules override earlier ones; a negated file is re-included unless a\nparent directory is excluded.",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "ignoresDirect",
+          "kind": "var",
+          "signature": "private ignoresDirect",
+          "startLine": 33,
+          "endLine": 33,
+          "exported": false,
+          "doc": "",
+          "parent": "IgnoreStack"
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "dist/ignore.js",
+      "language": "javascript",
+      "hash": "4604e76bf610c34e5e6a47505e0ea9f9906e5ca5b56f92b97a78face5dc0cf7c",
+      "lineCount": 137,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "makeIgnore",
+          "kind": "const",
+          "signature": "const makeIgnore = ignoreDefault;",
+          "startLine": 10,
+          "endLine": 10,
+          "exported": false,
+          "doc": "`ignore` ships a merged function/namespace default export. Node resolves it to\nthe callable at runtime (verified), but NodeNext's view of the declaration\nfile surfaces only the namespace, so the call signature is restored here\nrather than loosening module resolution for the whole package."
+        },
+        {
+          "name": "DEFAULT_IGNORES",
+          "kind": "const",
+          "signature": "const DEFAULT_IGNORES = [ \".git/\", \".hg/\", \".svn/\", \"node_modules/\", \".kaioken/\", \"vendor/\", \"__pycache__/\", \".venv/\", \"venv/\", \".mypy_cache/\", \".pytest_cache/\", \".ruff_cache/\", \".gradle/\", \".idea/\", \".vscode/\", \".next/\", \".nuxt/\", \".turbo/\", \".parcel-cache/\", \".terraform/\", \"target/debug/\", \"target/release/\", ];",
+          "startLine": 15,
+          "endLine": 38,
+          "exported": true,
+          "doc": "Always excluded, regardless of what the repo's own ignore files say. These are\ndirectories no repository wants indexed and every repository has."
+        },
+        {
+          "name": "IGNORE_FILENAMES",
+          "kind": "const",
+          "signature": "const IGNORE_FILENAMES = [\".gitignore\", \".kaiokenignore\", \".kaikenignore\"];",
+          "startLine": 40,
+          "endLine": 40,
+          "exported": false,
+          "doc": "Ignore files honoured, in ascending order of precedence."
+        },
+        {
+          "name": "IgnoreStack",
+          "kind": "class",
+          "signature": "class IgnoreStack",
+          "startLine": 46,
+          "endLine": 108,
+          "exported": true,
+          "doc": "Gitignore semantics are per-directory: a pattern in `src/.gitignore` is\nrelative to `src/`. The stack mirrors that — a layer is pushed on entering a\ndirectory that has an ignore file, and consulted only for paths beneath it."
+        },
+        {
+          "name": "constructor",
+          "kind": "method",
+          "signature": "constructor(layers, options)",
+          "startLine": 47,
+          "endLine": 50,
+          "exported": true,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "fromPatterns",
+          "kind": "method",
+          "signature": "static fromPatterns(rootPatterns, options)",
+          "startLine": 51,
+          "endLine": 54,
+          "exported": true,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "withLayer",
+          "kind": "method",
+          "signature": "withLayer(base, patterns)",
+          "startLine": 60,
+          "endLine": 65,
+          "exported": true,
+          "doc": "A stack with one more layer. Returning a new instance rather than mutating\nis what lets sibling directories inherit the same parent rules without one\nof them leaking its own into the other.",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "ignores",
+          "kind": "method",
+          "signature": "ignores(relPath)",
+          "startLine": 73,
+          "endLine": 82,
+          "exported": true,
+          "doc": "`relPath` is repo-relative POSIX. Directories must be passed with a trailing\nslash so directory-only patterns (`build/`) match.\n\nLater rules override earlier ones; a negated file is re-included unless a\nparent directory is excluded.",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "ignoresDirect",
+          "kind": "method",
+          "signature": "ignoresDirect(path)",
+          "startLine": 83,
+          "endLine": 107,
+          "exported": true,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "readIgnoreFiles",
+          "kind": "function",
+          "signature": "function readIgnoreFiles(absDir)",
+          "startLine": 113,
+          "endLine": 126,
+          "exported": true,
+          "doc": "Read whichever ignore files exist in `absDir`. Returns [] when there are none,\nwhich is the overwhelmingly common case and must stay allocation-free."
+        },
+        {
+          "name": "parseIgnoreText",
+          "kind": "function",
+          "signature": "function parseIgnoreText(text)",
+          "startLine": 127,
+          "endLine": 136,
+          "exported": true,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "dist/index.d.ts",
+      "language": "typescript",
+      "hash": "dc378441d4b9642c91fc5420207b94b24d0511cf042acd02a96fbefb730182e1",
+      "lineCount": 7,
+      "unparsed": false,
+      "symbols": [],
+      "reexports": [
+        {
+          "name": "scan",
+          "importedName": "scan",
+          "from": "./scan.ts"
+        },
+        {
+          "name": "toPosix",
+          "importedName": "toPosix",
+          "from": "./scan.ts"
+        },
+        {
+          "name": "KAIOKEN_DIR",
+          "importedName": "KAIOKEN_DIR",
+          "from": "./artifact.ts"
+        },
+        {
+          "name": "SCAN_ARTIFACT",
+          "importedName": "SCAN_ARTIFACT",
+          "from": "./artifact.ts"
+        },
+        {
+          "name": "readScanArtifact",
+          "importedName": "readScanArtifact",
+          "from": "./artifact.ts"
+        },
+        {
+          "name": "scanArtifactPath",
+          "importedName": "scanArtifactPath",
+          "from": "./artifact.ts"
+        },
+        {
+          "name": "writeScanArtifact",
+          "importedName": "writeScanArtifact",
+          "from": "./artifact.ts"
+        },
+        {
+          "name": "classifyRisk",
+          "importedName": "classifyRisk",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "hasCredentialContent",
+          "importedName": "hasCredentialContent",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "hasPrivateKeyContent",
+          "importedName": "hasPrivateKeyContent",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "isBinary",
+          "importedName": "isBinary",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "looksLikeLiveSecret",
+          "importedName": "looksLikeLiveSecret",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "detectLanguage",
+          "importedName": "detectLanguage",
+          "from": "./language.ts"
+        },
+        {
+          "name": "extensionOf",
+          "importedName": "extensionOf",
+          "from": "./language.ts"
+        },
+        {
+          "name": "languageFromShebang",
+          "importedName": "languageFromShebang",
+          "from": "./language.ts"
+        },
+        {
+          "name": "DEFAULT_IGNORES",
+          "importedName": "DEFAULT_IGNORES",
+          "from": "./ignore.ts"
+        },
+        {
+          "name": "IgnoreStack",
+          "importedName": "IgnoreStack",
+          "from": "./ignore.ts"
+        },
+        {
+          "name": "parseIgnoreText",
+          "importedName": "parseIgnoreText",
+          "from": "./ignore.ts"
+        },
+        {
+          "name": "readIgnoreFiles",
+          "importedName": "readIgnoreFiles",
+          "from": "./ignore.ts"
+        },
+        {
+          "name": "IgnoreStackOptions",
+          "importedName": "IgnoreStackOptions",
+          "from": "./ignore.ts"
+        },
+        {
+          "name": "FileRecord",
+          "importedName": "FileRecord",
+          "from": "./types.ts"
+        },
+        {
+          "name": "Risk",
+          "importedName": "Risk",
+          "from": "./types.ts"
+        },
+        {
+          "name": "ScanOptions",
+          "importedName": "ScanOptions",
+          "from": "./types.ts"
+        },
+        {
+          "name": "ScanResult",
+          "importedName": "ScanResult",
+          "from": "./types.ts"
+        }
+      ]
+    },
+    {
+      "path": "dist/index.js",
+      "language": "javascript",
+      "hash": "c6f24cf98f17305bf69bfd875afa34c1a2c09fb786196e84e11a0cd6023b2c9e",
+      "lineCount": 6,
+      "unparsed": false,
+      "symbols": [],
+      "reexports": [
+        {
+          "name": "scan",
+          "importedName": "scan",
+          "from": "./scan.js"
+        },
+        {
+          "name": "toPosix",
+          "importedName": "toPosix",
+          "from": "./scan.js"
+        },
+        {
+          "name": "KAIOKEN_DIR",
+          "importedName": "KAIOKEN_DIR",
+          "from": "./artifact.js"
+        },
+        {
+          "name": "SCAN_ARTIFACT",
+          "importedName": "SCAN_ARTIFACT",
+          "from": "./artifact.js"
+        },
+        {
+          "name": "readScanArtifact",
+          "importedName": "readScanArtifact",
+          "from": "./artifact.js"
+        },
+        {
+          "name": "scanArtifactPath",
+          "importedName": "scanArtifactPath",
+          "from": "./artifact.js"
+        },
+        {
+          "name": "writeScanArtifact",
+          "importedName": "writeScanArtifact",
+          "from": "./artifact.js"
+        },
+        {
+          "name": "classifyRisk",
+          "importedName": "classifyRisk",
+          "from": "./risk.js"
+        },
+        {
+          "name": "hasCredentialContent",
+          "importedName": "hasCredentialContent",
+          "from": "./risk.js"
+        },
+        {
+          "name": "hasPrivateKeyContent",
+          "importedName": "hasPrivateKeyContent",
+          "from": "./risk.js"
+        },
+        {
+          "name": "isBinary",
+          "importedName": "isBinary",
+          "from": "./risk.js"
+        },
+        {
+          "name": "looksLikeLiveSecret",
+          "importedName": "looksLikeLiveSecret",
+          "from": "./risk.js"
+        },
+        {
+          "name": "detectLanguage",
+          "importedName": "detectLanguage",
+          "from": "./language.js"
+        },
+        {
+          "name": "extensionOf",
+          "importedName": "extensionOf",
+          "from": "./language.js"
+        },
+        {
+          "name": "languageFromShebang",
+          "importedName": "languageFromShebang",
+          "from": "./language.js"
+        },
+        {
+          "name": "DEFAULT_IGNORES",
+          "importedName": "DEFAULT_IGNORES",
+          "from": "./ignore.js"
+        },
+        {
+          "name": "IgnoreStack",
+          "importedName": "IgnoreStack",
+          "from": "./ignore.js"
+        },
+        {
+          "name": "parseIgnoreText",
+          "importedName": "parseIgnoreText",
+          "from": "./ignore.js"
+        },
+        {
+          "name": "readIgnoreFiles",
+          "importedName": "readIgnoreFiles",
+          "from": "./ignore.js"
+        }
+      ]
+    },
+    {
+      "path": "dist/language.d.ts",
+      "language": "typescript",
+      "hash": "a98c902c79f3117237840041fe434f72d573c76fe3a5f86288824b880929c5c4",
+      "lineCount": 13,
+      "unparsed": false,
+      "symbols": [],
+      "reexports": []
+    },
+    {
+      "path": "dist/language.js",
+      "language": "javascript",
+      "hash": "09fb8d7f248419e5f22960aa5161720908e4a32533032825e268ae73f9d5a1df",
+      "lineCount": 138,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "BY_EXTENSION",
+          "kind": "const",
+          "signature": "const BY_EXTENSION = new Map(Object.entries({ \".ts\": \"typescript\", \".mts\": \"typescript\", \".cts\": \"typescript\", \".tsx\": \"tsx\", \".js\": \"javascript\", \".mjs\": \"javascript\", \".cjs\": \"javascript\", \".jsx\": \"jsx\", \".py\": \"python\", \".pyi\": \"python\", \".go\": \"go\", \".rs\": \"rust\", \".rb\": \"ruby\", \".java\": \"java\", \".kt\": \"kotlin\", \".kts\": \"kotlin\", \".cs\": \"csharp\", \".c\": \"c\", \".h\": \"c\", \".cc\": \"cpp\", \".cpp\": \"cpp\", \".cxx\": \"cpp\", \".hpp\": \"cpp\", \".swift\": \"swift\", \".php\": \"php\", \".sh\": \"shell\", \".bash\": \"shell\", \".zsh\": \"shell\", \".ps1\": \"powershell\", \".sql\": \"sql\", \".md\": \"markdown\", \".mdx\": \"markdown\", \".json\": \"json\", \".jsonc\": \"json\", \".yaml\": \"yaml\", \".yml\": \"yaml\", \".toml\": \"toml\", \".xml\": \"xml\", \".html\": \"html\", \".htm\": \"html\", \".css\": \"css\", \".scss\": \"scss\", \".lua\": \"lua\", \".vim\": \"vim\", \".dart\": \"dart\", \".scala\": \"scala\", \".ex\": \"elixir\", \".exs\": \"elixir\", \".erl\": \"erlang\", \".hs\": \"haskell\", \".ml\": \"ocaml\", \".zig\": \"zig\", \".proto\": \"protobuf\", \".graphql\": \"graphql\", \".gql\": \"graphql\", }));",
+          "startLine": 6,
+          "endLine": 62,
+          "exported": false,
+          "doc": "Language identification: extension first, shebang as fallback. Deliberately a\nlookup rather than a heuristic — every downstream consumer keys off this id,\nso it has to be boring and stable."
+        },
+        {
+          "name": "BY_FILENAME",
+          "kind": "const",
+          "signature": "const BY_FILENAME = new Map(Object.entries({ dockerfile: \"dockerfile\", makefile: \"make\", \"go.mod\": \"gomod\", \"go.sum\": \"gosum\", \".gitignore\": \"gitignore\", \".env\": \"dotenv\", }));",
+          "startLine": 63,
+          "endLine": 70,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "BY_INTERPRETER",
+          "kind": "const",
+          "signature": "const BY_INTERPRETER = new Map(Object.entries({ node: \"javascript\", bun: \"typescript\", deno: \"typescript\", \"ts-node\": \"typescript\", python: \"python\", python2: \"python\", python3: \"python\", ruby: \"ruby\", sh: \"shell\", bash: \"shell\", zsh: \"shell\", perl: \"perl\", php: \"php\", }));",
+          "startLine": 72,
+          "endLine": 86,
+          "exported": false,
+          "doc": "Interpreter name (basename of the shebang target) to language id."
+        },
+        {
+          "name": "extensionOf",
+          "kind": "function",
+          "signature": "function extensionOf(path)",
+          "startLine": 87,
+          "endLine": 94,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "detectLanguage",
+          "kind": "function",
+          "signature": "function detectLanguage(path, head)",
+          "startLine": 99,
+          "endLine": 114,
+          "exported": true,
+          "doc": "Resolve a language id. `head` is the first bytes of the file, used only when\nthe extension says nothing — which is the common case for scripts."
+        },
+        {
+          "name": "languageFromShebang",
+          "kind": "function",
+          "signature": "function languageFromShebang(head)",
+          "startLine": 115,
+          "endLine": 137,
+          "exported": true,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "dist/risk.d.ts",
+      "language": "typescript",
+      "hash": "af5f8181c3fa272b63d2afe05dd9e6f51fee791b2cd2e0492118107ca82b7718",
+      "lineCount": 20,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "RiskInput",
+          "kind": "interface",
+          "signature": "interface RiskInput",
+          "startLine": 2,
+          "endLine": 10,
+          "exported": true,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "dist/risk.js",
+      "language": "javascript",
+      "hash": "902974663423747ad896b4af506031f1d1fda1dc52ca2b50c890739913658e8c",
+      "lineCount": 262,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "PRIVATE_KEY_CONTENT",
+          "kind": "const",
+          "signature": "const PRIVATE_KEY_CONTENT = [ /-----BEGIN (?:[A-Z0-9_ -]+ )?PRIVATE KEY(?: BLOCK)?-----/, /PuTTY-User-Key-File-\\d/, ];",
+          "startLine": 9,
+          "endLine": 12,
+          "exported": false,
+          "doc": "Risk flagging runs inside the scan traversal because the bytes are already in\nhand. Every downstream consumer — bundling, the wiki, the agent's write\napproval prompt — inherits the result without paying for another pass.\n\nThe bias throughout is toward precision over recall. A flag on ordinary source\ntrains the reader to ignore flags, which is worse than missing one."
+        },
+        {
+          "name": "PRIVATE_KEY_FILENAMES",
+          "kind": "const",
+          "signature": "const PRIVATE_KEY_FILENAMES = new Set([ \"id_rsa\", \"id_dsa\", \"id_ecdsa\", \"id_ed25519\", \"identity\", \"server.key\", \"privkey.pem\", ]);",
+          "startLine": 13,
+          "endLine": 21,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "PRIVATE_KEY_EXTENSIONS",
+          "kind": "const",
+          "signature": "const PRIVATE_KEY_EXTENSIONS = new Set([\".pem\", \".key\", \".p12\", \".pfx\", \".jks\", \".keystore\"]);",
+          "startLine": 22,
+          "endLine": 22,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "CREDENTIAL_FILENAMES",
+          "kind": "const",
+          "signature": "const CREDENTIAL_FILENAMES = new Set([ \"credentials\", \"credentials.json\", \"secrets.json\", \"secrets.yaml\", \"secrets.yml\", \".npmrc\", \".pypirc\", \".netrc\", \"_netrc\", \".htpasswd\", ]);",
+          "startLine": 23,
+          "endLine": 34,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "ENV_TEMPLATE_SUFFIXES",
+          "kind": "const",
+          "signature": "const ENV_TEMPLATE_SUFFIXES = [\".example\", \".sample\", \".template\", \".dist\", \".defaults\"];",
+          "startLine": 36,
+          "endLine": 36,
+          "exported": false,
+          "doc": "Suffixes that mark an env file as a documented template rather than a real one."
+        },
+        {
+          "name": "CREDENTIAL_CONTENT",
+          "kind": "const",
+          "signature": "const CREDENTIAL_CONTENT = [ /\\bAKIA[0-9A-Z]{16}\\b/, // AWS access key id /\\bASIA[0-9A-Z]{16}\\b/, // AWS temporary access key id /\\bgh[pousr]_[A-Za-z0-9]{36,}\\b/, // GitHub classic token /\\bgithub_pat_[A-Za-z0-9_]{22,}\\b/, // GitHub fine-grained PAT /\\bxox[baprs]-[A-Za-z0-9-]{10,}\\b/, // Slack token /\\bAIza[0-9A-Za-z_-]{35}\\b/, // Google API key /\\bya29\\.[0-9A-Za-z_-]{20,}\\b/, // GCP OAuth / access token /\\b[sr]k_live_[0-9a-zA-Z]{24,}\\b/, // Stripe live secret or restricted key /\\bsk-ant-[A-Za-z0-9_-]{20,}\\b/, // Anthropic /\\bsk-(?:proj|admin|svcacct)-[A-Za-z0-9_-]{20,}\\b/, // OpenAI project/admin key /\\bsk-[A-Za-z0-9]{32,}\\b/, // OpenAI key /\\bhf_[A-Za-z0-9]{20,}\\b/, // HuggingFace token /\\bpypi-[A-Za-z0-9_-]{20,}\\b/, // PyPI API token /\\bDefaultEndpointsProtocol=https?;[^\\s\"']*/, // Azure Storage connection string /\\b(?:SharedAccessKey|AccountKey)=[A-Za-z0-9+/=]{40,}\\b/, // Azure account / access key /\\bSharedAccessSignature(?:=|\\s+)[^\\s\"']{20,}/, // Azure SAS token /\\b(?:sv=\\d{4}-\\d{2}-\\d{2}[^\\s\"']*sig=|sig=[A-Za-z0-9%+/=]{20,}[^\\s\"']*sv=\\d{4}-\\d{2}-\\d{2})[A-Za-z0-9%+/=]{20,}/, // Azure SAS query token /\\b[Bb]earer\\s+(?!example|sample|test|placeholder|your|dummy|fake)[A-Za-z0-9_\\-\\.~+/]{20,}\\b/, // Bearer auth header /\\bglpat-[A-Za-z0-9_-]{20,}\\b/, // GitLab PAT /\\beyJ[A-Za-z0-9_-]{10,}\\.eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}/, // JWT ];",
+          "startLine": 41,
+          "endLine": 62,
+          "exported": false,
+          "doc": "Provider token shapes. Each of these is specific enough that a match is\neffectively never a coincidence."
+        },
+        {
+          "name": "GENERIC_SECRET",
+          "kind": "const",
+          "signature": "const GENERIC_SECRET = /\\b(?:password|passwd|secret|secret_key|token|auth_token|api[_-]?key|access[_-]?key|private[_-]?key|client[_-]?secret)\\b\\s*[:=]\\s*[\"'`]([^\"'`\\n]{20,})[\"'`]/i;",
+          "startLine": 68,
+          "endLine": 68,
+          "exported": false,
+          "doc": "The generic rule: a secret-ish name assigned a high-entropy literal. This is\nthe only pattern that could plausibly fire on real source, so it is fenced by\na placeholder check and an entropy floor."
+        },
+        {
+          "name": "PLACEHOLDER_WORDS",
+          "kind": "const",
+          "signature": "const PLACEHOLDER_WORDS = [ \"example\", \"sample\", \"placeholder\", \"dummy\", \"fake\", \"test\", \"changeme\", \"change_me\", \"your\", \"xxxx\", \"redacted\", \"insert\", \"todo\", \"replace\", \"notreal\", \"secretsecret\", ];",
+          "startLine": 70,
+          "endLine": 87,
+          "exported": false,
+          "doc": "Words that mark a literal as documentation rather than a live credential."
+        },
+        {
+          "name": "GENERATED_PATH_SEGMENTS",
+          "kind": "const",
+          "signature": "const GENERATED_PATH_SEGMENTS = [ \"dist/\", \"build/\", \"out/\", \".next/\", \"coverage/\", \"__generated__/\", \"generated/\", \".output/\", ];",
+          "startLine": 88,
+          "endLine": 97,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "GENERATED_FILENAME",
+          "kind": "const",
+          "signature": "const GENERATED_FILENAME = [ /\\.min\\.(?:js|css|mjs)$/, /\\.(?:js|css|mjs)\\.map$/, /\\.pb\\.go$/, /_pb2\\.pyi?$/, /\\.pb\\.cc$/, /\\.g\\.dart$/, /\\.generated\\.[A-Za-z0-9]+$/, /\\.designer\\.cs$/i, ];",
+          "startLine": 98,
+          "endLine": 107,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "GENERATED_CONTENT",
+          "kind": "const",
+          "signature": "const GENERATED_CONTENT = [ /Code generated by .+ DO NOT EDIT/i, /@generated\\b/, /DO NOT EDIT(?:[.!]| THIS FILE)/i, /This file (?:was|is) (?:auto[- ]?)?generated/i, /Autogenerated by/i, ];",
+          "startLine": 108,
+          "endLine": 114,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "LOCKFILES",
+          "kind": "const",
+          "signature": "const LOCKFILES = new Set([ \"package-lock.json\", \"npm-shrinkwrap.json\", \"yarn.lock\", \"pnpm-lock.yaml\", \"bun.lock\", \"bun.lockb\", \"go.sum\", \"cargo.lock\", \"poetry.lock\", \"pdm.lock\", \"uv.lock\", \"gemfile.lock\", \"composer.lock\", \"pubspec.lock\", \"packages.lock.json\", \"mix.lock\", \"flake.lock\", ]);",
+          "startLine": 115,
+          "endLine": 133,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "classifyRisk",
+          "kind": "function",
+          "signature": "function classifyRisk(input)",
+          "startLine": 134,
+          "endLine": 169,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "hasPrivateKeyContent",
+          "kind": "function",
+          "signature": "function hasPrivateKeyContent(text)",
+          "startLine": 170,
+          "endLine": 172,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "isCertificateOnly",
+          "kind": "function",
+          "signature": "function isCertificateOnly(text)",
+          "startLine": 177,
+          "endLine": 181,
+          "exported": false,
+          "doc": "PEM content that holds certificates and nothing secret. Public roots ship in\nplenty of repositories and are not a finding."
+        },
+        {
+          "name": "isCredentialFilename",
+          "kind": "function",
+          "signature": "function isCredentialFilename(base)",
+          "startLine": 182,
+          "endLine": 192,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "isGeneratedPath",
+          "kind": "function",
+          "signature": "function isGeneratedPath(path)",
+          "startLine": 193,
+          "endLine": 196,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "hasGeneratedBanner",
+          "kind": "function",
+          "signature": "function hasGeneratedBanner(text)",
+          "startLine": 198,
+          "endLine": 201,
+          "exported": false,
+          "doc": "Only the first lines count — a banner buried on line 900 is not a banner."
+        },
+        {
+          "name": "hasCredentialContent",
+          "kind": "function",
+          "signature": "function hasCredentialContent(text)",
+          "startLine": 202,
+          "endLine": 212,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "looksLikeLiveSecret",
+          "kind": "function",
+          "signature": "function looksLikeLiveSecret(value)",
+          "startLine": 217,
+          "endLine": 241,
+          "exported": true,
+          "doc": "The entropy floor. A live secret mixes character classes and is not a word a\nhuman wrote as an illustration."
+        },
+        {
+          "name": "isBinary",
+          "kind": "function",
+          "signature": "function isBinary(head)",
+          "startLine": 242,
+          "endLine": 244,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "firstLines",
+          "kind": "function",
+          "signature": "function firstLines(text, count)",
+          "startLine": 245,
+          "endLine": 254,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "basename",
+          "kind": "function",
+          "signature": "function basename(path)",
+          "startLine": 255,
+          "endLine": 257,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "extname",
+          "kind": "function",
+          "signature": "function extname(base)",
+          "startLine": 258,
+          "endLine": 261,
+          "exported": false,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "dist/scan.d.ts",
+      "language": "typescript",
+      "hash": "f465eaa97a15816d0fac0977df457c30f5aa73093e16d3d321163e60907bc551",
+      "lineCount": 10,
+      "unparsed": false,
+      "symbols": [],
+      "reexports": []
+    },
+    {
+      "path": "dist/scan.js",
+      "language": "javascript",
+      "hash": "0c4b9c36d265b8980477c9e1683b4916c4207bbaa4b8210ffa62a0636dba49da",
+      "lineCount": 245,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "DETECTION_WINDOW",
+          "kind": "const",
+          "signature": "const DETECTION_WINDOW = 64 * 1024;",
+          "startLine": 10,
+          "endLine": 10,
+          "exported": false,
+          "doc": "Bytes read for language, binary and risk detection when a file is not read whole."
+        },
+        {
+          "name": "DEFAULT_MAX_READ_BYTES",
+          "kind": "const",
+          "signature": "const DEFAULT_MAX_READ_BYTES = 4 * 1024 * 1024;",
+          "startLine": 11,
+          "endLine": 11,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "DEFAULT_MAX_SECRET_SCAN_BYTES",
+          "kind": "const",
+          "signature": "const DEFAULT_MAX_SECRET_SCAN_BYTES = 16 * 1024 * 1024;",
+          "startLine": 12,
+          "endLine": 12,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "DEFAULT_LARGE_BINARY_BYTES",
+          "kind": "const",
+          "signature": "const DEFAULT_LARGE_BINARY_BYTES = 1024 * 1024;",
+          "startLine": 13,
+          "endLine": 13,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "scan",
+          "kind": "function",
+          "signature": "async function scan(root, options = {})",
+          "startLine": 19,
+          "endLine": 183,
+          "exported": true,
+          "doc": "One traversal of the working tree. Everything the pipeline knows about the\nfile set originates here, which is why risk flagging is folded in rather than\ngiven its own pass — the bytes are only paid for once."
+        },
+        {
+          "name": "walk",
+          "kind": "function",
+          "signature": "async function walk(absDir, relDir, inherited)",
+          "startLine": 43,
+          "endLine": 98,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "readFile",
+          "kind": "function",
+          "signature": "async function readFile(absPath, relPath)",
+          "startLine": 99,
+          "endLine": 182,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "readHead",
+          "kind": "function",
+          "signature": "async function readHead(absPath, bytes)",
+          "startLine": 184,
+          "endLine": 194,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "streamHashAndScan",
+          "kind": "function",
+          "signature": "function streamHashAndScan(absPath, options)",
+          "startLine": 195,
+          "endLine": 240,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "toPosix",
+          "kind": "function",
+          "signature": "function toPosix(path)",
+          "startLine": 242,
+          "endLine": 244,
+          "exported": true,
+          "doc": "Normalise a native path to the repo-relative POSIX form used in artifacts."
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "dist/types.d.ts",
+      "language": "typescript",
+      "hash": "c51d4381c80937a62119cffc0836ef5e5534794aa47408375af7518c399000f9",
+      "lineCount": 40,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "Risk",
+          "kind": "type",
+          "signature": "type Risk = \"private_key\" | \"credentials\" | \"generated\" | \"large_binary\" | \"lockfile\";",
+          "startLine": 2,
+          "endLine": 2,
+          "exported": true,
+          "doc": "Risk classes flagged during the scan traversal."
+        },
+        {
+          "name": "FileRecord",
+          "kind": "interface",
+          "signature": "interface FileRecord",
+          "startLine": 4,
+          "endLine": 14,
+          "exported": true,
+          "doc": "One file in the canonical file set."
+        },
+        {
+          "name": "ScanResult",
+          "kind": "interface",
+          "signature": "interface ScanResult",
+          "startLine": 15,
+          "endLine": 23,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "ScanOptions",
+          "kind": "interface",
+          "signature": "interface ScanOptions",
+          "startLine": 24,
+          "endLine": 39,
+          "exported": true,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "dist/types.js",
+      "language": "javascript",
+      "hash": "01ae2a5b120382f9a648ced7ee8507493a134f216d100fc61600c6c9738235d2",
+      "lineCount": 2,
+      "unparsed": false,
+      "symbols": [],
+      "reexports": []
+    },
+    {
+      "path": "src/artifact.ts",
+      "language": "typescript",
+      "hash": "2479ffd31a19ac4cf6a1b20bd2ad4d942d6c2173d10699930afd4e2ef5583b44",
+      "lineCount": 32,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "KAIOKEN_DIR",
+          "kind": "const",
+          "signature": "const KAIOKEN_DIR = \".kaioken\";",
+          "startLine": 6,
+          "endLine": 6,
+          "exported": true,
+          "doc": "Everything the pipeline derives lives here, at the repo root."
+        },
+        {
+          "name": "SCAN_ARTIFACT",
+          "kind": "const",
+          "signature": "const SCAN_ARTIFACT = join(KAIOKEN_DIR, \"scan.json\");",
+          "startLine": 7,
+          "endLine": 7,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "scanArtifactPath",
+          "kind": "function",
+          "signature": "function scanArtifactPath(root: string): string",
+          "startLine": 9,
+          "endLine": 11,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "writeScanArtifact",
+          "kind": "function",
+          "signature": "async function writeScanArtifact(root: string, result: ScanResult): Promise<string>",
+          "startLine": 18,
+          "endLine": 23,
+          "exported": true,
+          "doc": "No stage is a black box: the scan writes an inspectable artifact before the\nnext stage reads it. Formatted, sorted and newline-terminated so a diff of two\nscans is readable by a person."
+        },
+        {
+          "name": "readScanArtifact",
+          "kind": "function",
+          "signature": "async function readScanArtifact(root: string): Promise<ScanResult | null>",
+          "startLine": 25,
+          "endLine": 32,
+          "exported": true,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "src/entropy.ts",
+      "language": "typescript",
+      "hash": "4f8a82a49d054c0a41357296c5df18d68f67fd35ff66fe67fe36dfc60b0d4484",
+      "lineCount": 244,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "HighEntropyFinding",
+          "kind": "interface",
+          "signature": "interface HighEntropyFinding",
+          "startLine": 7,
+          "endLine": 22,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "EntropyOptions",
+          "kind": "interface",
+          "signature": "interface EntropyOptions",
+          "startLine": 24,
+          "endLine": 33,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "DEFAULT_MIN_ENTROPY",
+          "kind": "const",
+          "signature": "const DEFAULT_MIN_ENTROPY = 4.3;",
+          "startLine": 35,
+          "endLine": 35,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "DEFAULT_MIN_LENGTH",
+          "kind": "const",
+          "signature": "const DEFAULT_MIN_LENGTH = 20;",
+          "startLine": 36,
+          "endLine": 36,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "DEFAULT_MAX_LENGTH",
+          "kind": "const",
+          "signature": "const DEFAULT_MAX_LENGTH = 256;",
+          "startLine": 37,
+          "endLine": 37,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "DEFAULT_WHITELIST",
+          "kind": "const",
+          "signature": "const DEFAULT_WHITELIST: RegExp[] = [ // UUIDs /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, // Full SHA-256 or SHA-1 hashes (e.g., git commit hashes or file integrity checks) /^[0-9a-f]{40}$/i, /^[0-9a-f]{64}$/i, // Common benign URL / data formats /^data:image\\/[a-z+]+;base64,/i, // Common package identifiers / semver strings /^[a-z0-9-_]+@[0-9]+\\.[0-9]+\\.[0-9]+/, ];",
+          "startLine": 39,
+          "endLine": 49,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "PLACEHOLDER_TERMS",
+          "kind": "const",
+          "signature": "const PLACEHOLDER_TERMS = [ \"example\", \"sample\", \"placeholder\", \"dummy\", \"fake\", \"test\", \"changeme\", \"change_me\", \"your\", \"redacted\", \"notreal\", ];",
+          "startLine": 51,
+          "endLine": 63,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "calculateShannonEntropy",
+          "kind": "function",
+          "signature": "function calculateShannonEntropy(text: string): number",
+          "startLine": 70,
+          "endLine": 87,
+          "exported": true,
+          "doc": "Calculates the standard Shannon entropy of a string:\nH(X) = -sum(P(x_i) * log2(P(x_i)))\nReturns value in bits per character (0.0 to ~8.0 for byte/ASCII range)."
+        },
+        {
+          "name": "calculateMetricEntropy",
+          "kind": "function",
+          "signature": "function calculateMetricEntropy(text: string): number",
+          "startLine": 93,
+          "endLine": 99,
+          "exported": true,
+          "doc": "Normalizes Shannon entropy against the theoretical maximum for the given string length\nor character alphabet."
+        },
+        {
+          "name": "detectHighEntropyStrings",
+          "kind": "function",
+          "signature": "function detectHighEntropyStrings( text: string, options: EntropyOptions = {}, ): HighEntropyFinding[]",
+          "startLine": 104,
+          "endLine": 191,
+          "exported": true,
+          "doc": "Scan source text for candidate high-entropy tokens (string literals, bearer tokens, API keys)."
+        },
+        {
+          "name": "maskToken",
+          "kind": "function",
+          "signature": "function maskToken(token: string): string",
+          "startLine": 197,
+          "endLine": 205,
+          "exported": true,
+          "doc": "Safely masks a secret token for terminal output or reports.\nPreserves first 4 and last 4 characters if long enough."
+        },
+        {
+          "name": "formatEntropyBar",
+          "kind": "function",
+          "signature": "function formatEntropyBar(entropy: number, maxEntropy = 6.0, width = 10): string",
+          "startLine": 211,
+          "endLine": 220,
+          "exported": true,
+          "doc": "Formats a terminal ASCII / Unicode progress bar representing Shannon entropy.\nGreen < 3.5, Yellow 3.5 - 4.4, Red >= 4.5."
+        },
+        {
+          "name": "visualizeEntropyProfile",
+          "kind": "function",
+          "signature": "function visualizeEntropyProfile(findings: HighEntropyFinding[]): string",
+          "startLine": 225,
+          "endLine": 244,
+          "exported": true,
+          "doc": "Formats an overview terminal summary card of high-entropy findings."
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "src/ignore.ts",
+      "language": "typescript",
+      "hash": "f3da445dcc48b54976aae6a4582cbde63af228e7a4e76a839a475f57831ab912",
+      "lineCount": 156,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "makeIgnore",
+          "kind": "const",
+          "signature": "const makeIgnore = ignoreDefault as unknown as (options?: Options) => Ignore;",
+          "startLine": 11,
+          "endLine": 11,
+          "exported": false,
+          "doc": "`ignore` ships a merged function/namespace default export. Node resolves it to\nthe callable at runtime (verified), but NodeNext's view of the declaration\nfile surfaces only the namespace, so the call signature is restored here\nrather than loosening module resolution for the whole package."
+        },
+        {
+          "name": "DEFAULT_IGNORES",
+          "kind": "const",
+          "signature": "const DEFAULT_IGNORES: readonly string[] = [ \".git/\", \".hg/\", \".svn/\", \"node_modules/\", \".kaioken/\", \"vendor/\", \"__pycache__/\", \".venv/\", \"venv/\", \".mypy_cache/\", \".pytest_cache/\", \".ruff_cache/\", \".gradle/\", \".idea/\", \".vscode/\", \".next/\", \".nuxt/\", \".turbo/\", \".parcel-cache/\", \".terraform/\", \"target/debug/\", \"target/release/\", ];",
+          "startLine": 17,
+          "endLine": 40,
+          "exported": true,
+          "doc": "Always excluded, regardless of what the repo's own ignore files say. These are\ndirectories no repository wants indexed and every repository has."
+        },
+        {
+          "name": "IGNORE_FILENAMES",
+          "kind": "const",
+          "signature": "const IGNORE_FILENAMES = [\".gitignore\", \".kaiokenignore\", \".kaikenignore\"] as const;",
+          "startLine": 43,
+          "endLine": 43,
+          "exported": false,
+          "doc": "Ignore files honoured, in ascending order of precedence."
+        },
+        {
+          "name": "Layer",
+          "kind": "interface",
+          "signature": "interface Layer",
+          "startLine": 45,
+          "endLine": 49,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "IgnoreStackOptions",
+          "kind": "interface",
+          "signature": "interface IgnoreStackOptions",
+          "startLine": 51,
+          "endLine": 53,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "IgnoreStack",
+          "kind": "class",
+          "signature": "class IgnoreStack",
+          "startLine": 60,
+          "endLine": 128,
+          "exported": true,
+          "doc": "Gitignore semantics are per-directory: a pattern in `src/.gitignore` is\nrelative to `src/`. The stack mirrors that — a layer is pushed on entering a\ndirectory that has an ignore file, and consulted only for paths beneath it."
+        },
+        {
+          "name": "layers",
+          "kind": "var",
+          "signature": "private readonly layers: readonly Layer[]",
+          "startLine": 61,
+          "endLine": 61,
+          "exported": false,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "ignoreCase",
+          "kind": "var",
+          "signature": "private readonly ignoreCase: boolean",
+          "startLine": 62,
+          "endLine": 62,
+          "exported": false,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "constructor",
+          "kind": "method",
+          "signature": "private constructor(layers: readonly Layer[], options?: IgnoreStackOptions)",
+          "startLine": 64,
+          "endLine": 67,
+          "exported": false,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "fromPatterns",
+          "kind": "method",
+          "signature": "static fromPatterns(rootPatterns: readonly string[], options?: IgnoreStackOptions): IgnoreStack",
+          "startLine": 69,
+          "endLine": 75,
+          "exported": true,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "withLayer",
+          "kind": "method",
+          "signature": "withLayer(base: string, patterns: string[]): IgnoreStack",
+          "startLine": 82,
+          "endLine": 90,
+          "exported": true,
+          "doc": "A stack with one more layer. Returning a new instance rather than mutating\nis what lets sibling directories inherit the same parent rules without one\nof them leaking its own into the other.",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "ignores",
+          "kind": "method",
+          "signature": "ignores(relPath: string): boolean",
+          "startLine": 99,
+          "endLine": 107,
+          "exported": true,
+          "doc": "`relPath` is repo-relative POSIX. Directories must be passed with a trailing\nslash so directory-only patterns (`build/`) match.\n\nLater rules override earlier ones; a negated file is re-included unless a\nparent directory is excluded.",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "ignoresDirect",
+          "kind": "method",
+          "signature": "private ignoresDirect(path: string): boolean",
+          "startLine": 109,
+          "endLine": 127,
+          "exported": false,
+          "doc": "",
+          "parent": "IgnoreStack"
+        },
+        {
+          "name": "readIgnoreFiles",
+          "kind": "function",
+          "signature": "function readIgnoreFiles(absDir: string): string[]",
+          "startLine": 134,
+          "endLine": 146,
+          "exported": true,
+          "doc": "Read whichever ignore files exist in `absDir`. Returns [] when there are none,\nwhich is the overwhelmingly common case and must stay allocation-free."
+        },
+        {
+          "name": "parseIgnoreText",
+          "kind": "function",
+          "signature": "function parseIgnoreText(text: string): string[]",
+          "startLine": 148,
+          "endLine": 156,
+          "exported": true,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "src/index.ts",
+      "language": "typescript",
+      "hash": "4f4ad85899e811886605cb87178ca14996695a0cff794d4eb15b4565fcf5e037",
+      "lineCount": 56,
+      "unparsed": false,
+      "symbols": [],
+      "reexports": [
+        {
+          "name": "scan",
+          "importedName": "scan",
+          "from": "./scan.ts"
+        },
+        {
+          "name": "toPosix",
+          "importedName": "toPosix",
+          "from": "./scan.ts"
+        },
+        {
+          "name": "KAIOKEN_DIR",
+          "importedName": "KAIOKEN_DIR",
+          "from": "./artifact.ts"
+        },
+        {
+          "name": "SCAN_ARTIFACT",
+          "importedName": "SCAN_ARTIFACT",
+          "from": "./artifact.ts"
+        },
+        {
+          "name": "readScanArtifact",
+          "importedName": "readScanArtifact",
+          "from": "./artifact.ts"
+        },
+        {
+          "name": "scanArtifactPath",
+          "importedName": "scanArtifactPath",
+          "from": "./artifact.ts"
+        },
+        {
+          "name": "writeScanArtifact",
+          "importedName": "writeScanArtifact",
+          "from": "./artifact.ts"
+        },
+        {
+          "name": "classifyRisk",
+          "importedName": "classifyRisk",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "extractSecretFindings",
+          "importedName": "extractSecretFindings",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "hasCredentialContent",
+          "importedName": "hasCredentialContent",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "hasPrivateKeyContent",
+          "importedName": "hasPrivateKeyContent",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "isBinary",
+          "importedName": "isBinary",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "looksLikeLiveSecret",
+          "importedName": "looksLikeLiveSecret",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "PROVIDER_SECRET_PATTERNS",
+          "importedName": "PROVIDER_SECRET_PATTERNS",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "NamedPattern",
+          "importedName": "NamedPattern",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "RiskInput",
+          "importedName": "RiskInput",
+          "from": "./risk.ts"
+        },
+        {
+          "name": "detectLanguage",
+          "importedName": "detectLanguage",
+          "from": "./language.ts"
+        },
+        {
+          "name": "extensionOf",
+          "importedName": "extensionOf",
+          "from": "./language.ts"
+        },
+        {
+          "name": "languageFromShebang",
+          "importedName": "languageFromShebang",
+          "from": "./language.ts"
+        },
+        {
+          "name": "DEFAULT_IGNORES",
+          "importedName": "DEFAULT_IGNORES",
+          "from": "./ignore.ts"
+        },
+        {
+          "name": "IgnoreStack",
+          "importedName": "IgnoreStack",
+          "from": "./ignore.ts"
+        },
+        {
+          "name": "parseIgnoreText",
+          "importedName": "parseIgnoreText",
+          "from": "./ignore.ts"
+        },
+        {
+          "name": "readIgnoreFiles",
+          "importedName": "readIgnoreFiles",
+          "from": "./ignore.ts"
+        },
+        {
+          "name": "IgnoreStackOptions",
+          "importedName": "IgnoreStackOptions",
+          "from": "./ignore.ts"
+        },
+        {
+          "name": "BufferPool",
+          "importedName": "BufferPool",
+          "from": "./pool.ts"
+        },
+        {
+          "name": "defaultBufferPool",
+          "importedName": "defaultBufferPool",
+          "from": "./pool.ts"
+        },
+        {
+          "name": "calculateMetricEntropy",
+          "importedName": "calculateMetricEntropy",
+          "from": "./entropy.ts"
+        },
+        {
+          "name": "calculateShannonEntropy",
+          "importedName": "calculateShannonEntropy",
+          "from": "./entropy.ts"
+        },
+        {
+          "name": "detectHighEntropyStrings",
+          "importedName": "detectHighEntropyStrings",
+          "from": "./entropy.ts"
+        },
+        {
+          "name": "formatEntropyBar",
+          "importedName": "formatEntropyBar",
+          "from": "./entropy.ts"
+        },
+        {
+          "name": "maskToken",
+          "importedName": "maskToken",
+          "from": "./entropy.ts"
+        },
+        {
+          "name": "visualizeEntropyProfile",
+          "importedName": "visualizeEntropyProfile",
+          "from": "./entropy.ts"
+        },
+        {
+          "name": "EntropyOptions",
+          "importedName": "EntropyOptions",
+          "from": "./entropy.ts"
+        },
+        {
+          "name": "HighEntropyFinding",
+          "importedName": "HighEntropyFinding",
+          "from": "./entropy.ts"
+        },
+        {
+          "name": "analyzeStreamWithWindow",
+          "importedName": "analyzeStreamWithWindow",
+          "from": "./sliding-window.ts"
+        },
+        {
+          "name": "SlidingWindowAnalyzer",
+          "importedName": "SlidingWindowAnalyzer",
+          "from": "./sliding-window.ts"
+        },
+        {
+          "name": "BoundaryFinding",
+          "importedName": "BoundaryFinding",
+          "from": "./sliding-window.ts"
+        },
+        {
+          "name": "SlidingWindowOptions",
+          "importedName": "SlidingWindowOptions",
+          "from": "./sliding-window.ts"
+        },
+        {
+          "name": "SlidingWindowResult",
+          "importedName": "SlidingWindowResult",
+          "from": "./sliding-window.ts"
+        },
+        {
+          "name": "formatClassificationTable",
+          "importedName": "formatClassificationTable",
+          "from": "./quarantine.ts"
+        },
+        {
+          "name": "quarantineSecretFile",
+          "importedName": "quarantineSecretFile",
+          "from": "./quarantine.ts"
+        },
+        {
+          "name": "suggestIgnoreRules",
+          "importedName": "suggestIgnoreRules",
+          "from": "./quarantine.ts"
+        },
+        {
+          "name": "QuarantineManifest",
+          "importedName": "QuarantineManifest",
+          "from": "./quarantine.ts"
+        },
+        {
+          "name": "QuarantineManifestEntry",
+          "importedName": "QuarantineManifestEntry",
+          "from": "./quarantine.ts"
+        },
+        {
+          "name": "QuarantineOptions",
+          "importedName": "QuarantineOptions",
+          "from": "./quarantine.ts"
+        },
+        {
+          "name": "QuarantineResult",
+          "importedName": "QuarantineResult",
+          "from": "./quarantine.ts"
+        },
+        {
+          "name": "SecretFinding",
+          "importedName": "SecretFinding",
+          "from": "./quarantine.ts"
+        },
+        {
+          "name": "FileRecord",
+          "importedName": "FileRecord",
+          "from": "./types.ts"
+        },
+        {
+          "name": "Risk",
+          "importedName": "Risk",
+          "from": "./types.ts"
+        },
+        {
+          "name": "ScanOptions",
+          "importedName": "ScanOptions",
+          "from": "./types.ts"
+        },
+        {
+          "name": "ScanProgress",
+          "importedName": "ScanProgress",
+          "from": "./types.ts"
+        },
+        {
+          "name": "ScanResult",
+          "importedName": "ScanResult",
+          "from": "./types.ts"
+        }
+      ]
+    },
+    {
+      "path": "src/language.ts",
+      "language": "typescript",
+      "hash": "151632b2db24588a1c82f3e4d2f043c306288cacf117248446b7f19ee57885c8",
+      "lineCount": 148,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "BY_EXTENSION",
+          "kind": "const",
+          "signature": "const BY_EXTENSION = new Map<string, string>( Object.entries({ \".ts\": \"typescript\", \".mts\": \"typescript\", \".cts\": \"typescript\", \".tsx\": \"tsx\", \".js\": \"javascript\", \".mjs\": \"javascript\", \".cjs\": \"javascript\", \".jsx\": \"jsx\", \".py\": \"python\", \".pyi\": \"python\", \".go\": \"go\", \".rs\": \"rust\", \".rb\": \"ruby\", \".java\": \"java\", \".kt\": \"kotlin\", \".kts\": \"kotlin\", \".cs\": \"csharp\", \".c\": \"c\", \".h\": \"c\", \".cc\": \"cpp\", \".cpp\": \"cpp\", \".cxx\": \"cpp\", \".hpp\": \"cpp\", \".swift\": \"swift\", \".php\": \"php\", \".sh\": \"shell\", \".bash\": \"shell\", \".zsh\": \"shell\", \".ps1\": \"powershell\", \".sql\": \"sql\", \".md\": \"markdown\", \".mdx\": \"markdown\", \".json\": \"json\", \".jsonc\": \"json\", \".yaml\": \"yaml\", \".yml\": \"yaml\", \".toml\": \"toml\", \".xml\": \"xml\", \".html\": \"html\", \".htm\": \"html\", \".css\": \"css\", \".scss\": \"scss\", \".lua\": \"lua\", \".vim\": \"vim\", \".dart\": \"dart\", \".scala\": \"scala\", \".ex\": \"elixir\", \".exs\": \"elixir\", \".erl\": \"erlang\", \".hs\": \"haskell\", \".ml\": \"ocaml\", \".zig\": \"zig\", \".proto\": \"protobuf\", \".graphql\": \"graphql\", \".gql\": \"graphql\", }), );",
+          "startLine": 7,
+          "endLine": 65,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "BY_FILENAME",
+          "kind": "const",
+          "signature": "const BY_FILENAME = new Map<string, string>( Object.entries({ dockerfile: \"dockerfile\", makefile: \"make\", \"go.mod\": \"gomod\", \"go.sum\": \"gosum\", \".gitignore\": \"gitignore\", \".env\": \"dotenv\", }), );",
+          "startLine": 67,
+          "endLine": 76,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "BY_INTERPRETER",
+          "kind": "const",
+          "signature": "const BY_INTERPRETER = new Map<string, string>( Object.entries({ node: \"javascript\", bun: \"typescript\", deno: \"typescript\", \"ts-node\": \"typescript\", python: \"python\", python2: \"python\", python3: \"python\", ruby: \"ruby\", sh: \"shell\", bash: \"shell\", zsh: \"shell\", perl: \"perl\", php: \"php\", }), );",
+          "startLine": 79,
+          "endLine": 95,
+          "exported": false,
+          "doc": "Interpreter name (basename of the shebang target) to language id."
+        },
+        {
+          "name": "extensionOf",
+          "kind": "function",
+          "signature": "function extensionOf(path: string): string",
+          "startLine": 97,
+          "endLine": 103,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "detectLanguage",
+          "kind": "function",
+          "signature": "function detectLanguage(path: string, head: Buffer | null): string",
+          "startLine": 109,
+          "endLine": 125,
+          "exported": true,
+          "doc": "Resolve a language id. `head` is the first bytes of the file, used only when\nthe extension says nothing — which is the common case for scripts."
+        },
+        {
+          "name": "languageFromShebang",
+          "kind": "function",
+          "signature": "function languageFromShebang(head: Buffer): string | null",
+          "startLine": 127,
+          "endLine": 148,
+          "exported": true,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "src/pool.ts",
+      "language": "typescript",
+      "hash": "abc3f03bbd04afc5202f8692da68c50b780e74a07cc8d4585b6330831e916ad9",
+      "lineCount": 55,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "BufferPool",
+          "kind": "class",
+          "signature": "class BufferPool",
+          "startLine": 5,
+          "endLine": 53,
+          "exported": true,
+          "doc": "Buffer slab pool for high-throughput zero-allocation file scanning.\nEliminates GC pressure and heap thrashing during rapid directory traversals."
+        },
+        {
+          "name": "slabSize",
+          "kind": "var",
+          "signature": "private readonly slabSize: number",
+          "startLine": 6,
+          "endLine": 6,
+          "exported": false,
+          "doc": "",
+          "parent": "BufferPool"
+        },
+        {
+          "name": "maxPoolSize",
+          "kind": "var",
+          "signature": "private readonly maxPoolSize: number",
+          "startLine": 7,
+          "endLine": 7,
+          "exported": false,
+          "doc": "",
+          "parent": "BufferPool"
+        },
+        {
+          "name": "pool",
+          "kind": "var",
+          "signature": "private readonly pool: Buffer[] = []",
+          "startLine": 8,
+          "endLine": 8,
+          "exported": false,
+          "doc": "",
+          "parent": "BufferPool"
+        },
+        {
+          "name": "constructor",
+          "kind": "method",
+          "signature": "constructor(slabSize = 64 * 1024, maxPoolSize = 32)",
+          "startLine": 10,
+          "endLine": 13,
+          "exported": true,
+          "doc": "",
+          "parent": "BufferPool"
+        },
+        {
+          "name": "acquire",
+          "kind": "method",
+          "signature": "acquire(): Buffer",
+          "startLine": 18,
+          "endLine": 25,
+          "exported": true,
+          "doc": "Acquire a buffer from the pool or allocate a new slab if empty.",
+          "parent": "BufferPool"
+        },
+        {
+          "name": "release",
+          "kind": "method",
+          "signature": "release(buf: Buffer): void",
+          "startLine": 30,
+          "endLine": 34,
+          "exported": true,
+          "doc": "Return a loaned buffer back to the pool if it matches slab size and pool is not full.",
+          "parent": "BufferPool"
+        },
+        {
+          "name": "clear",
+          "kind": "method",
+          "signature": "clear(): void",
+          "startLine": 39,
+          "endLine": 41,
+          "exported": true,
+          "doc": "Clear all pooled buffers to free memory.",
+          "parent": "BufferPool"
+        },
+        {
+          "name": "size",
+          "kind": "method",
+          "signature": "get size(): number",
+          "startLine": 46,
+          "endLine": 48,
+          "exported": true,
+          "doc": "Current number of idle slabs in pool.",
+          "parent": "BufferPool"
+        },
+        {
+          "name": "slabBytes",
+          "kind": "method",
+          "signature": "get slabBytes(): number",
+          "startLine": 50,
+          "endLine": 52,
+          "exported": true,
+          "doc": "",
+          "parent": "BufferPool"
+        },
+        {
+          "name": "defaultBufferPool",
+          "kind": "const",
+          "signature": "const defaultBufferPool = new BufferPool();",
+          "startLine": 55,
+          "endLine": 55,
+          "exported": true,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "src/quarantine.ts",
+      "language": "typescript",
+      "hash": "dca13b1ecbebe98670e73c2f935996021f3d1722f44af889a9b9dced590e4200",
+      "lineCount": 206,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "SecretFinding",
+          "kind": "interface",
+          "signature": "interface SecretFinding",
+          "startLine": 6,
+          "endLine": 13,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "QuarantineManifestEntry",
+          "kind": "interface",
+          "signature": "interface QuarantineManifestEntry",
+          "startLine": 15,
+          "endLine": 21,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "QuarantineManifest",
+          "kind": "interface",
+          "signature": "interface QuarantineManifest",
+          "startLine": 23,
+          "endLine": 27,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "QuarantineOptions",
+          "kind": "interface",
+          "signature": "interface QuarantineOptions",
+          "startLine": 29,
+          "endLine": 34,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "QuarantineResult",
+          "kind": "interface",
+          "signature": "interface QuarantineResult",
+          "startLine": 36,
+          "endLine": 41,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "formatClassificationTable",
+          "kind": "function",
+          "signature": "function formatClassificationTable(findings: SecretFinding[]): string",
+          "startLine": 46,
+          "endLine": 82,
+          "exported": true,
+          "doc": "Format a structured risk classification table for terminal output."
+        },
+        {
+          "name": "suggestIgnoreRules",
+          "kind": "function",
+          "signature": "function suggestIgnoreRules( findings: SecretFinding[], existingPatterns: string[] = [], ): string[]",
+          "startLine": 88,
+          "endLine": 131,
+          "exported": true,
+          "doc": "Generate automated .gitignore and .kaiokenignore rule suggestions based on\ndetected sensitive files and directories."
+        },
+        {
+          "name": "quarantineSecretFile",
+          "kind": "function",
+          "signature": "async function quarantineSecretFile( root: string, relPath: string, options: QuarantineOptions = {}, ): Promise<QuarantineResult>",
+          "startLine": 136,
+          "endLine": 193,
+          "exported": true,
+          "doc": "Quarantines a dangerous secret file into `.kaioken/quarantine/` and logs entry to manifest."
+        },
+        {
+          "name": "generateExampleTemplate",
+          "kind": "function",
+          "signature": "function generateExampleTemplate(originalText: string): string",
+          "startLine": 195,
+          "endLine": 206,
+          "exported": false,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "src/risk.ts",
+      "language": "typescript",
+      "hash": "1e4db0fa7f4d242d05682a682cfbc31d032a964257b1ffb3a392ef4df99e43e4",
+      "lineCount": 463,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "PRIVATE_KEY_CONTENT",
+          "kind": "const",
+          "signature": "const PRIVATE_KEY_CONTENT = [ /-----BEGIN (?:[A-Z0-9_ -]+ )?PRIVATE KEY(?: BLOCK)?-----/, /PuTTY-User-Key-File-\\d/, ];",
+          "startLine": 14,
+          "endLine": 17,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "PRIVATE_KEY_FILENAMES",
+          "kind": "const",
+          "signature": "const PRIVATE_KEY_FILENAMES = new Set([ \"id_rsa\", \"id_dsa\", \"id_ecdsa\", \"id_ed25519\", \"identity\", \"server.key\", \"privkey.pem\", ]);",
+          "startLine": 19,
+          "endLine": 27,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "PRIVATE_KEY_EXTENSIONS",
+          "kind": "const",
+          "signature": "const PRIVATE_KEY_EXTENSIONS = new Set([\".pem\", \".key\", \".p12\", \".pfx\", \".jks\", \".keystore\"]);",
+          "startLine": 29,
+          "endLine": 29,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "CREDENTIAL_FILENAMES",
+          "kind": "const",
+          "signature": "const CREDENTIAL_FILENAMES = new Set([ \"credentials\", \"credentials.json\", \"secrets.json\", \"secrets.yaml\", \"secrets.yml\", \".npmrc\", \".pypirc\", \".netrc\", \"_netrc\", \".htpasswd\", ]);",
+          "startLine": 31,
+          "endLine": 42,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "ENV_TEMPLATE_SUFFIXES",
+          "kind": "const",
+          "signature": "const ENV_TEMPLATE_SUFFIXES = [\".example\", \".sample\", \".template\", \".dist\", \".defaults\"];",
+          "startLine": 45,
+          "endLine": 45,
+          "exported": false,
+          "doc": "Suffixes that mark an env file as a documented template rather than a real one."
+        },
+        {
+          "name": "NamedPattern",
+          "kind": "interface",
+          "signature": "interface NamedPattern",
+          "startLine": 47,
+          "endLine": 52,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "PROVIDER_SECRET_PATTERNS",
+          "kind": "const",
+          "signature": "const PROVIDER_SECRET_PATTERNS: NamedPattern[] = [ { category: \"AWS Access Key\", pattern: /\\bAKIA[0-9A-Z]{16}\\b/, severity: \"CRITICAL\", action: \"Quarantine and rotate AWS IAM credentials\", }, { category: \"AWS Temp Key\", pattern: /\\bASIA[0-9A-Z]{16}\\b/, severity: \"HIGH\", action: \"Quarantine temporary AWS credentials\", }, { category: \"GitHub Classic Token\", pattern: /\\bgh[pousr]_[A-Za-z0-9]{36,}\\b/, severity: \"CRITICAL\", action: \"Revoke token and remove from repository\", }, { category: \"GitHub Fine-Grained PAT\", pattern: /\\bgithub_pat_[A-Za-z0-9_]{22,}\\b/, severity: \"CRITICAL\", action: \"Revoke PAT and add to .gitignore\", }, { category: \"Slack Token\", pattern: /\\bxox[baprs]-[A-Za-z0-9-]{10,}\\b/, severity: \"HIGH\", action: \"Revoke bot/user token from Slack workspace\", }, { category: \"Google API Key\", pattern: /\\bAIza[0-9A-Za-z_-]{35}\\b/, severity: \"HIGH\", action: \"Restrict API key scope in Google Cloud Console\", }, { category: \"GCP OAuth Token\", pattern: /\\bya29\\.[0-9A-Za-z_-]{20,}\\b/, severity: \"CRITICAL\", action: \"Revoke OAuth token and quarantine file\", }, { category: \"Stripe Live Secret Key\", pattern: /\\b[sr]k_live_[0-9a-zA-Z]{24,}\\b/, severity: \"CRITICAL\", action: \"Roll key immediately in Stripe Dashboard\", }, { category: \"Anthropic API Key\", pattern: /\\bsk-ant-[A-Za-z0-9_-]{20,}\\b/, severity: \"CRITICAL\", action: \"Revoke Anthropic console key and quarantine\", }, { category: \"OpenAI Project/Admin Key\", pattern: /\\bsk-(?:proj|admin|svcacct)-[A-Za-z0-9_-]{20,}\\b/, severity: \"CRITICAL\", action: \"Revoke OpenAI organization/project key\", }, { category: \"OpenAI API Key\", pattern: /\\bsk-[A-Za-z0-9]{32,}\\b/, severity: \"CRITICAL\", action: \"Revoke OpenAI platform API key\", }, { category: \"HuggingFace Token\", pattern: /\\bhf_[A-Za-z0-9]{20,}\\b/, severity: \"HIGH\", action: \"Rotate HuggingFace user access token\", }, { category: \"PyPI Deployment Token\", pattern: /\\bpypi-[A-Za-z0-9_-]{20,}\\b/, severity: \"CRITICAL\", action: \"Revoke package deployment token on PyPI\", }, { category: \"Azure Storage Connection String\", pattern: /\\bDefaultEndpointsProtocol=https?;[^\\s\"']*/, severity: \"CRITICAL\", action: \"Rotate storage keys in Azure portal\", }, { category: \"Azure Account Access Key\", pattern: /\\b(?:SharedAccessKey|AccountKey)=[A-Za-z0-9+/=]{40,}\\b/, severity: \"CRITICAL\", action: \"Regenerate account key in Azure\", }, { category: \"Azure SAS Token\", pattern: /\\bSharedAccessSignature(?:=|\\s+)[^\\s\"']{20,}/, severity: \"HIGH\", action: \"Expire SAS token and update storage policy\", }, { category: \"Azure SAS Query Token\", pattern: /\\b(?:sv=\\d{4}-\\d{2}-\\d{2}[^\\s\"']*sig=|sig=[A-Za-z0-9%+/=]{20,}[^\\s\"']*sv=\\d{4}-\\d{2}-\\d{2})[A-Za-z0-9%+/=]{20,}/, severity: \"HIGH\", action: \"Invalidate SAS signature\", }, { category: \"Bearer Authorization Header\", pattern: /\\b[Bb]earer\\s+(?!example|sample|test|placeholder|your|dummy|fake)[A-Za-z0-9_\\-\\.~+/]{20,}\\b/, severity: \"HIGH\", action: \"Remove hardcoded Authorization header\", }, { category: \"GitLab PAT\", pattern: /\\bglpat-[A-Za-z0-9_-]{20,}\\b/, severity: \"CRITICAL\", action: \"Revoke GitLab personal access token\", }, { category: \"JWT Token\", pattern: /\\beyJ[A-Za-z0-9_-]{10,}\\.eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}/, severity: \"MEDIUM\", action: \"Investigate whether JWT contains sensitive claims\", }, ];",
+          "startLine": 58,
+          "endLine": 179,
+          "exported": true,
+          "doc": "Provider token shapes. Each of these is specific enough that a match is\neffectively never a coincidence."
+        },
+        {
+          "name": "CREDENTIAL_CONTENT",
+          "kind": "const",
+          "signature": "const CREDENTIAL_CONTENT = PROVIDER_SECRET_PATTERNS.map((p) => p.pattern);",
+          "startLine": 181,
+          "endLine": 181,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "GENERIC_SECRET",
+          "kind": "const",
+          "signature": "const GENERIC_SECRET = /\\b(?:password|passwd|secret|secret_key|token|auth_token|api[_-]?key|access[_-]?key|private[_-]?key|client[_-]?secret)\\b\\s*[:=]\\s*[\"'`]([^\"'`\\n]{20,})[\"'`]/i;",
+          "startLine": 188,
+          "endLine": 189,
+          "exported": false,
+          "doc": "The generic rule: a secret-ish name assigned a high-entropy literal. This is\nthe only pattern that could plausibly fire on real source, so it is fenced by\na placeholder check and an entropy floor."
+        },
+        {
+          "name": "PLACEHOLDER_WORDS",
+          "kind": "const",
+          "signature": "const PLACEHOLDER_WORDS = [ \"example\", \"sample\", \"placeholder\", \"dummy\", \"fake\", \"test\", \"changeme\", \"change_me\", \"your\", \"xxxx\", \"redacted\", \"insert\", \"todo\", \"replace\", \"notreal\", \"secretsecret\", ];",
+          "startLine": 192,
+          "endLine": 209,
+          "exported": false,
+          "doc": "Words that mark a literal as documentation rather than a live credential."
+        },
+        {
+          "name": "GENERATED_PATH_SEGMENTS",
+          "kind": "const",
+          "signature": "const GENERATED_PATH_SEGMENTS = [ \"dist/\", \"build/\", \"out/\", \".next/\", \"coverage/\", \"__generated__/\", \"generated/\", \".output/\", ];",
+          "startLine": 211,
+          "endLine": 220,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "GENERATED_FILENAME",
+          "kind": "const",
+          "signature": "const GENERATED_FILENAME = [ /\\.min\\.(?:js|css|mjs)$/, /\\.(?:js|css|mjs)\\.map$/, /\\.pb\\.go$/, /_pb2\\.pyi?$/, /\\.pb\\.cc$/, /\\.g\\.dart$/, /\\.generated\\.[A-Za-z0-9]+$/, /\\.designer\\.cs$/i, ];",
+          "startLine": 222,
+          "endLine": 231,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "GENERATED_CONTENT",
+          "kind": "const",
+          "signature": "const GENERATED_CONTENT = [ /Code generated by .+ DO NOT EDIT/i, /@generated\\b/, /DO NOT EDIT(?:[.!]| THIS FILE)/i, /This file (?:was|is) (?:auto[- ]?)?generated/i, /Autogenerated by/i, ];",
+          "startLine": 233,
+          "endLine": 239,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "LOCKFILES",
+          "kind": "const",
+          "signature": "const LOCKFILES = new Set([ \"package-lock.json\", \"npm-shrinkwrap.json\", \"yarn.lock\", \"pnpm-lock.yaml\", \"bun.lock\", \"bun.lockb\", \"go.sum\", \"cargo.lock\", \"poetry.lock\", \"pdm.lock\", \"uv.lock\", \"gemfile.lock\", \"composer.lock\", \"pubspec.lock\", \"packages.lock.json\", \"mix.lock\", \"flake.lock\", ]);",
+          "startLine": 241,
+          "endLine": 259,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "RiskInput",
+          "kind": "interface",
+          "signature": "interface RiskInput",
+          "startLine": 261,
+          "endLine": 271,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "classifyRisk",
+          "kind": "function",
+          "signature": "function classifyRisk(input: RiskInput): Risk[]",
+          "startLine": 273,
+          "endLine": 317,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "extractSecretFindings",
+          "kind": "function",
+          "signature": "function extractSecretFindings(path: string, text: string): SecretFinding[]",
+          "startLine": 322,
+          "endLine": 362,
+          "exported": true,
+          "doc": "Extracts structured secret findings with category, line number, masked preview, and action."
+        },
+        {
+          "name": "hasPrivateKeyContent",
+          "kind": "function",
+          "signature": "function hasPrivateKeyContent(text: string): boolean",
+          "startLine": 364,
+          "endLine": 366,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "isCertificateOnly",
+          "kind": "function",
+          "signature": "function isCertificateOnly(text: string): boolean",
+          "startLine": 372,
+          "endLine": 375,
+          "exported": false,
+          "doc": "PEM content that holds certificates and nothing secret. Public roots ship in\nplenty of repositories and are not a finding."
+        },
+        {
+          "name": "isCredentialFilename",
+          "kind": "function",
+          "signature": "function isCredentialFilename(base: string): boolean",
+          "startLine": 377,
+          "endLine": 385,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "isGeneratedPath",
+          "kind": "function",
+          "signature": "function isGeneratedPath(path: string): boolean",
+          "startLine": 387,
+          "endLine": 392,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "hasGeneratedBanner",
+          "kind": "function",
+          "signature": "function hasGeneratedBanner(text: string): boolean",
+          "startLine": 395,
+          "endLine": 398,
+          "exported": false,
+          "doc": "Only the first lines count — a banner buried on line 900 is not a banner."
+        },
+        {
+          "name": "hasCredentialContent",
+          "kind": "function",
+          "signature": "function hasCredentialContent(text: string): boolean",
+          "startLine": 400,
+          "endLine": 409,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "looksLikeLiveSecret",
+          "kind": "function",
+          "signature": "function looksLikeLiveSecret(value: string): boolean",
+          "startLine": 415,
+          "endLine": 440,
+          "exported": true,
+          "doc": "The entropy floor. A live secret mixes character classes and is not a word a\nhuman wrote as an illustration."
+        },
+        {
+          "name": "isBinary",
+          "kind": "function",
+          "signature": "function isBinary(head: Buffer): boolean",
+          "startLine": 442,
+          "endLine": 444,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "firstLines",
+          "kind": "function",
+          "signature": "function firstLines(text: string, count: number): string",
+          "startLine": 446,
+          "endLine": 454,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "basename",
+          "kind": "function",
+          "signature": "function basename(path: string): string",
+          "startLine": 456,
+          "endLine": 458,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "extname",
+          "kind": "function",
+          "signature": "function extname(base: string): string",
+          "startLine": 460,
+          "endLine": 463,
+          "exported": false,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "src/scan.ts",
+      "language": "typescript",
+      "hash": "b66f3bd4eda15fa022d879da0dbe4c16b5ce68363a7dc52288dc2cc1c1e40e6a",
+      "lineCount": 338,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "DETECTION_WINDOW",
+          "kind": "const",
+          "signature": "const DETECTION_WINDOW = 64 * 1024;",
+          "startLine": 22,
+          "endLine": 22,
+          "exported": false,
+          "doc": "Bytes read for language, binary and risk detection when a file is not read whole."
+        },
+        {
+          "name": "DEFAULT_MAX_READ_BYTES",
+          "kind": "const",
+          "signature": "const DEFAULT_MAX_READ_BYTES = 4 * 1024 * 1024;",
+          "startLine": 24,
+          "endLine": 24,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "DEFAULT_MAX_SECRET_SCAN_BYTES",
+          "kind": "const",
+          "signature": "const DEFAULT_MAX_SECRET_SCAN_BYTES = 16 * 1024 * 1024;",
+          "startLine": 25,
+          "endLine": 25,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "DEFAULT_LARGE_BINARY_BYTES",
+          "kind": "const",
+          "signature": "const DEFAULT_LARGE_BINARY_BYTES = 1024 * 1024;",
+          "startLine": 26,
+          "endLine": 26,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "scan",
+          "kind": "function",
+          "signature": "async function scan(root: string, options: ScanOptions = {}): Promise<ScanResult>",
+          "startLine": 33,
+          "endLine": 333,
+          "exported": true,
+          "doc": "One traversal of the working tree. Everything the pipeline knows about the\nfile set originates here, which is why risk flagging is folded in rather than\ngiven its own pass — the bytes are only paid for once."
+        },
+        {
+          "name": "walk",
+          "kind": "function",
+          "signature": "async function walk(absDir: string, relDir: string, inherited: IgnoreStack): Promise<void>",
+          "startLine": 100,
+          "endLine": 180,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "readFile",
+          "kind": "function",
+          "signature": "async function readFile(absPath: string, relPath: string): Promise<FileRecord | null>",
+          "startLine": 182,
+          "endLine": 332,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "toPosix",
+          "kind": "function",
+          "signature": "function toPosix(path: string): string",
+          "startLine": 336,
+          "endLine": 338,
+          "exported": true,
+          "doc": "Normalise a native path to the repo-relative POSIX form used in artifacts."
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "src/sliding-window.ts",
+      "language": "typescript",
+      "hash": "edf895b341d4f8e24f2d18299db1bd8fcbe7c05431c7dc44d4b87ae2028c0547",
+      "lineCount": 175,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "BoundaryFinding",
+          "kind": "interface",
+          "signature": "interface BoundaryFinding",
+          "startLine": 5,
+          "endLine": 10,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "SlidingWindowOptions",
+          "kind": "interface",
+          "signature": "interface SlidingWindowOptions",
+          "startLine": 12,
+          "endLine": 19,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "SlidingWindowResult",
+          "kind": "interface",
+          "signature": "interface SlidingWindowResult",
+          "startLine": 21,
+          "endLine": 27,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "SlidingWindowAnalyzer",
+          "kind": "class",
+          "signature": "class SlidingWindowAnalyzer",
+          "startLine": 33,
+          "endLine": 146,
+          "exported": true,
+          "doc": "Sliding window stream analyzer that eliminates false negatives caused by\nsecrets or certificates straddling chunk boundaries."
+        },
+        {
+          "name": "overlapBytes",
+          "kind": "var",
+          "signature": "private readonly overlapBytes: number",
+          "startLine": 34,
+          "endLine": 34,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "maxScanBytes",
+          "kind": "var",
+          "signature": "private readonly maxScanBytes: number",
+          "startLine": 35,
+          "endLine": 35,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "decoder",
+          "kind": "var",
+          "signature": "private readonly decoder = new StringDecoder(\"utf8\")",
+          "startLine": 36,
+          "endLine": 36,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "hasher",
+          "kind": "var",
+          "signature": "private readonly hasher = createHash(\"sha256\")",
+          "startLine": 37,
+          "endLine": 37,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "customPatterns",
+          "kind": "var",
+          "signature": "private readonly customPatterns: Array<{ kind: \"credentials\" | \"private_key\" | \"high_entropy\"; pattern: RegExp; }>",
+          "startLine": 38,
+          "endLine": 41,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "scannedBytes",
+          "kind": "var",
+          "signature": "private scannedBytes = 0",
+          "startLine": 43,
+          "endLine": 43,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "totalBytes",
+          "kind": "var",
+          "signature": "private totalBytes = 0",
+          "startLine": 44,
+          "endLine": 44,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "currentLine",
+          "kind": "var",
+          "signature": "private currentLine = 1",
+          "startLine": 45,
+          "endLine": 45,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "overlapText",
+          "kind": "var",
+          "signature": "private overlapText = \"\"",
+          "startLine": 46,
+          "endLine": 46,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "seenOffsets",
+          "kind": "var",
+          "signature": "private seenOffsets = new Set<string>()",
+          "startLine": 47,
+          "endLine": 47,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "hasCredentials",
+          "kind": "var",
+          "signature": "public hasCredentials = false",
+          "startLine": 49,
+          "endLine": 49,
+          "exported": true,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "hasPrivateKey",
+          "kind": "var",
+          "signature": "public hasPrivateKey = false",
+          "startLine": 50,
+          "endLine": 50,
+          "exported": true,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "findings",
+          "kind": "var",
+          "signature": "public readonly findings: BoundaryFinding[] = []",
+          "startLine": 51,
+          "endLine": 51,
+          "exported": true,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "constructor",
+          "kind": "method",
+          "signature": "constructor(options: SlidingWindowOptions = {})",
+          "startLine": 53,
+          "endLine": 57,
+          "exported": true,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "feed",
+          "kind": "method",
+          "signature": "feed(chunk: Buffer | string): void",
+          "startLine": 62,
+          "endLine": 83,
+          "exported": true,
+          "doc": "Feed a data chunk from the file stream.",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "finish",
+          "kind": "method",
+          "signature": "finish(): SlidingWindowResult",
+          "startLine": 88,
+          "endLine": 102,
+          "exported": true,
+          "doc": "Complete analysis at stream EOF and flush any remaining tail buffer.",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "scanWindow",
+          "kind": "method",
+          "signature": "private scanWindow(windowText: string): void",
+          "startLine": 104,
+          "endLine": 132,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "recordFinding",
+          "kind": "method",
+          "signature": "private recordFinding(kind: \"credentials\" | \"private_key\", windowText: string): void",
+          "startLine": 134,
+          "endLine": 145,
+          "exported": false,
+          "doc": "",
+          "parent": "SlidingWindowAnalyzer"
+        },
+        {
+          "name": "analyzeStreamWithWindow",
+          "kind": "function",
+          "signature": "async function analyzeStreamWithWindow( stream: NodeJS.ReadableStream, options: SlidingWindowOptions = {}, ): Promise<SlidingWindowResult>",
+          "startLine": 151,
+          "endLine": 175,
+          "exported": true,
+          "doc": "Convenient asynchronous wrapper for streaming analysis with sliding window."
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "src/types.ts",
+      "language": "typescript",
+      "hash": "1fcd95618a1bafad90bc1c3980c5624b0d32345667f93382af3ec7dbcbf9b249",
+      "lineCount": 77,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "Risk",
+          "kind": "type",
+          "signature": "type Risk = | \"private_key\" | \"credentials\" | \"generated\" | \"large_binary\" | \"lockfile\" | \"high_entropy\" | \"symlink_loop\";",
+          "startLine": 5,
+          "endLine": 12,
+          "exported": true,
+          "doc": "Risk classes flagged during the scan traversal."
+        },
+        {
+          "name": "FileRecord",
+          "kind": "interface",
+          "signature": "interface FileRecord",
+          "startLine": 15,
+          "endLine": 27,
+          "exported": true,
+          "doc": "One file in the canonical file set."
+        },
+        {
+          "name": "ScanResult",
+          "kind": "interface",
+          "signature": "interface ScanResult",
+          "startLine": 29,
+          "endLine": 41,
+          "exported": true,
+          "doc": ""
+        },
+        {
+          "name": "ScanProgress",
+          "kind": "interface",
+          "signature": "interface ScanProgress",
+          "startLine": 44,
+          "endLine": 52,
+          "exported": true,
+          "doc": "Streaming real-time progress update during scan traversal."
+        },
+        {
+          "name": "ScanOptions",
+          "kind": "interface",
+          "signature": "interface ScanOptions",
+          "startLine": 54,
+          "endLine": 77,
+          "exported": true,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "test/entropy.test.ts",
+      "language": "typescript",
+      "hash": "1bacddfd6d8a79249754cdc66a901400a37ffa8431afc07a3883e17d2b20c668",
+      "lineCount": 123,
+      "unparsed": false,
+      "symbols": [],
+      "reexports": []
+    },
+    {
+      "path": "test/quarantine.test.ts",
+      "language": "typescript",
+      "hash": "ec040f64739baadceacce69b7939f7ace26c5c0c692dc9cf0aa6db119bae3650",
+      "lineCount": 132,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "roots",
+          "kind": "const",
+          "signature": "const roots: string[] = [];",
+          "startLine": 12,
+          "endLine": 12,
+          "exported": false,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "test/risk.test.ts",
+      "language": "typescript",
+      "hash": "737fa8db76ebdda15ae0ca365d3f8da70c51e545bd93258d646327cb87378433",
+      "lineCount": 262,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "classify",
+          "kind": "function",
+          "signature": "function classify(path: string, text = \"\", overrides: Partial<{ size: number; binary: boolean }> = {})",
+          "startLine": 10,
+          "endLine": 18,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "PLANTED_KEY",
+          "kind": "const",
+          "signature": "const PLANTED_KEY = [ \"-----BEGIN RSA PRIVATE KEY-----\", \"MIIEowIBAAKCAQEAx7Vn9dQ2mKPZs4TfLmN8vBcXwYqHrJ0aGtEuIoPlKjHgFdSa\", \"QwErTyUiOpAsDfGhJkLzXcVbNmQwErTyUiOpAsDfGhJkLzXcVbNm1234567890ab\", \"-----END RSA PRIVATE KEY-----\", ].join(\"\\n\");",
+          "startLine": 21,
+          "endLine": 26,
+          "exported": false,
+          "doc": "A syntactically real but functionally worthless key body."
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "test/scan.test.ts",
+      "language": "typescript",
+      "hash": "fad020e75383e1336f07cc66a08fd86d4a475696a944d6a68f638452e3933368",
+      "lineCount": 313,
+      "unparsed": false,
+      "symbols": [
+        {
+          "name": "roots",
+          "kind": "const",
+          "signature": "const roots: string[] = [];",
+          "startLine": 7,
+          "endLine": 7,
+          "exported": false,
+          "doc": ""
+        },
+        {
+          "name": "repo",
+          "kind": "function",
+          "signature": "async function repo(files: Record<string, string>): Promise<string>",
+          "startLine": 14,
+          "endLine": 23,
+          "exported": false,
+          "doc": "Build a throwaway repository from a path -> content map."
+        },
+        {
+          "name": "paths",
+          "kind": "function",
+          "signature": "function paths(result: ScanResult): string[]",
+          "startLine": 25,
+          "endLine": 27,
+          "exported": false,
+          "doc": ""
+        }
+      ],
+      "reexports": []
+    },
+    {
+      "path": "test/sliding-window.test.ts",
+      "language": "typescript",
+      "hash": "36efd1c104b951f9b7a4bf0f9422f95b53500843716f88eb0e1b5597df0abb01",
+      "lineCount": 64,
+      "unparsed": false,
+      "symbols": [],
+      "reexports": []
+    }
+  ]
+}

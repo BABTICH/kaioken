@@ -1,0 +1,792 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-23T16:23:52.151Z",
+  "documents": [
+    {
+      "document": "evaluation/eval-probes-and-docs.md",
+      "chapterId": "evaluation",
+      "sectionId": "eval-probes-and-docs",
+      "generatedAt": "2026-09-23T16:23:52.091Z",
+      "sources": []
+    },
+    {
+      "document": "evaluation/harness-and-benchmarking.md",
+      "chapterId": "evaluation",
+      "sectionId": "harness-and-benchmarking",
+      "generatedAt": "2026-09-23T16:23:18.695Z",
+      "sources": []
+    },
+    {
+      "document": "evaluation/index.md",
+      "chapterId": "evaluation",
+      "generatedAt": "2026-09-23T16:16:01.592Z",
+      "sources": []
+    },
+    {
+      "document": "evaluation/overview-and-structure.md",
+      "chapterId": "evaluation",
+      "sectionId": "overview-and-structure",
+      "generatedAt": "2026-09-23T16:22:49.807Z",
+      "sources": []
+    },
+    {
+      "document": "foundation/extensions-and-skills.md",
+      "chapterId": "foundation",
+      "sectionId": "extensions-and-skills",
+      "generatedAt": "2026-09-23T16:17:18.684Z",
+      "sources": []
+    },
+    {
+      "document": "foundation/index.md",
+      "chapterId": "foundation",
+      "generatedAt": "2026-09-23T16:13:21.495Z",
+      "sources": []
+    },
+    {
+      "document": "foundation/overview-of-pi-directory.md",
+      "chapterId": "foundation",
+      "sectionId": "overview-of-pi-directory",
+      "generatedAt": "2026-09-23T16:16:45.425Z",
+      "sources": []
+    },
+    {
+      "document": "foundation/themes-and-configuration.md",
+      "chapterId": "foundation",
+      "sectionId": "themes-and-configuration",
+      "generatedAt": "2026-09-23T16:17:20.318Z",
+      "sources": []
+    },
+    {
+      "document": "impact-model/index.md",
+      "chapterId": "impact-model",
+      "generatedAt": "2026-09-23T16:13:56.284Z",
+      "sources": [
+        {
+          "path": "kaioken/impact/package.json",
+          "hash": "3b1df8ff6664df9a418f16eb0b286090cd8d5d6badab1127e2b2d8823da79f7a"
+        },
+        {
+          "path": "kaioken/impact/tsconfig.json",
+          "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+        },
+        {
+          "path": "kaioken/impact/src/index.ts",
+          "hash": "1583fe1f0436ba81053ab6ca25dce7d0e092a46ac1325f059e3146e33520f2c7"
+        },
+        {
+          "path": "kaioken/impact/src/predict.ts",
+          "hash": "ce4bef2453ec5b0634fff6c1a185427910aebb8dff2631b07c1426c1d0358c46"
+        },
+        {
+          "path": "kaioken/impact/src/render.ts",
+          "hash": "b92b07e09596c37d8e243f5fb35446dc8be4b909bb06d2f8eccac91f15972278"
+        }
+      ]
+    },
+    {
+      "document": "impact-model/overview-and-types.md",
+      "chapterId": "impact-model",
+      "sectionId": "overview-and-types",
+      "generatedAt": "2026-09-23T16:19:33.143Z",
+      "sources": [
+        {
+          "path": "kaioken/impact/src/index.ts",
+          "hash": "1583fe1f0436ba81053ab6ca25dce7d0e092a46ac1325f059e3146e33520f2c7"
+        },
+        {
+          "path": "kaioken/impact/src/predict.ts",
+          "hash": "ce4bef2453ec5b0634fff6c1a185427910aebb8dff2631b07c1426c1d0358c46"
+        }
+      ]
+    },
+    {
+      "document": "impact-model/prediction-process.md",
+      "chapterId": "impact-model",
+      "sectionId": "prediction-process",
+      "generatedAt": "2026-09-23T16:19:24.748Z",
+      "sources": [
+        {
+          "path": "kaioken/impact/src/predict.ts",
+          "hash": "ce4bef2453ec5b0634fff6c1a185427910aebb8dff2631b07c1426c1d0358c46"
+        },
+        {
+          "path": "kaioken/impact/src/index.ts",
+          "hash": "1583fe1f0436ba81053ab6ca25dce7d0e092a46ac1325f059e3146e33520f2c7"
+        }
+      ]
+    },
+    {
+      "document": "impact-model/rendering.md",
+      "chapterId": "impact-model",
+      "sectionId": "rendering",
+      "generatedAt": "2026-09-23T16:19:22.898Z",
+      "sources": [
+        {
+          "path": "kaioken/impact/src/render.ts",
+          "hash": "b92b07e09596c37d8e243f5fb35446dc8be4b909bb06d2f8eccac91f15972278"
+        }
+      ]
+    },
+    {
+      "document": "kaioken-core/action-and-delivery-modules.md",
+      "chapterId": "kaioken-core",
+      "sectionId": "action-and-delivery-modules",
+      "generatedAt": "2026-09-23T16:18:49.108Z",
+      "sources": []
+    },
+    {
+      "document": "kaioken-core/core-analysis-modules.md",
+      "chapterId": "kaioken-core",
+      "sectionId": "core-analysis-modules",
+      "generatedAt": "2026-09-23T16:19:06.038Z",
+      "sources": []
+    },
+    {
+      "document": "kaioken-core/framework-overview.md",
+      "chapterId": "kaioken-core",
+      "sectionId": "framework-overview",
+      "generatedAt": "2026-09-23T16:19:17.346Z",
+      "sources": [
+        {
+          "path": "kaioken/README.md",
+          "hash": "52e92c6460baac42dc45f32a47211a438df14c466ed5e5f61d51bb91b72d0636"
+        },
+        {
+          "path": "kaioken/CHANGELOG.md",
+          "hash": "5bd0b8556090e9da35eae689f8a8988ac80456553bb152aaaa09b59feb35a386"
+        }
+      ]
+    },
+    {
+      "document": "kaioken-core/index.md",
+      "chapterId": "kaioken-core",
+      "generatedAt": "2026-09-23T16:13:16.191Z",
+      "sources": [
+        {
+          "path": "kaioken/README.md",
+          "hash": "52e92c6460baac42dc45f32a47211a438df14c466ed5e5f61d51bb91b72d0636"
+        },
+        {
+          "path": "kaioken/CHANGELOG.md",
+          "hash": "5bd0b8556090e9da35eae689f8a8988ac80456553bb152aaaa09b59feb35a386"
+        }
+      ]
+    },
+    {
+      "document": "knowledge-graph/graph-construction.md",
+      "chapterId": "knowledge-graph",
+      "sectionId": "graph-construction",
+      "generatedAt": "2026-09-23T16:18:55.459Z",
+      "sources": [
+        {
+          "path": "kaioken/graph/src/build.ts",
+          "hash": "0d761cf5b5bfefcdcfe7befce88881ca5a56d795195b709eb4f34bfe96d1a421"
+        }
+      ]
+    },
+    {
+      "document": "knowledge-graph/graph-rendering-and-export.md",
+      "chapterId": "knowledge-graph",
+      "sectionId": "graph-rendering-and-export",
+      "generatedAt": "2026-09-23T16:20:08.062Z",
+      "sources": [
+        {
+          "path": "kaioken/graph/src/render.ts",
+          "hash": "133b269015dc9a22731014180fb3ddbbd707f1dd986139b46960ddc34019925a"
+        }
+      ]
+    },
+    {
+      "document": "knowledge-graph/graph-types-and-artifacts.md",
+      "chapterId": "knowledge-graph",
+      "sectionId": "graph-types-and-artifacts",
+      "generatedAt": "2026-09-23T16:18:35.946Z",
+      "sources": [
+        {
+          "path": "kaioken/graph/src/types.ts",
+          "hash": "b8f2bd55674ed8bc2d89f4a7c354292eecad8946533043a86ad2d6b68713ecdb"
+        },
+        {
+          "path": "kaioken/graph/src/artifact.ts",
+          "hash": "bb4fca844af4c0f8ae411fa11f6b2f497e4efdbd09ab0ce6d4735eece41cf824"
+        },
+        {
+          "path": "kaioken/graph/src/index.ts",
+          "hash": "c555d651d0fc0fc9ac626b229e5ed7e53e6e61997089c5fdd708ef743ab76e72"
+        }
+      ]
+    },
+    {
+      "document": "knowledge-graph/index.md",
+      "chapterId": "knowledge-graph",
+      "generatedAt": "2026-09-23T16:14:28.918Z",
+      "sources": [
+        {
+          "path": "kaioken/graph/package.json",
+          "hash": "2dd428129ed51e7076d0b524f554c065b0f3fe42813d2d74705f8918801100b9"
+        },
+        {
+          "path": "kaioken/graph/tsconfig.json",
+          "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+        },
+        {
+          "path": "kaioken/graph/src/index.ts",
+          "hash": "c555d651d0fc0fc9ac626b229e5ed7e53e6e61997089c5fdd708ef743ab76e72"
+        },
+        {
+          "path": "kaioken/graph/src/artifact.ts",
+          "hash": "bb4fca844af4c0f8ae411fa11f6b2f497e4efdbd09ab0ce6d4735eece41cf824"
+        },
+        {
+          "path": "kaioken/graph/src/build.ts",
+          "hash": "0d761cf5b5bfefcdcfe7befce88881ca5a56d795195b709eb4f34bfe96d1a421"
+        },
+        {
+          "path": "kaioken/graph/src/render.ts",
+          "hash": "133b269015dc9a22731014180fb3ddbbd707f1dd986139b46960ddc34019925a"
+        },
+        {
+          "path": "kaioken/graph/src/types.ts",
+          "hash": "b8f2bd55674ed8bc2d89f4a7c354292eecad8946533043a86ad2d6b68713ecdb"
+        }
+      ]
+    },
+    {
+      "document": "planning/card-generation.md",
+      "chapterId": "planning",
+      "sectionId": "card-generation",
+      "generatedAt": "2026-09-23T16:20:54.902Z",
+      "sources": [
+        {
+          "path": "kaioken/plan/src/cards.ts",
+          "hash": "92d21073ef17eba768ac8110d11bcd644fec601f59e4a5b5e7c90644dd697247"
+        }
+      ]
+    },
+    {
+      "document": "planning/index.md",
+      "chapterId": "planning",
+      "generatedAt": "2026-09-23T16:14:16.881Z",
+      "sources": [
+        {
+          "path": "kaioken/plan/package.json",
+          "hash": "ec88a5618abb175dd52cb7c4d432128db25eb9a390174abeedaa5bd20bfaea32"
+        },
+        {
+          "path": "kaioken/plan/tsconfig.json",
+          "hash": "bd4429a3d2bcf6870a32c14c7e913489daeed4b1bb2be8e4f579d5acf8007817"
+        },
+        {
+          "path": "kaioken/plan/src/index.ts",
+          "hash": "3900b27866136889fb83f83f0cbf7d5400adae578b8e3da6a9f7d7f5194ca2e1"
+        },
+        {
+          "path": "kaioken/plan/src/cards.ts",
+          "hash": "92d21073ef17eba768ac8110d11bcd644fec601f59e4a5b5e7c90644dd697247"
+        },
+        {
+          "path": "kaioken/plan/src/propose.ts",
+          "hash": "5b7830548464ab872e329332392ee7bb2d79b1b9bea5b7940c912956e1a46653"
+        },
+        {
+          "path": "kaioken/plan/src/validate.ts",
+          "hash": "a8686342417648f3d4d3d5f034b3249d974724f9dc40fb51c0e913b43e8c21f4"
+        },
+        {
+          "path": "kaioken/plan/src/types.ts",
+          "hash": "0be95bdd96a0742aba873996e1d19cd4589a00d19f54f23b29ef2abe53f48bba"
+        },
+        {
+          "path": "kaioken/plan/src/artifact.ts",
+          "hash": "d02da67e4097beb0f32ff25c4b8eef37145e0cb75fa25afb2bc1660a9a5bbe6d"
+        }
+      ]
+    },
+    {
+      "document": "planning/module-plan-generation.md",
+      "chapterId": "planning",
+      "sectionId": "module-plan-generation",
+      "generatedAt": "2026-09-23T16:20:53.153Z",
+      "sources": [
+        {
+          "path": "kaioken/plan/src/propose.ts",
+          "hash": "5b7830548464ab872e329332392ee7bb2d79b1b9bea5b7940c912956e1a46653"
+        },
+        {
+          "path": "kaioken/plan/src/validate.ts",
+          "hash": "a8686342417648f3d4d3d5f034b3249d974724f9dc40fb51c0e913b43e8c21f4"
+        }
+      ]
+    },
+    {
+      "document": "planning/planning-overview.md",
+      "chapterId": "planning",
+      "sectionId": "planning-overview",
+      "generatedAt": "2026-09-23T16:21:53.542Z",
+      "sources": [
+        {
+          "path": "kaioken/plan/src/types.ts",
+          "hash": "0be95bdd96a0742aba873996e1d19cd4589a00d19f54f23b29ef2abe53f48bba"
+        },
+        {
+          "path": "kaioken/plan/src/index.ts",
+          "hash": "3900b27866136889fb83f83f0cbf7d5400adae578b8e3da6a9f7d7f5194ca2e1"
+        },
+        {
+          "path": "kaioken/plan/src/artifact.ts",
+          "hash": "d02da67e4097beb0f32ff25c4b8eef37145e0cb75fa25afb2bc1660a9a5bbe6d"
+        }
+      ]
+    },
+    {
+      "document": "provenance-and-staleness/index.md",
+      "chapterId": "provenance-and-staleness",
+      "generatedAt": "2026-09-23T16:14:31.599Z",
+      "sources": [
+        {
+          "path": "kaioken/provenance/package.json",
+          "hash": "d5196231a4ae4927b28d18f6dd1be23b9e802d49113dae96d7a5c306df4a1968"
+        },
+        {
+          "path": "kaioken/provenance/tsconfig.json",
+          "hash": "c1b8652e80a60cbe6a34ad80b4f3724f6171374542958493e5996b3c8710ebed"
+        },
+        {
+          "path": "kaioken/provenance/src/index.ts",
+          "hash": "a8819e6bc651d97413567e88a40784b56f0b316dcb220656d23b37a336fd6361"
+        },
+        {
+          "path": "kaioken/provenance/src/staleness.ts",
+          "hash": "a50728729d7165e737fac54af4b19cab44e610f9df01981b4963d76e8831a0a4"
+        },
+        {
+          "path": "kaioken/provenance/src/types.ts",
+          "hash": "ea2d3a37c854e5d59e6d7cdcaebbd437206ba7923d05a85eb3aff3a93414e039"
+        }
+      ]
+    },
+    {
+      "document": "provenance-and-staleness/invalidation-detection.md",
+      "chapterId": "provenance-and-staleness",
+      "sectionId": "invalidation-detection",
+      "generatedAt": "2026-09-23T16:20:06.441Z",
+      "sources": [
+        {
+          "path": "kaioken/provenance/src/staleness.ts",
+          "hash": "a50728729d7165e737fac54af4b19cab44e610f9df01981b4963d76e8831a0a4"
+        }
+      ]
+    },
+    {
+      "document": "provenance-and-staleness/provenance-model.md",
+      "chapterId": "provenance-and-staleness",
+      "sectionId": "provenance-model",
+      "generatedAt": "2026-09-23T16:19:56.926Z",
+      "sources": [
+        {
+          "path": "kaioken/provenance/src/types.ts",
+          "hash": "ea2d3a37c854e5d59e6d7cdcaebbd437206ba7923d05a85eb3aff3a93414e039"
+        },
+        {
+          "path": "kaioken/provenance/src/index.ts",
+          "hash": "a8819e6bc651d97413567e88a40784b56f0b316dcb220656d23b37a336fd6361"
+        }
+      ]
+    },
+    {
+      "document": "provenance-and-staleness/staleness-computation.md",
+      "chapterId": "provenance-and-staleness",
+      "sectionId": "staleness-computation",
+      "generatedAt": "2026-09-23T16:20:46.638Z",
+      "sources": [
+        {
+          "path": "kaioken/provenance/src/staleness.ts",
+          "hash": "a50728729d7165e737fac54af4b19cab44e610f9df01981b4963d76e8831a0a4"
+        },
+        {
+          "path": "kaioken/provenance/src/types.ts",
+          "hash": "ea2d3a37c854e5d59e6d7cdcaebbd437206ba7923d05a85eb3aff3a93414e039"
+        }
+      ]
+    },
+    {
+      "document": "research/gathering-and-generation.md",
+      "chapterId": "research",
+      "sectionId": "gathering-and-generation",
+      "generatedAt": "2026-09-23T16:22:14.979Z",
+      "sources": [
+        {
+          "path": "kaioken/research/src/run.ts",
+          "hash": "e2d8209e345bbe62464fe7390e7e32e0d39b1c1c91ca950d1750f4f8296ba54f"
+        }
+      ]
+    },
+    {
+      "document": "research/index.md",
+      "chapterId": "research",
+      "generatedAt": "2026-09-23T16:14:42.853Z",
+      "sources": [
+        {
+          "path": "kaioken/research/package.json",
+          "hash": "47fed60e069f17a53476539c515b3d41c29b95bb7c50c6a64b9193773c87dee3"
+        },
+        {
+          "path": "kaioken/research/tsconfig.json",
+          "hash": "bd4429a3d2bcf6870a32c14c7e913489daeed4b1bb2be8e4f579d5acf8007817"
+        },
+        {
+          "path": "kaioken/research/src/index.ts",
+          "hash": "f95062874403a2bbab29498c694f0beeda71ede23b22a9def72e59eed6fd143c"
+        },
+        {
+          "path": "kaioken/research/src/ports.ts",
+          "hash": "4d9311138356bb87acd335e99c63e4c25594df00e8d779ddc5b83f3c6b747a87"
+        },
+        {
+          "path": "kaioken/research/src/run.ts",
+          "hash": "e2d8209e345bbe62464fe7390e7e32e0d39b1c1c91ca950d1750f4f8296ba54f"
+        },
+        {
+          "path": "kaioken/research/src/sanitize.ts",
+          "hash": "942671bf8cfb38d2a10e936b17af564464400cd32ffadef1c4503609477bb807"
+        }
+      ]
+    },
+    {
+      "document": "research/ports-and-fetching.md",
+      "chapterId": "research",
+      "sectionId": "ports-and-fetching",
+      "generatedAt": "2026-09-23T16:22:14.085Z",
+      "sources": [
+        {
+          "path": "kaioken/research/src/ports.ts",
+          "hash": "4d9311138356bb87acd335e99c63e4c25594df00e8d779ddc5b83f3c6b747a87"
+        }
+      ]
+    },
+    {
+      "document": "research/sanitization-and-extraction.md",
+      "chapterId": "research",
+      "sectionId": "sanitization-and-extraction",
+      "generatedAt": "2026-09-23T16:22:23.399Z",
+      "sources": [
+        {
+          "path": "kaioken/research/src/sanitize.ts",
+          "hash": "942671bf8cfb38d2a10e936b17af564464400cd32ffadef1c4503609477bb807"
+        }
+      ]
+    },
+    {
+      "document": "scan-and-search/index.md",
+      "chapterId": "scan-and-search",
+      "generatedAt": "2026-09-23T16:15:01.471Z",
+      "sources": [
+        {
+          "path": "kaioken/scan/package.json",
+          "hash": "de6930efe1e19deacea3be74f70b560cd901126f35536a06ee0683b248f61d2b"
+        },
+        {
+          "path": "kaioken/scan/tsconfig.json",
+          "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+        },
+        {
+          "path": "kaioken/scan/src/index.ts",
+          "hash": "f5ea9b5466255732f20feb730808401f4be4f29645f27ef4dc8e287b0c50af92"
+        },
+        {
+          "path": "kaioken/search/package.json",
+          "hash": "c61d5ffa9411eb1bb77a3273213bb4ba73e4533a5f5bbdd7aed2287f203cee5a"
+        },
+        {
+          "path": "kaioken/search/tsconfig.json",
+          "hash": "c1b8652e80a60cbe6a34ad80b4f3724f6171374542958493e5996b3c8710ebed"
+        },
+        {
+          "path": "kaioken/search/src/index.ts",
+          "hash": "4fa03aa9e5897662600ba5f7072d3cf03cf084d2f31f0b6efed5fd0c38c6bf9b"
+        },
+        {
+          "path": "kaioken/search/src/search.ts",
+          "hash": "c1ce48fd58344b46376d090a0914ea46649e8a8349b76c73789609933b4f6d39"
+        }
+      ]
+    },
+    {
+      "document": "scan-and-search/integration.md",
+      "chapterId": "scan-and-search",
+      "sectionId": "integration",
+      "generatedAt": "2026-09-23T16:22:24.605Z",
+      "sources": [
+        {
+          "path": "kaioken/scan/src/index.ts",
+          "hash": "f5ea9b5466255732f20feb730808401f4be4f29645f27ef4dc8e287b0c50af92"
+        },
+        {
+          "path": "kaioken/search/src/search.ts",
+          "hash": "c1ce48fd58344b46376d090a0914ea46649e8a8349b76c73789609933b4f6d39"
+        }
+      ]
+    },
+    {
+      "document": "scan-and-search/scan-module.md",
+      "chapterId": "scan-and-search",
+      "sectionId": "scan-module",
+      "generatedAt": "2026-09-23T16:22:43.963Z",
+      "sources": [
+        {
+          "path": "kaioken/scan/package.json",
+          "hash": "de6930efe1e19deacea3be74f70b560cd901126f35536a06ee0683b248f61d2b"
+        },
+        {
+          "path": "kaioken/scan/tsconfig.json",
+          "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+        },
+        {
+          "path": "kaioken/scan/src/index.ts",
+          "hash": "f5ea9b5466255732f20feb730808401f4be4f29645f27ef4dc8e287b0c50af92"
+        }
+      ]
+    },
+    {
+      "document": "scan-and-search/search-module.md",
+      "chapterId": "scan-and-search",
+      "sectionId": "search-module",
+      "generatedAt": "2026-09-23T16:22:23.469Z",
+      "sources": [
+        {
+          "path": "kaioken/search/package.json",
+          "hash": "c61d5ffa9411eb1bb77a3273213bb4ba73e4533a5f5bbdd7aed2287f203cee5a"
+        },
+        {
+          "path": "kaioken/search/tsconfig.json",
+          "hash": "c1b8652e80a60cbe6a34ad80b4f3724f6171374542958493e5996b3c8710ebed"
+        },
+        {
+          "path": "kaioken/search/src/index.ts",
+          "hash": "4fa03aa9e5897662600ba5f7072d3cf03cf084d2f31f0b6efed5fd0c38c6bf9b"
+        },
+        {
+          "path": "kaioken/search/src/search.ts",
+          "hash": "c1ce48fd58344b46376d090a0914ea46649e8a8349b76c73789609933b4f6d39"
+        }
+      ]
+    },
+    {
+      "document": "serve-and-presentation/document-and-card-views.md",
+      "chapterId": "serve-and-presentation",
+      "sectionId": "document-and-card-views",
+      "generatedAt": "2026-09-23T16:21:28.867Z",
+      "sources": [
+        {
+          "path": "kaioken/serve/src/pages/wikiView.ts",
+          "hash": "86e8fad1e2012945f700e8723b1f63b16b4fb0ac13ed87c61bf9fea1ee204c3b"
+        },
+        {
+          "path": "kaioken/serve/src/pages/cardsView.ts",
+          "hash": "cf163e7634d69cdf8fb46af2d1e108695d63466d6af61598f3e7ab4845dcd03a"
+        },
+        {
+          "path": "kaioken/serve/src/pages/filesView.ts",
+          "hash": "2fa83e6fb96c182468c94339a2cd11359920373230b22ebfe53cc8f4bfcfb091"
+        }
+      ]
+    },
+    {
+      "document": "serve-and-presentation/graph-and-search.md",
+      "chapterId": "serve-and-presentation",
+      "sectionId": "graph-and-search",
+      "generatedAt": "2026-09-23T16:21:36.735Z",
+      "sources": [
+        {
+          "path": "kaioken/serve/src/graph.ts",
+          "hash": "47badaae8ae9cc259f30129e68d66bc7b04d6bd8df956cb1b30f3c307c746c5d"
+        },
+        {
+          "path": "kaioken/serve/src/pages/graphView.ts",
+          "hash": "8f279b85d04147200aa68bc406efb954a64a47f4417f4cf8df7db9aa13756cfb"
+        },
+        {
+          "path": "kaioken/serve/src/pages/searchView.ts",
+          "hash": "abb6952ef1de328e79a633fd0497ddeb2aab978656eaea3f310890bbe79b0201"
+        }
+      ]
+    },
+    {
+      "document": "serve-and-presentation/index.md",
+      "chapterId": "serve-and-presentation",
+      "generatedAt": "2026-09-23T16:16:10.815Z",
+      "sources": [
+        {
+          "path": "kaioken/serve/package.json",
+          "hash": "deb7a92f0414dc55ddc240f117a0d92fb76fcd281e9fbf3483ba4ae8aa104c25"
+        },
+        {
+          "path": "kaioken/serve/tsconfig.json",
+          "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+        },
+        {
+          "path": "kaioken/serve/src/index.ts",
+          "hash": "636e8bc6426361939dc76aa48931766b731333ac1b2d75e6810166b7f80cc7db"
+        },
+        {
+          "path": "kaioken/serve/src/graph.ts",
+          "hash": "47badaae8ae9cc259f30129e68d66bc7b04d6bd8df956cb1b30f3c307c746c5d"
+        },
+        {
+          "path": "kaioken/serve/src/library.ts",
+          "hash": "21cd34671002f9f57c5060c4f61ca63e33b9e6d7eca4fe0b07574196f0a85c3d"
+        },
+        {
+          "path": "kaioken/serve/src/pages/cardsView.ts",
+          "hash": "cf163e7634d69cdf8fb46af2d1e108695d63466d6af61598f3e7ab4845dcd03a"
+        },
+        {
+          "path": "kaioken/serve/src/pages/filesView.ts",
+          "hash": "2fa83e6fb96c182468c94339a2cd11359920373230b22ebfe53cc8f4bfcfb091"
+        },
+        {
+          "path": "kaioken/serve/src/pages/graphView.ts",
+          "hash": "8f279b85d04147200aa68bc406efb954a64a47f4417f4cf8df7db9aa13756cfb"
+        },
+        {
+          "path": "kaioken/serve/src/pages/layout.ts",
+          "hash": "1ae5dc22229eddde4b8cd382de8a28aab6916d5638aa64080430891dad113453"
+        },
+        {
+          "path": "kaioken/serve/src/pages/overviewView.ts",
+          "hash": "9c895dbc4fca77c6540c12511db40f2c341a32c5648063dadec752cb71a38904"
+        },
+        {
+          "path": "kaioken/serve/src/pages/searchView.ts",
+          "hash": "abb6952ef1de328e79a633fd0497ddeb2aab978656eaea3f310890bbe79b0201"
+        },
+        {
+          "path": "kaioken/serve/src/pages/wikiView.ts",
+          "hash": "86e8fad1e2012945f700e8723b1f63b16b4fb0ac13ed87c61bf9fea1ee204c3b"
+        }
+      ]
+    },
+    {
+      "document": "serve-and-presentation/overview-and-library.md",
+      "chapterId": "serve-and-presentation",
+      "sectionId": "overview-and-library",
+      "generatedAt": "2026-09-23T16:21:01.132Z",
+      "sources": [
+        {
+          "path": "kaioken/serve/src/index.ts",
+          "hash": "636e8bc6426361939dc76aa48931766b731333ac1b2d75e6810166b7f80cc7db"
+        },
+        {
+          "path": "kaioken/serve/src/library.ts",
+          "hash": "21cd34671002f9f57c5060c4f61ca63e33b9e6d7eca4fe0b07574196f0a85c3d"
+        },
+        {
+          "path": "kaioken/serve/src/pages/layout.ts",
+          "hash": "1ae5dc22229eddde4b8cd382de8a28aab6916d5638aa64080430891dad113453"
+        },
+        {
+          "path": "kaioken/serve/src/pages/overviewView.ts",
+          "hash": "9c895dbc4fca77c6540c12511db40f2c341a32c5648063dadec752cb71a38904"
+        }
+      ]
+    },
+    {
+      "document": "skill-generation/index.md",
+      "chapterId": "skill-generation",
+      "generatedAt": "2026-09-23T16:15:55.890Z",
+      "sources": [
+        {
+          "path": "kaioken/skillgen/package.json",
+          "hash": "fb21794b78f417ed82f0f3dffe6df32812ced45467c20dc2497028c5720067d2"
+        },
+        {
+          "path": "kaioken/skillgen/tsconfig.json",
+          "hash": "bd4429a3d2bcf6870a32c14c7e913489daeed4b1bb2be8e4f579d5acf8007817"
+        },
+        {
+          "path": "kaioken/skillgen/src/index.ts",
+          "hash": "a7446d2e4831d13f4c5fae962b0b84cb7e2c5da4a7e79900e8bef73acb3c8937"
+        },
+        {
+          "path": "kaioken/skillgen/src/propose.ts",
+          "hash": "629f1bb6af7e386fc7b7d3524fee8ccfccf673fddec7ae8959fe9f61447a3ef5"
+        },
+        {
+          "path": "kaioken/skillgen/src/write.ts",
+          "hash": "b18091bf3832bbe30f5c165ed6bcc3cfc0c285db7fec327a77f5c2136a475837"
+        }
+      ]
+    },
+    {
+      "document": "skill-generation/package-and-module-exports.md",
+      "chapterId": "skill-generation",
+      "sectionId": "package-and-module-exports",
+      "generatedAt": "2026-09-23T16:21:44.316Z",
+      "sources": [
+        {
+          "path": "kaioken/skillgen/src/index.ts",
+          "hash": "a7446d2e4831d13f4c5fae962b0b84cb7e2c5da4a7e79900e8bef73acb3c8937"
+        },
+        {
+          "path": "kaioken/skillgen/package.json",
+          "hash": "fb21794b78f417ed82f0f3dffe6df32812ced45467c20dc2497028c5720067d2"
+        },
+        {
+          "path": "kaioken/skillgen/tsconfig.json",
+          "hash": "bd4429a3d2bcf6870a32c14c7e913489daeed4b1bb2be8e4f579d5acf8007817"
+        }
+      ]
+    },
+    {
+      "document": "skill-generation/proposal-generation.md",
+      "chapterId": "skill-generation",
+      "sectionId": "proposal-generation",
+      "generatedAt": "2026-09-23T16:21:23.292Z",
+      "sources": [
+        {
+          "path": "kaioken/skillgen/src/propose.ts",
+          "hash": "629f1bb6af7e386fc7b7d3524fee8ccfccf673fddec7ae8959fe9f61447a3ef5"
+        }
+      ]
+    },
+    {
+      "document": "skill-generation/skill-writing-and-validation.md",
+      "chapterId": "skill-generation",
+      "sectionId": "skill-writing-and-validation",
+      "generatedAt": "2026-09-23T16:21:54.601Z",
+      "sources": [
+        {
+          "path": "kaioken/skillgen/src/write.ts",
+          "hash": "b18091bf3832bbe30f5c165ed6bcc3cfc0c285db7fec327a77f5c2136a475837"
+        }
+      ]
+    },
+    {
+      "document": "workspace-structure/index.md",
+      "chapterId": "workspace-structure",
+      "generatedAt": "2026-09-23T16:13:36.935Z",
+      "sources": []
+    },
+    {
+      "document": "workspace-structure/package-configuration.md",
+      "chapterId": "workspace-structure",
+      "sectionId": "package-configuration",
+      "generatedAt": "2026-09-23T16:16:34.885Z",
+      "sources": []
+    },
+    {
+      "document": "workspace-structure/repository-layout.md",
+      "chapterId": "workspace-structure",
+      "sectionId": "repository-layout",
+      "generatedAt": "2026-09-23T16:17:12.207Z",
+      "sources": []
+    },
+    {
+      "document": "workspace-structure/workspace-source-paths.md",
+      "chapterId": "workspace-structure",
+      "sectionId": "workspace-source-paths",
+      "generatedAt": "2026-09-23T16:16:55.837Z",
+      "sources": []
+    }
+  ]
+}

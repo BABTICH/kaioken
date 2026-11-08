@@ -1,0 +1,30 @@
+{
+  "name": "kaio-base",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Kaioken base monorepo: offline symbol oracle, provenance-tracked wiki, and deterministic truth layer packages",
+  "workspaces": [
+    "kaioken/*",
+    "kaioken-pi",
+    ".pi/extensions/kaioken"
+  ],
+  "scripts": {
+    "build:kaioken": "tsc --build kaioken/index kaioken/modelport kaioken/plan kaioken/wiki kaioken/research kaioken/skillgen kaioken/evals kaioken/completion kaioken/gitops kaioken/graph kaioken/impact kaioken/provenance kaioken/scan kaioken/search kaioken/serve kaioken/skills kaioken/verify kaioken/verifycore",
+    "check:kaioken": "tsc -p tsconfig.kaioken.json && node scripts/check-kaioken-offline.mjs && node scripts/check-kaioken-barrels.mjs",
+    "check:kaioken:fresh": "tsx scripts/check-kaioken-fresh.mjs",
+    "pack:kaioken": "npm run build:kaioken && node scripts/build-kaioken-pi.mjs && node scripts/check-kaioken-pi-package.mjs",
+    "test": "npm test --workspaces --if-present",
+    "test:offline": "node scripts/check-kaioken-offline.mjs",
+    "eval": "node kaioken/evals/bin.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "tsx": "^4.22.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.9"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  }
+}

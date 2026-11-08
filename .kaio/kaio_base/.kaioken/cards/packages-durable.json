@@ -1,0 +1,134 @@
+{
+  "moduleId": "packages-durable",
+  "name": "Packages Durable",
+  "generatedAt": "2026-09-23T15:15:21.451Z",
+  "summary": "Packages Durable is a structural module providing the durable storage layer for conversations, entries, tasks, inputs, and documents. It defines core TypeScript types for records, storage operations, and outcomes, plus an in-memory implementation of the Storage interface.",
+  "keyPoints": [
+    "Defines an in-memory storage implementation (MemoryStorage) that simulates the Storage interface for durable data, including conversations, entries, tasks, inputs, and commit sequencing.",
+    "Central types describe a content-addressed model with immutable IDs (Id = number), commit sequences (Seq), and a root conversation constant (ROOT_CONVERSATION_ID = 1).",
+    "Task lifecycle states are explicitly modeled: pending, running, and terminal, with outcomes spanning completed, failed, aborted, orphaned, and faulted.",
+    "Input records track deduplication via requestId and transition through queued, placed, done, and unanswered statuses.",
+    "Data manipulated by MemoryStorage is deep-cloned to protect caller-provided objects from unintended mutation during reads.",
+    "Entries support head markers, edits (omit/replace) for context overrides, and optional model messages and JSON data.",
+    "Storage API includes cursor-based pagination, findLatestHeadMarker for active head resolution, and write commits that return a sequence number.",
+    "MemoryStorage maintains sorted ID lists for efficient binary-search-based insertion and removal, enabling low-overhead scanning and pagination.",
+    "The module is structured as a compact package with only a handful of source files, relying on external context types (like Context) for operation metadata.",
+    "Tests cover behavior of MemoryStorage operations and type-level guarantees, including the Storage interface contract."
+  ],
+  "entryPoints": [
+    {
+      "name": "MemoryStorage",
+      "file": "packages/durable/src/memory-storage.ts",
+      "note": "Class implementing the Storage interface in-memory; primary implementation of durable storage without a backing database."
+    },
+    {
+      "name": "Storage",
+      "file": "packages/durable/src/types.ts",
+      "note": "Interface defining the durable storage contract for operations like commit, scan, and retrieval across conversations, entries, tasks, and inputs."
+    },
+    {
+      "name": "TaskRecord",
+      "file": "packages/durable/src/types.ts",
+      "note": "Type for durable task records with kind, version, input, dependencies (after), background flag, abort handling, and state machine."
+    },
+    {
+      "name": "EntryRecord",
+      "file": "packages/durable/src/types.ts",
+      "note": "Type for conversation entries carrying kind, optional model messages, data payload, head reference, and context edits."
+    },
+    {
+      "name": "Input",
+      "file": "packages/durable/src/types.ts",
+      "note": "Type for host-provided inputs with requestId deduplication and status transitions through the durable pipeline."
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/durable/CHANGELOG.md",
+      "hash": "4a05cb8af32c4b3b425b10ccf8f7e5f7793c1c7eb46ff6d988532f2c5ad06a5a"
+    },
+    {
+      "path": "packages/durable/README.md",
+      "hash": "9ce87e8ad87d397b0def3b0f7f11634ee7e2a1219c7124a983b99a517a669875"
+    },
+    {
+      "path": "packages/durable/docs/chord-delta-findings.md",
+      "hash": "3d0f79363d4021a5152baf67185d2fd6cb9d72fd6c751a6e93eef31862a099ac"
+    },
+    {
+      "path": "packages/durable/docs/pico-v5-chord-usage.md",
+      "hash": "efe2c81bd6d16d39350fe663afe416f03f8edeb92496d754f445a9770e78d652"
+    },
+    {
+      "path": "packages/durable/docs/pico-v5-handoff.md",
+      "hash": "c91e8fbfaea1d641beff907363387ae6b7445ba3539b33760374448d119925ed"
+    },
+    {
+      "path": "packages/durable/docs/pico-v5.md",
+      "hash": "7d814ff9a54e898f8c10a936a2ace3d0b1c0a8b57d3cb77936a432866f663224"
+    },
+    {
+      "path": "packages/durable/package.json",
+      "hash": "d4f823398aa7da4af007cea486c67a17a31d17b207b8ebfdbadd080569f2e146"
+    },
+    {
+      "path": "packages/durable/src/index.ts",
+      "hash": "5a704d62ccb304ee990bd651b97c353387ef7268bf858c98cd617d3354c601ee"
+    },
+    {
+      "path": "packages/durable/src/memory-storage.ts",
+      "hash": "d5bfac60414b56129ec1e75def72942caad0a9d97c44b12725a804f842caadfe"
+    },
+    {
+      "path": "packages/durable/src/types.ts",
+      "hash": "a3e0afdd9b3ac1c402eb2144609e78921bab62917aaed46c8b6da872532a422c"
+    },
+    {
+      "path": "packages/durable/test/memory-storage.test.ts",
+      "hash": "be6f2fd4d6af5b21119c996b23d27b08bde0dfc304d968fbfd67d7712b10c91e"
+    },
+    {
+      "path": "packages/durable/test/types.test.ts",
+      "hash": "21fabce15ad9a4be38f53b8fef4b12c98d052c49b165f25e38498fe9667e75b0"
+    },
+    {
+      "path": "packages/durable/tsconfig.build.json",
+      "hash": "97b8f62c2c6d3da13f00762851747205e266d77c4e88ec73590cd029896f2900"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "commit",
+      "mintId",
+      "conversation",
+      "scanConversations",
+      "entry",
+      "findLatestHeadMarker",
+      "scanEntries",
+      "task",
+      "scanTasks",
+      "input",
+      "inputByRequest",
+      "close",
+      "Id",
+      "Seq",
+      "ROOT_CONVERSATION_ID",
+      "StoredError",
+      "ConversationRecord",
+      "ContextEdit",
+      "EntryDraft",
+      "TaskOutcome",
+      "TaskState",
+      "DocumentRecord",
+      "DocumentCreate",
+      "Page",
+      "Cursor",
+      "EntryQuery",
+      "TaskQuery",
+      "StorageWrite"
+    ]
+  }
+}

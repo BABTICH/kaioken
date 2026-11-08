@@ -1,0 +1,17 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { cn } from "@/lib/utils";
+export default function Badge({ variant = "orange", isComment = false, className, children, ...props }) {
+    const variantStyles = {
+        orange: "border-kai-orange/30 bg-kai-orange/10 text-kai-orange",
+        amber: "border-kai-amber/30 bg-kai-amber/10 text-kai-amber",
+        green: "border-kai-green/30 bg-kai-green/10 text-kai-green",
+        violet: "border-kai-violet/40 bg-kai-violet/10 text-[#d8b4fe]",
+        blue: "border-kai-blue/30 bg-kai-blue/10 text-kai-blue",
+        rose: "border-kai-rose/30 bg-kai-rose/10 text-kai-rose",
+        dim: "border-white/10 bg-white/5 text-kai-muted",
+    }[variant];
+    if (isComment) {
+        return (_jsxs("div", { className: cn("inline-flex items-center gap-1.5 font-mono text-[12px] font-medium tracking-wide uppercase", variant === "orange" && "text-kai-orange", variant === "amber" && "text-kai-amber", variant === "violet" && "text-[#c084fc]", variant === "green" && "text-kai-green", variant === "blue" && "text-kai-blue", variant === "rose" && "text-kai-rose", variant === "dim" && "text-kai-muted", className), ...props, children: [_jsx("span", { className: "opacity-60", children: "//" }), _jsx("span", { children: children })] }));
+    }
+    return (_jsx("div", { className: cn("inline-flex items-center gap-1.5 rounded-full border px-3 py-0.5 font-mono text-[11px] font-medium transition-colors", variantStyles, className), ...props, children: children }));
+}

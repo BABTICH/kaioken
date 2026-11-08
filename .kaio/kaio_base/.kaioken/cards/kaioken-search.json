@@ -1,0 +1,143 @@
+{
+  "moduleId": "kaioken-search",
+  "name": "Kaioken Search",
+  "generatedAt": "2026-09-23T15:09:58.096Z",
+  "summary": "Kaioken Search is a structural module for the kaioken/search directory (an npm package). It builds and queries a hybrid search index over markdown content in a repository. The implementation bundles a stopword-aware analyzer with a Porter stemmer, a BM25 lexical scorer with phrase bonus and reciprocal rank fusion, a corpus collector that walks markdown files and splits them into chunks, and an on-disk search index that supports optional semantic embeddings and hybrid ranking.",
+  "keyPoints": [
+    "The analyzer (src/analyze.ts) lowercases, strips stopwords (via a STOPWORDS set), splits camelCase/snake_case identifiers, and applies a Porter-style stemmer to tokens; tokens shorter than 2 chars are dropped.",
+    "The BM25 module (src/bm25.ts) implements a Lexicon class built from chunked documents, with BM25 scoring (K1=1.2, B=0.75), IDF, phrase bonus (for exact phrase matches), reciprocal rank fusion (RRF with K=60), and cosine similarity.",
+    "The corpus module (src/corpus.ts) collects docs and chunks by walking markdown files under wiki/, cards/, skills/, and symbols/ directories, splits markdown into chunks (target 2000 chars, minimum 40), skips navigation-only headings, and supports oversized-text splitting.",
+    "The index store (src/index-store.ts) persists a SearchIndex to disk under $KAIOKEN_DIR/search-index, supports lexical-only or semantic (embedding-based) search, filters by kind, and materializes hits with snippets (240 chars) and 'via' tags.",
+    "A convenience search entry point (src/search.ts) exposes bm25Search which opens/loads the index and runs a lexical search, returning matching document paths."
+  ],
+  "entryPoints": [
+    {
+      "name": "analyze",
+      "file": "kaioken/search/src/analyze.ts",
+      "note": "Tokenizes and stems input text into searchable terms."
+    },
+    {
+      "name": "stem",
+      "file": "kaioken/search/src/analyze.ts",
+      "note": "Applies Porter stemming to a single word."
+    },
+    {
+      "name": "Lexicon",
+      "file": "kaioken/search/src/bm25.ts",
+      "note": "Holds postings and norms; scores documents against query terms."
+    },
+    {
+      "name": "rrf",
+      "file": "kaioken/search/src/bm25.ts",
+      "note": "Merges multiple ranked lists using reciprocal rank fusion."
+    },
+    {
+      "name": "collect",
+      "file": "kaioken/search/src/corpus.ts",
+      "note": "Walks the repository and returns docs and chunks (async)."
+    },
+    {
+      "name": "splitMarkdown",
+      "file": "kaioken/search/src/corpus.ts",
+      "note": "Splits a markdown body into chunks; used for indexing."
+    },
+    {
+      "name": "SearchIndex",
+      "file": "kaioken/search/src/index-store.ts",
+      "note": "Main index object; build/open/load/save and search."
+    },
+    {
+      "name": "searchIndexPath",
+      "file": "kaioken/search/src/index-store.ts",
+      "note": "Returns the file path for the persisted index."
+    },
+    {
+      "name": "bm25Search",
+      "file": "kaioken/search/src/search.ts",
+      "note": "One-shot lexical search: returns matching doc paths."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/search/package.json",
+      "hash": "c61d5ffa9411eb1bb77a3273213bb4ba73e4533a5f5bbdd7aed2287f203cee5a"
+    },
+    {
+      "path": "kaioken/search/src/analyze.ts",
+      "hash": "1ba15033c8906caf285ba74f95278b895efd5c32347db6caa0367b5526ea72b6"
+    },
+    {
+      "path": "kaioken/search/src/bm25.ts",
+      "hash": "5dfb43d37b12568a13402d0181714d3fcf9e093b164f9deffc6b4e5b18fc8a36"
+    },
+    {
+      "path": "kaioken/search/src/corpus.ts",
+      "hash": "54c8c80db271de028b54d6ec40cd797ee94d4fecc7f51daf856a7e81d1fa6c0d"
+    },
+    {
+      "path": "kaioken/search/src/index-store.ts",
+      "hash": "d6a7e3d6de8fa93b4187a2bb15573405f435c2e3cdcad8a0b9de4c6f274bd5fe"
+    },
+    {
+      "path": "kaioken/search/src/index.ts",
+      "hash": "4fa03aa9e5897662600ba5f7072d3cf03cf084d2f31f0b6efed5fd0c38c6bf9b"
+    },
+    {
+      "path": "kaioken/search/src/search.ts",
+      "hash": "c1ce48fd58344b46376d090a0914ea46649e8a8349b76c73789609933b4f6d39"
+    },
+    {
+      "path": "kaioken/search/test/analyze.test.ts",
+      "hash": "2bc529f3d2e377c43cd1be40ba94347029c16ae6817c083f2bac6a23f2c94a1c"
+    },
+    {
+      "path": "kaioken/search/test/index.test.ts",
+      "hash": "1952079192977f5bfd6ea99e02f9fff00a813c87c75b9c478ff6c32e02951399"
+    },
+    {
+      "path": "kaioken/search/tsconfig.json",
+      "hash": "c1b8652e80a60cbe6a34ad80b4f3724f6171374542958493e5996b3c8710ebed"
+    }
+  ],
+  "verification": {
+    "grounded": 9,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "isStopword",
+      "splitIdentifier",
+      "Ranked",
+      "Posting",
+      "constructor",
+      "documentCount",
+      "averageLength",
+      "postings",
+      "idf",
+      "score",
+      "phraseBonus",
+      "RRF_K",
+      "topN",
+      "cosine",
+      "Kind",
+      "Doc",
+      "Chunk",
+      "Corpus",
+      "firstHeading",
+      "SEARCH_DIR",
+      "SearchQuery",
+      "SearchHit",
+      "EmbeddingProvider",
+      "embed",
+      "build",
+      "open",
+      "load",
+      "save",
+      "fingerprint",
+      "docCount",
+      "chunkCount",
+      "semantic",
+      "kinds",
+      "search"
+    ]
+  }
+}

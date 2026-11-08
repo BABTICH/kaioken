@@ -1,0 +1,172 @@
+{
+  "moduleId": "kaioken-serve",
+  "name": "Kaioken Serve",
+  "generatedAt": "2026-09-23T15:10:19.686Z",
+  "summary": "Kaioken Serve is a static site generator and server for wiki-style documentation repositories. It reads markdown docs, cards, skills, and a graph of document relationships from disk, renders them into HTML pages, and serves them over HTTP with a local development server. The module is organized into graph building, library loading, markdown rendering, page templates, and HTTP serving layers.",
+  "keyPoints": [
+    "Reads a library from markdown docs, card files, skill files, and a plan, indexing them by path and source with freshness tracking (current/stale/orphaned/unknown).",
+    "Builds a graph with three node kinds (doc, file, section) and three edge kinds (contains, links, source) from the library index.",
+    "Serves wiki pages, card pages, skill pages, a graph view, and a search view, with a shared layout providing sidebar navigation, per-document outline, and a local graph rail.",
+    "HTTP server supports wiki, card, skill, and symbol kinds with path confinement, pagination, and artifact state caching with async refresh.",
+    "Markdown rendering includes table support, safe URL filtering, heading outline extraction, and query term highlighting, with full CSS theming for light/dark modes."
+  ],
+  "entryPoints": [
+    {
+      "name": "buildGraph",
+      "file": "kaioken/serve/src/graph.ts",
+      "note": "Builds a Graph from a root directory and Library, creating doc/file/section nodes and contains/links/source edges."
+    },
+    {
+      "name": "readLibrary",
+      "file": "kaioken/serve/src/library.ts",
+      "note": "Reads and assembles a Library from markdown docs, cards, skills, and plan files under a root directory."
+    },
+    {
+      "name": "serve",
+      "file": "kaioken/serve/src/server.ts",
+      "note": "Starts an HTTP server serving the wiki, cards, skills, and search pages using the built library and graph."
+    },
+    {
+      "name": "renderMarkdown",
+      "file": "kaioken/serve/src/markdown.ts",
+      "note": "Renders markdown source to HTML with table, inline, heading, and safe-URL handling."
+    },
+    {
+      "name": "wikiPage",
+      "file": "kaioken/serve/src/pages/wikiView.ts",
+      "note": "Renders the wiki overview page listing documents grouped by chapter, with special handling for templates."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/serve/package.json",
+      "hash": "deb7a92f0414dc55ddc240f117a0d92fb76fcd281e9fbf3483ba4ae8aa104c25"
+    },
+    {
+      "path": "kaioken/serve/src/graph.ts",
+      "hash": "47badaae8ae9cc259f30129e68d66bc7b04d6bd8df956cb1b30f3c307c746c5d"
+    },
+    {
+      "path": "kaioken/serve/src/index.ts",
+      "hash": "636e8bc6426361939dc76aa48931766b731333ac1b2d75e6810166b7f80cc7db"
+    },
+    {
+      "path": "kaioken/serve/src/library.ts",
+      "hash": "21cd34671002f9f57c5060c4f61ca63e33b9e6d7eca4fe0b07574196f0a85c3d"
+    },
+    {
+      "path": "kaioken/serve/src/markdown.ts",
+      "hash": "9918bcb7001b57336d43eaada89eff17ab78156bb8a139b66281a8cbd5b8a3bb"
+    },
+    {
+      "path": "kaioken/serve/src/pages.ts",
+      "hash": "89de692bf5c275e1772fed08642c2de261f35797641c324526eddd9c5f6952ea"
+    },
+    {
+      "path": "kaioken/serve/src/pages/cardsView.ts",
+      "hash": "cf163e7634d69cdf8fb46af2d1e108695d63466d6af61598f3e7ab4845dcd03a"
+    },
+    {
+      "path": "kaioken/serve/src/pages/filesView.ts",
+      "hash": "2fa83e6fb96c182468c94339a2cd11359920373230b22ebfe53cc8f4bfcfb091"
+    },
+    {
+      "path": "kaioken/serve/src/pages/graphView.ts",
+      "hash": "8f279b85d04147200aa68bc406efb954a64a47f4417f4cf8df7db9aa13756cfb"
+    },
+    {
+      "path": "kaioken/serve/src/pages/layout.ts",
+      "hash": "1ae5dc22229eddde4b8cd382de8a28aab6916d5638aa64080430891dad113453"
+    },
+    {
+      "path": "kaioken/serve/src/pages/overviewView.ts",
+      "hash": "9c895dbc4fca77c6540c12511db40f2c341a32c5648063dadec752cb71a38904"
+    },
+    {
+      "path": "kaioken/serve/src/pages/searchView.ts",
+      "hash": "abb6952ef1de328e79a633fd0497ddeb2aab978656eaea3f310890bbe79b0201"
+    },
+    {
+      "path": "kaioken/serve/src/pages/wikiView.ts",
+      "hash": "86e8fad1e2012945f700e8723b1f63b16b4fb0ac13ed87c61bf9fea1ee204c3b"
+    },
+    {
+      "path": "kaioken/serve/src/server.ts",
+      "hash": "7ef6ab9ee3e968342dda2f1e539fce4f37ff3db3d35bfe4b5b2f5477d7ee3985"
+    },
+    {
+      "path": "kaioken/serve/test/serve.test.ts",
+      "hash": "4688f14c48e06595daa436404875b01e25ea4ea20d48116257cf7de62dd90e9d"
+    },
+    {
+      "path": "kaioken/serve/tsconfig.json",
+      "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "GraphNodeKind",
+      "GraphEdgeKind",
+      "GraphNode",
+      "GraphEdge",
+      "GraphStats",
+      "Graph",
+      "docId",
+      "WikiDoc",
+      "DocVerification",
+      "WikiChapter",
+      "Skill",
+      "CardSummary",
+      "Library",
+      "EMPTY_LIBRARY",
+      "readCardFile",
+      "titleFromId",
+      "inline",
+      "isSafeUrl",
+      "Heading",
+      "outline",
+      "highlight",
+      "stripTitle",
+      "queryTerms",
+      "slug",
+      "escapeHtml",
+      "escapeAttr",
+      "cardsPage",
+      "cardPage",
+      "skillsPage",
+      "skillPage",
+      "filesPage",
+      "filePage",
+      "graphPage",
+      "STYLE",
+      "Site",
+      "Shell",
+      "layout",
+      "FRESHNESS_LABEL",
+      "badge",
+      "meter",
+      "stat",
+      "hrefFor",
+      "fileLink",
+      "plural",
+      "shortDate",
+      "command",
+      "notFoundPage",
+      "str",
+      "overviewPage",
+      "freshnessSummary",
+      "searchPage",
+      "hitHref",
+      "docPage",
+      "mobileToc",
+      "ServeOptions",
+      "RunningServer",
+      "close",
+      "Context",
+      "handle"
+    ]
+  }
+}

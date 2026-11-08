@@ -1,0 +1,304 @@
+{
+  "moduleId": ".pi",
+  "name": ".pi",
+  "generatedAt": "2026-09-23T15:05:34.188Z",
+  "summary": "The .pi directory is the structural home for the Kaioken extension, containing modules for session import/export (gists, GitHub issues), a TUI with themed headers and boot animations, command/tool registration for the pi extension API, destructive-command detection, and prompt/skill specific for solving coding tasks.",
+  "keyPoints": [
+    "Session import/export logic parses GitHub gist URLs, issue URLs, and pi.dev session share URLs into refs; supports extracting session data from exported HTML and JSONL.",
+    "The kaioken extension registers pi commands and tools with spend-gating, web ports, and a symbol oracle for grounding responses against the repository.",
+    "TUI components include animated boot/poweroff sequences, a kaioken logo, headers, and status panels with motion timing constants for carets and sweeping rules.",
+    "Hooks detect destructive commands (e.g., rm -rf, git push --force) and flag dirty state, with environment-controlled motion/color settings.",
+    "Prompt files and skills (e.g., grounding rules, interactive-testing, release) guide agent behavior, requiring symbol lookup and verification before edits."
+  ],
+  "entryPoints": [
+    {
+      "name": "registerCommands",
+      "file": ".pi/extensions/kaioken/commands/index.ts",
+      "note": "Registers pi extension commands with optional spend gate and web ports."
+    },
+    {
+      "name": "registerTools",
+      "file": ".pi/extensions/kaioken/tools/index.ts",
+      "note": "Registers pi tools including symbol oracle and execute actions."
+    },
+    {
+      "name": "registerHooks",
+      "file": ".pi/extensions/kaioken/hooks/index.ts",
+      "note": "Installs hooks for destructive command detection and dirty state tracking."
+    },
+    {
+      "name": "applyKaiokenTheme",
+      "file": ".pi/extensions/kaioken/index.ts",
+      "note": "Applies the kaioken theme (e.g., to TUI) given an extension context."
+    },
+    {
+      "name": "promptUrlWidgetExtension",
+      "file": ".pi/extensions/prompt-url-widget.ts",
+      "note": "Creates a pi extension that detects GitHub URLs in prompts and provides metadata for PRs, issues, and advisories."
+    }
+  ],
+  "sources": [
+    {
+      "path": ".pi/extensions/import-repro.ts",
+      "hash": "4e1b252b647f4848a88dcfaf963fe64d82b06e34e3768ecbe5efcef64a9a73e6"
+    },
+    {
+      "path": ".pi/extensions/kaioken/commands/index.ts",
+      "hash": "3983f4b634752dc799a583bd30c6ccbd16208635ad227678f552f7ef1f49d212"
+    },
+    {
+      "path": ".pi/extensions/kaioken/hooks/index.ts",
+      "hash": "6f04d04c3ebce7bed4eb91e1ff47145a14087915e510d3e37e155d7f343c9da0"
+    },
+    {
+      "path": ".pi/extensions/kaioken/index.ts",
+      "hash": "282c29929fda8d8f77b5f54aa8dbead4e119688174c2814119a4103884b2ef68"
+    },
+    {
+      "path": ".pi/extensions/kaioken/package.json",
+      "hash": "31dfb3f4e685c62ba8a591a1693b05a13bef4f04571dfbc6564dfe9ceb9c8423"
+    },
+    {
+      "path": ".pi/extensions/kaioken/prompts/grounding.ts",
+      "hash": "81ac971b18ba2aaf6fa7b0dd3cf658401c8f73d7c3833e85522f5f0310afb641"
+    },
+    {
+      "path": ".pi/extensions/kaioken/test/bridge.test.ts",
+      "hash": "7dfe6648a04d7212f74e991a3095bb1baff88f07a28097414a54e5cfca705cdc"
+    },
+    {
+      "path": ".pi/extensions/kaioken/test/commands.test.ts",
+      "hash": "021ea01ccb6d6ce0acd03de9d1a695440c38516c7ef970afe2beb81eda9675d5"
+    },
+    {
+      "path": ".pi/extensions/kaioken/test/delegate.test.ts",
+      "hash": "3c0b9d741bc12e5435eedfa6140a1b554f07601629c3f9975e21efbb8865c64f"
+    },
+    {
+      "path": ".pi/extensions/kaioken/test/fake-pi.ts",
+      "hash": "2a011362ed4beeaa503eb1482a28371c4e81eb7d4485875371be8585ddcb447b"
+    },
+    {
+      "path": ".pi/extensions/kaioken/test/hooks.test.ts",
+      "hash": "2204837874374b4350e41f21c87b34b4ac2791be2b2d82ad706496b900834e8f"
+    },
+    {
+      "path": ".pi/extensions/kaioken/test/layout.test.ts",
+      "hash": "c7d63ed95df180c4653613f4dadd45f291119f11ab43038f8b884857735e28a4"
+    },
+    {
+      "path": ".pi/extensions/kaioken/test/tools.test.ts",
+      "hash": "63775710d7e030be5bd1d5cfe52643de1a723dc6eeb268ca907324ca24048091"
+    },
+    {
+      "path": ".pi/extensions/kaioken/test/ui.test.ts",
+      "hash": "6ace10e0dda310410b4693c4a1bbb941502a4dca4bfaeda3842fd0e3dbdb30a1"
+    },
+    {
+      "path": ".pi/extensions/kaioken/tools/index.ts",
+      "hash": "94e8fb9f43c3dbd3e239f7e34cd723ffdee58dbda97c42d25fb49ba92d761b35"
+    },
+    {
+      "path": ".pi/extensions/kaioken/ui/curtain.ts",
+      "hash": "eee44cc5076faf6d5c5666d47a554fe817400c753e0210cf91718bef7564489d"
+    },
+    {
+      "path": ".pi/extensions/kaioken/ui/header.ts",
+      "hash": "84b57b30e94bca655601454984bb4e520d53a942962dce21cfc5e0e8ea9f72b9"
+    },
+    {
+      "path": ".pi/extensions/kaioken/ui/layout.ts",
+      "hash": "803628859ecbee9d24b8ff8772d566f29549cf8bc4a579a96fc2bd1328bd24dc"
+    },
+    {
+      "path": ".pi/extensions/kaioken/ui/logo.ts",
+      "hash": "c6d572474f390800c9f8855bf59c15ab182104e1479f23d6146990fc74eee7fb"
+    },
+    {
+      "path": ".pi/extensions/kaioken/ui/motion.ts",
+      "hash": "134232f0c72067d55fb6625ff5a7accafd39527c45c4e22407997a21fb856e16"
+    },
+    {
+      "path": ".pi/extensions/kaioken/ui/preview.ts",
+      "hash": "9917098285973bdc00d6172b9f514f8deaa7b86df5f56ff24930b77b0f856a29"
+    },
+    {
+      "path": ".pi/extensions/kaioken/ui/theme.ts",
+      "hash": "7e45ea6d36b1ce3f411885b75705652da7cd9b59ce36fb7dff319f655f7d6aef"
+    },
+    {
+      "path": ".pi/extensions/prompt-url-widget.ts",
+      "hash": "f528019bfef0522af4664241329367688b39c16b8f8f0356e461e107e28e689e"
+    },
+    {
+      "path": ".pi/extensions/redraws.ts",
+      "hash": "80857e2febdd1f61b0d329aaa271e03422109c40ca813551109babae646b4461"
+    },
+    {
+      "path": ".pi/extensions/tps.ts",
+      "hash": "dea173a46a686c22b2daa40e81ad147cfdf1d8175fc14cc47de4fbdade77b792"
+    },
+    {
+      "path": ".pi/git/.gitignore",
+      "hash": "240a3e0d37d2e86b614063f5347eb02d4f99ca6c254de6b82871ff8d95532a7d"
+    },
+    {
+      "path": ".pi/npm/.gitignore",
+      "hash": "240a3e0d37d2e86b614063f5347eb02d4f99ca6c254de6b82871ff8d95532a7d"
+    },
+    {
+      "path": ".pi/prompts/cl.md",
+      "hash": "e86103ed3476ac5760526496f9d4a5a63ae6e3a8a9597db103cfd023ddbf9684"
+    },
+    {
+      "path": ".pi/prompts/deslop.md",
+      "hash": "a52acc375c4b8c949ddb0469f802c5a352a98fe26d47fb12fbcf5c555aeb4551"
+    },
+    {
+      "path": ".pi/prompts/is.md",
+      "hash": "9bc500efde0bcd1285e1103492077d732c24242719d230a109b13c7bcad7b7d4"
+    },
+    {
+      "path": ".pi/prompts/pr.md",
+      "hash": "1ba8e6cba91354e27bc4976d237c291691e9a064cee2132cef7656e3ceb46e20"
+    },
+    {
+      "path": ".pi/prompts/sa.md",
+      "hash": "7b590798a5526e6620c6052cb688afd1d7ff2c2ca9426f8a28b5110a94ddbd7a"
+    },
+    {
+      "path": ".pi/prompts/wr.md",
+      "hash": "86c6bd7b244b6d4d1792804ce170a2d0b67f735dcf79d539c88163c0c73dba1b"
+    },
+    {
+      "path": ".pi/skills/add-llm-provider.md",
+      "hash": "684ffea93aee90c2f13a21c5c696a4a303264d412ea8f9f789b6c9065718132d"
+    },
+    {
+      "path": ".pi/skills/interactive-testing.md",
+      "hash": "65264173c8d5352b9ad643dd524238da0537572aeed9c1d754017ca8907c9673"
+    },
+    {
+      "path": ".pi/skills/release.md",
+      "hash": "22ffbeda40edee2bfb6a8d93ba31472dd9b8a028f9fc32b6e64d468fb0aa3fb6"
+    },
+    {
+      "path": ".pi/themes/kaioken-light.json",
+      "hash": "40cc67d442d7d739d0ae432ede7f53d71c7111c1b62c5eaaba26ef6046fe10eb"
+    },
+    {
+      "path": ".pi/themes/kaioken.json",
+      "hash": "6d8a8b371c9e300944458b6f6aeb97a531dce40b1ddc84358949f9451d84f83a"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "SpendEstimate",
+      "SpendGate",
+      "estimate",
+      "confirm",
+      "parseMult",
+      "DefaultSpendGate",
+      "clientFor",
+      "PlanRun",
+      "runPlan",
+      "WebPorts",
+      "NO_WEB_PORTS",
+      "search",
+      "fetch",
+      "isDestructive",
+      "setDirty",
+      "isDirty",
+      "readConfiguredTheme",
+      "GROUNDING_RULES",
+      "Registry",
+      "FakePi",
+      "fakePi",
+      "getSymbolOracle",
+      "RegisterToolsOptions",
+      "execute",
+      "CURTAIN",
+      "BOOT",
+      "aura",
+      "BootLine",
+      "style",
+      "bootScript",
+      "typedLines",
+      "openAura",
+      "bootFrame",
+      "POWEROFF",
+      "squeeze",
+      "beamWidth",
+      "powerOffFrame",
+      "goodbye",
+      "curtainEnabled",
+      "KaiokenHeaderOptions",
+      "KaiokenHeader",
+      "constructor",
+      "setInfo",
+      "beginWork",
+      "render",
+      "invalidate",
+      "dispose",
+      "playPowerOff",
+      "PinnedHeader",
+      "pinHeader",
+      "unpinHeader",
+      "LOGO_WIDTH",
+      "logoPlain",
+      "renderLogo",
+      "keyLegend",
+      "HeaderInfo",
+      "RepoState",
+      "isEmpty",
+      "statusPanel",
+      "knowledgeSummary",
+      "kv",
+      "welcomeBanner",
+      "logoBlock",
+      "logoRule",
+      "stickyHeader",
+      "compactHeader",
+      "displayModel",
+      "joinHorizontal",
+      "blockWidth",
+      "repoLabel",
+      "shortPath",
+      "visibleWidth",
+      "pad",
+      "truncate",
+      "TIMING",
+      "setMotion",
+      "motionEnabled",
+      "motionFromEnv",
+      "phase",
+      "easeOut",
+      "caret",
+      "sweepRule",
+      "shimmerBar",
+      "HIGH_POWER",
+      "powerBand",
+      "powerMeter",
+      "revealedRows",
+      "isRevealing",
+      "chargeOffset",
+      "FLASH_MS",
+      "flashAlive",
+      "renderFlash",
+      "pulseText",
+      "Role",
+      "ThemeToken",
+      "ROLE_TOKEN",
+      "PaintTheme",
+      "fg",
+      "bold",
+      "Painter",
+      "colorFromEnv",
+      "dim",
+      "muted"
+    ]
+  }
+}

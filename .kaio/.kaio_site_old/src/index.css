@@ -1,0 +1,313 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/jetbrains-mono";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Kaioken v2 Design Tokens — Canonical ANSI Lipgloss Palette + Cyber Accents
+   ───────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Core Kaioken Ramp (matching CLI lipgloss ANSI palette) */
+  --kai-red: #ff0000;      /* ANSI 196 · Logo, danger, ambient bloom */
+  --kai-orange: #ff8700;   /* ANSI 208 · Primary brand, gutter, glow */
+  --kai-amber: #ffaf00;    /* ANSI 214 · Approval, keycaps, badges */
+  --kai-tan: #d7af87;      /* ANSI 180 · Tool calls, parameters */
+  --kai-blue: #87d7ff;     /* ANSI 117 · User input, command prompts */
+  --kai-green: #00d787;    /* ANSI 42  · Verification pass, diff additions */
+  --kai-sage: #87af87;     /* ANSI 108 · Tool results */
+  --kai-rose: #ff5f5f;     /* ANSI 203 · Errors, diff deletions */
+  
+  /* Cyber Accent (commandcode.ai signature aesthetic) */
+  --kai-violet: #8c4edd;   /* Sub-agents, neural worktree, grain blocks */
+  --kai-violet-glow: rgba(140, 78, 221, 0.45);
+
+  /* Backgrounds & Surfaces */
+  --kai-black: #050507;    /* Pitch obsidian page backdrop */
+  --kai-ink: #0b0c10;      /* Card background */
+  --kai-panel: #13141b;    /* Elevated surface */
+  --kai-line: #22232d;     /* Grid & separator borders */
+  --kai-dim: #52525b;      /* Monospace meta & unselected state */
+  --kai-muted: #8e8ea0;    /* Secondary text */
+  --kai-text: #ededed;     /* Primary text */
+  --kai-white: #ffffff;
+
+  /* Theme tokens */
+  --background: var(--kai-black);
+  --foreground: var(--kai-text);
+  --card: var(--kai-ink);
+  --card-foreground: var(--kai-text);
+  --primary: var(--kai-orange);
+  --primary-foreground: #000000;
+  --secondary: var(--kai-panel);
+  --secondary-foreground: var(--kai-text);
+  --muted: var(--kai-panel);
+  --muted-foreground: var(--kai-muted);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.18);
+  --border-active: rgba(255, 135, 0, 0.5);
+
+  --radius: 0.375rem;
+}
+
+@theme inline {
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", monospace;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-kai-red: var(--kai-red);
+  --color-kai-orange: var(--kai-orange);
+  --color-kai-amber: var(--kai-amber);
+  --color-kai-tan: var(--kai-tan);
+  --color-kai-blue: var(--kai-blue);
+  --color-kai-green: var(--kai-green);
+  --color-kai-sage: var(--kai-sage);
+  --color-kai-rose: var(--kai-rose);
+  --color-kai-violet: var(--kai-violet);
+  --color-kai-black: var(--kai-black);
+  --color-kai-ink: var(--kai-ink);
+  --color-kai-panel: var(--kai-panel);
+  --color-kai-line: var(--kai-line);
+  --color-kai-dim: var(--kai-dim);
+  --color-kai-muted: var(--kai-muted);
+  --color-kai-text: var(--kai-text);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-border: var(--border);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+  ::selection {
+    background-color: rgba(255, 135, 0, 0.25);
+    color: #ffffff;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Blueprint Grid & Matrix Lines (Command Code signature style)
+   ───────────────────────────────────────────────────────────────────────── */
+.blueprint-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.dash-right {
+  border-right: 1px dashed rgba(255, 255, 255, 0.09);
+}
+
+.dash-top {
+  border-top: 1px dashed rgba(255, 255, 255, 0.09);
+}
+
+.dash-top-right {
+  border-top: 1px dashed rgba(255, 255, 255, 0.09);
+  border-right: 1px dashed rgba(255, 255, 255, 0.09);
+}
+
+.dash-right-solid {
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.dash-top-solid {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.dash-top-right-solid {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Corner junction dot */
+.grid-corner-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background-color: #22232d;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* CRT Scanlines Fallback for mobile */
+.crt-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.4) 50%
+  ),
+  linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.04),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.04)
+  );
+  background-size: 100% 3px, 6px 100%;
+}
+
+/* Tactile Grain Overlay */
+.block-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.25'/%3E%3C/svg%3E");
+}
+
+/* Glowing effects */
+.glow-orange {
+  text-shadow: 0 0 20px rgba(255, 135, 0, 0.55);
+}
+
+.glow-box-orange {
+  box-shadow: 0 0 30px -5px rgba(255, 135, 0, 0.3);
+}
+
+.glow-box-violet {
+  box-shadow: 0 0 35px -5px rgba(140, 78, 221, 0.35);
+}
+
+/* Animations */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Scroll reveal utility */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Original Kaioken Ambient Backdrop Utilities (from website)
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* The faint character grid a terminal emulator leaves behind. */
+.term-grid {
+  background-image:
+    linear-gradient(to right, #ffffff08 1px, transparent 1px),
+    linear-gradient(to bottom, #ffffff08 1px, transparent 1px);
+  background-size: 3ch 1.5rem;
+}
+
+/* The dot matrix a phosphor screen leaves between characters. */
+.kai-dots {
+  background-image: radial-gradient(var(--kai-dim) 1.1px, transparent 1.2px);
+  background-size: 26px 26px;
+}
+
+/* The coarse mesh behind everything — panel seams, not character cells. */
+.kai-mesh {
+  background-image:
+    linear-gradient(to right, #ffffff14 1px, transparent 1px),
+    linear-gradient(to bottom, #ffffff14 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Softens a texture at the very bottom so it never collides with the footer. */
+.kai-fade-down {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
+}
+
+/* Keeps a texture to the top of the viewport, where the hero sits. */
+.kai-fade-hero {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+}
+
+/* Scanlines as a plain background, for elements that are themselves overlays. */
+.kai-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 2px,
+    #00000073 2px 3px
+  );
+}
+
+/* A soft off-screen light source. Position and tint come from the caller. */
+.kai-bloom {
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+/* Darkens the edges so the centre column reads first. */
+.kai-vignette {
+  background: radial-gradient(
+    ellipse 80% 65% at 50% 40%,
+    transparent 0%,
+    color-mix(in oklab, var(--kai-black) 65%, transparent) 100%
+  );
+}
+
+/* Very slow bloom drift — long enough that you notice it only if you look. */
+@keyframes bloom-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(3%, -4%, 0) scale(1.08); }
+}
+.animate-bloom {
+  animation: bloom-drift 26s ease-in-out infinite;
+}
+
+.panel-glow {
+  box-shadow:
+    0 0 0 1px #ffffff0f,
+    0 0 40px -12px color-mix(in oklab, var(--kai-orange) 45%, transparent);
+}
+
+.section-alt {
+  background: color-mix(in oklab, var(--kai-panel) 35%, var(--kai-black));
+}
+

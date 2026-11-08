@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+out/
+dist/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test artifacts
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Electron
+release/
+/electron-builder-debug.yml
+build/*.p12
+build/*.pfx
+*.dmg
+*.exe
+*.AppImage
+*.deb
+*.snap
+
+# Secrets
+*.p12
+*.pfx
+*.pem
+*.key
+
+# OS
+Thumbs.db

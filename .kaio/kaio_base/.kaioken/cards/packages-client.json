@@ -1,0 +1,180 @@
+{
+  "moduleId": "packages-client",
+  "name": "Packages Client",
+  "generatedAt": "2026-09-23T15:14:18.874Z",
+  "summary": "The packages/client module implements the client side of a remote service protocol. It provides a Client class for establishing connections, sending RPC requests, and subscribing to services, built on a byte-level transport abstraction. It includes Unix socket discovery and connection utilities, error handling, and promise helpers, with tests using an in-memory server for verification.",
+  "keyPoints": [
+    "Client class manages connection lifecycle (disconnected/connecting/connected), supports connect, reconnect, disconnect, and exposes state, server ID, and attachment info.",
+    "RPC via request(target, call, signal) returns ServiceResult (JsonValue | undefined); serviceCatalogue and subscribeService provide service discovery and subscription.",
+    "Connection class handles handshake, frame sending, and state changes; uses MAX_UINT32 for frame size limits and supports maxFrameLength.",
+    "Unix transport includes discoverUnixServers with timeout and concurrent probe limits, createUnixTransportFactory for socket connections, and handles socket lifecycle.",
+    "Errors: ServerError, DisconnectedError, ClientDisposedError; toError and toDisconnectedError convert unknown errors. PromiseResolvers helper for manual promise control."
+  ],
+  "entryPoints": [
+    {
+      "name": "Client",
+      "file": "packages/client/src/client.ts",
+      "note": "Main client class: connect, request, subscribeService, dispose."
+    },
+    {
+      "name": "Connection",
+      "file": "packages/client/src/connection.ts",
+      "note": "Manages connection state and frame transport."
+    },
+    {
+      "name": "discoverUnixServers",
+      "file": "packages/client/src/unix.ts",
+      "note": "Discovers Unix socket servers with timeout and concurrency limits."
+    },
+    {
+      "name": "createUnixTransportFactory",
+      "file": "packages/client/src/unix.ts",
+      "note": "Creates a ByteTransportFactory for Unix socket connections."
+    },
+    {
+      "name": "ServerError",
+      "file": "packages/client/src/errors.ts",
+      "note": "Error class for protocol errors with code."
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/client/CHANGELOG.md",
+      "hash": "b4013b927d3424872e298e4415edf8e71f32c259cf235e73e87db113f0fb010e"
+    },
+    {
+      "path": "packages/client/README.md",
+      "hash": "be336696a8f91c5cb40a240c672926dc96cc8f30e38ab97afc8d2a6885cb7205"
+    },
+    {
+      "path": "packages/client/package.json",
+      "hash": "1ce2817c40090cb753ce098c473864e2f561afb79725d79bf9ebdd072b9760fd"
+    },
+    {
+      "path": "packages/client/src/client.ts",
+      "hash": "ce3a4173cba2295f6e765ee51b6919d57e80a2b1f954e1c45b37b21a04c28c82"
+    },
+    {
+      "path": "packages/client/src/connection.ts",
+      "hash": "c6188a63351b2000401c87acb11beb737f681bde9171ee06a9445122209f08c0"
+    },
+    {
+      "path": "packages/client/src/errors.ts",
+      "hash": "33727c683e98a2a0d4e09d7b0cbd8f9fd068f7ff8e0b7924d6511d3365c313ee"
+    },
+    {
+      "path": "packages/client/src/index.ts",
+      "hash": "e0b0b6773ee864244c10c11a6e17246662faba96fbc7878a6f06c30c26a6b3b6"
+    },
+    {
+      "path": "packages/client/src/promise.ts",
+      "hash": "4437b54dcf657e0992ecedc7cc27dd863d21765047dfba63835b24926a20075b"
+    },
+    {
+      "path": "packages/client/src/transport.ts",
+      "hash": "22ce6eea04d189d71e0037978593ae7844f024d4fed321d4bf4f2c8d7d83ef03"
+    },
+    {
+      "path": "packages/client/src/types.ts",
+      "hash": "465a753902f7827a24357f9ff2745213e5151908d5917cec6968fcba68714d90"
+    },
+    {
+      "path": "packages/client/src/unix.ts",
+      "hash": "1009a7dfda0f0cb946d2587cbb72a77a91ed5552aa61e8ae84771eed0dd22aec"
+    },
+    {
+      "path": "packages/client/test/client.test.ts",
+      "hash": "308b1bb3d0b6f498d7671865e09b83cf8f942fec357e75f04eef12bba4afc694"
+    },
+    {
+      "path": "packages/client/test/fixtures/stale-socket-server.mjs",
+      "hash": "ee4ce29485368f6930936d2053b97d928c018e6b7dd60b5cb2ea01c7c93370d8"
+    },
+    {
+      "path": "packages/client/test/support.ts",
+      "hash": "9864826d3bcb4812efe522b004bc9aa83bd4c04f1636d512b034b036e0eb2cd6"
+    },
+    {
+      "path": "packages/client/test/unix-transport.test.ts",
+      "hash": "486b007138c9f264be61f0013fc0c1650f265760a04f0ede4c464520fb31c62a"
+    },
+    {
+      "path": "packages/client/test/unix.test.ts",
+      "hash": "82d6969098bed9ad9b6197e3e9d2ff003cbd72691826579281f055503edb7c3b"
+    },
+    {
+      "path": "packages/client/tsconfig.build.json",
+      "hash": "f7455e8f1154cf140c15d6f658fac8f26a9f26ef97de8dc95ed5814244bbdb94"
+    },
+    {
+      "path": "packages/client/tsconfig.test.json",
+      "hash": "6a3d381f293fe7a484faeb40a52186623f061cca6d561c0dc80f7e5253669a47"
+    },
+    {
+      "path": "packages/client/vitest.config.ts",
+      "hash": "027ec8e6c25bbf9554c86ad669d50b587e5dd066c201df5e40078cb8cf9403fd"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "constructor",
+      "disposed",
+      "connectionState",
+      "connected",
+      "serverId",
+      "hello",
+      "attachment",
+      "connect",
+      "reconnect",
+      "disconnect",
+      "onConnectionStateChange",
+      "onAttachmentChange",
+      "request",
+      "serviceCatalogue",
+      "subscribeService",
+      "dispose",
+      "createClientServiceTransport",
+      "subscribe",
+      "state",
+      "maxFrameLength",
+      "fail",
+      "send",
+      "code",
+      "DisconnectedError",
+      "ClientDisposedError",
+      "toError",
+      "toDisconnectedError",
+      "PromiseResolvers",
+      "resolve",
+      "reject",
+      "createPromiseResolvers",
+      "ByteTransport",
+      "close",
+      "ByteTransportHandlers",
+      "onData",
+      "onClose",
+      "onError",
+      "ByteTransportFactory",
+      "ConnectionState",
+      "ConnectionStateChange",
+      "Unsubscribe",
+      "ListenerErrorHandler",
+      "AttachmentChangeListener",
+      "ServiceSubscription",
+      "start",
+      "ClientOptions",
+      "UnixTransportOptions",
+      "UnixServerRoute",
+      "DiscoverUnixServersOptions",
+      "MemoryByteServer",
+      "messages",
+      "clientCloseCount",
+      "waitForMessages",
+      "sendRaw",
+      "error"
+    ]
+  }
+}

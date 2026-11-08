@@ -1,0 +1,131 @@
+{
+  "moduleId": "kaioken-research",
+  "name": "Kaioken Research",
+  "generatedAt": "2026-09-23T15:09:33.040Z",
+  "summary": "Kaioken Research is a research pipeline that gathers web sources, extracts clean text excerpts, and uses an LLM to produce a JSON research answer with numbered citations, which is then verified for citation defects and stored as a markdown artifact. It distinguishes grounded facts (cited) from synthesis (uncited), defends against prompt injection and SSRF via URL/private-IP checks, and supports depth/breadth tuning per run. Artifacts are written to $KAIOKEN_DIR/research and inherit system provenance, keeping the agent loop auditable and replayable.",
+  "keyPoints": [
+    "Pipeline stages: ports.ts defines WebSearchPort/WebFetchPort and SSRF guards (normaliseUrl, isPrivateIp, isFetchableUrlResolved); run.ts implements gatherSources (concurrent web gathering) and generateResearch (LLM prompt, JSON parse, pathFor); verify.ts verifies citations against sources/excerpts; artifact.ts persists documents and parses markdown back.",
+    "LLM contract: run.ts SYSTEM and REPAIR_SYSTEM prompt the model to reply JSON-only {\"title\",\"body\"} with [N] citations to exact source numbers; REPAIR_SYSTEM fixes only the defects named in a verification report, nothing else.",
+    "Safety: sanitize.ts strips script/style/svg, respects BLOCK_TAGS for text extraction, detects injectionPatterns; ports.ts blocks localhost, .local, .internal, private IPs to prevent SSRF.",
+    "Provenance and audit: artifact.ts writes documents under RESEARCH_DIR and asProvenance records each artifact, so every research output traces to its sources and runs; verification defects (unknown_source, quote_not_found, uncited_claim, cites_failed_fetch) drive the repair step.",
+    "Depth control: types.ts defines ResearchDepth with MIN/MAX_MULTIPLIER (1–10) and BREADTH_THRESHOLD=5; depthFor maps a multiplier to a depth, controlling how many sources/citations are requested per question."
+  ],
+  "entryPoints": [
+    {
+      "name": "gatherSources",
+      "file": "kaioken/research/src/run.ts",
+      "note": "Collects web sources for a question via ports (search+fetch) with concurrency, dedupe, and excerpt extraction; returns GatherResult."
+    },
+    {
+      "name": "generateResearch",
+      "file": "kaioken/research/src/run.ts",
+      "note": "Calls the model with buildPrompt (question, excerpts, depth), parses the JSON reply, and produces GenerateResult."
+    },
+    {
+      "name": "verifyCitations",
+      "file": "kaioken/research/src/verify.ts",
+      "note": "Checks body citations against sources/excerpts; returns ResearchVerification of grounded citations and defects."
+    },
+    {
+      "name": "writeResearchDocument",
+      "file": "kaioken/research/src/artifact.ts",
+      "note": "Persists a verified document as markdown under the research dir, returning the file path."
+    },
+    {
+      "name": "parseArtifact",
+      "file": "kaioken/research/src/artifact.ts",
+      "note": "Parses markdown back into a ResearchDocument for later reading/auditing."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/research/package.json",
+      "hash": "47fed60e069f17a53476539c515b3d41c29b95bb7c50c6a64b9193773c87dee3"
+    },
+    {
+      "path": "kaioken/research/src/artifact.ts",
+      "hash": "c7731da4f965f4545008a407b101ef162846e6b4d9c7373cfc5616a45b2b7964"
+    },
+    {
+      "path": "kaioken/research/src/index.ts",
+      "hash": "f95062874403a2bbab29498c694f0beeda71ede23b22a9def72e59eed6fd143c"
+    },
+    {
+      "path": "kaioken/research/src/ports.ts",
+      "hash": "4d9311138356bb87acd335e99c63e4c25594df00e8d779ddc5b83f3c6b747a87"
+    },
+    {
+      "path": "kaioken/research/src/run.ts",
+      "hash": "e2d8209e345bbe62464fe7390e7e32e0d39b1c1c91ca950d1750f4f8296ba54f"
+    },
+    {
+      "path": "kaioken/research/src/sanitize.ts",
+      "hash": "942671bf8cfb38d2a10e936b17af564464400cd32ffadef1c4503609477bb807"
+    },
+    {
+      "path": "kaioken/research/src/types.ts",
+      "hash": "790369128fcc2265b8881c6b1fefc6b6d51357bcd663b34a948b1a47ab0898ac"
+    },
+    {
+      "path": "kaioken/research/src/verify.ts",
+      "hash": "6b23a1be2535af4c84bddcd1d3c1ebdbae6679087c02774590946e5553a553cd"
+    },
+    {
+      "path": "kaioken/research/test/research.test.ts",
+      "hash": "4621056005614f730d2d903c5a0f5bed990fac1911f061726c3bdc9885c9055c"
+    },
+    {
+      "path": "kaioken/research/tsconfig.json",
+      "hash": "bd4429a3d2bcf6870a32c14c7e913489daeed4b1bb2be8e4f579d5acf8007817"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "RESEARCH_DIR",
+      "researchDir",
+      "documentPath",
+      "renderMarkdown",
+      "asProvenance",
+      "readResearchDocuments",
+      "WebHit",
+      "WebSearchPort",
+      "search",
+      "WebFetchResult",
+      "WebFetchPort",
+      "fetch",
+      "dedupeHits",
+      "isFetchableUrl",
+      "DnsLookupFn",
+      "isFetchableUrlResolved",
+      "isPrivateIp",
+      "numberSources",
+      "GatherInput",
+      "GatherResult",
+      "GenerateInput",
+      "GenerateResult",
+      "buildPrompt",
+      "pathFor",
+      "htmlToText",
+      "fenceSource",
+      "excerptOf",
+      "injectionPatterns",
+      "ResearchSource",
+      "SourceExcerpt",
+      "Citation",
+      "CitationDefectKind",
+      "CitationDefect",
+      "ResearchVerification",
+      "ResearchDocument",
+      "ResearchDepth",
+      "MIN_MULTIPLIER",
+      "MAX_MULTIPLIER",
+      "BREADTH_THRESHOLD",
+      "parseMultiplier",
+      "depthFor",
+      "uncitedSentences"
+    ]
+  }
+}

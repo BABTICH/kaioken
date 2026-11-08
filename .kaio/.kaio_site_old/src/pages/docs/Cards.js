@@ -1,0 +1,21 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import CodeBlock from "@/components/CodeBlock";
+import TerminalWindow from "@/components/TerminalWindow";
+import { C, Callout, DocPage, H2, LI, P, UL } from "@/components/docs/parts";
+const SCHEMA = [
+    { file: "_module.yaml", note: "metadata — scope, model, generated_at" },
+    { file: "overview.md", note: "what this module is and why it exists" },
+    { file: "architecture.md", note: "how it is put together internally" },
+    { file: "conventions.md", note: "the local rules a newcomer would violate" },
+    { file: "tech_stack.md", note: "what it depends on and why" },
+    { file: "setup_commands.md", note: "only when the module has unique commands" },
+];
+export default function Cards() {
+    return (_jsxs(DocPage, { title: "Knowledge cards", lead: "Dense per-module documents on a fixed schema \u2014 inspired by Qoder's repowiki knowledge folder, with a planning step you control.", children: [_jsx(H2, { id: "plan", children: "Plan first" }), _jsxs(P, { children: [_jsx(C, { children: "kaioken plan" }), " has the architectural planner propose ", _jsx(C, { children: "modules.yaml" }), ": a module tree with a file scope for each entry. It is meant to be edited. Module boundaries are a judgment call the maintainer should own, and the file is plain YAML precisely so you can argue with it."] }), _jsx("div", { className: "pt-4", children: _jsx(CodeBlock, { title: "powershell", prompt: true, code: `kaioken scan            # what will be analyzed
+kaioken plan            # propose modules.yaml
+# edit modules.yaml
+kaioken generate        # parallel card generation` }) }), _jsx(Callout, { kind: "warn", title: "Coverage is reported", children: "After planning, Kaioken reports what percentage of scanned files the plan claims and which directories the misses cluster in. Files no module claims are reported rather than silently ignored." }), _jsx(H2, { id: "schema", children: "The fixed schema" }), _jsx(P, { children: "Every module produces the same files, so an agent can rely on them existing without probing." }), _jsx("div", { className: "pt-4", children: _jsx(TerminalWindow, { title: ".kaioken/knowledge/<module>/", bodyClassName: "text-[12.5px]", children: SCHEMA.map((s, i) => (_jsxs("div", { className: "flex items-baseline gap-2 whitespace-pre py-[1px]", children: [_jsx("span", { className: "text-kai-dim select-none", "aria-hidden": true, children: i === SCHEMA.length - 1 ? "└─ " : "├─ " }), _jsx("span", { className: "shrink-0 text-foreground", children: s.file }), _jsxs("span", { className: "truncate text-kai-dim", children: ["\u00B7 ", s.note] })] }, s.file))) }) }), _jsx(H2, { id: "incremental", children: "Incrementality" }), _jsxs(P, { children: [_jsx(C, { children: ".kaioken/state.json" }), " stores a sha256 over each module's scoped files. Unchanged modules are never re-billed \u2014 running ", _jsx(C, { children: "generate" }), " twice in a row costs nothing the second time."] }), _jsx("div", { className: "pt-4", children: _jsx(CodeBlock, { title: "tui", code: `/status              # per-module freshness
+/cards               # only the stale ones
+/cards force         # rebuild everything
+/cards <module-id>   # just one` }) }), _jsxs(Callout, { kind: "note", title: "Cards vs. the wiki", children: ["Cards are compact, per-module, and agent-facing. The deep wiki is long-form, narrative, and human-facing. Today ", _jsx(C, { children: "update" }), " covers the wiki; diff-driven updates for cards are on the roadmap."] }), _jsx(H2, { id: "index", children: "The index" }), _jsxs(P, { children: [_jsx(C, { children: ".kaioken/KNOWLEDGE.md" }), " is the file an agent reads first \u2014 a catalog of what exists and where. Kaioken's own chat agent loads it automatically and opens individual cards on demand through its ", _jsx(C, { children: "read_knowledge" }), " tool."] }), _jsxs(UL, { children: [_jsx(LI, { children: "Low temperature (0.2) \u2014 cards should be factual, not creative." }), _jsx(LI, { children: "Bundling heuristics put manifests and entry points first, tests last; long files keep head and tail." }), _jsx(LI, { children: "A file's skeleton always fits the budget, so nothing in scope is invisible to the model \u2014 detail is rationed, never coverage." })] })] }));
+}

@@ -1,0 +1,57 @@
+{
+	"name": "kaioken-pi",
+	"version": "0.1.0",
+	"description": "Deterministic truth layer for Pi: an offline symbol oracle, provenance-tracked wiki, and a verification gate that refuses to call work done until tests pass.",
+	"license": "MIT",
+	"type": "module",
+	"keywords": [
+		"pi-package",
+		"kaioken",
+		"grounding",
+		"wiki",
+		"provenance"
+	],
+	"files": [
+		"extensions",
+		"skills",
+		"themes",
+		"README.md",
+		"LICENSE"
+	],
+	"pi": {
+		"extensions": [
+			"./extensions"
+		],
+		"skills": [
+			"./skills"
+		],
+		"themes": [
+			"./themes"
+		]
+	},
+	"peerDependencies": {
+		"@earendil-works/pi-ai": "*",
+		"@earendil-works/pi-coding-agent": "*",
+		"typebox": "*"
+	},
+	"dependencies": {
+		"@kaioken/scan": "0.1.0",
+		"@kaioken/index": "0.1.0",
+		"@kaioken/search": "0.1.0",
+		"@kaioken/provenance": "0.1.0",
+		"@kaioken/graph": "0.1.0",
+		"@kaioken/impact": "0.1.0",
+		"@kaioken/gitops": "0.1.0",
+		"@kaioken/verify": "0.1.0",
+		"@kaioken/skills": "0.1.0",
+		"@kaioken/serve": "0.1.0",
+		"@kaioken/modelport": "0.1.0",
+		"@kaioken/plan": "0.1.0",
+		"@kaioken/wiki": "0.1.0",
+		"@kaioken/research": "0.1.0",
+		"@kaioken/skillgen": "0.1.0"
+	},
+	"engines": {
+		"node": ">=22"
+	}
+}

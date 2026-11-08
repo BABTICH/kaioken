@@ -1,0 +1,83 @@
+{
+  "moduleId": "kaioken-verifycore",
+  "name": "Kaioken Verifycore",
+  "generatedAt": "2026-09-23T15:11:24.074Z",
+  "summary": "Kaioken Verifycore is a structural module that verifies whether prose claims in documentation or other bodies of text are grounded in actual code. It extracts claims from text (file paths, symbol names, line anchors, code excerpts), checks them against a repository's known files and symbols via an oracle, and produces a report of defects such as ungrounded claims. It includes heuristics to ignore padding phrases and generic filenames to reduce noise. The main entry is an async verification function that coordinates scope reading, claim extraction, and per-claim checks.",
+  "keyPoints": [
+    "Claims have four kinds (file, symbol, anchor, excerpt) defined in types.ts, each capturing a different way a text can reference code.",
+    "claims.ts uses regexes (CODE_SPAN, PATH_LIKE, ANCHOR, SYMBOL_LIKE) and a NOT_SYMBOLS set to extract and classify claims from body text.",
+    "verify.ts exposes verifyDocument which asynchronously verifies a document's claims against a repository using a SymbolOracle, known file set, and scope; it also exports coverageOf and summariseDefects/groundingDefects for analysis.",
+    "The module filters out padding phrases (e.g., 'this module provides', 'in conclusion') via findPadding to avoid trivial claims, and treats generic filenames (index.ts, utils.ts) specially when verifying file claims.",
+    "A test file constructs a synthetic repository (SOURCE) and walks the tree to build scan/index/oracle fixtures, demonstrating the intended verification workflow."
+  ],
+  "entryPoints": [
+    {
+      "name": "extractClaims",
+      "file": "kaioken/verifycore/src/claims.ts",
+      "note": "Parses a body of text and returns an array of Claim objects, using code span extraction, classification, and deduplication."
+    },
+    {
+      "name": "findPadding",
+      "file": "kaioken/verifycore/src/claims.ts",
+      "note": "Detects occurrences of padding phrases in body text, returning phrase/line pairs for filtering low-value claims."
+    },
+    {
+      "name": "verifyDocument",
+      "file": "kaioken/verifycore/src/verify.ts",
+      "note": "Main async entry point: takes VerifyInput, reads scope, extracts claims, checks each against the repository, and returns a VerificationReport of defects."
+    },
+    {
+      "name": "coverageOf",
+      "file": "kaioken/verifycore/src/verify.ts",
+      "note": "Given a body, an oracle, and a scope, computes which known symbols are uncovered and the coverage ratio."
+    },
+    {
+      "name": "summariseDefects",
+      "file": "kaioken/verifycore/src/verify.ts",
+      "note": "Aggregates a list of Defects into a record keyed by defect kind, useful for reporting."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/verifycore/package.json",
+      "hash": "6fdf7c3f6219493f4137d1b1dc10193e43d74d317b8b5f9d55c6b0fdf4f3c87f"
+    },
+    {
+      "path": "kaioken/verifycore/src/claims.ts",
+      "hash": "25ee253892d546a3d7092219bc8babe38e48151c21ed8b5bde71dcf2d821b5fa"
+    },
+    {
+      "path": "kaioken/verifycore/src/index.ts",
+      "hash": "42608823729069ac1f2cd6ba1d08e9fc3e8cd97402bc9612a83578e516c087c2"
+    },
+    {
+      "path": "kaioken/verifycore/src/types.ts",
+      "hash": "ee96ebe78f78a16dec45ffcde8d63e66ca90cd26dbb3fe44c3358c45bd0d4e78"
+    },
+    {
+      "path": "kaioken/verifycore/src/verify.ts",
+      "hash": "f53bc68416632f46ff48acaa50a90ef5fa17b0e884ddf1aa65a5174f67dd60b3"
+    },
+    {
+      "path": "kaioken/verifycore/test/verifycore.test.ts",
+      "hash": "cac02102552ed9cd2c5d41eb7277d2b7273e668dce059a7428d49ef46b01fdc1"
+    },
+    {
+      "path": "kaioken/verifycore/tsconfig.json",
+      "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "ClaimKind",
+      "Claim",
+      "Defect",
+      "VerificationReport",
+      "VerifyInput",
+      "groundingDefects"
+    ]
+  }
+}

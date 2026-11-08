@@ -1,0 +1,68 @@
+{
+  "credentials": [
+    ".npmrc",
+    "kaioken/scan/test/risk.test.ts"
+  ],
+  "private_key": [
+    "kaioken/scan/test/risk.test.ts"
+  ],
+  "generated": [
+    "kaioken/serve/src/graphEngineAsset.ts",
+    "packages/ai/src/image-models.generated.ts",
+    "packages/ai/src/models.generated.ts",
+    "packages/ai/src/providers/amazon-bedrock.models.ts",
+    "packages/ai/src/providers/ant-ling.models.ts",
+    "packages/ai/src/providers/anthropic.models.ts",
+    "packages/ai/src/providers/azure-openai-responses.models.ts",
+    "packages/ai/src/providers/baseten.models.ts",
+    "packages/ai/src/providers/cerebras.models.ts",
+    "packages/ai/src/providers/cloudflare-ai-gateway.models.ts",
+    "packages/ai/src/providers/cloudflare-workers-ai.models.ts",
+    "packages/ai/src/providers/deepseek.models.ts",
+    "packages/ai/src/providers/fireworks.models.ts",
+    "packages/ai/src/providers/github-copilot.models.ts",
+    "packages/ai/src/providers/google-vertex.models.ts",
+    "packages/ai/src/providers/google.models.ts",
+    "packages/ai/src/providers/groq.models.ts",
+    "packages/ai/src/providers/huggingface.models.ts",
+    "packages/ai/src/providers/kimi-coding.models.ts",
+    "packages/ai/src/providers/minimax-cn.models.ts",
+    "packages/ai/src/providers/minimax.models.ts",
+    "packages/ai/src/providers/mistral.models.ts",
+    "packages/ai/src/providers/moonshotai-cn.models.ts",
+    "packages/ai/src/providers/moonshotai.models.ts",
+    "packages/ai/src/providers/nvidia.models.ts",
+    "packages/ai/src/providers/openai-codex.models.ts",
+    "packages/ai/src/providers/openai.models.ts",
+    "packages/ai/src/providers/opencode-go.models.ts",
+    "packages/ai/src/providers/opencode.models.ts",
+    "packages/ai/src/providers/openrouter.models.ts",
+    "packages/ai/src/providers/qwen-token-plan-cn.models.ts",
+    "packages/ai/src/providers/qwen-token-plan-individual.models.ts",
+    "packages/ai/src/providers/qwen-token-plan.models.ts",
+    "packages/ai/src/providers/radius.models.ts",
+    "packages/ai/src/providers/together.models.ts",
+    "packages/ai/src/providers/vercel-ai-gateway.models.ts",
+    "packages/ai/src/providers/xai.models.ts",
+    "packages/ai/src/providers/xiaomi-token-plan-ams.models.ts",
+    "packages/ai/src/providers/xiaomi-token-plan-cn.models.ts",
+    "packages/ai/src/providers/xiaomi-token-plan-sgp.models.ts",
+    "packages/ai/src/providers/xiaomi.models.ts",
+    "packages/ai/src/providers/zai-coding-cn.models.ts",
+    "packages/ai/src/providers/zai.models.ts",
+    "packages/coding-agent/examples/extensions/doom-overlay/doom/build/doom.js",
+    "packages/coding-agent/examples/extensions/doom-overlay/doom/build/doom.wasm"
+  ],
+  "lockfile": [
+    "package-lock.json",
+    "packages/coding-agent/examples/extensions/custom-provider-anthropic/package-lock.json",
+    "packages/coding-agent/examples/extensions/gondolin/package-lock.json",
+    "packages/coding-agent/examples/extensions/sandbox/package-lock.json",
+    "packages/coding-agent/examples/extensions/with-deps/package-lock.json",
+    "packages/coding-agent/install-lock/package-lock.json",
+    "packages/coding-agent/npm-shrinkwrap.json"
+  ],
+  "large_binary": [
+    "packages/coding-agent/docs/images/exy.png"
+  ]
+}

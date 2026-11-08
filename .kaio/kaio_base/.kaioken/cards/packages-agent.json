@@ -1,0 +1,2560 @@
+{
+  "moduleId": "packages-agent",
+  "name": "Packages Agent",
+  "generatedAt": "2026-09-23T15:12:30.307Z",
+  "summary": "The packages/agent module contains two generations of agent execution: a legacy runtime in src/ (agent loop, Agent class) and a newer harness runtime in src/harness/ with durable session storage (memory, JSONL, v3 migration), a lane-based durable operation model, compaction/branch summarization, file tools (read/write/edit/bash) and telemetry schemas. A separate pico3 harness under src/harness/pico3/ implements a task-kind scheduler with kinds (generation/tool/post-tools/collapse/job) over a Storage interface, backed by MemoryStorage or JsonlStorage, plus a chord view bridge. The module also has extensive benchmarks, conformance tests, and docs under docs/ and benchmark/.",
+  "keyPoints": [
+    "Two distinct runtimes: a legacy agent loop (src/agent-loop.ts, src/agent.ts) and a newer harness runtime (src/harness/) with durable lane-based operations.",
+    "Session persistence via Storage (memory or JSONL) with migration from legacy v3 JSONL, plus forking with branch-scoped value/list projection.",
+    "Harness operations are durable state machines (run, compaction, navigation) with retry policies, deferred execution, gate-based abort, and structural summaries.",
+    "pico3 (src/harness/pico3/) is a task-kind scheduler with kinds for generation, tool, post-tools, collapse, job, plugin; backed by MemoryStorage or JsonlStorage, with rewindable/sticky/session config and a chord view bridge.",
+    "File tools (read, write, edit, bash) with output capture/truncation, diff utilities, skills/prompt-template loading, and telemetry schemas (AI + harness spans)."
+  ],
+  "entryPoints": [
+    {
+      "name": "Agent",
+      "file": "src/agent.ts",
+      "note": "Legacy Agent class with prompt/continue, steering/follow-up queues, streaming, and tool lifecycle hooks."
+    },
+    {
+      "name": "agentLoop",
+      "file": "src/agent-loop.ts",
+      "note": "Core agent loop implementation; streams assistant responses, executes tool calls (sequential/parallel), emits AgentEvents."
+    },
+    {
+      "name": "Harness",
+      "file": "src/harness/agent-harness.ts",
+      "note": "Main harness interface: lanes, operations (prompt/skill/compaction/navigation), event bus, watch, config, hooks."
+    },
+    {
+      "name": "Harness",
+      "file": "src/harness/runtime/harness.ts",
+      "note": "Harness implementation with lanes, session restore, config, events; created via createAgentHarness."
+    },
+    {
+      "name": "Harness",
+      "file": "src/harness/pico3/harness.ts",
+      "note": "pico3 task-kind scheduler with conversations, hooks, tasks, and config; opened with Harness.open."
+    },
+    {
+      "name": "createAgentHarness",
+      "file": "src/harness/runtime/harness.ts",
+      "note": "Factory that restores session state and builds the harness runtime."
+    },
+    {
+      "name": "MemoryStorage",
+      "file": "src/harness/session/memory.ts",
+      "note": "In-memory Storage implementation; also MemoryStorageOptions class with fork."
+    },
+    {
+      "name": "JsonlStorage",
+      "file": "src/harness/session/jsonl/storage.ts",
+      "note": "JSONL-based Storage with v4 format and v3 legacy migration/upgrade."
+    },
+    {
+      "name": "MemorySessionRepo",
+      "file": "src/harness/session/memory.ts",
+      "note": "In-memory session repository implementing SessionRepo."
+    },
+    {
+      "name": "JsonlSessionRepo",
+      "file": "src/harness/session/jsonl/repo.ts",
+      "note": "JSONL session repository with create/open/list/delete/fork and legacy v3 support."
+    },
+    {
+      "name": "sessionRepoBenchmarkTargets",
+      "file": "benchmark/session/session-repo-targets.ts",
+      "note": "Benchmark fixture for memory session repo."
+    },
+    {
+      "name": "storageBenchmarkTargets",
+      "file": "benchmark/session/storage-targets.ts",
+      "note": "Benchmark fixture for memory storage."
+    },
+    {
+      "name": "registerReadBenchmarks",
+      "file": "benchmark/session/benchmark.ts",
+      "note": "Registers read benchmarks; also registerWriteBenchmarks."
+    },
+    {
+      "name": "apply",
+      "file": "docs/mobile-handoff/01-harness/01-delta/delta.ts",
+      "note": "Applies a list of Op deltas to a target object."
+    },
+    {
+      "name": "createBashTool",
+      "file": "src/harness/tools/bash.ts",
+      "note": "Bash tool with timeout validation and output capture; also createReadTool/createEditTool/createWriteTool."
+    },
+    {
+      "name": "HarnessEventBus",
+      "file": "src/harness/events.ts",
+      "note": "Event bus for harness events with watch support and resnapshot."
+    },
+    {
+      "name": "createGate",
+      "file": "src/harness/execution/effect-gate.ts",
+      "note": "Gate for admitting tool/effect execution with abort signal."
+    },
+    {
+      "name": "loadSkills",
+      "file": "src/harness/skills.ts",
+      "note": "Load skills from directories with frontmatter and ignore patterns; also loadPromptTemplates."
+    },
+    {
+      "name": "generateBranchSummary",
+      "file": "src/harness/compaction/branch-summarization.ts",
+      "note": "Generate branch summary after navigation using LLM; also collectEntriesForBranchSummary."
+    },
+    {
+      "name": "compact",
+      "file": "src/harness/compaction/compaction.ts",
+      "note": "Generate compaction summary with retries; also prepareCompaction, shouldCompact, estimateTokens."
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/agent/CHANGELOG.md",
+      "hash": "2eec658c8b1f4e329c372b14a26848051830e769c978bbd2befba6bfb5781f0e"
+    },
+    {
+      "path": "packages/agent/README.md",
+      "hash": "3a3fe6ed39fed6eae0678bb7ce2b1ed055c7198dc717b01cd810b741ed3e9200"
+    },
+    {
+      "path": "packages/agent/benchmark/session/README.md",
+      "hash": "eccbaea04d574880b788495309230a952b1622bd6167b4e7cf2d5d8bfd6788c8"
+    },
+    {
+      "path": "packages/agent/benchmark/session/allocation-profile-worker.ts",
+      "hash": "ae39c81685df9c250a1a365780d68f64f0fc3363f5216b849c6209f316e96353"
+    },
+    {
+      "path": "packages/agent/benchmark/session/allocation-profile.ts",
+      "hash": "b27dfcf90f98c9a4f79540c3b0db01811780daabd8f36795c8d4907361e5b12e"
+    },
+    {
+      "path": "packages/agent/benchmark/session/benchmark.ts",
+      "hash": "0d99812c0ffa36932501cbef5118bccae24976aafce256fa8928a62eaaa96d0d"
+    },
+    {
+      "path": "packages/agent/benchmark/session/loaded-footprint-worker.ts",
+      "hash": "6e97b524b61e855535b3d63bcfee96c473410d2e89c97a48c4c8a95fd26d3b21"
+    },
+    {
+      "path": "packages/agent/benchmark/session/loaded-footprint.ts",
+      "hash": "6fbf973c4b45663e47c9d6b3122a707e2f8571222d5c6378445d817e2c9b338d"
+    },
+    {
+      "path": "packages/agent/benchmark/session/session-repo-targets.ts",
+      "hash": "61ad7facc5d482e1a2e2f49ef50a373fd81c0237184d8a8508abdf5170b84cdd"
+    },
+    {
+      "path": "packages/agent/benchmark/session/session-repo.bench.ts",
+      "hash": "fe570e9acd6e43ed7bfe4fbd025fc2067f5dcfb1bb9a753a8cf61e2689f5ce94"
+    },
+    {
+      "path": "packages/agent/benchmark/session/storage-targets.ts",
+      "hash": "66d8521e23e46ab5dec801141443987811c81c19de7129ea6362a93de016f187"
+    },
+    {
+      "path": "packages/agent/benchmark/session/storage.bench.ts",
+      "hash": "150792e85b1635e4f4970ed31a8758d4c7b509781a859dbe9566bea8e7364b60"
+    },
+    {
+      "path": "packages/agent/benchmark/tsconfig.json",
+      "hash": "de7f2233f731d3e242a27ff905e107429bdb46bfa4df526d899eddc6232cb7a6"
+    },
+    {
+      "path": "packages/agent/docs/assistant-durability.md",
+      "hash": "c07961d0fb7fb8416bf980544f952cf1491f8c1526822a8eb4b02b03490e164c"
+    },
+    {
+      "path": "packages/agent/docs/harness.md",
+      "hash": "8bb08ad97dcd0227a16a7ec29a563fd7c2ed7b64d474d89d9b53f4c61a053b1a"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/01-delta/FINDINGS.md",
+      "hash": "282d59edf9f01b2774f3a0875c7a1de6329a2a129b4b80036b0b9a2f17a0fd8a"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/01-delta/append-decision.md",
+      "hash": "7eacef6240e8e3fc22101860b6064a2024866d1435c48305f1ee37f72b37cd77"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/01-delta/delta-impl.ts",
+      "hash": "65028ec206b32be85071f59ff1954772172a6a2f772d23f5935e04bdc426e133"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/01-delta/delta.bench.ts",
+      "hash": "fd09c934b0744360288df6e057201802e5b32bf5988fe0142e2f9c379aa93b12"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/01-delta/delta.examples.ts",
+      "hash": "82fbfb1f044821dccff71000ea4fa060802a033a7e9270175c8ddc73f2f134a2"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/01-delta/delta.md",
+      "hash": "50587087a0cf128f3fb6449d50a1cb674011622d41b24b6dd91adf672da326bc"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/01-delta/delta.test.ts",
+      "hash": "48702e106941d6b1f7e363d96fe24cbe66afce7386c71fc47b27ab21c0496cdb"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/01-delta/delta.ts",
+      "hash": "6888b2634b8af5a46cd0b23c0b009bf2ad068b9becd6514db91bc5a69851c4e4"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/02-scopes/implementation-handoff.md",
+      "hash": "71846ba3845bd2f994fba6935f28e3cd3bfa5ee3f26f142956f9d044e06936c5"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/02-scopes/scopes.md",
+      "hash": "9be423f5fe02ca839a08d368acae519f72292d89bd142e5761a76163454b15d5"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/02-scopes/scopes.variance.ts",
+      "hash": "25ebf6d92d6ee8136cdeb956d4471c1b4487d54e93550ed80aaddc86922230a6"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/03-execenv/bash.after.ts",
+      "hash": "13016ffecbfe5aed4f7f8213daf17e1c19dda087238c131e0978e7102223c363"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/03-execenv/execenv.md",
+      "hash": "81bd51d228915c99c167f8cabfd8851a48563e305770569c3a98372465a7e7c7"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/03-execenv/nodejs-env.diff",
+      "hash": "691151feaa04c14eb54c7404d471f4e2589ca737ca1d037bcdb428e6372b1280"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/03-execenv/nodejs-env.test.diff",
+      "hash": "fc58f542685c41ea3c73b4f47719a7e0f4e25d01ddf8a8336f27fb0385286e79"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/03-execenv/output-capture.ts",
+      "hash": "43ac825b886c05429b36503a12b537af80cc38c4414fa5f65c890eaa7be8571f"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/04-tool-output/bash-worked-example.md",
+      "hash": "f3f4da9963d26629c8886e0a25d2326cf91d2e6504dd7e703c9db5c7224c4ded"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/04-tool-output/harness-tools.md",
+      "hash": "83eb98af9e51a58618e861d5d6988549ee7f17599991fbe46d14d49a2b5429bc"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/04-tool-output/rate-limiting.md",
+      "hash": "646fc651871ca65ff0d48bdb4c5030b9c5114a2afe668230f22e6d06a1a80aac"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/01-harness/05-assistant-output/message-update.md",
+      "hash": "a18568c6941f953df551d5b5ebe5ed98d41f27925277cc6a0ecd4366576742c8"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/01-facets/facets.md",
+      "hash": "047e49f8ee28c84270601ebe652b28e40b3dcadf02a0b83d2d44a7d082f77e62"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/README.md",
+      "hash": "a8bf209e84447eac892ae23d2dde457a9a18be05913ec2791ba4271860611992"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/package.json",
+      "hash": "ec6f2bbed1a312f7bb84cbec52d630190f3678af1f317e3d944d5963d70942c5"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/src/bench.ts",
+      "hash": "23549365d2683e971f64dfa0b47303d28efb43a6c6810de2df9fdbe6ba6ff1d6"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/src/demo-facet.ts",
+      "hash": "ee01c338614f8be6375951cc42899a643d99a8ef98f7763f46950dbd5c795142"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/src/escape-audit.ts",
+      "hash": "842e3b5ba2677d2285ae910b5334142df12b940d3e7f6d73a38b08709b2268c3"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/src/facet-example.js",
+      "hash": "968ca3aa83c23e0725cb6536c0e46a9765088da6b0b81c7f8a3cf14c0c3c4a78"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/src/iso-vs-ctx.ts",
+      "hash": "db830f12201a5e00b9b0b8da670d83d483260c52ebe80c8ffc115eabb6223dc5"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/src/leak.ts",
+      "hash": "35213ac7a2e50b1e520603f057a97aee4d4e4b4ac6a5d5b9712e886a277c418b"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/src/markdown-bundle.js",
+      "hash": "0aba902d3135065a1b0e3763550a88968a0209ef69fb780c67675266436a6556"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/src/membrane.ts",
+      "hash": "bdc741b981d5bc979c7678ea300d119668bede7e0aa25c821d731be853d2f34c"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/02-plugins/02-sandbox/src/property-test.ts",
+      "hash": "852621721760813dd0a89e7b57a53ce8f39794b8274d6a0ade1cffb9107926fd"
+    },
+    {
+      "path": "packages/agent/docs/mobile-handoff/README.md",
+      "hash": "45ae30da0f72f3487e97bc32ae0c962d36f98d2ceb862c0b656266c2f6f24762"
+    },
+    {
+      "path": "packages/agent/docs/pico-v3.md",
+      "hash": "423ce3f63ec9d38b8900a4b88a81c07eca91722591dfa1e73c3f620c298484ac"
+    },
+    {
+      "path": "packages/agent/docs/pico/pico-handoff-v2.md",
+      "hash": "331462855bedd35ff9298268f5690283a4d0c8bfea51e2288552d5ac516c873c"
+    },
+    {
+      "path": "packages/agent/docs/pico/pico-rendering.md",
+      "hash": "eb9a64374c48ca985f804b23e15fc5626182f0f958ea9ed3ed0f4cc56eecfba1"
+    },
+    {
+      "path": "packages/agent/docs/pico/pico-simple-blockers.md",
+      "hash": "b93d7431920cf2cb29caaa2a45947f1b090a58edecb02e31863fc9d0b85339d0"
+    },
+    {
+      "path": "packages/agent/docs/pico/pico-simple-handoff.md",
+      "hash": "973301b317788955992d92833a32738b4a20190908eaa3bab20c31fd1caca8f5"
+    },
+    {
+      "path": "packages/agent/docs/pico/pico-usage-guide.md",
+      "hash": "f2e834a31d2345690df1f8878d9614832b04befd976999f943860216f30c14c4"
+    },
+    {
+      "path": "packages/agent/docs/pico/pico-usage-v2.md",
+      "hash": "00238ba36b10f0e69ad32b2a0e37dcaa9c20b4634d46d38a926ea9e9b69b44ba"
+    },
+    {
+      "path": "packages/agent/docs/pico/pico-v3.md",
+      "hash": "a08a6e46b5f69b1d089fdc0c5e898bb549bf4008191f61d59634be4e9df3d8b7"
+    },
+    {
+      "path": "packages/agent/docs/pico/pico-work.md",
+      "hash": "f68b25e35832486c76060caa915fdb5e5903504186c0da981b64279f1b785f52"
+    },
+    {
+      "path": "packages/agent/docs/pico/v3/hardening-handoff.md",
+      "hash": "12c899fdd72fe171373f15e5156ecc82e311e15412ba494163f2212d5040add8"
+    },
+    {
+      "path": "packages/agent/docs/pico/v3/plugins.md",
+      "hash": "9a32a25c527b30c69b2117057ff362b4c575b3cac501960818a03e1e9d67063a"
+    },
+    {
+      "path": "packages/agent/docs/pico/v3/view-and-events.md",
+      "hash": "0b4a4ff36c7c206e85b6ed4d0883c85bdf704d6485975184f6e96096ed8a1170"
+    },
+    {
+      "path": "packages/agent/docs/pico2.md",
+      "hash": "f1b00124bab7598893e8ede1560602a1dc639e37d671305f51d8e7cfbd77e68c"
+    },
+    {
+      "path": "packages/agent/docs/plugins.md",
+      "hash": "56c3c9fd76e4389a85658ae853632dad48f621acef15dac1c9529f5a87ef9468"
+    },
+    {
+      "path": "packages/agent/docs/post-wp05-roadmap.md",
+      "hash": "2dba08e6aaffc7e8317b1e1c8a35cf3f390cc1bdc7cb7634902c80f26ab72c36"
+    },
+    {
+      "path": "packages/agent/docs/rpc.md",
+      "hash": "089e7c850c8772f8ba21533873bd05ef8f843bc94afa63b203fc1ac26d57e4ec"
+    },
+    {
+      "path": "packages/agent/docs/runtime-simplification.md",
+      "hash": "1bf746b56adf8588ce348d0936c696737614fd88946e213a44b9fc19e8029238"
+    },
+    {
+      "path": "packages/agent/docs/telemetry-schema.md",
+      "hash": "a8c7228e5c50b45501b3c6e3edf7f5a75433c98cf81d2d3b848b14e12cd9572a"
+    },
+    {
+      "path": "packages/agent/docs/telemetry.md",
+      "hash": "31cd30ed04222de36ae002768ffde85db0a0dcf57aea3be6aad6bd8b2b4723c9"
+    },
+    {
+      "path": "packages/agent/docs/tool-durability.md",
+      "hash": "0439ef6ae1fdc732787c7ac2cdd804bf566ca837200665caab539b8068497d7f"
+    },
+    {
+      "path": "packages/agent/docs/values.md",
+      "hash": "ca2dfc2bd97d8e4f8eacddc9254b9077eb1403a20d5660ed844309b54c471c43"
+    },
+    {
+      "path": "packages/agent/docs/work-packages/00-runtime1-removal.md",
+      "hash": "948961e65aec2d552e9a60e54976d01db67ac0c54e5659bdeec09cbfa708c2fd"
+    },
+    {
+      "path": "packages/agent/docs/work-packages/01-bound-values-lists.md",
+      "hash": "2b474f94a6c63c7ec987a9756b04cf8a893aa9ac2a431bb13fe94f5ac32cab4d"
+    },
+    {
+      "path": "packages/agent/docs/work-packages/02-atomic-run-acceptance.md",
+      "hash": "6242c17c03b1beaa141da509e5300c1c81b2968834cddc89e3010cac3de22297"
+    },
+    {
+      "path": "packages/agent/docs/work-packages/03-remove-drive-deadlines.md",
+      "hash": "4e9c8f902af053d6f7e684b115955597e6e2a2ef578dce6753beefc146ac8445"
+    },
+    {
+      "path": "packages/agent/docs/work-packages/04-mutation-publication.md",
+      "hash": "151854ee280716009749386f06d317f89552707ca76672716407e9086239cb3c"
+    },
+    {
+      "path": "packages/agent/docs/work-packages/05-direct-durable-drive.md",
+      "hash": "d774bd5e92d2db41d254b82175432d2a57bf4ea3ad38130f0d0f1ed7895e3dc8"
+    },
+    {
+      "path": "packages/agent/docs/work-packages/06-session-branch-lane-separation.md",
+      "hash": "d8631cadf66ea98761cf85e1795155193a84d3391ebc93cea08a054c411874d7"
+    },
+    {
+      "path": "packages/agent/docs/work-packages/07-sqlite-host-ownership-live-forks.md",
+      "hash": "61d8f98e8af1a18dd0ce565ded34677f022b80713d69086dd92ad06890862e0f"
+    },
+    {
+      "path": "packages/agent/docs/work-packages/08-named-branch-streaming-forks.md",
+      "hash": "5f785c08f86c553f7d3fb39eef1c4092a70194852c1eb266a69627e6849ffea0"
+    },
+    {
+      "path": "packages/agent/docs/work-packages/09-lane-snapshot-settled-tools.md",
+      "hash": "fa342633e58f87cfcbde876920f555c0e250b788429a94d4da898f7123ba3a43"
+    },
+    {
+      "path": "packages/agent/package.json",
+      "hash": "07982b1fe8e6e81b797359da050ebe7c211bc96b88958233c6135e7635a9aa63"
+    },
+    {
+      "path": "packages/agent/scripts/generate-telemetry-docs.ts",
+      "hash": "4ed99d51446530cae8de500d4b90ad905f94346f062b386d7293d5e03e72afb6"
+    },
+    {
+      "path": "packages/agent/src/agent-loop.ts",
+      "hash": "2f4e228055729f684e01349813a6ab903b0f646f6320d5f892ef77303561b82e"
+    },
+    {
+      "path": "packages/agent/src/agent.ts",
+      "hash": "a586b3b5488ce3018a89dcd30350689942e72cd9fe1cc2a3d8bb1360e355476c"
+    },
+    {
+      "path": "packages/agent/src/harness/agent-harness.ts",
+      "hash": "f00e89cdf1412e4193db0207c9358d89116e240fba1823c9db81eb6e8f1f85f5"
+    },
+    {
+      "path": "packages/agent/src/harness/compaction/branch-summarization.ts",
+      "hash": "38fed20de82bad088ab0a49c7c46e8c801c0bf448dc8a86d7c0f8f225d43792e"
+    },
+    {
+      "path": "packages/agent/src/harness/compaction/compaction.ts",
+      "hash": "6e7aec0d27cb566f8f85f7dd13850eda98f5ddf7e78f9a919fb3dd03c3ea3a8a"
+    },
+    {
+      "path": "packages/agent/src/harness/compaction/utils.ts",
+      "hash": "85ea768b590e683727aecaf6ac72cf4218806e66313bc3ed2e1593867592d6c0"
+    },
+    {
+      "path": "packages/agent/src/harness/config.ts",
+      "hash": "b95461edf229c73ab181a09a4dcc7ad609593e8422c6a5080529d2eff8fc8659"
+    },
+    {
+      "path": "packages/agent/src/harness/context.ts",
+      "hash": "de3e6afc553327d7fca456f06393039dce033c4c97508649063c285c968bca86"
+    },
+    {
+      "path": "packages/agent/src/harness/env/nodejs.ts",
+      "hash": "8cdd46309bacc1e0bfed1fd09b1960fb495c557d07f457b09cc9837482d7ae0b"
+    },
+    {
+      "path": "packages/agent/src/harness/events.ts",
+      "hash": "8e69fd404703ff88d487b26323e2b8950500c16b4945e115d8a1ab2bedf38769"
+    },
+    {
+      "path": "packages/agent/src/harness/execution/assistant.ts",
+      "hash": "b524fbb0019ae9153bd0b3b5e150a49836d5d761591572c685bb32379302614f"
+    },
+    {
+      "path": "packages/agent/src/harness/execution/effect-gate.ts",
+      "hash": "eb2e140917ec55d7297f13208bb696bcd38666cf806b842c319946555ec7d37c"
+    },
+    {
+      "path": "packages/agent/src/harness/execution/tools.ts",
+      "hash": "446b8624b365162a8878efeadcdc97ac053dc953f25155743d6a0646cf8868d5"
+    },
+    {
+      "path": "packages/agent/src/harness/hooks.ts",
+      "hash": "1f86b9da3ab1a80b6896bbc409eb020f947b296765e26aa8a3672f75bbbfe8a1"
+    },
+    {
+      "path": "packages/agent/src/harness/messages.ts",
+      "hash": "6a4e24af6571bf6d1309a753b3cb34e936a189096f05ccf10fa80cf8abcd6d33"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/bash.ts",
+      "hash": "506434cd76b0f2325b34ac7d20efcf2410b1ada9d5d2afa9690c3ad4e57c57ac"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/bounded.ts",
+      "hash": "249c07bff790c83ad12147d2fe5229303299933bfb261144d77e4d10c86882a0"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/chord.ts",
+      "hash": "c94fcad86f0a9c47299743a809655550f804b12a37655de9a70a35a0ee69a39a"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/context.ts",
+      "hash": "681583934f872fee32c3d0fdb6945efded1e09592f6dff85ac139b954fe8f588"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/harness.ts",
+      "hash": "470747d7c8eaa40243f60a44e27e5b03b0951f6aa8913be09406f1f3b4901a3a"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/hooks.ts",
+      "hash": "409fb63660264e15fef37aa3cf78084100678b0d9d4d047fb262048f445df380"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/index.ts",
+      "hash": "ed16bfba0f151b0cfde690dc49c94a3af6719c55dd8fdea3ff8c1b9fb26a1462"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/jsonl.ts",
+      "hash": "a6bb5d65d95677b743486b7ae25ef11bf8f1a37dc4611dcfcaa406c5c5d620a9"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/kinds/collapse.ts",
+      "hash": "8c6bfc6ec41920b520e5a8d286a4c3096e713f1e442a2a4750b4bc6efcf54b97"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/kinds/entries.ts",
+      "hash": "f427e2bfeb01429a5696cf26bd906dce22e6154bc9c7cd9f58495abe5c35f219"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/kinds/frames.ts",
+      "hash": "dbbe66dbea8ca323cacc2b5b293fdbefe3cd9dd3a9f38de743e06b53bf8c3455"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/kinds/generation.ts",
+      "hash": "222034db7e8ca88fcf5045856ccd81166323df53649d9a0d27142648adc3c870"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/kinds/job.ts",
+      "hash": "08205fe559a0da527909bc34262a9e810922f7c111967e4c3ae16243e494193c"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/kinds/plugin.ts",
+      "hash": "6507efe6cb3e42e14a72b85f8e74c03cf7dce9f83d831c35cab61d507e26ee10"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/kinds/post-tools.ts",
+      "hash": "6aa2fda40eb10079cf6f96ba0b438f6cbff46d53c9ce2114c111e752dd89df74"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/kinds/task-api.ts",
+      "hash": "a3495e72ffe34936565be5849db4322364f94c3a5083746b5aab838ec01e7332"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/kinds/tool.ts",
+      "hash": "e38bad34121aced0507f907973df75517949c1273583cb5c9876ed12c13d46b1"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/membrane.ts",
+      "hash": "384da7ddfea925e1a94126bdb88ffc56ef798af3ef0a4130c50954d98be6155b"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/memory.ts",
+      "hash": "4c390267e65d9569453001e353169a8b3c14b62c06a7de21c124c2f3164c0244"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/scheduler.ts",
+      "hash": "536e944221a9ce78439db7e2e7b8581a713b14b84a3c45f8b449a8f33de9dfe4"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/session.ts",
+      "hash": "de59114f9da43f65a2e88082625743543fd5d6ff1ada20b107cf902237acef5c"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/system.ts",
+      "hash": "33aaa66a141684ace3c24ad26ae5d108751fa55b0902a03b1baab69c6c64d7ea"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/types.ts",
+      "hash": "277b4d6f153827e83a43155d1b23ce9174c01909a27b28680b7eb8a015b7eac0"
+    },
+    {
+      "path": "packages/agent/src/harness/pico3/view.ts",
+      "hash": "4a7b805ff90ccd63def015b29e008fe5fc8500b6ebe5ba430bf9e65679c755ec"
+    },
+    {
+      "path": "packages/agent/src/harness/prompt-templates.ts",
+      "hash": "edeed31ed4cea3353b47d1061356a898a52b131c9f50100f20bb21f1fca6b554"
+    },
+    {
+      "path": "packages/agent/src/harness/result.ts",
+      "hash": "035a0e603043a1d598e49949936dda132dce1f098923f2b5722fbf09ffbebbd1"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive.ts",
+      "hash": "a939752796f5e7182ab06fd736c5dffd38d836050adc65ab079f4583305e6b24"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/boundary.ts",
+      "hash": "c530ec12400f430a3c1128a63e50a4b04a96719c3fd4d16625ed12248a24aa70"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/checkpoint.ts",
+      "hash": "e886ee81be75d72723922488b3fb7f133e25464ad113fa12c6508950267c33b1"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/deferred.ts",
+      "hash": "025e35aa88fd90844e91c0f74da28c9165791a7d5e15fed707a92dd453bcc4cb"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/generation.ts",
+      "hash": "c0d6a0c61bdf573fe56f9919111ffef40b6654cc9f38dac4d6d16a1deebd3cf1"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/reconcile.ts",
+      "hash": "4fcc904b6ec1ffa508f2174fa78aa8ffc7e53093ff0e1992b6edf90f19e9f651"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/recovery.ts",
+      "hash": "3b731dddd703b4fc6f09e193d5ad438fc0330d25333993ae9cd774f97f2086e1"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/response.ts",
+      "hash": "6e66e581e63af08833cda2c0e305e9695bd131022b71389b61d3ce268ed3f157"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/retry.ts",
+      "hash": "633f94d7176c3aa6dd963f265cddeac28639a2d4afa17c914345eee235a99b65"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/structural.ts",
+      "hash": "b5da9f9b8a6fe4bd8624eb2f833e02d955d229cbac3d0e8f9a2cda9a2c15154c"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/terminal.ts",
+      "hash": "eefb1981fd025a0e8cb1d51a2d8f1a27fd7cf9a957cbc3a5ac8eb54715f5261e"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/tool-placement.ts",
+      "hash": "de4c8b797531438f798d89a2fe5c8d49ec60f9ae603e63c32d8065ef0bb328ff"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/drive/tools.ts",
+      "hash": "0dbfd29f893bd01a296cf243523db1e0fedf5b2ff7f1ce828588f33a7b16d7a3"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/harness.ts",
+      "hash": "0d92dcd8802e5de32d15f6aa2650c349c0df3c9da206449959941594d9e69b05"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/index.ts",
+      "hash": "773be18f13b3c4792032d17637119d572cf0b82a3d6455a60c483ea2960744f0"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/lane.ts",
+      "hash": "00e66cd00a1912ae05615e3f2ba110ab40008c1570bf07f4d5476bbb4291ccde"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/progress.ts",
+      "hash": "397e5447644ad1552cd35b34342369a8f47e77369369d1a5a0e8fa8b34843f8c"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/reducer.ts",
+      "hash": "f3066a2c4710ecdba1a87befe175330a3f19b87e31d8a2b5be4b237eea16849d"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/restore.ts",
+      "hash": "7bc8f2817707297ead81f29a30531c3c8a9cc99f747124e300e7d931b7cd7ec4"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/transcript.ts",
+      "hash": "ebba52d98b71eb684610c24320321c5a580dc368835e6fc827810e1c217f5b64"
+    },
+    {
+      "path": "packages/agent/src/harness/runtime/types.ts",
+      "hash": "2fd2fe18ea57483a3274d4612e4716d27666592c025db418377e59998943311b"
+    },
+    {
+      "path": "packages/agent/src/harness/session/commit.ts",
+      "hash": "78f930aadd8b5d6245a9bf3b4514df454a404de53b46d65525dffc7d00a5a383"
+    },
+    {
+      "path": "packages/agent/src/harness/session/context.ts",
+      "hash": "409078e31155a77bbfa1fff20ab81d55370fa379ad95c12933eecbf832efeaf1"
+    },
+    {
+      "path": "packages/agent/src/harness/session/fork-policy.ts",
+      "hash": "118cddc6f6ed112dec6c69013da5fbcfca7bb2477cf6e15083cd86cc7697183f"
+    },
+    {
+      "path": "packages/agent/src/harness/session/fork.ts",
+      "hash": "ac4e8552d10a723d915cdffa702f0d085763f9a24e49604cb0234844bd1adcff"
+    },
+    {
+      "path": "packages/agent/src/harness/session/in-memory-storage-state.ts",
+      "hash": "1b61fd8dea1e2d609c449c48006c236d0f418b2569d9d9a9e2687f42daf74762"
+    },
+    {
+      "path": "packages/agent/src/harness/session/index.ts",
+      "hash": "8ff08ac3c9b7c43c31c62a6bd722f8e82df452fb87a811c0de859e310e8897ee"
+    },
+    {
+      "path": "packages/agent/src/harness/session/jsonl/codec.ts",
+      "hash": "f1104b8b6dfc1eac68741cd5cca688057476c5c45e3572930fe19f9a46bc2c9e"
+    },
+    {
+      "path": "packages/agent/src/harness/session/jsonl/fork.ts",
+      "hash": "f244e5fc01a76840ad770b3697f9d309b3daf3371dddc634ae05e23fc328a2e0"
+    },
+    {
+      "path": "packages/agent/src/harness/session/jsonl/index.ts",
+      "hash": "bf99e7ebda3fbde7ebe11e26c15ce94c9b60e9536a18e019fd8919266005ad89"
+    },
+    {
+      "path": "packages/agent/src/harness/session/jsonl/io.ts",
+      "hash": "71384ac4300af71656a82fb39dd9acf1ed1821daa67d9cc48f43ec3ee9319da0"
+    },
+    {
+      "path": "packages/agent/src/harness/session/jsonl/legacy-v3.ts",
+      "hash": "bd64d390dab0ae52192cd024e312185b5806bf3fb34fcb8a9472c5d7ca135dc8"
+    },
+    {
+      "path": "packages/agent/src/harness/session/jsonl/repo.ts",
+      "hash": "b0370397238b0ebbb8ff5ac9cceb0a3c22ded3e381f8462b7aff8e41de952a49"
+    },
+    {
+      "path": "packages/agent/src/harness/session/jsonl/storage.ts",
+      "hash": "3de2f2b426c6e8770ea882d43b601d36a70000ee551e09fe485ed2e1b0ede3d4"
+    },
+    {
+      "path": "packages/agent/src/harness/session/jsonl/types.ts",
+      "hash": "adf69fa5c1a61a83e4bead6307bfd8c30c9e09d36e6288419ed47093d4bc067d"
+    },
+    {
+      "path": "packages/agent/src/harness/session/memory.ts",
+      "hash": "733c14c12e1c87ed480861eea3d3039b96dc0a1bd44ab8a8dbe239b8ef49d08f"
+    },
+    {
+      "path": "packages/agent/src/harness/session/mutation-line.ts",
+      "hash": "50004c3538aa5318cc89951f5f967d0af1db4c5ae52f06a3adc562a914fb426c"
+    },
+    {
+      "path": "packages/agent/src/harness/session/session.ts",
+      "hash": "df77596e51a83ed6a41b1021c1453a00a7e4be2c2dce0c85de3ec20d334953a0"
+    },
+    {
+      "path": "packages/agent/src/harness/session/testing/benchmark/datasets.ts",
+      "hash": "9b9a64d1bdc805a408fb94f67b21f039f8066595dc0e7b363658e3ff83103c56"
+    },
+    {
+      "path": "packages/agent/src/harness/session/testing/benchmark/session-repo.ts",
+      "hash": "5f6fcf6bc9a42aa5f79d25f2c2f33f67623542a3b113b5b62274665944017503"
+    },
+    {
+      "path": "packages/agent/src/harness/session/testing/benchmark/storage.ts",
+      "hash": "448fa4d44b313352a19fb52ef1e187e1a3e726f6a83656cfd4e64190f97a87d3"
+    },
+    {
+      "path": "packages/agent/src/harness/session/testing/conformance/session-repo.ts",
+      "hash": "b915403a55e27afb615f9916b104e3de4dc873a72f038d00371c55e38e3e142c"
+    },
+    {
+      "path": "packages/agent/src/harness/session/testing/conformance/storage.ts",
+      "hash": "237e1d475e4fbd8b1826c5bba0eb6284fbc983d83e35c25a9a177ff44be1a9e1"
+    },
+    {
+      "path": "packages/agent/src/harness/session/testing/gating-storage.ts",
+      "hash": "63e4afa995b42c13fc82292d74eb5ab569c5613fdde6f84e7f57de1ba7a821c3"
+    },
+    {
+      "path": "packages/agent/src/harness/session/testing/index.ts",
+      "hash": "3cbf84599465bcad0888f6318a7f2d04422ec17c11baed29737d4b7367858834"
+    },
+    {
+      "path": "packages/agent/src/harness/session/testing/instrumented-storage.ts",
+      "hash": "0a9dd9e397c34fb5846952f88ce64607195727174b9c5f68f5d9802fa283694f"
+    },
+    {
+      "path": "packages/agent/src/harness/session/testing/storage-decorator.ts",
+      "hash": "230fafd8bf472396e68926364ac74ffe94095d950196b46eff9da566558d8706"
+    },
+    {
+      "path": "packages/agent/src/harness/session/testing/types.ts",
+      "hash": "f0716c330fea469a0468d2145756f40c028c8ea96803809eb363a96c3911dd86"
+    },
+    {
+      "path": "packages/agent/src/harness/session/types.ts",
+      "hash": "5dd08a32b83dce0fd050662488dbd9b015a321eec4644671e51c901a3969fa42"
+    },
+    {
+      "path": "packages/agent/src/harness/session/values.ts",
+      "hash": "b3f87fef7b5faf58e4ab99a1baaafd9df47f73acf2a92cefcc7279b9eb43e50b"
+    },
+    {
+      "path": "packages/agent/src/harness/skills.ts",
+      "hash": "b88025e1bcf65de30649aa15ca045caadff23ae46a147e1e078a998610ac253b"
+    },
+    {
+      "path": "packages/agent/src/harness/system-prompt.ts",
+      "hash": "a3a8f4e2e343562277d348e99762447131632aea963c9ee4633369e5d1a9e9f4"
+    },
+    {
+      "path": "packages/agent/src/harness/telemetry.ts",
+      "hash": "2a93a876ecea19b8d16609b8985c58540c93d12ef29bdac50496fce8208443ea"
+    },
+    {
+      "path": "packages/agent/src/harness/tools/bash.ts",
+      "hash": "7ebd769d320feb9c25f9878731aed08f71053dbed7bb398f6eb0e848cc85f80a"
+    },
+    {
+      "path": "packages/agent/src/harness/tools/edit-diff.ts",
+      "hash": "70f486d5d5e54a76913d96597e792fc3e2c0938813b01595824a63b2300800db"
+    },
+    {
+      "path": "packages/agent/src/harness/tools/edit.ts",
+      "hash": "c66f9cab3daa9da5196ca1e98c03a82be7a7756df989e16ceac31f69d9dfb07d"
+    },
+    {
+      "path": "packages/agent/src/harness/tools/file-mutation-queue.ts",
+      "hash": "f9b10b428e6f3006bf27835ad09e9e69cc652dfca41a2f3d51fbfb81fa8ce88e"
+    },
+    {
+      "path": "packages/agent/src/harness/tools/image.ts",
+      "hash": "d63af23f90abd2925b80d555ac5c5915ee1b7f512a2490b95a727c8bd0e8d97b"
+    },
+    {
+      "path": "packages/agent/src/harness/tools/index.ts",
+      "hash": "7b11295ec3517b9677886a717ece40183cb70dc92720741a201a9012f8f6f9a4"
+    },
+    {
+      "path": "packages/agent/src/harness/tools/path-utils.ts",
+      "hash": "61fee524375d679759305569fdebc2ed41a3ba06e8cc9ac8bab268c3f99116f5"
+    },
+    {
+      "path": "packages/agent/src/harness/tools/read.ts",
+      "hash": "55dc4a19734dd94c2abf4603d5a41ba385e5a48e22d33bc09de4b1a079c99de1"
+    },
+    {
+      "path": "packages/agent/src/harness/tools/tool-context.ts",
+      "hash": "6c224cc5c58e2b9bb8ed177eddca2a26870a3604995181198163a19aea2440d9"
+    },
+    {
+      "path": "packages/agent/src/harness/tools/write.ts",
+      "hash": "10f3086670e64cf531f39c170dcf5da75a7d97f900d18ba4666758aaa4eb5c79"
+    },
+    {
+      "path": "packages/agent/src/harness/types.ts",
+      "hash": "ce92e0a00a6b5f7b95ef9f41e909d7a0e5c269956a782c83c65d885c50680770"
+    },
+    {
+      "path": "packages/agent/src/harness/utils/adaptive-publisher.ts",
+      "hash": "6ba0636fd50ff0f02988d04f11f0857c8a117ccd562c3cec3d903f75caf791d5"
+    },
+    {
+      "path": "packages/agent/src/harness/utils/output-capture.ts",
+      "hash": "4ebb5406519c6681769497943c473a95f8016bf0aac3fce3d76fbe7b3bb9fe60"
+    },
+    {
+      "path": "packages/agent/src/harness/utils/shell-output.ts",
+      "hash": "17f5b99a3400b6bcddd5fed7e23ffd3d93039bb44782f1900ed6fffd9bd82e89"
+    },
+    {
+      "path": "packages/agent/src/harness/utils/truncate.ts",
+      "hash": "0b1d69f589ebced5ed7b3527c515e6fe7a0aca08660c6f8e84310fe040d73e34"
+    },
+    {
+      "path": "packages/agent/src/harness/utils/usage.ts",
+      "hash": "4a0baab54475263a73fef362a8c15f2386a69c1e5d5c4b579b312c88291c7278"
+    },
+    {
+      "path": "packages/agent/src/index.ts",
+      "hash": "f335c42e75a0ab39eab9d8a08a01cd8804b720ed89f1f0a25ea12239210132d3"
+    },
+    {
+      "path": "packages/agent/src/node.ts",
+      "hash": "63d8dc9b22d93b3b1172ed1f1e83cc62bb370789f56f8dd31affb5c2a0a8dff3"
+    },
+    {
+      "path": "packages/agent/src/proxy.ts",
+      "hash": "9c23fc8a625e79c6f8d180a65146288eaa8c10995d7c6fd91b75f57ff934fd40"
+    },
+    {
+      "path": "packages/agent/src/search/index.ts",
+      "hash": "ca385395c326d76c99dd42bcfd7bf4a0ca93368c5fe59f1ea00d288ec0603ea3"
+    },
+    {
+      "path": "packages/agent/src/stream-fn.ts",
+      "hash": "1f9dee101a5ce1052558458d9ce47e53e05187224e879217899059a80d90bc45"
+    },
+    {
+      "path": "packages/agent/src/types.ts",
+      "hash": "b39a716944e8eee79562354e0c1a6a96dd5fb364078084cc6903fbcd61ed3d5a"
+    },
+    {
+      "path": "packages/agent/test/agent-loop.test.ts",
+      "hash": "47cdde0c9b42b99baed7d2d8aeca2409b9465b1155b3b060b59ae20535cf9f53"
+    },
+    {
+      "path": "packages/agent/test/agent.test.ts",
+      "hash": "c749bae5d7d9787b9f64009c065210c51622ad04dfd941388fee6b668c5b29f4"
+    },
+    {
+      "path": "packages/agent/test/e2e.test.ts",
+      "hash": "186286d01bd377797e15452da264cb55902462199ee0d10bfa5ff191292810a9"
+    },
+    {
+      "path": "packages/agent/test/harness/adaptive-publisher.test.ts",
+      "hash": "3f3445db166ad1aecaeda921edc4bb80f59723277cb9c98565d7f9dc926300f2"
+    },
+    {
+      "path": "packages/agent/test/harness/branch-summarization.test.ts",
+      "hash": "eb75b427ebac0495ea73e23486a3477bba8f43fa36e032102ac3410bfc9ed57b"
+    },
+    {
+      "path": "packages/agent/test/harness/branch.test.ts",
+      "hash": "41e9115025b7ed5ae5d981dcfaf11cd08814c71c568cf29bd7858c38f817cef9"
+    },
+    {
+      "path": "packages/agent/test/harness/compaction.test.ts",
+      "hash": "b4a2de2dad43aacc240572fc6e03a4418af3213c3a2601feb9dcdba350235327"
+    },
+    {
+      "path": "packages/agent/test/harness/context.test.ts",
+      "hash": "5427e1e7d6d88e0408d89872cd55d92a5314fc9d5eb74c1e483e7b2f347764b3"
+    },
+    {
+      "path": "packages/agent/test/harness/execution-assistant.test.ts",
+      "hash": "4bd98542ba8d8db9459797f92296403afbd350505fee525c78fa0ddb45bb9c30"
+    },
+    {
+      "path": "packages/agent/test/harness/execution-primitives.test.ts",
+      "hash": "9ff5270a348cf87a91beda6e165b0199f113b21faac00e6f6a97d525c9948458"
+    },
+    {
+      "path": "packages/agent/test/harness/execution-tools.test.ts",
+      "hash": "7eccabe1a14e65570b854555cbd794c6febd0ef9ba4e1637a4be995343d03518"
+    },
+    {
+      "path": "packages/agent/test/harness/gating-storage.test.ts",
+      "hash": "bee5e99bc2dd4d61735925253678e78b36bf930cc938f0dc63fe418da6574efe"
+    },
+    {
+      "path": "packages/agent/test/harness/instrumented-storage.test.ts",
+      "hash": "78e20ff7eee3b659f1a4b5a6f288eed7a63df2910019c8b031e624bd002494e5"
+    },
+    {
+      "path": "packages/agent/test/harness/jsonl-io.test.ts",
+      "hash": "ac3b91882c523af0b75351919478945ab05a44f9367007285685a1c5ef40c307"
+    },
+    {
+      "path": "packages/agent/test/harness/jsonl-session-repo-conformance.test.ts",
+      "hash": "0a101f2acfc9fa88db27b7d5fc46c2f11ece77fdfb0ed7fcadf5cff53f8eeaca"
+    },
+    {
+      "path": "packages/agent/test/harness/jsonl-session-repo.test.ts",
+      "hash": "27698d0c98cce1dd638d0ba3a91e5c49e3451a181bdf4852fa0fe8e9d3cf0a34"
+    },
+    {
+      "path": "packages/agent/test/harness/jsonl-storage-conformance.test.ts",
+      "hash": "dfe326d2602e98b82c581a07fed26e1be0ce1f8a09cc70055973e7c840562e50"
+    },
+    {
+      "path": "packages/agent/test/harness/jsonl-storage.test.ts",
+      "hash": "9973756a587ae5041351a4694cb03ceb638694c3feae1308684b4990f4738911"
+    },
+    {
+      "path": "packages/agent/test/harness/jsonl-v3-migration.test.ts",
+      "hash": "f1b741b1183fce63a1fe38e7a48d695892d8b7672a9cb448ced646d4fa4ee615"
+    },
+    {
+      "path": "packages/agent/test/harness/jsonl-v3-stream.test.ts",
+      "hash": "8e1cd7a00197f18e0f8ec334bc073f25ee9e0305ed1a89f7c22d8ca2c2498587"
+    },
+    {
+      "path": "packages/agent/test/harness/memory-conformance.test.ts",
+      "hash": "97d3e1025b9a2b0cb69df5d5046c6a41018301a1235962709ad45bf4b8aeb101"
+    },
+    {
+      "path": "packages/agent/test/harness/memory-session-repo.test.ts",
+      "hash": "d524dd300ed4d01fa58bdefbf5057911ef18aa46e7467b7db7814bded813b8a0"
+    },
+    {
+      "path": "packages/agent/test/harness/memory-storage.test.ts",
+      "hash": "714971ecb1e3c4e5f39bbbbf6b0d0a477f79e459ad69a11ad4005e3c59dcb708"
+    },
+    {
+      "path": "packages/agent/test/harness/mutation-line.test.ts",
+      "hash": "977bdd68684c8ffc81866c279b1fcaea4c0dc53aa81c841ac2ac9c5ff94b9a25"
+    },
+    {
+      "path": "packages/agent/test/harness/nodejs-env.test.ts",
+      "hash": "867e9d41715773e99d9e06d2fbbbd2b2fc924469f02de1b944f099a3a02e6d36"
+    },
+    {
+      "path": "packages/agent/test/harness/output-capture.test.ts",
+      "hash": "47fa1c86d271f1048c38f14c81112a9d13c72f6ac6ee0ffade32fb5640615c63"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/atomicity.test.ts",
+      "hash": "f767bd807bfbb81781b1fea01efc5f60e826436344f52ba258464e7c3c6595fe"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/authority.test.ts",
+      "hash": "e60bd4630302baa0bbed343e59f0a9a2f3bec5d2dbb7a878a27026baf118d69a"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/busy.test.ts",
+      "hash": "371e4dbb449fa6c17039e8ea1a80af4ff8253555964c68b6536deb22cdfa3bab"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/chord.test.ts",
+      "hash": "72e4526654be2a39cc7834af4200578f19ee8a4a03628f719e2f3c5608180c97"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/hardening.test.ts",
+      "hash": "8007a8a6a911b617818439768ac7a021f0d626830e8363ccca8fc05158dccdf5"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/helpers.ts",
+      "hash": "71ba39f9b116173857da95bf0b52ba049bb34350da40e90716c4bfdc39653597"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/kinds.test.ts",
+      "hash": "1ae2b1d727390fb12d0c7e8c28113fa838ee5d221a8f80ce0870688690201398"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/membrane.test.ts",
+      "hash": "8cd3dafe9b4daf88abcc389fce9e24e22e12132405e7c614f487b75574ffc81e"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/reads.test.ts",
+      "hash": "c8056aaf95213b059ae258c64a00092179263bd678e0f23900ec9913fb12d8f1"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/recovery.test.ts",
+      "hash": "1c6de9ada1e6674612b5ecbca8c56154cc625bc348393914e255df4ee7c06647"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/retention.test.ts",
+      "hash": "dc19ffe7ffeb9dcc01387826f444619a6ac7e5ff64c1182d2c959d09974c3dd4"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/spec-context-capabilities.test.ts",
+      "hash": "babb0b531c310d004c0241160e3afdb947d6216470b8f76238bb775a0efe0740"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/spec-plugins-lifecycle.test.ts",
+      "hash": "89e0b2b786c6ca88055b3eac1a7b15deb285f81c628b6826036c30e5ed54db5b"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/spec-scheduler-process.test.ts",
+      "hash": "62747e35cdf0a7cb17bab7ba96b4a4d91c6f3ccbdac549a107b09c490ab6ed7d"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/spec-storage-history.test.ts",
+      "hash": "5e92fdfd13d1a1ecf906fc07435d2cf80d5243860e4bad8923085423dd8f505a"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/spec-transactions.test.ts",
+      "hash": "7de147e80e1a69b1255262ab12eb6db5e102d8c1898e3bcdadf4070d0b5987e4"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/spec-view-events.test.ts",
+      "hash": "17acb4e09d19a5bcc9beee4c706472daf75fa4cca285dde9ff4a91485c328ef6"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/subagent.test.ts",
+      "hash": "2b4b5513abe8d1a3f9849f6ec4864722a5532225d8633492b31361ef1ccde7ca"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/tool-bounds.test.ts",
+      "hash": "383d9d9c536691929f1e85696ab64b1cf4ff5c36683894e71247654bf96c9cc3"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/turn.test.ts",
+      "hash": "dedc1ae7ea45f68422794e8cd2483ca4fd8c5e13dfff43dc4d086b0b2b3bf485"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/types.compile.ts",
+      "hash": "7b37057a746c6e70fbf64219fc83f7876f48b85bcf023279155af1088f7fa520"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/view.test.ts",
+      "hash": "f7830f576325040463362bbe6bf8197635c5e6dac632362649603c5860a6e4b9"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/waiters.test.ts",
+      "hash": "906e4b2d797f507a601c5ab36937523dc2f32281884ad2d374204c004f60de5f"
+    },
+    {
+      "path": "packages/agent/test/harness/pico3/watch.test.ts",
+      "hash": "8ba160c792ab80afd336e24eb111717368ee3e5bad4671ce9f9571d2133ddb7b"
+    },
+    {
+      "path": "packages/agent/test/harness/prompt-templates.test.ts",
+      "hash": "2c50931e2a0b1b63800ecb9ee5ca56245363086a18b47c90491e70055da2a511"
+    },
+    {
+      "path": "packages/agent/test/harness/resource-formatting.test.ts",
+      "hash": "7bc3d164339f2642327a576a905389e12b7081bec77e4315712c9f7576115a15"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/accept.test.ts",
+      "hash": "b8c048d94d2a14ec571d1541ceba09f75f52e776cb9fd537a9a46d1558bdf5e0"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/drive-generation.test.ts",
+      "hash": "8488a23fb967e7d6ac071aba47f43895b7811c2139d4870a993c4342f384c160"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/drive-public.test.ts",
+      "hash": "bc85c1c5739a325a6191d2e20d636f1c4ece48287c412edbbadc04f6ef851407"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/drive-reconcile.test.ts",
+      "hash": "934db9b6b1aaac0df2b179ad8dd93a668fc3eacf9002b24be38b7d7043a05fdf"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/drive-retry-deferred.test.ts",
+      "hash": "338623fe07d76cbfcbee4b8b456cdb07d58e7c90c12931e7e859116aadca6df7"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/drive-retry.test.ts",
+      "hash": "c8668ca1c8407e476903e7f5018860393d360584c80e8083fe0857ffd95f0008"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/drive-structural.test.ts",
+      "hash": "3e96860d693c851237127542ce01ce45fe9738475753706e6893d5c98f5a6483"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/drive-terminal.test.ts",
+      "hash": "c17232d631fa0dd3c7d33c90f12b64dbd16e88568d1a7899d0d0143e65a8eef7"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/drive-tools.test.ts",
+      "hash": "5a6dcdd3662154d574aaa87e1865eb161c860a2ead466c7515f68499b86c03de"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/harness.test.ts",
+      "hash": "8263c060f9a7abe9f4268845dd0e70e40d19b694424419311e9c5f6979eb8859"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/lane.test.ts",
+      "hash": "0e7917e702fda10c0db4828d210afbfd889bebc546af8969da94b37f464b82e7"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/progress.test.ts",
+      "hash": "9bf14cd1e9448b4a84d3976f67d20672e9bede4f109bde19cf257e5ef165376e"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/reducer.test.ts",
+      "hash": "0eb2480917d258f8b9cdd8f6b1ae1b8702ce50890cadc52af8f6ae0f9305c8fa"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/restore.test.ts",
+      "hash": "3cc76f7337251bbb2638d06bd71c0b97aa7321c993ddc5926a607cddaa93042d"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/test-utils.ts",
+      "hash": "7cfa098163fd09868bfd1eb15a25bc074386b54a48d35a883e4ad408f2688e75"
+    },
+    {
+      "path": "packages/agent/test/harness/runtime/watch.test.ts",
+      "hash": "2d03c4e3d1727b16df2ac2e9be9c0fdd9058da01915d1da5ad990cdd0cc92cd7"
+    },
+    {
+      "path": "packages/agent/test/harness/session-context.test.ts",
+      "hash": "aff48e6111beb43aebc75ae30cc7886095f97aba4475c7a0e47799a70c313eed"
+    },
+    {
+      "path": "packages/agent/test/harness/session-create-branch.test.ts",
+      "hash": "d83f0b2bd962a3a76f07f635b16d53cd143a78c050233ce090f3ee04eacdcca8"
+    },
+    {
+      "path": "packages/agent/test/harness/session-test-utils.ts",
+      "hash": "e8cbb584e75d49f658e620b15cf80ae90823820b90f02d0f94e1236dcf725292"
+    },
+    {
+      "path": "packages/agent/test/harness/skills.test.ts",
+      "hash": "b806d12690e989a986c49bd6ff05f123e990195136c90f6c4576e9945641e799"
+    },
+    {
+      "path": "packages/agent/test/harness/storage-backed-session.test.ts",
+      "hash": "291bc67769ceb6f5f9ade4db59053243db68d5a5e35b8a007b091a9530519c53"
+    },
+    {
+      "path": "packages/agent/test/harness/system-prompt.test.ts",
+      "hash": "40dafee3aedf176cd02c19c932fbc16442e016a5b29b254d7c76bd0197db3c5f"
+    },
+    {
+      "path": "packages/agent/test/harness/telemetry.test.ts",
+      "hash": "6fce0e26e28c9cf3693b63a602a30f72022d99e8c089d91cdd9466795b6fa4e9"
+    },
+    {
+      "path": "packages/agent/test/harness/text-line-reader.test.ts",
+      "hash": "1bf5e00f4fd4ce6c2c7b4fa64ce1a427cf0aafe66714e8638254a60fbac5c514"
+    },
+    {
+      "path": "packages/agent/test/harness/tools.test.ts",
+      "hash": "5418020581f401a10277b999d8dcf06cc7ef21d7f79ee57e681913e0546f4edb"
+    },
+    {
+      "path": "packages/agent/test/harness/truncate.test.ts",
+      "hash": "4fe8d6155d468a7843c6831a83af1b79a50edd54f69160b14e893b2bb49f8aaa"
+    },
+    {
+      "path": "packages/agent/test/harness/types.test.ts",
+      "hash": "4b75559c18a77f15bfea9e78f355a7591c62c791b68325a086f86b14b0b5ef84"
+    },
+    {
+      "path": "packages/agent/test/harness/values.test.ts",
+      "hash": "a0ec82ccd3531c634e1dd07e13eb7ebd2951942c269302fbb85134221ee43f7d"
+    },
+    {
+      "path": "packages/agent/test/proxy.test.ts",
+      "hash": "d38ade78d744fa0dc22a6167a60a54ceb202ff0ba44be18bdf49b3a01388ca73"
+    },
+    {
+      "path": "packages/agent/test/utils/calculate.ts",
+      "hash": "93e332014f57e14d1131b66791bcd865a2db9647aa87ad2e0e86a79414591a8f"
+    },
+    {
+      "path": "packages/agent/test/utils/get-current-time.ts",
+      "hash": "0192fa9720f3713c7ca6be54968c49f681eef6d01ea944cf418863b9c56d027b"
+    },
+    {
+      "path": "packages/agent/test/utils/wait-for-tick.ts",
+      "hash": "d4f3cda1a6449f918d8ee569d310eb9d07af3c4a5931ce60b5b4111e2e689bb6"
+    },
+    {
+      "path": "packages/agent/tsconfig.build.json",
+      "hash": "ccdc6c20a858b66ddf2eb4971790d44a4c830f8017d670b8450af9a5d32dff77"
+    },
+    {
+      "path": "packages/agent/vitest.benchmark.config.ts",
+      "hash": "134c32d8ff7dd71230a4b32fb57a9b4ac97769800c9033f0c5089068f1023312"
+    },
+    {
+      "path": "packages/agent/vitest.config.ts",
+      "hash": "fd2d498e6160353f09f843aed1dfede67e242a51b7d6577898390a0f25bd3388"
+    },
+    {
+      "path": "packages/agent/vitest.harness.config.ts",
+      "hash": "5e4fdbd86f1ac0aaaaebac50fcd60648ef1f3290dc8e7f07af1741d7852b6565"
+    }
+  ],
+  "verification": {
+    "grounded": 0,
+    "ungrounded": [
+      "Agent",
+      "agentLoop",
+      "Harness",
+      "Harness",
+      "Harness",
+      "createAgentHarness",
+      "MemoryStorage",
+      "JsonlStorage",
+      "MemorySessionRepo",
+      "JsonlSessionRepo",
+      "sessionRepoBenchmarkTargets",
+      "storageBenchmarkTargets",
+      "registerReadBenchmarks",
+      "apply",
+      "createBashTool",
+      "HarnessEventBus",
+      "createGate",
+      "loadSkills",
+      "generateBranchSummary",
+      "compact"
+    ],
+    "unknownFiles": [
+      "src/agent.ts",
+      "src/agent-loop.ts",
+      "src/harness/agent-harness.ts",
+      "src/harness/runtime/harness.ts",
+      "src/harness/pico3/harness.ts",
+      "src/harness/session/memory.ts",
+      "src/harness/session/jsonl/storage.ts",
+      "src/harness/session/jsonl/repo.ts",
+      "benchmark/session/session-repo-targets.ts",
+      "benchmark/session/storage-targets.ts",
+      "benchmark/session/benchmark.ts",
+      "docs/mobile-handoff/01-harness/01-delta/delta.ts",
+      "src/harness/tools/bash.ts",
+      "src/harness/events.ts",
+      "src/harness/execution/effect-gate.ts",
+      "src/harness/skills.ts",
+      "src/harness/compaction/branch-summarization.ts",
+      "src/harness/compaction/compaction.ts"
+    ],
+    "uncovered": [
+      "BenchmarkTarget",
+      "createFixture",
+      "registerWriteBenchmarks",
+      "SessionRepoBenchmarkFixture",
+      "JsonValue",
+      "Seg",
+      "Path",
+      "NonEmptyPath",
+      "PathRef",
+      "Op",
+      "WireOp",
+      "isReplace",
+      "isBase",
+      "overlap",
+      "TrackerOptions",
+      "Tracker",
+      "flush",
+      "rebase",
+      "discard",
+      "track",
+      "get",
+      "set",
+      "deleteProperty",
+      "state",
+      "target",
+      "dirty",
+      "UnsafePathError",
+      "segment",
+      "constructor",
+      "assertJsonValue",
+      "assertValidOp",
+      "assertValidWireOp",
+      "assertSafePath",
+      "PathError",
+      "path",
+      "Encoder",
+      "encode",
+      "encoder",
+      "Decoder",
+      "decode",
+      "decoder",
+      "Replica",
+      "receive",
+      "BashToolInput",
+      "BashToolDetails",
+      "BashExecution",
+      "BashPrepare",
+      "BashToolOptions",
+      "execute",
+      "OutputCapture",
+      "push",
+      "setSpillPath",
+      "snapshot",
+      "dispose",
+      "createCompartment",
+      "encodePending",
+      "settle",
+      "intern",
+      "reviveGuest",
+      "callGuestRef",
+      "endow",
+      "renderAgentTelemetrySchemaMarkdown",
+      "generateTelemetryDocs",
+      "AgentEventSink",
+      "agentLoopContinue",
+      "runAgentLoop",
+      "runAgentLoopContinue",
+      "AgentInitialState",
+      "AgentOptions",
+      "convertToLlm",
+      "transformContext",
+      "streamFunction",
+      "getApiKey",
+      "onPayload",
+      "onResponse",
+      "beforeToolCall",
+      "afterToolCall",
+      "shouldStopAfterTurn",
+      "prepareNextTurn",
+      "prepareNextTurnWithContext",
+      "sessionId",
+      "thinkingBudgets",
+      "transport",
+      "maxRetryDelayMs",
+      "toolExecution",
+      "subscribe",
+      "steeringMode",
+      "followUpMode",
+      "steer",
+      "followUp",
+      "clearSteeringQueue",
+      "clearFollowUpQueue",
+      "clearAllQueues",
+      "hasQueuedMessages",
+      "signal",
+      "abort",
+      "waitForIdle",
+      "reset",
+      "prompt",
+      "continue",
+      "SuspendedRun",
+      "RunResult",
+      "CompactionResult",
+      "NavigationResult",
+      "ResumeResult",
+      "QueueResult",
+      "CancelQueuedResult",
+      "AbortResult",
+      "RecordUsageResult",
+      "NavigateOptions",
+      "OperationRequest",
+      "OperationAdmission",
+      "OperationAdmissionError",
+      "OperationAdmissionResult",
+      "DriveOptions",
+      "ModelIdentity",
+      "OperationStatus",
+      "CurrentOperationInfo",
+      "LaneExecutionInfo",
+      "DriveOutcome",
+      "DriveResult",
+      "AbortRequestResult",
+      "WatchHandle",
+      "start",
+      "resnapshot",
+      "unsubscribe",
+      "LaneInfo",
+      "LaneSnapshotTool",
+      "OpenOperation",
+      "LaneQueuedItem",
+      "LaneSnapshot",
+      "SessionSnapshot",
+      "HarnessEventPayload",
+      "SpecialEventPayload",
+      "LaneEventPayload",
+      "ConfigEventPayload",
+      "LaneConfigEventPayload",
+      "GlobalConfigEventPayload",
+      "HandlerErrorPayload",
+      "HarnessEvent",
+      "LaneTranscriptSnapshot",
+      "LaneWatchEvent",
+      "HarnessEventType",
+      "EventListener",
+      "Events",
+      "on",
+      "Resources",
+      "HookMap",
+      "HookName",
+      "HookInvocation",
+      "HookHandler",
+      "Hooks",
+      "AgentHarnessOptions",
+      "AgentLane",
+      "getTipId",
+      "findEntries",
+      "findEntry",
+      "appendMessage",
+      "appendCustomEntry",
+      "getResult",
+      "accept",
+      "drive",
+      "requestAbort",
+      "inspectExecution",
+      "skill",
+      "promptFromTemplate",
+      "navigateTree",
+      "resume",
+      "nextRun",
+      "cancelQueued",
+      "recordUsage",
+      "runWhenIdle",
+      "getModel",
+      "setModel",
+      "getThinkingLevel",
+      "setThinkingLevel",
+      "getActiveTools",
+      "setActiveTools",
+      "watch",
+      "AcquireLaneOptions",
+      "AgentHarness",
+      "lane",
+      "lanes",
+      "getName",
+      "setName",
+      "getLabel",
+      "setLabel",
+      "getTools",
+      "setTools",
+      "getResources",
+      "setResources",
+      "getStreamOptions",
+      "setStreamOptions",
+      "getRetryPolicy",
+      "setRetryPolicy",
+      "getCompactionSettings",
+      "setCompactionSettings",
+      "getSteeringMode",
+      "setSteeringMode",
+      "getFollowUpMode",
+      "setFollowUpMode",
+      "watchSession",
+      "close",
+      "AgentHarnessConstructor",
+      "create",
+      "BranchSummaryResult",
+      "BranchSummaryDetails",
+      "BranchPreparation",
+      "CollectEntriesResult",
+      "GenerateBranchSummaryOptions",
+      "collectEntriesForBranchSummary",
+      "prepareBranchEntries",
+      "PreparedBranchSummaryOptions",
+      "generateBranchSummaryWithRequest",
+      "CompactionDetails",
+      "CompactResult",
+      "SummaryRequest",
+      "createSummaryRequestOptions",
+      "completeSimpleWithRetries",
+      "CompactionSettings",
+      "DEFAULT_COMPACTION_SETTINGS",
+      "calculateContextTokens",
+      "getLastAssistantUsage",
+      "ContextUsageEstimate",
+      "estimateContextTokens",
+      "shouldCompact",
+      "estimateTokens",
+      "findTurnStartIndex",
+      "CutPointResult",
+      "findCutPoint",
+      "SUMMARIZATION_SYSTEM_PROMPT",
+      "generateSummary",
+      "generateSummaryWithUsage",
+      "SummaryGenerationOptions",
+      "generateSummaryWithRequest",
+      "CompactionPreparation",
+      "prepareCompaction",
+      "CompactGenerationOptions",
+      "compactWithRequest",
+      "FileOperations",
+      "createFileOps",
+      "extractFileOpsFromMessage",
+      "computeFileLists",
+      "formatFileOperations",
+      "serializeConversation",
+      "DEFAULT_RETRY_POLICY",
+      "validateToolNames",
+      "validateRetryPolicy",
+      "validateCompactionSettings",
+      "getTelemetryContext",
+      "withTelemetryContext",
+      "NodeExecutionEnv",
+      "cwd",
+      "absolutePath",
+      "joinPath",
+      "exec",
+      "openTextLineReader",
+      "readTextFile",
+      "readTextLines",
+      "readBinaryFile",
+      "writeFile",
+      "appendFile",
+      "renameFile",
+      "fileInfo",
+      "listDir",
+      "canonicalPath",
+      "exists",
+      "createDir",
+      "remove",
+      "createTempDir",
+      "createTempFile",
+      "cleanup",
+      "emit",
+      "emitBatch",
+      "watchFromSnapshot",
+      "AssistantResponseMetadata",
+      "AssistantStreamObserver",
+      "update",
+      "end",
+      "HarnessAssistantStreamConfig",
+      "request",
+      "consumeAssistantStream",
+      "streamHarnessAssistant",
+      "AbortRequested",
+      "cancellation",
+      "Gate",
+      "admit",
+      "GateControl",
+      "beginAbort",
+      "signalAbort",
+      "PreparedToolCall",
+      "ImmediateToolOutcome",
+      "BeforeToolDecision",
+      "ClearedToolCall",
+      "ExecutedToolCall",
+      "AfterToolPatch",
+      "FinalizedToolCall",
+      "prepareToolCall",
+      "applyBeforeToolDecision",
+      "executeToolCall",
+      "finalizeToolCall",
+      "toolResultFromMessage",
+      "createToolResultMessage",
+      "HookRegistry",
+      "has",
+      "runWithGate",
+      "runToolWithGate",
+      "applyStreamOptionsPatch",
+      "COMPACTION_SUMMARY_PREFIX",
+      "COMPACTION_SUMMARY_SUFFIX",
+      "BRANCH_SUMMARY_PREFIX",
+      "BRANCH_SUMMARY_SUFFIX",
+      "BashExecutionMessage",
+      "CustomMessage",
+      "BranchSummaryMessage",
+      "CompactionSummaryMessage",
+      "bashExecutionToText",
+      "createBranchSummaryMessage",
+      "createCompactionSummaryMessage",
+      "createCustomMessage",
+      "bashTool",
+      "Bounded",
+      "droppedBytes",
+      "droppedLines",
+      "total",
+      "dropped",
+      "text",
+      "PublishedConversationView",
+      "PicoConversationService",
+      "send",
+      "write",
+      "inputAbort",
+      "configSet",
+      "collapse",
+      "fork",
+      "entries",
+      "PicoHarnessService",
+      "createPicoConversationService",
+      "ChordViewBridge",
+      "ChordViewBridgeOptions",
+      "attachChordView",
+      "deriveContext",
+      "HarnessOptions",
+      "BuiltinKinds",
+      "ConfigFor",
+      "ConversationHandle",
+      "commit",
+      "rewindable",
+      "sticky",
+      "context",
+      "hooks",
+      "InputHandle",
+      "result",
+      "wait",
+      "open",
+      "runtime",
+      "revision",
+      "quiescent",
+      "hold",
+      "suspend",
+      "registerTaskKind",
+      "namespace",
+      "registerTool",
+      "registerSection",
+      "registerEntryKind",
+      "root",
+      "onConversation",
+      "conversation",
+      "createConversation",
+      "getTask",
+      "abortInput",
+      "abortTask",
+      "markTask",
+      "waitForTask",
+      "captureActiveTranscript",
+      "kinds",
+      "HookRegistration",
+      "createHookRunners",
+      "each",
+      "fsync",
+      "sizes",
+      "truncate",
+      "CollapseInput",
+      "CollapseCheckpoint",
+      "CollapseFailure",
+      "CollapseHooks",
+      "beforeCollapse",
+      "collapseConfig",
+      "initial",
+      "summarizing",
+      "retrying",
+      "prepared",
+      "chooseThrough",
+      "UserEntry",
+      "AssistantEntry",
+      "ToolResultEntry",
+      "SystemEntry",
+      "NoticeEntry",
+      "UsageEntry",
+      "SummaryEntry",
+      "HandoffEntry",
+      "ResetEntry",
+      "applyFrame",
+      "GenerationInput",
+      "GenerationCheckpoint",
+      "GenerationResult",
+      "GenerationFailure",
+      "DisplayAssistantData",
+      "GenerationHooks",
+      "beforeRequest",
+      "afterResponse",
+      "onYield",
+      "generationConfig",
+      "generation",
+      "requesting",
+      "deferred",
+      "retryDecision",
+      "JobInput",
+      "JobCheckpoint",
+      "JobOutput",
+      "JobResult",
+      "JobFailure",
+      "job",
+      "PluginInput",
+      "plugin",
+      "PostToolsInput",
+      "PostToolsResult",
+      "PostToolsHooks",
+      "afterTools",
+      "postToolsConfig",
+      "postTools",
+      "taskApi",
+      "StoredToolCall",
+      "ToolInput",
+      "ToolCheckpoint",
+      "ToolTaskResult",
+      "ToolHooks",
+      "beforeTool",
+      "afterTool",
+      "invalid",
+      "tool",
+      "started",
+      "DEFAULT_BOUNDS",
+      "Membrane",
+      "revoke",
+      "wrap",
+      "ownKeys",
+      "getOwnPropertyDescriptor",
+      "defineProperty",
+      "getPrototypeOf",
+      "setPrototypeOf",
+      "isExtensible",
+      "preventExtensions",
+      "mintId",
+      "conversations",
+      "scanEntries",
+      "task",
+      "scanTasks",
+      "input",
+      "inputByRequest",
+      "doc",
+      "docAsOf",
+      "SchedulerDeps",
+      "onReport",
+      "Scheduler",
+      "stop",
+      "kick",
+      "waitForInput",
+      "joinAll",
+      "liveInvocations",
+      "removeWhere",
+      "isCoreKind",
+      "Defaults",
+      "route",
+      "register",
+      "unregister",
+      "validate",
+      "validateSeed",
+      "fill",
+      "freshRewindable",
+      "freshSticky",
+      "CommitChanges",
+      "ConversationIndex",
+      "subtree",
+      "ancestors",
+      "NestedLineOperation",
+      "CommitResult",
+      "TransactionControl",
+      "setTask",
+      "Session",
+      "storage",
+      "namespaces",
+      "docs",
+      "defaults",
+      "liveTasks",
+      "conversationRecords",
+      "lineListeners",
+      "listeners",
+      "index",
+      "ownerTaskCache",
+      "read",
+      "onLine",
+      "STICKY_BASE_BUDGET",
+      "retire",
+      "loadedDocument",
+      "SystemSection",
+      "render",
+      "defineSystemSection",
+      "EnvironmentInfo",
+      "SkillInfo",
+      "systemSections",
+      "SectionSeed",
+      "sectionSeed",
+      "removeSection",
+      "SectionRecord",
+      "SystemEntryData",
+      "Canonical",
+      "foldCanonical",
+      "SystemSectionDraft",
+      "delete",
+      "SectionRegistry",
+      "ToolRegistry",
+      "PreparationSnapshot",
+      "sameSnapshot",
+      "takeSnapshot",
+      "SystemInstructionsHooks",
+      "systemInstructions",
+      "prepareDraft",
+      "planManagedEntry",
+      "effectiveTools",
+      "JsonPrimitive",
+      "JsonObject",
+      "toStored",
+      "Stored",
+      "Id",
+      "Seq",
+      "Assert",
+      "IsJson",
+      "Conversation",
+      "SystemMessage",
+      "Message",
+      "StoredMessage",
+      "Model",
+      "ContextEdit",
+      "Entry",
+      "NewEntry",
+      "EntryKind",
+      "is",
+      "EntryInput",
+      "defineEntry",
+      "Checkpoint",
+      "Completion",
+      "Outcome",
+      "Task",
+      "TaskPatch",
+      "Input",
+      "ModelRef",
+      "RetryPolicy",
+      "ToolSlot",
+      "TurnState",
+      "PluginSlices",
+      "RewindableState",
+      "StickyState",
+      "SessionState",
+      "QueuedInput",
+      "DocRef",
+      "NamespaceDefaults",
+      "Namespace",
+      "NamespaceRegistration",
+      "memoOnce",
+      "ConfigOfKinds",
+      "DisjointConfig",
+      "ConfigFacade",
+      "Write",
+      "EntryScan",
+      "TaskScan",
+      "Storage",
+      "HookResult",
+      "HookApi",
+      "HookInfo",
+      "HookBinding",
+      "HookRunner",
+      "handlers",
+      "Step",
+      "Closure",
+      "AbortClosure",
+      "CheckpointAt",
+      "PhaseHandler",
+      "ConfigShape",
+      "KindConfig",
+      "KindTypes",
+      "Kind",
+      "CoreKind",
+      "defineTask",
+      "AnyKind",
+      "TaskRef",
+      "EntryRef",
+      "TaskOf",
+      "InputOf",
+      "HooksOf",
+      "ConfigOf",
+      "SlotOf",
+      "TaskSpec",
+      "ConversationSpec",
+      "OwnedConversationSpec",
+      "UserInput",
+      "SendInput",
+      "ContextView",
+      "GenerationStatus",
+      "TurnView",
+      "ConversationView",
+      "ViewEvent",
+      "Envelope",
+      "TxReads",
+      "entry",
+      "newestEntry",
+      "tasks",
+      "rewindableAsOf",
+      "HostTx",
+      "config",
+      "TaskTx",
+      "checkpoint",
+      "slot",
+      "CoreTx",
+      "session",
+      "toolSlot",
+      "appendEntry",
+      "createTask",
+      "resolveInputs",
+      "boundary",
+      "createOwnedConversation",
+      "createForkConversation",
+      "ReadAfterWrite",
+      "RequestOptions",
+      "Models",
+      "resolve",
+      "stream",
+      "fetchDeferred",
+      "cancelDeferred",
+      "Runtime",
+      "now",
+      "sleep",
+      "abortConversation",
+      "sendOwned",
+      "ToolControl",
+      "ToolDiagnostic",
+      "ToolResult",
+      "ToolDeclaration",
+      "AnyToolDeclaration",
+      "OwnedConversation",
+      "BeforeToolApi",
+      "waiting",
+      "memo",
+      "ToolApi",
+      "progress",
+      "ProcessSpec",
+      "ProcessStatus",
+      "ProcessHost",
+      "status",
+      "kill",
+      "PluginHandler",
+      "InvocationToken",
+      "taskId",
+      "mode",
+      "alive",
+      "Invoker",
+      "Forbidden",
+      "ConversationBusy",
+      "GenerationInProgress",
+      "CollapseInProgress",
+      "Faulted",
+      "Closed",
+      "TaskContractFault",
+      "RequestMessage",
+      "WATCH_CAPACITY",
+      "Watch",
+      "applyEnvelope",
+      "ViewManager",
+      "deliver",
+      "PromptTemplateDiagnosticCode",
+      "PromptTemplateDiagnostic",
+      "loadPromptTemplates",
+      "loadSourcedPromptTemplates",
+      "parseCommandArgs",
+      "substituteArgs",
+      "formatPromptTemplateInvocation",
+      "Result",
+      "ok",
+      "err",
+      "isOk",
+      "isErr",
+      "TaggedErrorValue",
+      "toJSON",
+      "TaggedErrorFactory",
+      "TaggedError",
+      "TaggedErrorClass",
+      "_tag",
+      "LaneBusy",
+      "OperationMismatch",
+      "NoActiveRun",
+      "NoActiveOperation",
+      "NothingToResume",
+      "NothingToCompact",
+      "InvalidMessage",
+      "InvalidNavigation",
+      "UnknownSkill",
+      "UnknownTemplate",
+      "UnknownTarget",
+      "InvalidLane",
+      "HarnessFault",
+      "cause",
+      "HarnessClosed",
+      "ErrorMatchers",
+      "matchError",
+      "driveOperation",
+      "BoundaryFinishPending",
+      "BoundaryPlacement",
+      "normalizedRetryPolicy",
+      "assistantReadyAtBoundary",
+      "planBoundaryInbox",
+      "boundaryPlacementEvents",
+      "finishRunBoundary",
+      "startRun",
+      "runCheckpoint",
+      "readDeferredSourceHandle",
+      "runDeferredSuspended",
+      "recoverDeferredPoll",
+      "runDeferred",
+      "runRetryWait",
+      "runGeneration",
+      "reconcileOperation",
+      "recoverAssistantGeneration",
+      "recoverCancelledAssistantEffect",
+      "AssistantResponseLifecycle",
+      "openAssistantResponse",
+      "publishConfigurationFailure",
+      "publishResponse",
+      "retryNotBefore",
+      "waitUntil",
+      "durableCompactionPreparation",
+      "durableBranchPreparation",
+      "runStructuralDecision",
+      "runStructuralGeneration",
+      "runStructuralRetryWait",
+      "recoverStructuralGeneration",
+      "prepareCompactionThreshold",
+      "prepareOverflowCompaction",
+      "commitNavigation",
+      "operationCleanupWrites",
+      "operationResultRecord",
+      "ToolBatchSource",
+      "readToolBatchSource",
+      "toolCallFor",
+      "withToolBatch",
+      "materializeReady",
+      "runTools",
+      "models",
+      "events",
+      "lanesByName",
+      "fault",
+      "Lane",
+      "name",
+      "activeDrive",
+      "closedError",
+      "readConfig",
+      "mismatch",
+      "command",
+      "settleOperation",
+      "continueOperation",
+      "requestOperationAbort",
+      "seal",
+      "assertOpen",
+      "ProgressChannel",
+      "drain",
+      "readAssistantFrames",
+      "openFrameProgress",
+      "openToolProgress",
+      "LaneSnapshotReduction",
+      "reduceLaneSnapshot",
+      "ClassifiedLaneStorage",
+      "readLaneStorage",
+      "restoreSession",
+      "restoreLane",
+      "restoreLaneState",
+      "chainEntries",
+      "entryLifecycleEvents",
+      "committedEntryEvents",
+      "readBoundedEntries",
+      "readBoundedContext",
+      "readLaneQueues",
+      "readPendingMessages",
+      "SliceNotImplemented",
+      "Config",
+      "LaneState",
+      "LaneCommand",
+      "ContinueOperationResult",
+      "OperationCommand",
+      "Drive",
+      "operationId",
+      "completion",
+      "gate",
+      "waitForRetry",
+      "closeSignal",
+      "deferredPermits",
+      "fail",
+      "closeGate",
+      "ProcedureResult",
+      "CommittedEntryWrite",
+      "CommittedUsageWrite",
+      "CommittedValueSetWrite",
+      "CommittedValueDeleteWrite",
+      "CommittedListAppendWrite",
+      "CommittedListDeleteWrite",
+      "CommittedWrite",
+      "PreparedCommit",
+      "CommitValidationState",
+      "hasEntryOrUsageId",
+      "hasEntryId",
+      "insertEntry",
+      "insertUsage",
+      "commitWrite",
+      "materializeCommittedEntry",
+      "prepareStorageCommit",
+      "validateCommittedWrites",
+      "SessionContextBuildOptions",
+      "buildContextEntries",
+      "sessionEntryToContextMessages",
+      "buildSessionContext",
+      "ForkCurrentStatePlan",
+      "selectBranchFork",
+      "projectForkCurrentStateWrite",
+      "ForkSourceSnapshot",
+      "ForkDestinationSnapshot",
+      "createForkSnapshot",
+      "InMemoryStorageState",
+      "prepareCommit",
+      "validateCommitted",
+      "applyValidated",
+      "createFork",
+      "advanceNextSeq",
+      "getEntries",
+      "getValue",
+      "scanValues",
+      "readList",
+      "scanBranch",
+      "scanBranchStructure",
+      "scanUsage",
+      "getStats",
+      "getNextSeq",
+      "LegacyV3SessionHeader",
+      "isLegacyV3SessionHeader",
+      "isJsonlStorageHeader",
+      "JsonlParsedSessionHeader",
+      "parseJsonlSessionHeader",
+      "JsonlForkInput",
+      "runJsonlFork",
+      "fileValue",
+      "readJsonlHeader",
+      "parseJsonlTransaction",
+      "serializeJsonlTransaction",
+      "publishFileAtomically",
+      "publishJsonl",
+      "metadataFromLegacyV3Header",
+      "normalizeLegacyV3Header",
+      "LegacyV3Source",
+      "header",
+      "importedUsage",
+      "nextSeq",
+      "values",
+      "entryStructures",
+      "translateForkEntryId",
+      "writes",
+      "list",
+      "isLegacyV3",
+      "captureForkNextSeq",
+      "JSONL_FORMAT_VERSION",
+      "JSONL_STORAGE_VERSION",
+      "JsonlStorageHeader",
+      "JsonlStorageOptions",
+      "JsonlSessionMetadata",
+      "JsonlSessionCreateOptions",
+      "JsonlSessionListOptions",
+      "JsonlSessionRepoOptions",
+      "MemoryStorageOptions",
+      "MemorySessionRepoOptions",
+      "MutationLine",
+      "run",
+      "StorageBackedSessionOptions",
+      "SessionInvariantError",
+      "SessionInvalidBranchError",
+      "branch",
+      "reason",
+      "SessionBranchExistsError",
+      "SessionPendingAssistantMessageError",
+      "SessionUnknownTargetError",
+      "targetId",
+      "StorageBackedSession",
+      "metadata",
+      "idGenerator",
+      "beginMutation",
+      "mutate",
+      "getEntry",
+      "createBranch",
+      "setValue",
+      "deleteValue",
+      "appendList",
+      "deleteList",
+      "getBranchTip",
+      "appendToBranch",
+      "StorageBenchmarkDataset",
+      "storageBenchmarkEntryId",
+      "STORAGE_BENCHMARK_DATASETS",
+      "SessionRepoCatalogBenchmarkDataset",
+      "sessionRepoBenchmarkSessionId",
+      "SESSION_REPO_CATALOG_BENCHMARK_DATASETS",
+      "seedSessionRepoCatalogBenchmark",
+      "SESSION_REPO_CATALOG_READ_BENCHMARK_SCENARIOS",
+      "expectedResult",
+      "SESSION_REPO_CATALOG_WRITE_BENCHMARK_SCENARIOS",
+      "prepare",
+      "SESSION_REPO_FORK_BENCHMARK_DATASETS",
+      "seedSessionRepoForkBenchmark",
+      "SESSION_REPO_FORK_WRITE_BENCHMARK_SCENARIOS",
+      "generateStorageBenchmarkSeedTransactions",
+      "seedStorageBenchmark",
+      "STORAGE_READ_BENCHMARK_SCENARIOS",
+      "STORAGE_WRITE_BENCHMARK_SCENARIOS",
+      "createSessionRepoLifecycleConformance",
+      "createSessionRepoOwnershipConformance",
+      "createSessionRepoMessageConformance",
+      "createSessionRepoForkBehaviorConformance",
+      "createSessionRepoStreamingForkConformance",
+      "createSessionRepoForkDestinationReservationConformance",
+      "createSessionRepoForkSourceSnapshotConformance",
+      "createSessionRepoForkCoordinationConformance",
+      "createSessionRepoForkConformance",
+      "createSessionRepoConformance",
+      "createStorageConformance",
+      "CommitDiscarded",
+      "GatingStorage",
+      "arm",
+      "pending",
+      "waitPending",
+      "next",
+      "InstrumentedStorage",
+      "getCommitAttempts",
+      "clearCommitAttempts",
+      "StorageDecorator",
+      "StorageFixture",
+      "ConformanceCase",
+      "SettledAssistantMessage",
+      "EntryType",
+      "EntryBase",
+      "MessageEntry",
+      "CompactionEntry",
+      "BranchSummaryEntry",
+      "CustomEntry",
+      "EntryProjector",
+      "LaneConfiguration",
+      "OperationMeta",
+      "Control",
+      "OperationError",
+      "TerminalStatus",
+      "OperationResultRecord",
+      "Continuation",
+      "CheckpointData",
+      "InboxItemKind",
+      "InboxItem",
+      "NormalizedRetryPolicy",
+      "GenerationContext",
+      "ToolCall",
+      "ToolBatch",
+      "SummaryContext",
+      "Cancellable",
+      "RunSettings",
+      "OperationScope",
+      "RetryWait",
+      "AssistantGenerationScope",
+      "ResultBoundary",
+      "SummaryTask",
+      "SummaryGenerationScope",
+      "SummaryGenerationReady",
+      "SummaryGenerationEffectPending",
+      "SummaryGenerationRetryWait",
+      "DeferredScope",
+      "StartingOperation",
+      "CheckpointOperation",
+      "AssistantReadyOperation",
+      "AssistantEffectPendingOperation",
+      "AssistantRetryWaitOperation",
+      "ToolsOperation",
+      "DeferredSuspendedOperation",
+      "DeferredEffectPendingOperation",
+      "SummaryDecidingOperation",
+      "SummaryReadyOperation",
+      "SummaryEffectPendingOperation",
+      "SummaryRetryWaitOperation",
+      "NavigationReadyToCommitOperation",
+      "OperationState",
+      "OperationAt",
+      "operationScopeOf",
+      "Operation",
+      "PendingEntry",
+      "DurableFileOperations",
+      "DurableStructuralPreparation",
+      "UsageRow",
+      "EntryWrite",
+      "UsageWrite",
+      "EntryStructure",
+      "EntryCursor",
+      "BranchScan",
+      "StorageBranchScan",
+      "UsageScan",
+      "SessionStats",
+      "SessionMetadata",
+      "IdGenerator",
+      "EntryQuery",
+      "SessionReader",
+      "SessionMutation",
+      "SessionMutator",
+      "SessionMutationCallback",
+      "Branch",
+      "SessionCreateOptions",
+      "ForkOptions",
+      "SessionRepo",
+      "StoredAddressBase",
+      "Value",
+      "ValueList",
+      "StoredValue",
+      "ListElement",
+      "ListCursor",
+      "ListReadOptions",
+      "ResolvedListReadOptions",
+      "ValueSetWrite",
+      "ValueDeleteWrite",
+      "ListAppendWrite",
+      "ListDeleteWrite",
+      "ValueWrite",
+      "ListWrite",
+      "value",
+      "resolveListReadOptions",
+      "branchTip",
+      "branchTipInventoryPrefix",
+      "laneConfig",
+      "laneState",
+      "operationResult",
+      "operationMeta",
+      "operationState",
+      "operationToolArgs",
+      "operationToolMemo",
+      "operationPreparation",
+      "operationToolArgsPrefix",
+      "operationToolMemoPrefix",
+      "operationPreparationPrefix",
+      "pendingEntry",
+      "pendingToolOutput",
+      "pendingAssistantFrames",
+      "pendingToolOutputPrefix",
+      "sessionName",
+      "entryLabel",
+      "SkillDiagnosticCode",
+      "SkillDiagnostic",
+      "formatSkillInvocation",
+      "loadSourcedSkills",
+      "formatSkillsForSystemPrompt",
+      "AI_TELEMETRY_SCHEMA",
+      "AiSpanName",
+      "AiSpanStartAttributes",
+      "AiSpanEndAttributes",
+      "AiSpanAttributes",
+      "AiSpanEventName",
+      "AiSpanEventAttributes",
+      "AiTelemetrySpan",
+      "AiSpan",
+      "startAiSpan",
+      "HARNESS_TELEMETRY_SCHEMA",
+      "AGENT_TELEMETRY_SCHEMAS",
+      "HarnessSpanName",
+      "HarnessSpanStartAttributes",
+      "HarnessSpanEndAttributes",
+      "HarnessSpanAttributes",
+      "HarnessSpanEventName",
+      "HarnessSpanEventAttributes",
+      "HarnessTelemetrySpan",
+      "HarnessSpan",
+      "startHarnessSpan",
+      "detectLineEnding",
+      "normalizeToLF",
+      "restoreLineEndings",
+      "normalizeForFuzzyMatch",
+      "applyReplacementsPreservingUnchangedLines",
+      "FuzzyMatchResult",
+      "Edit",
+      "AppliedEditsResult",
+      "fuzzyFindText",
+      "stripBom",
+      "applyEditsToNormalizedContent",
+      "generateUnifiedPatch",
+      "generateDiffString",
+      "EditToolInput",
+      "EditToolDetails",
+      "createEditTool",
+      "withFileMutationQueue",
+      "detectSupportedImageMimeType",
+      "encodeBase64",
+      "resolveToolPath",
+      "resolveReadToolPath",
+      "ReadToolInput",
+      "ReadToolDetails",
+      "ReadImageProcessorResult",
+      "ReadImageProcessor",
+      "ReadToolOptions",
+      "createReadTool",
+      "ExecutionToolContext",
+      "WriteToolInput",
+      "createWriteTool",
+      "getOrThrow",
+      "getOrUndefined",
+      "toError",
+      "Skill",
+      "PromptTemplate",
+      "AgentHarnessResources",
+      "AgentHarnessToolUpdateOptions",
+      "AgentHarnessToolUpdateCallback",
+      "AgentHarnessToolInvocation",
+      "getMemo",
+      "setMemo",
+      "AgentHarnessTool",
+      "AgentHarnessToolContextSource",
+      "AgentHarnessStreamOptions",
+      "AgentHarnessStreamOptionsPatch",
+      "FileKind",
+      "FileErrorCode",
+      "FileError",
+      "code",
+      "ExecutionErrorCode",
+      "ExecutionError",
+      "CompactionErrorCode",
+      "CompactionError",
+      "BranchSummaryErrorCode",
+      "BranchSummaryError",
+      "FileInfo",
+      "TextLine",
+      "TextLineReader",
+      "readLine",
+      "FileSystem",
+      "ShellOutputRetention",
+      "ShellOutputLimits",
+      "ShellOutputCaptureOptions",
+      "ShellOutputTruncation",
+      "ShellOutputMetadata",
+      "ShellOutputView",
+      "ShellOutputUpdate",
+      "ShellExecResult",
+      "ShellExecOptions",
+      "Shell",
+      "ExecutionEnv",
+      "AdaptivePublisherOptions",
+      "measure",
+      "publish",
+      "onError",
+      "AdaptivePublisher",
+      "markDirty",
+      "OUTPUT_MIN_EMIT_INTERVAL_MS",
+      "OUTPUT_TARGET_BYTES_PER_SECOND",
+      "truncated",
+      "finish",
+      "applyShellOutputUpdate",
+      "sanitizeShellOutput",
+      "ShellCaptureProgress",
+      "ShellCaptureOptions",
+      "ShellCaptureResult",
+      "executeShellWithCapture",
+      "DEFAULT_MAX_LINES",
+      "DEFAULT_MAX_BYTES",
+      "GREP_MAX_LINE_LENGTH",
+      "TruncationResult",
+      "TruncationOptions",
+      "utf8ByteLength",
+      "formatSize",
+      "truncateHead",
+      "truncateTail",
+      "truncateLine",
+      "emptyUsage",
+      "addUsage",
+      "ProxyAssistantMessageEvent",
+      "ProxyStreamOptions",
+      "streamProxy",
+      "SearchQuery",
+      "SessionSearchHit",
+      "EntrySearchHit",
+      "SessionSearchService",
+      "searchSessions",
+      "searchEntries",
+      "sync",
+      "notify",
+      "setDefaultStreamFn",
+      "getDefaultStreamFn",
+      "StreamFn",
+      "ToolExecutionMode",
+      "QueueMode",
+      "AgentToolCall",
+      "BeforeToolCallResult",
+      "AfterToolCallResult",
+      "BeforeToolCallContext",
+      "AfterToolCallContext",
+      "ShouldStopAfterTurnContext",
+      "AgentLoopTurnUpdate",
+      "PrepareNextTurnContext",
+      "AgentLoopConfig",
+      "ThinkingLevel",
+      "CustomAgentMessages",
+      "AgentMessage",
+      "AgentState",
+      "tools",
+      "messages",
+      "AgentToolResult",
+      "AgentToolUpdateCallback",
+      "AgentTool",
+      "AgentContext",
+      "AgentEvent",
+      "failureOf",
+      "resultOf",
+      "HooksByKind",
+      "ctx",
+      "model",
+      "contentOf",
+      "arrived",
+      "arrivals",
+      "Response",
+      "FakeOptions",
+      "respond",
+      "fake",
+      "lastMessage",
+      "echoScript",
+      "fakeHost",
+      "forget",
+      "exit",
+      "Env",
+      "crash",
+      "collectWatch",
+      "phaseOf",
+      "untilPhase",
+      "untilTerminal",
+      "FailingMemoryStorage",
+      "failure",
+      "ControlledMemoryStorage",
+      "beforeNextCommit",
+      "CalculateResult",
+      "calculate",
+      "calculateTool",
+      "createCalculateToolWithUsage",
+      "GetCurrentTimeResult",
+      "getCurrentTime",
+      "getCurrentTimeTool",
+      "waitForTick"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "moduleId": "kaioken",
+  "name": "Kaioken",
+  "generatedAt": "2026-09-23T15:06:23.416Z",
+  "summary": "The kaioken module is a structural module containing the CLI entry point and documentation files (README and CHANGELOG). The only code is bin.ts, which implements the command-line interface with a main async function and a help printer.",
+  "keyPoints": [
+    "The module contains a CLI script (bin.ts) with an async main function and a help output function, plus README and CHANGELOG documentation files.",
+    "printHelp() outputs usage instructions to the console, presumably listing available commands and options for the kaioken tool.",
+    "main() is the async entry point that parses command-line arguments and orchestrates the tool's execution flow.",
+    "The module is labeled 'Structural' suggesting it serves as the top-level orchestrator rather than containing core logic itself.",
+    "No library exports are declared — the module's only callable declarations are the CLI functions in bin.ts."
+  ],
+  "entryPoints": [
+    {
+      "name": "main",
+      "file": "kaioken/bin.ts",
+      "note": "Async CLI entry point invoked when running the kaioken command."
+    },
+    {
+      "name": "printHelp",
+      "file": "kaioken/bin.ts",
+      "note": "Prints help text to the console for user guidance."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/CHANGELOG.md",
+      "hash": "5bd0b8556090e9da35eae689f8a8988ac80456553bb152aaaa09b59feb35a386"
+    },
+    {
+      "path": "kaioken/README.md",
+      "hash": "52e92c6460baac42dc45f32a47211a438df14c466ed5e5f61d51bb91b72d0636"
+    },
+    {
+      "path": "kaioken/bin.ts",
+      "hash": "d393e29a8536fdb114fef26bfbb4d92dda63150715459511c22294d11d439c51"
+    }
+  ],
+  "verification": {
+    "grounded": 2,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": []
+  }
+}

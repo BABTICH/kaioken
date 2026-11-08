@@ -1,0 +1,4429 @@
+{
+  "root": "D:\\project\\ai_now_know",
+  "scannedAt": "2026-09-02T19:37:28.552Z",
+  "fileCount": 551,
+  "totalBytes": 4644049,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "hash": "15d7831004a6c2e42fa00a4d71905c304b7457f312f613862fd2ad877150ebfc",
+      "size": 607,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "hash": "dc2c7440df42b417857b54cdfea5f66e811ec41cc31f1c807e0c3ecfb40eaa48",
+      "size": 4068,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": ".github/workflows/release.yaml",
+      "hash": "4d5c7f3653c3d7741db1b70afdf6c2721db1716193f5624dc95e49d2b2358d9b",
+      "size": 3322,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": ".gitignore",
+      "hash": "d303ce9d0c91851b239cbe6411c1b2ffe1738ab19fa4b9b4b9d28218c28c1314",
+      "size": 3754,
+      "language": "gitignore",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "DESIGN.md",
+      "hash": "8845cac26e63368694516ec999ebbccb86d57eba4311990ef60cd8f6130cede9",
+      "size": 60493,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "KAIOKEN-logo.png",
+      "hash": "557e741cbc500bbace74b343ca95ec31ac47569d84b3c2adfb15e60598d762fd",
+      "size": 29080,
+      "language": "unknown",
+      "binary": true,
+      "risk": []
+    },
+    {
+      "path": "Kaioken-settings-logo.json",
+      "hash": "d523a8117c2f7a02d3994cc3f67121e581dd70cecca31b887017264d53c23565",
+      "size": 1072,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "README.md",
+      "hash": "9064ad78780051035540b22926c81b1093c7a3363adfe978aabae14906673830",
+      "size": 20584,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken-logo.txt",
+      "hash": "291250bcab9681c6bbd0ce236ae2f11d86aa7f250e64cce8a52c7d6e452a9808",
+      "size": 1101,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken-pipeline.svg",
+      "hash": "4b78da15f717fcd653a2690d4b2fa024533062251cef6074939de1de8248b853",
+      "size": 13282,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/.gitignore",
+      "hash": "903a4d71893a77a01cdf7843624d8fbdb395ec118156428f194c7ae795ab861a",
+      "size": 44,
+      "language": "gitignore",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/AGENTS.md",
+      "hash": "4f7a70ec04e5d3550307dbc7742e7dbef6eb6ed7b8dbbee7b36ba0d2ab16e26e",
+      "size": 9893,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/PROJECT-GUESS.md",
+      "hash": "5354549baf99f40847edd38cc3e5dd665783615a34f2daa1c3543ccfacd67749",
+      "size": 3467,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/README.md",
+      "hash": "e416bb69e6628624b9f4c60ce0857b1e552644f92bd3acb8fc63aa1e39f79746",
+      "size": 20400,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/package.json",
+      "hash": "ef23b0230fd03772e9c50f6999ae90fb95d3c63ab5398bb7d52f206a2c427360",
+      "size": 839,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/agent-host.ts",
+      "hash": "1a923a0a4f0176fe15fe77eefb04ae2bcd5c2a231dbf7e59d7142c4501d79776",
+      "size": 13496,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/artifacts.ts",
+      "hash": "fbc49aefd6e4a279aeb9caf7f80279cd65c2b9d3692a587e3ecbdae2df6d7158",
+      "size": 1644,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/bin.ts",
+      "hash": "58952ef2dc6c21bb72f99db9072cbc6d01707dcc2c9eb20d521fe1ae82eef85d",
+      "size": 435,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/agent-serve.ts",
+      "hash": "d3eceeb287e0c403b71ce6501e4e2308b603e1a469ad238ea07b61cf17c37af4",
+      "size": 7179,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/cards.ts",
+      "hash": "9c5ffd856a33e4a4aad7ac463f8f7c806c49bcbdfcf5229b1632f67e31a71e73",
+      "size": 4859,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/chat.ts",
+      "hash": "2c9c3e9656f004220d394c6bb6036771699a341bceee0ff2d2b238454648be50",
+      "size": 18215,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/daemon.ts",
+      "hash": "5e8d3a5bb0e0eb6adc4ab496d8cdd178eda341bd4d9e040beb701f9de175b680",
+      "size": 62549,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/draft.ts",
+      "hash": "fec671b54b99bc136e28691be417349cd698ead0b53262917250585c15e70f7b",
+      "size": 4614,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/export.ts",
+      "hash": "7a39bbfba3d5e8f8039d9b4f1aa74a7ede1801a82d8eb66acc4b3a8ae994cd60",
+      "size": 6173,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/ext.ts",
+      "hash": "52eacf4216242eb152cb22a0efcde848b2623dcf010e597beb5b7a40144aa647",
+      "size": 12898,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/fetcher.ts",
+      "hash": "8bd022f340e636eb78abb11ddbd856bdf37bf6ebcc39a84f123546210aa0ab00",
+      "size": 2163,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/graph.ts",
+      "hash": "228f77bb5f6f44c93ab32b86556b9e2119915dfd9bf565d55ab8b8508956f73d",
+      "size": 5433,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/handoff.ts",
+      "hash": "ba7e57320a654267448e0c7946009acf3629fcae3cb293b52ba72d6a977f5de6",
+      "size": 4512,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/hook.ts",
+      "hash": "c94f98544624b2eba2ba9cb2f7d93b4c1e47e7e52180daa7396571c188851e39",
+      "size": 3522,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/impact.ts",
+      "hash": "6e49044454a59f25daa2d61ef5118abc3d1d3b0264c3a8c4035de075cd6b944c",
+      "size": 2328,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/init.ts",
+      "hash": "b2d07c29f1de9428d2a0af599bcd783aaa5560731fc79acd131329ae31c5784d",
+      "size": 5019,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/learn.ts",
+      "hash": "92dbe15f8cb9e8338135ca2f6923198aea7f4cba5fe566815690948f32fae0d3",
+      "size": 8079,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/onboard.ts",
+      "hash": "44c69afb2734182799ce974aaab20a104cc9a19742af10f0b95a22e9bda64b47",
+      "size": 5980,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/plan.ts",
+      "hash": "271d94493f88bcd2bd3d8ad7e46164501f5e59e2e5cef1b90ea8e305b4b66721",
+      "size": 3730,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/prism.ts",
+      "hash": "06a0c0f017a02047f1778079b56f0d22272dafc10f3d4567fc8d14f7d2a37123",
+      "size": 11174,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/research.ts",
+      "hash": "c15dadeeef30378a56d75351f97752de22f681c263487446bb5af581acd34241",
+      "size": 5907,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/scan.ts",
+      "hash": "561f9a3520931b71010c1e1d2c31582bd3bb88e4da683cc132c7c1abbd92dfb9",
+      "size": 3809,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/search.ts",
+      "hash": "1de52d7315e745724d86c3b42cadf90de1060387e1a85b6193f1af9e77d93928",
+      "size": 2576,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/serve.ts",
+      "hash": "5195181396cfef902577a1394a35f7ae6cf31a3db69993c798b878f6e8483bbd",
+      "size": 1019,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/skills.ts",
+      "hash": "672d5790d0125d5b136bcbfff3d375d71824048c1986583ae05ae66581e79e8a",
+      "size": 5991,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/status.ts",
+      "hash": "968dd8a6b79147ba023d52c59190d4d8a8ae3edf7158ad647e44fbe90dd07092",
+      "size": 4082,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/symbols.ts",
+      "hash": "69683760af75baea68fa1ee6dad63b5f89a95700e2ba0e628d3f545577ef2e8d",
+      "size": 3593,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/update.ts",
+      "hash": "bbd5eab60904eb9b2fafb843e96ef2cb2b6948f087f1375fc5ac6a9252dba734",
+      "size": 6890,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/verify.ts",
+      "hash": "3adaf36bdb0f2b7d0f41d992f01612d350ab8a656cc1fba8eec8dc6f44b48460",
+      "size": 3134,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/commands/wiki.ts",
+      "hash": "fc7c5b88ce8b7d7348bb2ab568e2484c4d18e25b83a29dfdb49e858725b3bfa6",
+      "size": 11980,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/embeddings.ts",
+      "hash": "cec724e453a11f85ba8e0a470de55c94c122c2c600129066c57c8a669c22e50d",
+      "size": 2542,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/fetcher.ts",
+      "hash": "5acaa9ed063230d5e35c939fbe16531b9571ac067989628a0b23929044ec013c",
+      "size": 5606,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/knowledge.ts",
+      "hash": "a390027909dedfc61ebca8eaa996bc6b55cdd430b2823410408af1a7d9ab8cc4",
+      "size": 3336,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/main.ts",
+      "hash": "c6c7cb5771e71dad15828c496e96bc740bd316af2f12217044b7c0afd3110215",
+      "size": 15666,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/model.ts",
+      "hash": "804903db419d6625493a8145ddac2898b0022863fe9a95f6613165e25f0bc589",
+      "size": 12681,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/session-text.ts",
+      "hash": "accbff486df87ae6f73a76c61cd68ec000a7f9293ba153bbf7f45eecea7f9d79",
+      "size": 6916,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/version.ts",
+      "hash": "6a0fd85682d64df14d136046e5683aa6d993c76383cb53cee014764aaf1c9165",
+      "size": 300,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/src/web.ts",
+      "hash": "fe232a36979ae65ebf273a558c4ae38411c39f0c7bd1daa017f802c607b23e83",
+      "size": 5086,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/test/agent-host.test.ts",
+      "hash": "f84cef50436e307bdfac735f7bab418795c895208a4c2c320d3b9903becbda64",
+      "size": 11648,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/test/artifacts.test.ts",
+      "hash": "f3ddeffdeca913873698c7f5bfe52244a6797faae0e805f7167d6654e44683e8",
+      "size": 2372,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/test/cli.test.ts",
+      "hash": "da65139f0dd340555f587c33d3e9cca2d40e9837c26bbbebbb024182e691d053",
+      "size": 28722,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/test/fetcher.test.ts",
+      "hash": "0dcfc464e2883089a9a2621bcdb0d93ca5b20dd69a643449eb91e5e64a74252e",
+      "size": 3181,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/test/graph-cli.test.ts",
+      "hash": "37528ceb569def57e13d4a9e99880e4275c4bf4af4134c9ed8b83c4d021709c5",
+      "size": 8459,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/test/model.test.ts",
+      "hash": "06148d9f13b42999902bc7e34d266827ce3be6559ed02240eb8394bfd4f2fe60",
+      "size": 5842,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/test/research-cli.test.ts",
+      "hash": "669d8e77cd55bfd306946d9cbde8edb1449a807f011572990f1f017cc006f312",
+      "size": 2203,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/test/session-text.test.ts",
+      "hash": "adb79ada190e6892a48f401e4175ef204b7b773187bbf9813a3af96c60d18f71",
+      "size": 3197,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/test/setup-cli.test.ts",
+      "hash": "0ada43c06755ae19ff1491a7895f7ce70b01b6b21f2c8169505da5d22580e00f",
+      "size": 6238,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/cli/tsconfig.json",
+      "hash": "7a0b417b819ed5188d4f9e14774e553da94522b64ad32c91c0c6181b812b2e98",
+      "size": 1147,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/package.json",
+      "hash": "703bedea90140ad8aeda50e9f87b12d1e756ead2ea5a4cbc0952e644adad2d9c",
+      "size": 666,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/app.ts",
+      "hash": "972dfc85bd6dc365ae18ccf88280dd47650dc6a9957b491f61468419266af8f5",
+      "size": 115486,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/autocomplete.ts",
+      "hash": "6452ab0bd5911c4ff4ecd3c7c536dbc8c823c6c33392925b837c00d61b5501c7",
+      "size": 6419,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/bin.ts",
+      "hash": "4c7fdace2b3d081a2b4519ba5e20bbc2d632544665b72023902821afa0c27fd0",
+      "size": 2062,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/chatBridge.ts",
+      "hash": "684aadb9fa09c4e68607406a6a1b7f05538a7cb48b5e15ba2bec197af868b53c",
+      "size": 8008,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/commands.ts",
+      "hash": "85a217a41387babde7e9428f67369021621f7559b20fbd98eee709d15742fcfa",
+      "size": 40441,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/composer.ts",
+      "hash": "0cd43c93835cd819fd491c0085bbf68c744f215ef04f2ac290dfcef3bb26c000",
+      "size": 8212,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/curtain.ts",
+      "hash": "f2f30f5eb0d35a3a365f1228776af09f7a32c30e915c3f8892ebee8a80e00412",
+      "size": 21792,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/dispatch.ts",
+      "hash": "50a562069d78dc89c10fda726baeef978445a4bb8ed6b80e04822f31b3385300",
+      "size": 21907,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/logo.ts",
+      "hash": "38fab8e11d9a3eea44f09ac25e30272256b82b8aa18ff7857c87dd455e2ff741",
+      "size": 14598,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/main.ts",
+      "hash": "5a6089aaf7e61b1726804050a08175299cf050d91b432adf955285656058d5fd",
+      "size": 3035,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/manual.ts",
+      "hash": "c83c1b7ab8018f21afcbb10c5d5310d4bd2af2df666a9efc5e4f3a65d2558524",
+      "size": 17245,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/markdown.ts",
+      "hash": "0df25331b334b3e2b1d5585bbaf15fbf1aa10885883cdf7673b596f73e51ebfb",
+      "size": 4246,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/motion.ts",
+      "hash": "7246d89e8a50556d3dd336032296e8de03bff2461d0c62525551d96416683968",
+      "size": 11583,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/providers.ts",
+      "hash": "9fbdda15aef2154b2c83c7f50a006e7ddc01dc08f8d42703285a85c593e87b41",
+      "size": 8705,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/repoState.ts",
+      "hash": "e20476442788c7ef2a225f58ee10512236d12ec1c1058ec9e992544738d90da7",
+      "size": 7138,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/screen.ts",
+      "hash": "df91acb62793fb0d4b2b811d21ca25089612fb720bd6909f92c0708e8b69e48f",
+      "size": 1676,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/scriptedTerminal.ts",
+      "hash": "3c5145b4f27beaff2884a93da0ce6f288ff10d6f42148b91c516d1c5e6a76b71",
+      "size": 3984,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/sessionStorage.ts",
+      "hash": "dc43dcec2fb0fcb5cca0bcc2bf000b21a10014165b6fe26fff62ee34bf3b2923",
+      "size": 465,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/statusLine.ts",
+      "hash": "daa910784b28bc8b7b413aeab2bb5d0a5f4948050b0b5fe4e5c22a34dabff002",
+      "size": 5885,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/theme.ts",
+      "hash": "df9aced0ad9c1128f6a5de86d5309e6c5961b6381b4b9f8ab6037f5984227239",
+      "size": 7358,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/src/transcript.ts",
+      "hash": "fffd7e4e6e8177b16a662d1917690cb9c6425f086cfa4eedde530e22f6e0b376",
+      "size": 7306,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/test/chatBridge.test.ts",
+      "hash": "549732b0962bdae5e6c1be9f39c4964eea610ed9f54e1f49d2b3974426d556c5",
+      "size": 2961,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/test/curtain.test.ts",
+      "hash": "282a555332479f49461ed8291aba024f568caac0d6f9b25f46c427161f922d34",
+      "size": 18618,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/test/engine.test.ts",
+      "hash": "567169007a1ea718e74a44f91c987123645cc84f7883795a556dff491a7ab18f",
+      "size": 3837,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/test/motion.test.ts",
+      "hash": "499bf19fa71d1894a6a3fd5681f5f47fe30a82710e9277bfc4fe2b1f3f58e4b2",
+      "size": 10941,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/test/repoState.test.ts",
+      "hash": "1a96fcefc50e3d4aa96f7f1c77365429996185f39f9fe2c84abc6fa842ee5c56",
+      "size": 9589,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/test/sessionStorage.test.ts",
+      "hash": "cbc4133cedc039e388784d8e9621149f758d33494989d7163211c83121e89419",
+      "size": 3891,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/test/shell.test.ts",
+      "hash": "7c0e93e0415862ce0bd3a020a941978f32f61a1d3248ca45280b9e0df39446f7",
+      "size": 77534,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/test/streaming.test.ts",
+      "hash": "d342dab93991b625adf19e48eaf0ac6f60534d95d008d42d6c8837330d84a9e6",
+      "size": 11419,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/test/ux.test.ts",
+      "hash": "40d017948e57d82fb8c328f531097fc035c230a3b59593b9388e754b264b7557",
+      "size": 10582,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/test/views.test.ts",
+      "hash": "1dcbc83fc45915bc26e82ff8882e90c6fed9e60aca2e02f9653970a102aeb9c9",
+      "size": 32904,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/apps/tui/tsconfig.json",
+      "hash": "dd582ed1386d6ac9f16a787866145c1a1b07e05eddd10d4c872d4397000e4737",
+      "size": 827,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/docs/studio-codeoss-notes.md",
+      "hash": "81fa3643aaae85800c368043a973d926c50a971c9e5169b020edc11213c5b51a",
+      "size": 31718,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/docs/studio-design-brief.md",
+      "hash": "f6dd5a04a53d361868f54244e1e4bd26d694558a53965e3c203d311b4d9220ad",
+      "size": 13279,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/docs/studio-dev-setup.md",
+      "hash": "8cbcbc5d1f45926255be0a12d4affbe6770622a8534a15c357731a25a6c96a43",
+      "size": 7468,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/docs/studio-v0.1-build-notes.md",
+      "hash": "02e9b7f8d8b2a6b0a5054b4e8b71cee83d1cea28a5d710ae8a036244b31e615a",
+      "size": 11064,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/docs/studio-v0.1-scope.md",
+      "hash": "161ce69ab8fa94ad9773c59b81934ad49a5cd4a7056cf0cbf7c1e4e454f00b42",
+      "size": 5986,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/docs/theia-studio-research.md",
+      "hash": "e109956490a04e2c91ba7bc61b9aec233fefb87edc8560863314654996903bb1",
+      "size": 13697,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/package-lock.json",
+      "hash": "4a25fed6cb657715b3373feecc5b012ead6c82c2d9a4f9442181725bd9b4cb7f",
+      "size": 106938,
+      "language": "json",
+      "binary": false,
+      "risk": [
+        "lockfile"
+      ]
+    },
+    {
+      "path": "kaioken_v2/package.json",
+      "hash": "00508b59a7e24027604ce236d7b9306d75223de612580420725238225f7a28cb",
+      "size": 532,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/package.json",
+      "hash": "bc62772bb6674aaf49b040fc77a06302105c02a72167a5f1923c60644bbf0a94",
+      "size": 446,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/src/gate.ts",
+      "hash": "746bbf815a179adc61d4653dfc95bd9e1959bf8223121d6f599366598481fb26",
+      "size": 8234,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/src/index.ts",
+      "hash": "c1de9e2bba58aaf4473893efbc744eed3e4e67656298afe34636320e6d24a983",
+      "size": 630,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/src/prompt.ts",
+      "hash": "9ac4775b925c346374d685d17f1c440dee2870d86a93a367f04abc06e1928008",
+      "size": 5871,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/src/skills.ts",
+      "hash": "ff1559a8e1b211d25d021fbdeabccaa238e4d8bd678cbc6cce8b33b12180a19c",
+      "size": 4750,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/src/tools.ts",
+      "hash": "2fb58bc4dfcf88ab52021707adfef5e76ad8dd673e33820042d5d966263f4cac",
+      "size": 16434,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/src/types.ts",
+      "hash": "618daff618898f1d373dcd7096625c11dbc835a166103c8595080fa8fd55549d",
+      "size": 2680,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/test/gate.test.ts",
+      "hash": "ed10f216bbcf854fffda78424d5592dcfd26896b012e63b10d11271b7e4c30f3",
+      "size": 7257,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/test/skills.test.ts",
+      "hash": "42cfb09c91a5a557032b7b247c51fba29c612eda8d6796d51d2b08b975f4f8aa",
+      "size": 3914,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/test/tools.test.ts",
+      "hash": "e73d0387017b17e31cb51503b691d626f5e5a38d6aa275be5ec12c53507e743c",
+      "size": 11933,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agent/tsconfig.json",
+      "hash": "12c6bade73a6026434ea6c04cbd64ebcfc346cc1f03b84772820aba72c473326",
+      "size": 373,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agentsmd/package.json",
+      "hash": "f774f6a38706d5a0987efed64f3596b413803bf1eae30d575348a2e89591618f",
+      "size": 398,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agentsmd/src/document.ts",
+      "hash": "c8939a044289c8dd73aef1ad464b6148b0432c84c99f47e996999df2c14a738b",
+      "size": 6106,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agentsmd/src/generate.ts",
+      "hash": "435e1196cf19706347c281b1cc0386b3a54a97ec81e99e4052dfcd20c26793b6",
+      "size": 9314,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agentsmd/src/index.ts",
+      "hash": "4019d302c9b5e551e1f66385f3d54a9557a44f51f1645253ffcff1bebc20109e",
+      "size": 388,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agentsmd/src/sources.ts",
+      "hash": "f253b916d333ba4eab4f3e8d87f419a3fc93e7eff6bc061369a66e035b3642f7",
+      "size": 5014,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agentsmd/test/document.test.ts",
+      "hash": "5f8284a53a78459cf4277c717601d07258aadeba1af0e8ede5202d2bc84774fe",
+      "size": 6404,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/agentsmd/tsconfig.json",
+      "hash": "719d286d52784af411c44ce72c9b8e2851175d1a628621e50c265c73b2e2f08b",
+      "size": 298,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/package.json",
+      "hash": "244e15ef89b57e70656642388e4837b8c86ea750c3a81b6e2b71f19e84e91e4e",
+      "size": 310,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/src/archive.ts",
+      "hash": "18c73517a0e382ca5d8f3838ef1701c6e3ab4cc4ba2bb0d28c9816edff922d64",
+      "size": 4771,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/src/contribute.ts",
+      "hash": "c07dfca7ec124550b10f581a36ff0c4610ce3a2c68773514a1d04e0de8c5770d",
+      "size": 2820,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/src/index.ts",
+      "hash": "0adfe1398761a5847698e64262365f3ca5c50796196f214bde88c1702f3388a7",
+      "size": 1400,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/src/install.ts",
+      "hash": "39b30c3cdc7a9ccbc6b0852d40f676200b10c250fdd1e3595c7d135c9b956bbc",
+      "size": 8611,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/src/lock.ts",
+      "hash": "7d868a30660945aa071ce08253c4c1b65e1bf78288d9e3d361dd41274221ffd6",
+      "size": 3439,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/src/manifest.ts",
+      "hash": "d161140bfd47f7efa3f95720cf0511d2bd76f1953f914e2add6437b4e6b5b9eb",
+      "size": 8201,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/src/mcp.ts",
+      "hash": "36b5ecfebd6d051be75da7e904b3674f6b6ce749541c1f090d7e0a256641afa8",
+      "size": 7358,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/src/registry.ts",
+      "hash": "535172c939eebf249496478aef43a758e726811f0709c98a4ba64a5d12979d14",
+      "size": 5073,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/src/semver.ts",
+      "hash": "2aef35fc9b8be57e1a3a9eb6c38e1be0b451417252f675f46852c36838d46142",
+      "size": 2776,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/src/wasm.ts",
+      "hash": "9157ee25bdec00d1634de8185d66c73dccba9e425305e26977987ce0d2973d76",
+      "size": 7063,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/test/ext.test.ts",
+      "hash": "63d44c85882db1895b7a879ab9e6a9e67e41fe177da43b1240cdacf7affb7df1",
+      "size": 16129,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/ext/tsconfig.json",
+      "hash": "cb6c9de53569c4a1fc3a763c378e27b263295e405ea58476f10ae6a442c574e3",
+      "size": 181,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/gitops/package.json",
+      "hash": "e2fd474e64405f25cd95e989f8cf13a921ba1ccc82747bcea39a05198bc43ca6",
+      "size": 262,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/gitops/src/diff.ts",
+      "hash": "05c7718cdce029c68191114fa668a1014f9d846c084a37a035a9c51b508a2822",
+      "size": 3657,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/gitops/src/hook.ts",
+      "hash": "5b4e4dbb4c03c0c6c159436a3abfb9f7beda8d7cab2caf6a8d125b1bdcf5666b",
+      "size": 5394,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/gitops/src/index.ts",
+      "hash": "e41138c7d7eec23e9e6fafeb2dc3775ec68a9908dae1ed0233ce7412cc493138",
+      "size": 265,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/gitops/src/run.ts",
+      "hash": "a609c6f2b5a73c0a613c1dc30a2e8f1fc0e379d6a9fe1157cfc56776aa472ca9",
+      "size": 2149,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/gitops/test/hook.test.ts",
+      "hash": "9bf39431bacacb06fd5462ab55be5c60f3bf77d937ce3f6bf54c18036955cce1",
+      "size": 4317,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/gitops/tsconfig.json",
+      "hash": "ef4e152a40b6c90a3449215083fe2445cbd142888af1f9c1fd27f48e0fdec22f",
+      "size": 159,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/graph/package.json",
+      "hash": "99509a05398832e4d73f9075cbd621c5acd7d11803d2339572184b3f5d0b97f1",
+      "size": 395,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/graph/src/artifact.ts",
+      "hash": "d97cac2903bd7bf1d2bdfbc00acea5ba24290d8cc6ecefea6bf89f8646b7514c",
+      "size": 4393,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/graph/src/build.ts",
+      "hash": "4ad3658ddb88663be280269adf7492b1598d8291d13382d3e8583e3408236fa1",
+      "size": 6883,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/graph/src/index.ts",
+      "hash": "3e7eeaa5cb3f3b01666e937b64bde04dd8b7785c5e842fde9f64837105700bb4",
+      "size": 443,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/graph/src/render.ts",
+      "hash": "ee4979b49180906feb0f513175a23e56aeeba39857fedd93d7b6a39c95c19bc2",
+      "size": 5368,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/graph/src/types.ts",
+      "hash": "97f5f1be5b002007b93014a03c66d033871315d5605987dd7818f06d5fd80758",
+      "size": 3088,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/graph/test/artifact.test.ts",
+      "hash": "fc60f3deeba22b768854d6b273ab6cb02a30e5bcd7748db599a30d7d4a6ca6de",
+      "size": 3088,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/graph/test/build.test.ts",
+      "hash": "2d3600c45c9f1743d13aba16a2bfead3a64cc650dddc04719be6f41061ea156d",
+      "size": 4935,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/graph/test/render.test.ts",
+      "hash": "5d4c0da2eaf4a18d7bd03204010087aeacb2b7e76e7ef4648ae031d91e5fcec8",
+      "size": 4233,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/graph/tsconfig.json",
+      "hash": "afd8bef9d4d97dacac9efc30f02461f9ef901a2e43a120e49337076d2441f86e",
+      "size": 275,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/impact/package.json",
+      "hash": "6364374876c47bb962aaa5a9c06bc285652f7944ad62647b15a59e26d986a2fd",
+      "size": 455,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/impact/src/index.ts",
+      "hash": "1bfd82da1b966026d93633de1d8278545a4aa48a7e514cd4ef185c4db533c619",
+      "size": 154,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/impact/src/predict.ts",
+      "hash": "fa424e5d4f1edf792e78a8f5769b0e38d615c8fad23dbc87e432d6d20b839fd6",
+      "size": 11045,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/impact/src/render.ts",
+      "hash": "cf5625a7fe5faaa128588f9dbf8b2d53ab7fe94399e37c06f3e378ae56973e33",
+      "size": 2220,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/impact/test/impact.test.ts",
+      "hash": "52fe807c03bd0bf28fbfeb9639a9ae043d0658f8581fdac746ec222dd9d9c063",
+      "size": 6176,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/impact/tsconfig.json",
+      "hash": "d83fa933815464c5f707a0da956fc96f201ad0b08212765946edba88de5720f9",
+      "size": 359,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/package.json",
+      "hash": "eafec6a579052b44d214aa2294010a16897db17432b3488af192d3d4c45eca1c",
+      "size": 642,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/scripts/copy-queries.mjs",
+      "hash": "669b6f9fe9db24e32ec8d54950003c0377ce4f701123b2e1d1e5e1b5139e8c8c",
+      "size": 563,
+      "language": "javascript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/anchors.ts",
+      "hash": "3bdfd63287163eb9a836cbef76d5d93966c9717f2354e728169c8f0daaffb070",
+      "size": 4035,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/artifact.ts",
+      "hash": "7e10ad9eab727b79a3d1848fde6f2666c510e4928c50076cc6f022224444c695",
+      "size": 940,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/build.ts",
+      "hash": "ff4dc2c322fcf911996decde93ef73305bfdd6bba741f1775cecc09b8c80bb5d",
+      "size": 3395,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/extract.ts",
+      "hash": "7dc2aa42606a40829209c5f8d28a93ce715e7661d034c4847709e032e3525206",
+      "size": 12105,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/grammars.ts",
+      "hash": "05e1afbf40208b91bd3358b5e3ad345ee9c50ab7e89a54c872b433075dcc4574",
+      "size": 2882,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/index.ts",
+      "hash": "3edb1092b116c8562b7e6fc43eb80c787ba22af5f2d0e52afc0e1bb96c646631",
+      "size": 767,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/oracle.ts",
+      "hash": "569d7fd75e9ea0d0f316d2d138e99ea1fb23b809aeb72b49b9e5391231d01f8b",
+      "size": 2720,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/queries/go.scm",
+      "hash": "097afa91c470f901135e709912ce6b483529562127011613d56733c18b2861f5",
+      "size": 1462,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/queries/javascript.scm",
+      "hash": "29520969e5516244e7c4e181cf9e1b610a660deba55e5c862a68f32754d8d08e",
+      "size": 1215,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/queries/python.scm",
+      "hash": "34ec21e90482d96e1273632eb1d7903b641a4e3448a44e8416619a48437314d6",
+      "size": 714,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/queries/rust.scm",
+      "hash": "0d38279f800c4dffef2ad8b022dcb098381eb4532312a49880681b7c1f8d16e2",
+      "size": 783,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/queries/typescript.scm",
+      "hash": "c88b3e2073a050c32a015ae58d177381eaaf7d65c52eb051c675228a5ebf788f",
+      "size": 1644,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/src/types.ts",
+      "hash": "35a758e48f81dfe44917657203d4bd3985d9c1df0e38ed76cdb386043cfca0fd",
+      "size": 1603,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/test/extract.test.ts",
+      "hash": "a547324e85d7735897b0c93db115e04e5a20e16497a75013f78aefbb338fdc92",
+      "size": 9361,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/test/fixtures/langrepo/sample.go",
+      "hash": "a1563c24fbe13ce83757084b44cbf9ea5655f552a2fad10435d15901e2941d4c",
+      "size": 634,
+      "language": "go",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/test/fixtures/langrepo/sample.js",
+      "hash": "ba244d3224e22fb1d9cca640df4e3d02ad7e5178598e284fcf0b14ec1565bb03",
+      "size": 219,
+      "language": "javascript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/test/fixtures/langrepo/sample.py",
+      "hash": "1f598dd7c656fe638849d21f0b9b0a8c47a25244897f3804e5df077cf89d1c2e",
+      "size": 343,
+      "language": "python",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/test/fixtures/langrepo/sample.rs",
+      "hash": "244d5e1ea5a8dd1dbbae82e855588f6d7298361e9ab1079ab4c1e5be81f353f0",
+      "size": 418,
+      "language": "rust",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/test/fixtures/langrepo/sample.ts",
+      "hash": "45d550a7052588c53fab9f01acc400ee2f175bd37ae3592d9106c287c2ddd6f0",
+      "size": 655,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/test/incremental.test.ts",
+      "hash": "9ade0173926e6e189a76e2cb624710273b9325136571c80bf2c694ddd2083f57",
+      "size": 3566,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/test/oracle.test.ts",
+      "hash": "b2a3f5f39e0a46f4ccd7bceaaf9abe5383cfa9950594a988aedfc091421f586a",
+      "size": 4348,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/index/tsconfig.json",
+      "hash": "d8d1d94a3c99bf10193fa9361eb71c0bc61aa8852af52dfee3b36a567b7eea0c",
+      "size": 190,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/model/package.json",
+      "hash": "fdd0095366ec63ccb00bd404b601961fbcfa3b9636709c9afb964dc7542e6cde",
+      "size": 261,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/model/src/index.ts",
+      "hash": "1b5de31825111f9fddfade0e416a8dee21fd749b2fc2a09e9f7abcc88fc44965",
+      "size": 4842,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/model/src/pool.ts",
+      "hash": "cc311bf69c4b9b1f1ab91a04da7fe7aee4aae3a52eb6a51820bb05d6f31c8b89",
+      "size": 2638,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/model/src/retry.ts",
+      "hash": "2d23460f836548cd5aa7875889b9928252c625ad4d58e408fe5fde9ac08a0aec",
+      "size": 3626,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/model/test/model.test.ts",
+      "hash": "18fb49fbe295d25aa55f5b30388a39434f4ce97d7223f3d13f92799416044825",
+      "size": 8647,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/model/tsconfig.json",
+      "hash": "159e0da9b9ccc3a88101141ea2c1c77915012f17d56dbf8417c1cdd03031cba4",
+      "size": 140,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/plan/package.json",
+      "hash": "90dc9ae4415101fcce8c6392dd7b48e63f5b45af0821d6a6a8429372f2034dfe",
+      "size": 418,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/plan/src/artifact.ts",
+      "hash": "73f194a07be02fe616d2d7494e6c35515b81a2527db036ef34df8023c98a0f65",
+      "size": 4883,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/plan/src/cards.ts",
+      "hash": "e2b3897cb5810b8701bd76223dbff0d47eb06aebab5db4fa82594699ba623f63",
+      "size": 11096,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/plan/src/evidence.ts",
+      "hash": "6a4021a1580a4cb125065dfc17b8738ef0a5396db4ed1ff1b11808629e591bd9",
+      "size": 7452,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/plan/src/index.ts",
+      "hash": "218f97e39d31d98ccbc177e2df81ab08e95805c3af575b4352b1ebf9b8c75d10",
+      "size": 1083,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/plan/src/propose.ts",
+      "hash": "c9dc824bf2724f06d571198fdee4b7bcfa28cdb02881be40a18f217ca5dce639",
+      "size": 5462,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/plan/src/types.ts",
+      "hash": "aeb844abd4228354d0c4b4e5bd9376121a4598838857e24264502f6ff001a3c7",
+      "size": 2796,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/plan/src/validate.ts",
+      "hash": "2efa4950a5835281d5ec4714983dc828739bd625fc5f72dbbe68f630d24e30cb",
+      "size": 5245,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/plan/test/plan.test.ts",
+      "hash": "a6274277f336e47425eb46b5c0af49aa96a9303cdee420d1b9c748ab63083cd4",
+      "size": 22090,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/plan/tsconfig.json",
+      "hash": "bc3ce3a2d55cf7ba5b61e19cf57adc959c1e27ffba4808a6e3c60ec30082c95e",
+      "size": 335,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/prism/package.json",
+      "hash": "192219df64e935c289ec95910a367479eae01eee1308c5c7ec6a5fb7aaeee660",
+      "size": 344,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/prism/src/ask.ts",
+      "hash": "cd720baa70207b370fa910681cd59913dcac6b197b00ad360ab8db98f045b2e9",
+      "size": 3625,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/prism/src/chunk.ts",
+      "hash": "b39b093ace9d0dcde900e7759741cf40c8293740f8f75dec30380349aeebb4d7",
+      "size": 9712,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/prism/src/index.ts",
+      "hash": "6f1ddb3b78d86ec5667be52f2679b2a28df614cc6451e80916e78882fb52c0ab",
+      "size": 805,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/prism/src/ingest.ts",
+      "hash": "33fee63cbb837f73d0e9d008164ae7dd56c81ebb5a2aeec0d0649f6b54fe3b42",
+      "size": 8325,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/prism/src/retrieve.ts",
+      "hash": "104f385806fd431419119fd6469407c8860745ef52bf50910530944e21b91c6c",
+      "size": 9677,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/prism/src/store.ts",
+      "hash": "bc02d72c572a7df6ae6d4092bb2f6baa3f856d8fbe5effdc8bfe5fb68ca62bde",
+      "size": 6371,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/prism/test/prism.test.ts",
+      "hash": "a24b650aebe88f0f3f38ac7948f22c7743750376e2b89958fe2caa66fc586f1d",
+      "size": 7917,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/prism/tsconfig.json",
+      "hash": "3a56208f6bcbd9313c6df6920b6600144fc67ef9b6e1b3ef62ff6e02d3f4737b",
+      "size": 245,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/provenance/package.json",
+      "hash": "eda511ff32db1af94debdcbea9e4f0415a081a67a1100c56b11c9140fd8d8827",
+      "size": 288,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/provenance/src/index.ts",
+      "hash": "6305352d6419c65b7f735ad912ca8a7a0f9ff77c675e34de3a993e81948fd498",
+      "size": 217,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/provenance/src/staleness.ts",
+      "hash": "d0df4598346e09ef9443d87dc5be06f98bf6daa959c8aa53b364add63b2a8230",
+      "size": 4507,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/provenance/src/types.ts",
+      "hash": "698b025cd1cce32c978d73d32ba48a48dc3724bd9a89bb6dc53a1b91d93f73a4",
+      "size": 2782,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/provenance/test/staleness.test.ts",
+      "hash": "e4b8be555070798a2139cc140109dbdcccefd491bbd8d4770d0c8f2ad88ea920",
+      "size": 6805,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/provenance/tsconfig.json",
+      "hash": "faed8549761435799ab5cfea03c354f5974d0c30d897efbaa2f10f270756379c",
+      "size": 180,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/package.json",
+      "hash": "472a8190a3f3828d748c23b3c774f1ff67671da1ea88ca279ba8948b56f61724",
+      "size": 319,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/src/artifact.ts",
+      "hash": "67c5a733e26c283a613e84b2a6a84b2dcd15bad02c866725cfd0c7fe96944a68",
+      "size": 5488,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/src/index.ts",
+      "hash": "bb35bae4a2b1457b76308e453cd2f9eb4ac60232a5e5b031800ecb8da5a985f6",
+      "size": 935,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/src/ports.ts",
+      "hash": "444b7303e600b2605672850d02a7611d0e449797b073a05eb33f2a8c8f5d1bcd",
+      "size": 6213,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/src/run.ts",
+      "hash": "343e6253b9b8c8900c61aa0cdfee076287de8abf06931cc7e399a4d5b2af3d56",
+      "size": 10219,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/src/sanitize.ts",
+      "hash": "7eef20b8aa08e47e7345c8e16359e8813dbdada261dffe9dd2e0f54f4a9b9a33",
+      "size": 4475,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/src/types.ts",
+      "hash": "3c1c70cde0b234852402f4a9bb267aae5dd0af87798b8b3bea5c02d2a2219d38",
+      "size": 5258,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/src/verify.ts",
+      "hash": "c027f97d749252c394388c2d49d70259f9ca7088b1e79465132cb83acef7c8a8",
+      "size": 5223,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/test/artifact.test.ts",
+      "hash": "84e62a34a5d9720fe36a48e8466549220b26c3c766eec8bb79bfd695478c53cb",
+      "size": 2754,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/test/ports.test.ts",
+      "hash": "3ab600630e46b244efd67cdd35b70473d43514b3f58714b59f046aa047c04893",
+      "size": 3317,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/test/run.test.ts",
+      "hash": "41ad923b2f4dad838a47d263cf3df79892bec0bb7c2811e55317f40b49b30de5",
+      "size": 5912,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/test/sanitize.test.ts",
+      "hash": "ec70512649c2da62eb0fe2fa50e5ffe2713390f52867939c94a566ccadccf91c",
+      "size": 2041,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/test/verify.test.ts",
+      "hash": "7108a333a11ee83d7657e1ded92f943c0aed2b6afc6f6ec1cca1f0840f05b651",
+      "size": 3740,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/research/tsconfig.json",
+      "hash": "26f7cdd7d7af1d3c91fd08b153ab69959db44b3b4787bfdf594270df6640d0db",
+      "size": 216,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/scan/package.json",
+      "hash": "0aef4c6562cc4a12d59adfabb2bae8dac6553ef5a79eb7e0dd292a206eb59b83",
+      "size": 308,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/scan/src/artifact.ts",
+      "hash": "f0e883909f5572826972e6cfaee48e23e4f7bb497cfb589b4b752c34bcb0273c",
+      "size": 1134,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/scan/src/ignore.ts",
+      "hash": "e89f5cb725a879ad7d09ed4d89c98a66975dc057a7f2bdddfb08a115460e9c60",
+      "size": 3469,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/scan/src/index.ts",
+      "hash": "f02b2909c8be24b2f9a02520e0ac5e46d9cb7fba559feacff165a7eb97693538",
+      "size": 512,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/scan/src/language.ts",
+      "hash": "151632b2db24588a1c82f3e4d2f043c306288cacf117248446b7f19ee57885c8",
+      "size": 3892,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/scan/src/risk.ts",
+      "hash": "0812733a73488729c354cb22f33eab77cbc240b8937c44944669e56bcca25a30",
+      "size": 7952,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/scan/src/scan.ts",
+      "hash": "7a1c9a929ea29e3776071f9621853065e3bd3e6257bc1cdfb3cc344b8d5d86c0",
+      "size": 5409,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/scan/src/types.ts",
+      "hash": "60dca14f60e39a0d2b12f2d5c5e517857da142a3b7a52275da861b3bab45ac34",
+      "size": 1313,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/scan/test/risk.test.ts",
+      "hash": "73972f2101848f6d37b98a393ba3de4e1e8084d059f9412ebc88e40bb7491834",
+      "size": 6747,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "credentials",
+        "private_key"
+      ]
+    },
+    {
+      "path": "kaioken_v2/packages/scan/test/scan.test.ts",
+      "hash": "ba656d75ac761d8c98fe7f0a4d92fac714afb439df4938221d831b1f85d1824e",
+      "size": 4940,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/scan/tsconfig.json",
+      "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652",
+      "size": 149,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/search/package.json",
+      "hash": "5eecb7f9e7ca4941c6f079e9b8e78809e3e40028cf937f289e2affecc25d22ab",
+      "size": 317,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/search/src/analyze.ts",
+      "hash": "1477c8e3b9ed91509d51ca4fa047383354422d5c415b97e5fdcb83dabce498ba",
+      "size": 3172,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/search/src/bm25.ts",
+      "hash": "727bbde362d774f4a132a5022d62edbec29ac261df1e596f744689be1a1baebb",
+      "size": 3992,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/search/src/corpus.ts",
+      "hash": "54c8c80db271de028b54d6ec40cd797ee94d4fecc7f51daf856a7e81d1fa6c0d",
+      "size": 12057,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/search/src/index-store.ts",
+      "hash": "b4e4ca21a65ba9df5766423af22ddc9c06dde7862fb578479c004a8e55e378ad",
+      "size": 8180,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/search/src/index.ts",
+      "hash": "4086217b23b6f164bf12bb5128db94ee4e890c883f776612a5f2d8779ee87fa5",
+      "size": 475,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/search/test/analyze.test.ts",
+      "hash": "50ba19a84151859916fc4db002c794af64bd3d0f10f9d1bbcf45961bb6f5d9d6",
+      "size": 4762,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/search/test/index.test.ts",
+      "hash": "3c55f48a02df6a871d41bfa2c5e4b32d9f61c333300cd47aad86de642f387e55",
+      "size": 11864,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/search/tsconfig.json",
+      "hash": "27323ff390a6d1c655e615b1bb7d92488c08704ee1178cec8abe0e1df83e7bcd",
+      "size": 204,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/serve/package.json",
+      "hash": "278c05d552985257a02053ae407dc367ddeaf175f5e151aa76baf21d358eae9a",
+      "size": 398,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/serve/src/graph.ts",
+      "hash": "ad9abb5826fc52359fe38b610b31d27636f7e8aca80613bd107600506e505631",
+      "size": 4713,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/serve/src/graphEngineAsset.ts",
+      "hash": "e6873f401cc480efbe14a18b7c86d0abfe959762c145e0bc4f2ad6d42857ca9b",
+      "size": 14341,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "kaioken_v2/packages/serve/src/index.ts",
+      "hash": "fda3e3f4fce438eed160f4794116d3c576c95b217f21be26d2c2c79c952dd4cb",
+      "size": 481,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/serve/src/library.ts",
+      "hash": "76665310c4c70e9bd71ee6b854e6019e86a002712538772c6ad8560d9f4e8ba9",
+      "size": 16937,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/serve/src/markdown.ts",
+      "hash": "9918bcb7001b57336d43eaada89eff17ab78156bb8a139b66281a8cbd5b8a3bb",
+      "size": 10877,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/serve/src/pages.ts",
+      "hash": "f18966d5b69a6a46a85c50a0d3565defeff5b2b9a3f19439e3fa95337eb58a3f",
+      "size": 61097,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/serve/src/server.ts",
+      "hash": "3ec13446f6b641aa4625606f19dfe421cd15f83107d2665e6376c2308efab0e4",
+      "size": 9648,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/serve/test/serve.test.ts",
+      "hash": "5f41f440c7453e9bc1b6bf8e270f0b35ec244567aa7e80a40fa2a65ee82c32ab",
+      "size": 18387,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/serve/tsconfig.json",
+      "hash": "c786923129f57de2e88d187dc886c7fd6c65a4c71d48ee752fcc61ada0fba58c",
+      "size": 278,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/session/package.json",
+      "hash": "af7dae7157e8ccef91198ae38f7c48e18ab76a0e33367162b166e80487762c06",
+      "size": 285,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/session/src/index.ts",
+      "hash": "c157d6ce3a60b635ec4324cff2caf4400d757ad1d73434d294100ce1af19af01",
+      "size": 689,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/session/src/signals.ts",
+      "hash": "a66ae1a49c010d3570ccc18a698417316bedd1c5d44348d783f64f161ba4a7c1",
+      "size": 4361,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/session/src/storage.ts",
+      "hash": "3cdd0f872abbcc2555d4c7a49f2317f57588a791e938c82e51ea92883688e1e9",
+      "size": 6279,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/session/src/tree.ts",
+      "hash": "9461f81c934d75260477d934a92a54a86aa0e29eda2d76e952e0fcd646678308",
+      "size": 3461,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/session/src/undo.ts",
+      "hash": "b4cdf6eb819caefb94ceb87d34ab0a687e8949e995c2d6d181720cd629f35c08",
+      "size": 9128,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/session/test/history.test.ts",
+      "hash": "1876acc922663cce19742d057a8358a2e4b5ec2a412419a4454b58b54ef3323b",
+      "size": 8496,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/session/tsconfig.json",
+      "hash": "faed8549761435799ab5cfea03c354f5974d0c30d897efbaa2f10f270756379c",
+      "size": 180,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/skillgen/package.json",
+      "hash": "03d3333ef1a98a350a3ddb42049afe3a4a982d6159ab9d60f4d20ee1bfb7ab0a",
+      "size": 425,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/skillgen/src/index.ts",
+      "hash": "c5a165ea1302aba68b0bf3a98d3d07d1d81f76ec63cd50a511590d7a0dfe2d96",
+      "size": 236,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/skillgen/src/propose.ts",
+      "hash": "db7c3847d736b8ca4d2bd24c959c7cb5516a32861b4381dcb2b1fe4518035cad",
+      "size": 6238,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/skillgen/src/write.ts",
+      "hash": "05b7647cd464b9c928e2dce98e2eb1f60b074fb0b0fd109075ea1ca178295f12",
+      "size": 7707,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/skillgen/test/skillgen.test.ts",
+      "hash": "8aa842ba7cdcf1a715ef7d9a287dd0695b20305649abb6552c1408496afbdac0",
+      "size": 6127,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/skillgen/tsconfig.json",
+      "hash": "8b7e663ce894716da0bc103adb97a0696f34922cad4b2f3126762769dfcdf06d",
+      "size": 326,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/templates/package.json",
+      "hash": "876ae7d03ba86098b32ac8144e958a3cb9bf4cc0a150dd766173792726c94cdd",
+      "size": 287,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/templates/src/index.ts",
+      "hash": "2663dfd11bc84da8649db7654dff230b4fdd2ec67cbbac2705dff1e7fd453d11",
+      "size": 4163,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/templates/test/templates.test.ts",
+      "hash": "88c4e1ca7aa2fcf052f90922e7c1ee8b9b308116c77c29d532fc395c5893949c",
+      "size": 3908,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/templates/tsconfig.json",
+      "hash": "faed8549761435799ab5cfea03c354f5974d0c30d897efbaa2f10f270756379c",
+      "size": 180,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/package.json",
+      "hash": "0642399c768c32f4e5836d62d482f632cf91a6e29600267595ea3f2fc7fe8248",
+      "size": 418,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/src/artifact.ts",
+      "hash": "e99ef9896b8e2ec36ed38f892182ac22f1119630247f293724af1c709a54a14b",
+      "size": 8236,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/src/brief.ts",
+      "hash": "d80f4e68c39252026e68fc2b099f94e6ad30a23efdba1562cd64b229a9244524",
+      "size": 3908,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/src/claims.ts",
+      "hash": "3ed2033191a20bff89c96d67b891bc412cdbfd16af0dcc5750e6ff61a339c4e7",
+      "size": 6541,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/src/generate.ts",
+      "hash": "31bf325c0b2b786c27592f154a9ae776f77cef86367b1145a70449a335023d52",
+      "size": 9603,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/src/index.ts",
+      "hash": "4a7ea8ef650a39f751e00750df5b71209da3eeb0d0b7cb618b7ea7ac089d5bef",
+      "size": 1209,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/src/plan.ts",
+      "hash": "ce80aa8c7f5c5f62bdbbacb8ef3857dbc5bc31b068decb55eac5865b4e9bc443",
+      "size": 7880,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/src/run.ts",
+      "hash": "d1a74305b19d313a6500e7f2e2229070d3670fa07d9d800c45635fed822a840b",
+      "size": 8709,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/src/types.ts",
+      "hash": "e457e3efc6454c34764b1517ae314c12b417fcfaeefffeaa088fb16dd6e9e737",
+      "size": 3210,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/src/verify.ts",
+      "hash": "c6ac1c6e2b666c465e913af3505937f2adc2d4462dff5110ce77a6672e35b4b3",
+      "size": 11705,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/test/wiki.test.ts",
+      "hash": "d0b6b02a3beb765d785032b3cb62aaf3a067474749d816659278e546a89df33e",
+      "size": 32555,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/packages/wiki/tsconfig.json",
+      "hash": "bc3ce3a2d55cf7ba5b61e19cf57adc959c1e27ffba4808a6e3c60ec30082c95e",
+      "size": 335,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/tsconfig.base.json",
+      "hash": "f9df45e3b4b4165bf0999e3a5b8ffc66ef27d3ed2c8a36e4b240ae4f2bebc2c1",
+      "size": 501,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/tsconfig.json",
+      "hash": "de842555320ed68d101b513979575f9c40f1c187a7c6c324be0ea859fcd1a2ea",
+      "size": 1012,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "kaioken_v2/vitest.config.ts",
+      "hash": "c50c6a3a706e19afdb8f3d56702913a4ba64c66c3e51306b4a75ff82dba07eab",
+      "size": 360,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/.gitignore",
+      "hash": "27b3a05e5dba94c57a3a00387f2dca66ed8368f1ae6b8840b18b915e0e0cf614",
+      "size": 86,
+      "language": "gitignore",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/README.md",
+      "hash": "d8699dc7079efe9d112bc1c1ead2692bedb9d44607ab533ded8e8e3ed52bc515",
+      "size": 2283,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/api/_lib/__tests__/manifest.test.ts",
+      "hash": "d86e7f2ea983e1bce2738ee4c2c3c76755b31ccada94074d0cf51b6cd751d5b3",
+      "size": 5665,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/api/_lib/__tests__/registry.test.ts",
+      "hash": "eecf2a8e8189263eed2582523a5efafd2c895ef18dcd1ebbb6117cb8573397d1",
+      "size": 3598,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/api/_lib/github.ts",
+      "hash": "ed2f257a43c19f841c249e5ff98eec5ac25c31cbdc903ea2ec32243d97082708",
+      "size": 5047,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/api/_lib/http.ts",
+      "hash": "da7531e97b23d049c0f42f241cba58dc97cf927082ec5936ad558781f39885f0",
+      "size": 1427,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/api/_lib/manifest.ts",
+      "hash": "8980db169c3ad587937be742c5623f52d2354688e473510ae857743c60e6342f",
+      "size": 4893,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/api/_lib/registry.ts",
+      "hash": "98b93fde521b99bd7f4bfbbbbab174283f3dbd6161bfbe6cf07f28196e36b503",
+      "size": 953,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/api/_lib/types.ts",
+      "hash": "ed07567bcc3162facc1d5cdde6d731fe7c9a5856e4307a84288c3e88c4b9c447",
+      "size": 1886,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/api/ext/[id].ts",
+      "hash": "6ce0c33785505874dc1ea88d7d237e59924f52bf434bddb2d4cd2c0bc697c937",
+      "size": 3176,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/api/index.ts",
+      "hash": "9aa01c156e4d25d7ac6c87fcd286dd927e17af5d8118415e949f8e52c5b5ac46",
+      "size": 1085,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/api/validate.ts",
+      "hash": "2297395a28330a9285988055c795010bd9f704fec8affb8a5b0033be562030ca",
+      "size": 4726,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/content/developer-guide.md",
+      "hash": "5335197f7bd967eb495b389e7ffefd2504f0255e573ebff7c08218d5279759b1",
+      "size": 4769,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/content/packaging-publishing.md",
+      "hash": "3c92b24a65fbc166408bf0f41774c74f7728276fd6b2ad3e58485eb5841328f8",
+      "size": 2598,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/content/submitting.md",
+      "hash": "7417d7f0780f8001f1325be6db12890eec20de09af5ddb2eaf2341c0ddfd5041",
+      "size": 3088,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/content/user-guide.md",
+      "hash": "f5c36b72308221c8de7c8d3f2614e34f33989902e15dad8499d4342902ed9c13",
+      "size": 3744,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/index.html",
+      "hash": "24afeb29b475a78d10a5537cbccefc690e16ffdea57cdefcf04998e1c7ab0d24",
+      "size": 691,
+      "language": "html",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/package-lock.json",
+      "hash": "4d815bc0fdeaa690ef4013f1265fbd42049901d487d7e73e3d7268484a127b3f",
+      "size": 157681,
+      "language": "json",
+      "binary": false,
+      "risk": [
+        "lockfile"
+      ]
+    },
+    {
+      "path": "registry-web/package.json",
+      "hash": "656fa4c401f7fe05e4bd4aa97d0e53815161893cea22052011d98a76528726b6",
+      "size": 958,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/public/favicon.svg",
+      "hash": "f7207f519cfd7b25a1cce035a223ab495ad30880c058fe4e8d1595d4d144c7ef",
+      "size": 338,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/scripts/dev-mock-api.mjs",
+      "hash": "eacf655cb838c6137030abd37ab472419245aad003bf573de80e2c1982bbb709",
+      "size": 4742,
+      "language": "javascript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/App.tsx",
+      "hash": "a7f2cfef4ff15746802b33e139b953be73f989303d84beb164f0662a1fd5e35d",
+      "size": 3915,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/components/Markdown.tsx",
+      "hash": "9ae1ebefa259b489a7dfcfaaa43a0544579ff332aec6ac91b1ee3c8267f23578",
+      "size": 414,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/components/PageBackground.tsx",
+      "hash": "2a69e462eb5f7610145d285cfd2e234375a256a43b1fb274b25eb4fe4d017489",
+      "size": 2712,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/components/TrustPanel.tsx",
+      "hash": "7dd5cec9c7e542d09f48ada94b2c2cef9a2afa2c5332386bb625409716891b53",
+      "size": 3766,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/components/TypeBadge.tsx",
+      "hash": "e11ffcdf365e627fc0887f215fa8892620ddfc742394a4c89bbb589b125f5944",
+      "size": 1361,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/lib/__tests__/filter.test.ts",
+      "hash": "3572c18f34ed0288b102c61f4df76230e5c20acc9c89fb059b461323f8136788",
+      "size": 3265,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/lib/api.ts",
+      "hash": "c4c389a4e0e5c376d01b2e225e751d354d65765d8527d2685c4e426530268585",
+      "size": 1041,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/lib/filter.ts",
+      "hash": "ca6df7aa35db9e114b438422d87923f2737739aa568ee2b036df7d8b58e7c8c3",
+      "size": 2154,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/main.tsx",
+      "hash": "b06a322513747e312dbb6972c80fece8c319ab6e1ad7b577059c35aee9af1a6d",
+      "size": 227,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/pages/Browse.tsx",
+      "hash": "a27f7f40b2fd5ce859f1061449913e47316ed1dbc083e893dc40cc5bcba60867",
+      "size": 5010,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/pages/Detail.tsx",
+      "hash": "1e3948da4352025d1cf80c333c0e731521da2a2046f863bddddf8630854620a1",
+      "size": 7192,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/pages/Docs.tsx",
+      "hash": "4da03a89a34b4908044ae2ce3bf9db2bc9f6f48502f7a591186103fb8a0028dd",
+      "size": 2081,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/pages/Home.tsx",
+      "hash": "2d1dcf3dfbacf335a49755c4b0040df2db9aeab6cbb93e134a16d9a98bd7c787",
+      "size": 9118,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/pages/Submit.tsx",
+      "hash": "2b602b6a313830357e246df86a89d98c4f679388fa0f370767933ada94802905",
+      "size": 5983,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/src/styles.css",
+      "hash": "649791640d1e431bcb6523a085ed2d58a64e04664a2d09bc71a947ff2495d678",
+      "size": 8775,
+      "language": "css",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/tsconfig.json",
+      "hash": "1b9e5b3ce3fe7c6a584fe1d523b9b31c43597726ebae3866a7178c781105792c",
+      "size": 494,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/vercel.json",
+      "hash": "9849ce9823f17c75a3cbe500a7e361f43f0068e45080b60b966357cedef1fe96",
+      "size": 198,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "registry-web/vite.config.ts",
+      "hash": "666a232e17973f9d69addb1e991e18f2cf4e0f8f890d01402c3d7a707e4fda11",
+      "size": 484,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/.gitignore",
+      "hash": "fcbd0b4f3c19a541f5fa8819a818e3e1d1c0efafaa60dbb26848b70b7a8eb9a3",
+      "size": 57,
+      "language": "gitignore",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/README.md",
+      "hash": "6d0a3e270a26660558c2a88260044ec1861d062a41a6f2c1c2d472355661e616",
+      "size": 3936,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/_lib/__tests__/auth.test.ts",
+      "hash": "042573c859f0a16a932db952105acd3dd649eb8f0c38d90aa20e49727a80cef8",
+      "size": 2701,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/_lib/__tests__/storage-guard.test.ts",
+      "hash": "5f7647bc74379b4945d84f21adeaeac00139afa58a05d01014f748a5da037c97",
+      "size": 2416,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/_lib/__tests__/store.test.ts",
+      "hash": "ea3c42dd094bab8b34d43171338dff7b30673fa07d8289670f73ffd5ae27587c",
+      "size": 1367,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/_lib/auth.ts",
+      "hash": "28ce4f25222923ac4b3b5e2835ec0fb1b1a602f5aa4d16d46e706a7d6cdd62bd",
+      "size": 3661,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/_lib/http.ts",
+      "hash": "6870b430ebefef29ba2e6af0c8085752cbcfb5d906faea960ecfa587dbc4d4b7",
+      "size": 2730,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/_lib/store.ts",
+      "hash": "ffeb09bafb143c3d79b09f4cd6b427eef1cd5a14dd3d261f0613672b4b93e1d6",
+      "size": 4707,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/login.ts",
+      "hash": "5f440100a3898ca8fffa7a0a9c4268fc36f2268a7a76e224491a31699a11e74f",
+      "size": 916,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/logout.ts",
+      "hash": "54e238a6bde967249f1a1a3511d2f118e98e0d3611aa5621c4f7145eff488f8e",
+      "size": 271,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/posts.ts",
+      "hash": "afd7e8e0505125543118ad55dd294f9a2906c44bda5c741ce1f2704b7f42cc56",
+      "size": 1697,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/posts/[id].ts",
+      "hash": "e6433fe251650c14151864018554a1f3b734c29d894848c5c61a6e442416a56d",
+      "size": 2085,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/api/session.ts",
+      "hash": "efb838dea0608a281c6774665669d339044150d79a0a386f551a653bf225df8e",
+      "size": 701,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/index.html",
+      "hash": "7fc2020021db2858f831439ecf953b70e3e9bc88f29eae9e4e2fe1d145bca8c7",
+      "size": 605,
+      "language": "html",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/package-lock.json",
+      "hash": "e73cd49f3dcae7cec63ab41a12177cbaa901e0039b89cfe83ecbab7506d20e3e",
+      "size": 134682,
+      "language": "json",
+      "binary": false,
+      "risk": [
+        "lockfile"
+      ]
+    },
+    {
+      "path": "web-news/package.json",
+      "hash": "1f8e38c70626106412e6afc5c2b1c890188dd061e8a98953b9fd4ce75fc454b8",
+      "size": 660,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/public/favicon.svg",
+      "hash": "f7207f519cfd7b25a1cce035a223ab495ad30880c058fe4e8d1595d4d144c7ef",
+      "size": 338,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/src/Admin.tsx",
+      "hash": "4a5de5ac903983722a5e7453aef71c512a5674ef379740d9967e0e342cb95b93",
+      "size": 8460,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/src/App.tsx",
+      "hash": "fe1ec4b452ed8b6e4092a601d4cade5c01f13d5d95d4557cf63a98f96bac9a8f",
+      "size": 5919,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/src/Markdown.tsx",
+      "hash": "decea2f63686798ac1e87123aaaf24ab831b57f52238929a955f72ed96d47e66",
+      "size": 892,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/src/api.ts",
+      "hash": "18247379d4844d52941aeeb7346bcba070d9e6b376eb0eee3231059c09980957",
+      "size": 2330,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/src/main.tsx",
+      "hash": "f32c89ad413bf467aafbf5d7fda51a33de02db58aaf3aec81008f937a69b3a18",
+      "size": 226,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/src/styles.css",
+      "hash": "6b40674861ec4d88cadf713d3ea88b3e80fb0e55f47f06fd569dd6b446d1a30e",
+      "size": 12087,
+      "language": "css",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/tsconfig.json",
+      "hash": "633931455d056eddbc3ef029a8f45b4a9fc9f162c7cd6bc683b8483880c53174",
+      "size": 468,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/tsconfig.tsbuildinfo",
+      "hash": "d427d198a19a1f519cb16f140d2265a671f435b203dac5ef70ee5477bd6e976b",
+      "size": 409,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/vercel.json",
+      "hash": "9849ce9823f17c75a3cbe500a7e361f43f0068e45080b60b966357cedef1fe96",
+      "size": 198,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "web-news/vite.config.ts",
+      "hash": "fa02e441f51815914822c716768ba9961940305861a7464d07bbb5ca7f8c6d87",
+      "size": 425,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/DESKTOP APP-logo.html",
+      "hash": "0f873f8b4155416d22746f835b0aff6aece01c9a0dfb67994442f540d9ba1d2d",
+      "size": 20209,
+      "language": "html",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/KAIOKEN-logo.html",
+      "hash": "05abf15bda0e2bcd794c808a287ed5c55d1bb2184e19f9e9717803ec8da101e6",
+      "size": 13773,
+      "language": "html",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/components.json",
+      "hash": "156858e2da20785ac0f1853580c7e34d5b8496f519e8839d2176e85947d4f779",
+      "size": 515,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/index.html",
+      "hash": "ae1c5d393cfe98b893a237edb0f49efc0aec3d70a082e773d557aa3aa79265d7",
+      "size": 1331,
+      "language": "html",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/package-lock.json",
+      "hash": "2171986f657fdda599a1cfe718c1798d0bddeba8211932ca743836b49a2d5996",
+      "size": 312390,
+      "language": "json",
+      "binary": false,
+      "risk": [
+        "lockfile"
+      ]
+    },
+    {
+      "path": "website/package.json",
+      "hash": "f391039f5b4b9de059c7171f6e9caa43b4336d9c8a78a9a3fcb55f0a119b0d8c",
+      "size": 1185,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/favicon.svg",
+      "hash": "486c09ad8dfddd110ace71ee4a0d34f8c67c9ba45b92cf7a9e14d13f7fedc41d",
+      "size": 1751,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/architecture.md",
+      "hash": "394b94e1891a3ff68415a204533efd5c350ae7d2e887f52f4a64e615b88acc16",
+      "size": 6847,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/modules.yaml",
+      "hash": "7e0b2ab9e7d5e65e7639deb016d7a99a4a68d6dbadbdd26e834f903439f95af4",
+      "size": 3529,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Architecture Overview/Architecture Overview.md",
+      "hash": "0b604802fa3ce664b0e92d3eb8d7ca7dcf8b571acba36e3d1eaf4a6af85ec9aa",
+      "size": 15695,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Architecture Overview/Chat Agent.md",
+      "hash": "f82c52b1c317c668a8abb4f61a4fdfcd12b4b43bc8082f37faf89adcc5a68eec",
+      "size": 8047,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Architecture Overview/Component Interactions and Data Flow.md",
+      "hash": "1185e5a719650c63bfd5baa57387f513d370f8767c7bd9892dc54027cadbfd5e",
+      "size": 6850,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Architecture Overview/Dual Nature Chat Agent and Knowledge Engine.md",
+      "hash": "96262acdaad60191daac4e35109a7f2aad4e8304b2bdebfa45bb899e2de90628",
+      "size": 17306,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Architecture Overview/Knowledge Engine (Wiki System).md",
+      "hash": "b97af0ede232a35a98cd636efd1086169f8cc4172f39b4153e9f259d8c6634f5",
+      "size": 16861,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Architecture Overview/Terminal User Interface (TUI).md",
+      "hash": "b3d94e45b0bb1b218f1a5ba7b0b571a949bf56c0c01c21bc732214ec70fc9ae9",
+      "size": 19788,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Architecture Overview/_section.yaml",
+      "hash": "e5b21a78e46035ac76ab411b10e842cd5d79052da5ad191c88e281793eb4c961",
+      "size": 827,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Chat Agent/Agent Core Loop and Session Handling.md",
+      "hash": "4ab71c0e749cdd20c18c88742e01c6ea14e048cc5f33cc87e14e5f86d604acec",
+      "size": 6541,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Chat Agent/Chat Agent.md",
+      "hash": "6b55fb41848dfafdb439fe35bbf555147b302ebad40937ce5f5baf9a221989d0",
+      "size": 17468,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Chat Agent/Knowledge Integration from the Wiki.md",
+      "hash": "9ba5c42426566bc6ea2455aa80b2daef63031dcb081898145bc2d908e18bfbd1",
+      "size": 8633,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Chat Agent/LLM Interaction and Tool Invocation.md",
+      "hash": "3d0a9a8dd42e6b230d76c7e14b46be2215ad4a4a021deb1aacef093191d702d0",
+      "size": 4872,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Chat Agent/Tool System Definition, Execution, and Approval Workflow.md",
+      "hash": "f4e434b48fc0dc64ddfee54a468baa250788738a4a4893bdbac7ec0322fac70e",
+      "size": 11531,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Chat Agent/_section.yaml",
+      "hash": "cfdb1d1a5d94320c82d9aebdee0104f90bbc22be3f9048ccfd28128c55c7c203",
+      "size": 699,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Code Mapping and Indexing/Building the Repository Index.md",
+      "hash": "b3a1c56c0d85319dc86e8711845d81db461729f8d08916392a4526efdca0f7f0",
+      "size": 8970,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Code Mapping and Indexing/Bundling Code for LLM Context.md",
+      "hash": "01d91490bb240a6a06c7f40eb0369fab7100f337904d11670b8fe7f7eba849ec",
+      "size": 15815,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Code Mapping and Indexing/Code Mapping Overview.md",
+      "hash": "a0d7b3f41233726a971d3d656ec4a1d162300cb9ac522a410cd25e5d40817aed",
+      "size": 8951,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Code Mapping and Indexing/Code Mapping and Indexing.md",
+      "hash": "3c82a065724e8f1404b3fcfb6106a41cad4f46f63f94561ea5fa6c15b9c9c219",
+      "size": 19359,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Code Mapping and Indexing/Generating Code Skeletons.md",
+      "hash": "6ee9ea9455afcb9b94bcf603767be15c766c7dbe8f07cb9f8a215e7b38940b4e",
+      "size": 12297,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Code Mapping and Indexing/Parsing Individual Files.md",
+      "hash": "5abe57e4b3660a71fbb8b9a70b8e427b6499eaaab94a62d88667f66b870df116",
+      "size": 20279,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Code Mapping and Indexing/_section.yaml",
+      "hash": "33ddbe49e683f7089c920e9cf3ca43bf8395402e018198f82b3c7523850397f6",
+      "size": 949,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Configuration/Behavior Toggles and Advanced Settings.md",
+      "hash": "0bdcc97be2d05d2a298320751c1bb808acfb5c427afe940a522f79bd4c910f84",
+      "size": 9831,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Configuration/Configuration Layers and Precedence.md",
+      "hash": "8db70b0068301434da6c73c765636a358a3e94e4f0a4a2169ea6efed05f47d37",
+      "size": 11525,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Configuration/Configuration Structure and Key Settings.md",
+      "hash": "05b724098914471d1a2e883d585efbc58fd6c6e72992e87ab2519caa6fa8e588",
+      "size": 7637,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Configuration/Configuration.md",
+      "hash": "e062e67f3a5930e7fb25f935752f22bdd2459761cb07835b0f5cc924fa582739",
+      "size": 8007,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Configuration/Managing LLM Providers and Models.md",
+      "hash": "a64f5255af4d3444ad8f6bc148a80314f36a1f0136b59811da1c4a3a00d4db44",
+      "size": 13107,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Configuration/Token Budgets and Concurrency.md",
+      "hash": "dc677cd819145bbdd131c68b976432eea2b251d73508734efeb7fa085ab3b51b",
+      "size": 8886,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Configuration/Viewing and Editing Configuration.md",
+      "hash": "f5f9759f76c6207b85b2638143cd12f5d96173195203097eb43b87f1a38c1a25",
+      "size": 11196,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Configuration/_section.yaml",
+      "hash": "a680153111111f25fcca42e65ac09185decbee94f03a7c25d5817175e0944923",
+      "size": 765,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Development Guide/Building the Project.md",
+      "hash": "4b8af849320d6a7dbbc6d8ebc4f6f49063be8d8bd8b017d4ab6a121e352641e2",
+      "size": 3501,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Development Guide/Development Guide.md",
+      "hash": "7024da1aa3b1460f285ffd5d736590ed6f8180cff9a1859ce3299229744faede",
+      "size": 5589,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Development Guide/Linting and Code Quality.md",
+      "hash": "9c9c2116fd589f01ff3b615ffd3658c97eeeeb9781f975f21d69eac28785a8bc",
+      "size": 4497,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Development Guide/Making Changes and Contributing.md",
+      "hash": "5beb1fbb5ebfe5f910171302f3b21e523ca990aae71a7a8d576aec86f610d0a1",
+      "size": 4796,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Development Guide/Running Tests.md",
+      "hash": "edd9f39f92d885b666c520411b52a6d9e49f2b1e6bbe94ee1e70e238eb147a81",
+      "size": 5452,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Development Guide/Setting up the Development Environment.md",
+      "hash": "847a530c4b5e9af2a689c76f2618b6cd13c68be4fed69a72da0b4ade7003e416",
+      "size": 1772,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Development Guide/Understanding the Repository Structure.md",
+      "hash": "b18c0ac0784a7fb2b10a68eb48827bf9e1733098aea5b78340d412446e88de38",
+      "size": 5248,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Development Guide/_section.yaml",
+      "hash": "7b89959f350618dff2dc805d53bceb30660a74093eda3107c72e537eed591578",
+      "size": 786,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Getting Started/Basic CLI Commands Overview.md",
+      "hash": "554e23c4d93dd37f114acb2fe71ae08a57d538891e7a0b59e7139e649323bcbe",
+      "size": 8603,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Getting Started/Building the Binary.md",
+      "hash": "7a9e6e48fa62771dd8e5ae1e88c8bb0027ec594b6c0146ec284646d962d28fcc",
+      "size": 2098,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Getting Started/Getting Started.md",
+      "hash": "9710c21e9a2b6d2ce57135486a9dd7c913ba0b16dc647a8687ae847a6f69018c",
+      "size": 6244,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Getting Started/Initializing a Repository.md",
+      "hash": "8b27d7725cba35630cacc013c4f0c0d88004d53fa0c563da0031b8738175aed0",
+      "size": 4101,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Getting Started/Installation.md",
+      "hash": "4664ce968fc335ac9066df29c4909f7bc446bd040708c708b922936d7cab7359",
+      "size": 2937,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Getting Started/Serving the Generated Wiki.md",
+      "hash": "705476f556bc2e3272c29878684e1eed18e158bfaadcc35a357f2d46ad512b68",
+      "size": 5633,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Getting Started/Using the Terminal User Interface (TUI).md",
+      "hash": "6d409fa0aae8b61aaa8914997f4d4595e8d6a1fc49d9b0c28320c33e77be29be",
+      "size": 5437,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Getting Started/_section.yaml",
+      "hash": "29fc68bbcb42c52736748708af04b8e4b98569918abc43ac3fa2a5a15754af15",
+      "size": 749,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Git Integration/Automatic Update Hooks.md",
+      "hash": "9e4c6fbd62208ddc2d6629f31e73e2d3e782af35831f60bd75c8cefd39d171f8",
+      "size": 10204,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Git Integration/Detecting Changes Since Last Build.md",
+      "hash": "6cd6d92e8ffced85842fd0485dc6cdad720c74df4e0a1beb727e687dcb10f0a2",
+      "size": 13215,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Git Integration/Generating Diff Patches and Previews.md",
+      "hash": "1c462a49428414e6261a2f12c701b0eae595440f2d39ae75b6fab76d40ec5c6f",
+      "size": 5843,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Git Integration/Git Integration.md",
+      "hash": "5fac44d46e2faff58623e1b078796dd908f9abbffc36d7fa55e921d09699556a",
+      "size": 9838,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Git Integration/Git Repository Detection and Basics.md",
+      "hash": "20c634197acde65f6cd7e519ee6a3871c1462ef1781d8f22108ef90b44f236f5",
+      "size": 7422,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Git Integration/Viewing Commit History.md",
+      "hash": "10c3fd81c73ad924981c8230b888cd2bf948d61de6756b03a026337bcdfd57b2",
+      "size": 3052,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Git Integration/_section.yaml",
+      "hash": "002914a1abfde3b4ccb3c040cb9a8610e2b28981d3ad194d2ca74f68dbfc2254",
+      "size": 851,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Knowledge Engine/Incremental Wiki Updates.md",
+      "hash": "461755ab529cbc4cff6e8d0b8d0b89e59697130f5677a178b44ed2510bf9df0a",
+      "size": 10211,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Knowledge Engine/Knowledge Card Generation and Refinement.md",
+      "hash": "6496cb3dfe23d6e2b57eddd1742d46a693827cac969042d5c7507cb1b500a49e",
+      "size": 14176,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Knowledge Engine/Knowledge Engine.md",
+      "hash": "5c4b69aef0dfda722af60e5e771c342ca1fab81f4d6a9e0aba63c7a2690c8462",
+      "size": 20885,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Knowledge Engine/Module Planning.md",
+      "hash": "04ae8682f5e7dd213a706c65ad4287e5e2e176217b527057822df940e7bf83d3",
+      "size": 12742,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Knowledge Engine/Repository Scanning.md",
+      "hash": "d35030d7c517288c25527dd4bf4ceccf885e1291eb646fba12f6b099409812a5",
+      "size": 10829,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Knowledge Engine/State Management for Incremental Updates.md",
+      "hash": "8786afa4d5e50267f23b85cb809794926e73c3c352cdda2761006655b1daf626",
+      "size": 7751,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Knowledge Engine/Wiki Outline Planning.md",
+      "hash": "a7af3c17c9f96f491d17616a4af618f7c77318283cba05e4ce01d083b34baa33",
+      "size": 11423,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Knowledge Engine/_section.yaml",
+      "hash": "4b88bbbae853c709a5376fd4efe689bf30f3af8478eab5bca1b690bf8978e260",
+      "size": 915,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/README.md",
+      "hash": "f89c26858077aa52fc85c197fad81fec36d5d0039aee1589dc3eeb1568e5fb8d",
+      "size": 7816,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Research/compare-the-efficacy-and-adverse-event-profiles-of-sglt2-inh.md",
+      "hash": "a9cd1d2133c3f914340d2ad97a333fe3b5215e20f25cd5ec47b57e8eaf7862be",
+      "size": 235138,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Research/gemini_SGLT2 vs GLP-1 in CKD.md",
+      "hash": "5c28f990fb21464db79130f21dc1da6f3058e7ab76839c88635f2de8adc67ca5",
+      "size": 52255,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Research/is-solar-cheaper-than-nuclear-in-europe.md",
+      "hash": "e5c08179cfb8f58907c5064a595f307b3eaf584397be3aa7ceb7ffa397cf2254",
+      "size": 18084,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Research/last-cloud-llm-at-ollama.md",
+      "hash": "3cd4dc52807f20b9a43873fc3eb1f4be9ec5973a1e766d5cf33970080769e8ae",
+      "size": 14798,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Serving the Generated Wiki/Rendering and Navigating Documentation.md",
+      "hash": "28ea96f8f4daee247000c45ffdc6f82be8ce74fc2577c687e3093765c87a1b7d",
+      "size": 12079,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Serving the Generated Wiki/Searching the Wiki.md",
+      "hash": "9c0a834f4897d3884a1cff1327fe93d3d0f0e79da85ca28abe3bb31844067294",
+      "size": 7537,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Serving the Generated Wiki/Server Routing and Request Handling.md",
+      "hash": "5ff429c54ffef5f8cd97445de543e30d7abdd166eafc59691d8e169142375ad0",
+      "size": 17398,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Serving the Generated Wiki/Serving the Generated Wiki.md",
+      "hash": "8c3d65d56aa8dd587bc2f88659acb0c670623d0714a2917763faf93bd030b1f2",
+      "size": 19927,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Serving the Generated Wiki/Starting the Wiki Server.md",
+      "hash": "2f396a1ec408862a6c3c3c2c748d945eab8eb8890c7fcdfc0fc920847f652744",
+      "size": 3854,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Serving the Generated Wiki/_section.yaml",
+      "hash": "d21c2ad9fa9835be7ad0edc78d4ddcb2940dc2b7f1e96a823490c3ae16466f71",
+      "size": 826,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Skills System/Skill Generation.md",
+      "hash": "77930af570b1feaff16058a99dcf582afc7c44098c466a1c37e482d5938a791e",
+      "size": 18602,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Skills System/Skill Refreshing and Invalidation.md",
+      "hash": "3f98d260ce8e6329ac4cd6f803c2add3bcf4950a195a41a060da345747d2ed87",
+      "size": 15064,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Skills System/Skill Storage, Loading, and Indexing.md",
+      "hash": "c5156366c257087aa0a196b69a5bcc6cb2a4e98afa36b076a2d6a1bb4fb712e7",
+      "size": 11793,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Skills System/Skill Structure and Format.md",
+      "hash": "d0ea2c7e29efc08401643806471606e1cd773818a67c5535aeb6e545f6b53d1f",
+      "size": 10171,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Skills System/Skills System.md",
+      "hash": "5cfaf06982f0bee43c5d372eb328389a29cedb5070a007a9f0c7a37225af8da3",
+      "size": 24106,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Skills System/_section.yaml",
+      "hash": "18b67dab6ab50690d24576fe9fec12427cf1166b11fcba09c774eea415838f4b",
+      "size": 775,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Terminal User Interface (TUI)/Approval Workflow.md",
+      "hash": "efb7ca6e6f08c0f0284cfcb4ef9369a7cd9550d582bb138410c4c2adf70a0348",
+      "size": 6718,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Terminal User Interface (TUI)/Built-in Tutorial.md",
+      "hash": "0e47f07ca7501962959da2f400f8811c4253c11d99d976f643528795e8cacf00",
+      "size": 18260,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Terminal User Interface (TUI)/Command Palette.md",
+      "hash": "d4ee8369e5a84396c6bccc6e190113e6523dff9f4150f32742e533972890f4ba",
+      "size": 13878,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Terminal User Interface (TUI)/Keybindings and Input Handling.md",
+      "hash": "1c946335f22079230f12b1d22f4005a1b593bc87436fcee78299c1483ad84fe2",
+      "size": 4950,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Terminal User Interface (TUI)/Markdown Rendering.md",
+      "hash": "fa7011a47ee40207918742313eda1032b524fdeb11a2e3a8b5ad10d0d221a9e6",
+      "size": 5634,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Terminal User Interface (TUI)/Session Management.md",
+      "hash": "dec885f913126f19aa2025c0710353e9ec1dd784cef85cafd863b1bd835fd218",
+      "size": 11194,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Terminal User Interface (TUI)/Status Line and Footer.md",
+      "hash": "906593a4729a5fea17944eb120a2208c01b676f85bbddd0247aaea67fe6a5b7f",
+      "size": 10904,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Terminal User Interface (TUI)/TUI Structure and Main Loop.md",
+      "hash": "04b5e7abfa3538eb8f4d6693b75c09ab10f0a671101d447bdb991f0e3f1df43b",
+      "size": 21531,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Terminal User Interface (TUI)/Terminal User Interface (TUI).md",
+      "hash": "19bbfd32e5f000b599f0f820b6257e5d50154dfc73e618925ba8bb20c7d9dddb",
+      "size": 10823,
+      "language": "markdown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki/Terminal User Interface (TUI)/_section.yaml",
+      "hash": "856eb7873f5a65d6a76b0a00aaf1f718223d4664fc6488d94fad35aadf81cd87",
+      "size": 891,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki_plan.yaml",
+      "hash": "f2e36c95af5603b9012ef3d7cd4136ee60e178dc74c7d55ea18489b1b9cf64b7",
+      "size": 4704,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/kaioken/wiki_state.yaml",
+      "hash": "6e217609e49a9ac8b868190b109932b866bc6f499e86b564019b3e003b2d586f",
+      "size": 393,
+      "language": "yaml",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/logo.svg",
+      "hash": "486c09ad8dfddd110ace71ee4a0d34f8c67c9ba45b92cf7a9e14d13f7fedc41d",
+      "size": 1751,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/public/prism-logo.svg",
+      "hash": "18f6071b8c37be97eede60674592346bc4b5a1b03ceac43f880322502d7c0f45",
+      "size": 205,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/scripts/gen-wiki-manifest.mjs",
+      "hash": "87e144d8767878639ba204ecd506642a6db4d3d17115255bfe77c69745ec0e5d",
+      "size": 3511,
+      "language": "javascript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/App.tsx",
+      "hash": "4d5cf8b360eebfc992a9cb013050d64157b0c682b88ac2e955786fc3aafc7242",
+      "size": 1092,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/DesktopApp.tsx",
+      "hash": "b651c39484caae8c723be7f0395e4fa0c2c501920244bb4ce6ba0adf1862581f",
+      "size": 4533,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/bits/FaultyTerminal.tsx",
+      "hash": "13b7f3b788f26ca0a0835c3f4e95a4384a59e2ef9f4fd0fdc2cd626a0f7c826b",
+      "size": 13430,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/AsciiArt.tsx",
+      "hash": "2918d3f8a78011022086c68970195ae692b8b70528770bb448e63ef55db0468c",
+      "size": 1245,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/BackToTop.tsx",
+      "hash": "d9f1f469407545006040ed31a65b795c15333b0c3b7aded6e9aa704b5078fd71",
+      "size": 1392,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/CodeBlock.tsx",
+      "hash": "33bf74f65c487b65cae3dee8704488530f4656ce79591b966308147e502dd08b",
+      "size": 2604,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/GithubMark.tsx",
+      "hash": "b213c96fb0a446a7a0c2201c60f8a2760a96d1c8174cb0e110a06aae1d558d01",
+      "size": 968,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/Icon.tsx",
+      "hash": "e0ed131da8a0ced945a95e18cedfce97220b3fcdae8276e4367aa422b393886d",
+      "size": 1300,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/LinkButton.tsx",
+      "hash": "f92d8cd15e99c7e005c34995de5dadba99ddfacec4f55b5e7bbcffd8204cd75a",
+      "size": 1426,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/Markdown.tsx",
+      "hash": "eef1d2a2ba90a5853a50cd18536723b4f1f4758dbbda7f27d0b429e1d4d37ce3",
+      "size": 6268,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/Mermaid.tsx",
+      "hash": "745e3eef4fc3e66f73860aa2f119d30a951b9c2854fc7bc6648fab8fc50d14d4",
+      "size": 3505,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/PageBackground.tsx",
+      "hash": "2183cc46142196f0daa255ac30e1d0127f3ecef01cc9932b7a94c95188c0725b",
+      "size": 3303,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/Reveal.tsx",
+      "hash": "5eb6a49dd0c966e0e0b07dd48c8d7a109530a3e41bea72e1f0dd535e2aadae27",
+      "size": 1217,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/SectionHeading.tsx",
+      "hash": "d54bc77e0660608df775c53ac83636e78646141d4364b5896ac1ac03e5117c22",
+      "size": 1599,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/SectionNav.tsx",
+      "hash": "fe2ecae10c32eb8e1d312cec30c46c04ae9f167de57a88a5b1b008598b42f7e2",
+      "size": 2886,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/SiteFooter.tsx",
+      "hash": "d9ae0cd56f3c3f6ad0d86e89fb5ea7f21de08ede7aa64a5acdced3bb5337e16d",
+      "size": 10708,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/SiteHeader.tsx",
+      "hash": "779c2fd16d2fdf4a1b82aa7ee154f11acdf7c36b41b9ebfa84bd2eb9e4024d4b",
+      "size": 7159,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/TerminalDemo.tsx",
+      "hash": "29f77cbdcba87ab3030147a19ba3b9756192f5f595674d9eafa60ef78a0ad916",
+      "size": 3619,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/TerminalWindow.tsx",
+      "hash": "2d40b26bf9bf41855908b2c085de5a57f86ea4ccf79745758245b5688412263b",
+      "size": 1848,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/docs/parts.tsx",
+      "hash": "5ed7bf4e3b9a6c76a8dd7b3eeaa715db716bebc4a047fc14c9aa05e471d03cea",
+      "size": 5973,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/sections/Commands.tsx",
+      "hash": "2781025eec8c4c76af3eeaf23b28a5e3e3470af13555e644012f3aef9a797a24",
+      "size": 3049,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/sections/Features.tsx",
+      "hash": "0c784aa10ef9ab1753922140380a0d764f0215d90ebb4c3aa4de85ff0c2a426a",
+      "size": 4447,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/sections/Hero.tsx",
+      "hash": "93a93fd216272cf8d1802c29bdfd30cd541631ba0c1129fb8772bfef27f8b07d",
+      "size": 18302,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/sections/Multiplier.tsx",
+      "hash": "b31ec94bcf3bb8eef2a9156591670ac71cb61167c745f05ad173f4755bafdeae",
+      "size": 2424,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/sections/OutputTree.tsx",
+      "hash": "815bdb7b03e95806bd96679ac16a020c8567448079910e3046a89e5ea2457d09",
+      "size": 4234,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/sections/Pipeline.tsx",
+      "hash": "d1e7a17e6c08d4719eb0ed11a09b2611ccd5429fd3111ec7c6129ad10149edac",
+      "size": 3634,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/sections/Quality.tsx",
+      "hash": "af586bfb94724a3342b33dfa20b71f853be87fbbc3cc2d24d7bb0244f632bb13",
+      "size": 2278,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/sections/QuickStart.tsx",
+      "hash": "d35da95c401f2574c662ae5a68916a5ecf2c272facbecb195d74bec0f8f9f5d4",
+      "size": 2461,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/sections/Research.tsx",
+      "hash": "af51ece62e208f9016b9d125cedf0de28cd390d138d646844114a740cc31f699",
+      "size": 6072,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/sections/StatsBar.tsx",
+      "hash": "9a8cd80bf80d488185bc551832abe48493f63be1c7df4b9d0535d0735702b561",
+      "size": 1977,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/ui/badge.tsx",
+      "hash": "968b0403af74a785c9408ca69a677235e49d0c80b2c27fb9858ad421a8778c7d",
+      "size": 1925,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/ui/button.tsx",
+      "hash": "d14549ab3ba7a9d5d1f424c2599233bffa0b317121abf3b6efa2fb902d5e2781",
+      "size": 3240,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/components/ui/tabs.tsx",
+      "hash": "8bf9ee3935ab86c268a2a71cb5b4b67d3d5587ca9f2e0bf25f37ffdb1980434c",
+      "size": 3497,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/data/content.ts",
+      "hash": "7202117db115eb8de7b7735a6ae23535e67a908beeadfeda9ddcb59397d7742d",
+      "size": 29252,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/data/desktop.ts",
+      "hash": "41406b8ea1d3710d41cb545878a4347f5c35722c6ca20857390f2001317a598a",
+      "size": 19049,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/data/docs-nav.ts",
+      "hash": "69ad5921b5bb158505e6164aaf6bbf18f47c6760678ad741091d04126815b2eb",
+      "size": 2775,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/data/roadmap.ts",
+      "hash": "c453cc272d07e993990d81dc072e168eedfb88fe972f8f4eadccc1a866a8112f",
+      "size": 14826,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/data/wiki-manifest.json",
+      "hash": "109d78fe5648916275a751779b89fe6c840f963483637aedb0d66b81a9a16457",
+      "size": 26803,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/data/wiki.ts",
+      "hash": "360aba907a755f0cf8fd9bfcbdf586228e2df5990b54e27a489a21acd153ea20",
+      "size": 1597,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/index.css",
+      "hash": "8d0a05fa8e4f688bf94e80e64db99943bcf36af96a15b00e95f464b0bcf078ff",
+      "size": 19057,
+      "language": "css",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/lib/doc-chrome.ts",
+      "hash": "36bb8939c7f5fa240eff5deacbea4f2545c741bfa4dae8da8231781efe516a7e",
+      "size": 659,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/lib/motion.ts",
+      "hash": "e6487c7acf697fc7339f03dd72065e5abca1651128a50fd4461518b38668d9fd",
+      "size": 2100,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/lib/scroll.ts",
+      "hash": "14d8593bb51f0b277d877807b60242f3da30023cfd9fe8a298bafe2249570087",
+      "size": 1216,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/lib/shell.tsx",
+      "hash": "2366b23fcc3e636d4900b780e47266be92c56b8cb197b145d749bb11e1ebcb27",
+      "size": 1371,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/lib/utils.ts",
+      "hash": "7c8c3dfc0cdd370d44932828eb067ef771c8fe7996693221d5d4b90af6d54f2d",
+      "size": 166,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/lib/viewport.ts",
+      "hash": "4ed6f8711bc6fcd998deae5646b88ed39fd95795603f871d17a740127df71f7b",
+      "size": 2669,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/main.tsx",
+      "hash": "808606b0f837f3162149f8d7ae70f318c2af6360bdc5b5deef4d3da18bedc391",
+      "size": 387,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/MobileApp.tsx",
+      "hash": "1d3b0472e2bd116efba05d5f00aed72babe73a4fc37fe74cdb458b84aef284b5",
+      "size": 3609,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/components/Accordion.tsx",
+      "hash": "7483454192043e4763f976fdbf38dd6166bba7585e69897bee53f34b621b40b3",
+      "size": 3069,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/components/Code.tsx",
+      "hash": "b3bf634c5db787055d3833c3aa149f97732c15069e6d6a93b7a4c35e89092da4",
+      "size": 2786,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/components/FitText.tsx",
+      "hash": "3d952c63bf8998a5fd8a61882c4fc60cd14b7d41d00a5df480923913c5f2a587",
+      "size": 2390,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/components/TabBar.tsx",
+      "hash": "727be518f3f107f14e2111ddbd06825fd1c2497fb554d09140b4a42c33fad598",
+      "size": 2118,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/components/TerminalPeek.tsx",
+      "hash": "9da16090c015420c1e25d2d17c74d6ae878323fc924abe0ea175cceb4efdb558",
+      "size": 4281,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/components/TopBar.tsx",
+      "hash": "f0a2329548ad522ba1dc3622762fb66d14486d97fb401006993f273da163f9cd",
+      "size": 2986,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/components/primitives.tsx",
+      "hash": "180b253cee80227b4bca797562abda1f2a7bb6f3e9e50b0bd088a0f84368df16",
+      "size": 9219,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/lib/chrome.tsx",
+      "hash": "76845bd76929e8f6702ef2dee82dc34d302414662baf64d1383e6bb284c78da5",
+      "size": 1410,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/lib/tone.ts",
+      "hash": "a9925c96801b361648f5d3adff0e8e1a9681701ee968a3a1d14c7b5bc6539d2e",
+      "size": 1168,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/screens/DesktopScreen.tsx",
+      "hash": "b6b23dfae6a885b077b459113dfecdcc720c77b9a543c11d6bf872e933ae1169",
+      "size": 15142,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/screens/DocScreen.tsx",
+      "hash": "a1ad83a9377ad99937cdebdfd474797b59eeda1c70dc9ac05619b0d30c3967b8",
+      "size": 4858,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/screens/DocsIndex.tsx",
+      "hash": "c36fe5503437ecea7ff4b41f7f93ff4a02a2c18d1ad18939e6e6f375799c2a2e",
+      "size": 1758,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/screens/Home.tsx",
+      "hash": "fd85fa7e6791c7e9ab778e3799f14528b59183a5ea55bfa256e78b57124cfc0b",
+      "size": 21849,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/screens/More.tsx",
+      "hash": "2a5508a8508c2683ce70bfcfb2bfa67eb8e79572028e7de4edc1aa7b086dbe7c",
+      "size": 5882,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/screens/Next.tsx",
+      "hash": "5d14acaa16dfb190f9bc3d55ae4bf22b4330dcbde4851df09510bae46c349daf",
+      "size": 6233,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/screens/Output.tsx",
+      "hash": "eb9c9fb3e114b70e3a48178298048c73d1307115f03fb8c65a300bd15d6618fc",
+      "size": 4805,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/screens/OutputDoc.tsx",
+      "hash": "c59ac8a2e139e6f77bdc9893bc7e0d40dd10c8aad7f76c97074791641495c816",
+      "size": 6832,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/mobile/screens/Showcase.tsx",
+      "hash": "40e9b410659f642b81ae4ed94bf3f4bced88df7176fedb29ef26de2809b31d2b",
+      "size": 8726,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/Desktop.tsx",
+      "hash": "0f728d7a120e724386f498c0c8d39e7519d16afe3c2474f10f7ab219414a7fb7",
+      "size": 45587,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/DesktopBgPreview.tsx",
+      "hash": "fb0788d65450b20ae630060166661c3803b9f776dcec520aab0149d38a1b064e",
+      "size": 83586,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/Home.tsx",
+      "hash": "cbbb182068ec419a2a87ee5d266b560d9a470263cded29bf551b0ae4d54d10c0",
+      "size": 4953,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/Next.tsx",
+      "hash": "f791b1788ce3d47dac459673e1478c34db225613003a32f3eafce641b7ceb25d",
+      "size": 10222,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/Showcase.tsx",
+      "hash": "0a39f76b27dc09300fe1348f44763d45ed323b1a883a1f44372bfb02a8c6cd47",
+      "size": 25058,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Agent.tsx",
+      "hash": "f8425b155a2eb1f3bb57ba23e50252df2b4e3e8c5c1a47e69dc1834a39c2eea6",
+      "size": 10790,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Cards.tsx",
+      "hash": "a427b5e0ddaec383fffd138765e6c254c326305212e537ecdc29a3bfab5faf15",
+      "size": 4251,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/CommandsDoc.tsx",
+      "hash": "0d707102bcfd4d3c5d3ad3f46b9e77c80df6eb906ab56ae12109d36ced38c2e5",
+      "size": 10721,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Config.tsx",
+      "hash": "f90193eb352eb5a7a0fb2218a92d2b346a430262777b84a9942b00e2957be817",
+      "size": 7754,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/DocsIndex.tsx",
+      "hash": "b0ee8511a9f3c8b0fdb711177cbfc03d1707651440c20b72c1a089b2ca7699fe",
+      "size": 2321,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/DocsLayout.tsx",
+      "hash": "94fef06ab91d457ce0e42869c63a86469b5a9eef1b2a8b2cccce014dddefcef4",
+      "size": 2665,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Impact.tsx",
+      "hash": "73927caf03b8c21c05f8eb2866748c3385f1200867c6daaf65d13470dbc32041",
+      "size": 6832,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Install.tsx",
+      "hash": "2d3a68e7934eb6edc6b1d945534e41df5dd7ece3e06aa06b7b6cc8d7a6bf7140",
+      "size": 6308,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Integrations.tsx",
+      "hash": "24add8bc1421a252ac20f6852c3c105126353959c6ce5e42057636e414887fc1",
+      "size": 9491,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/OutputDoc.tsx",
+      "hash": "baca49011107b24401999334271c9f6969eb64f333288e3caa8603a87ef39da4",
+      "size": 5322,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Research.tsx",
+      "hash": "cfabfe1d36ee30212688cd313a1f2c84d8c814d73b0738846cf4b8ed1d2c5b36",
+      "size": 9436,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Skills.tsx",
+      "hash": "f74b1822d7923c577e5273d5df53c16901935b8f2b080308b7acf76d5bd52a20",
+      "size": 3779,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Tui.tsx",
+      "hash": "6e84bf09ec7e4e2e1431a9bbe603ebddf8877d88c97ee92f1941d2cd9a7e96aa",
+      "size": 6937,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Update.tsx",
+      "hash": "fa6a09c1d944407e027c3bebc53ed2ee5f11a4546fa8b1f05742843b08cc74b0",
+      "size": 3754,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/docs/Wiki.tsx",
+      "hash": "1ef7728757f0f92e607b8d191c3a240d10497a363f0505ae789a8840fa3c963b",
+      "size": 5567,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/preview/PreviewDoc.tsx",
+      "hash": "4ad28b5b1269b22b62d77a14d7a957acabc1ee38f8b8eedb8d4a9fabc38eeb84",
+      "size": 5838,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/preview/PreviewIndex.tsx",
+      "hash": "b5eb53cf615f06423cc7e278b6263deda265e4c82eb61556c14e9744ffff4635",
+      "size": 6675,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/pages/preview/PreviewLayout.tsx",
+      "hash": "a17f66f7ad7c5b7e0a9128305ba42e240082a289fae72b9779448b72bc648c59",
+      "size": 4868,
+      "language": "tsx",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/src/vite-env.d.ts",
+      "hash": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+      "size": 38,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/tsconfig.app.json",
+      "hash": "2d1f2ef00b776bf82002c75f4cb72483d2d0cb1714c51f34e4dbe76bb6192301",
+      "size": 757,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/tsconfig.json",
+      "hash": "3f24c40e2f822c632d0448261986f1422a255dc00733640a1f7a565afb42d740",
+      "size": 213,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/tsconfig.node.json",
+      "hash": "6eae9a9fe51296a83da58292fe9ec99d2bceb0d96094988013bdf07dd507027e",
+      "size": 610,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/vercel.json",
+      "hash": "1e7f0cd395695edd0c6587219e83ab4ab5e8598d30d9e95fa2cdd55ff2933c89",
+      "size": 190,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "website/vite.config.ts",
+      "hash": "6101881fd6b0e3d66ac477413003483707992ff0d5c289fe87bbc6619361082f",
+      "size": 490,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    }
+  ]
+}

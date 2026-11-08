@@ -1,0 +1,1881 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-23T16:23:52.156Z",
+  "model": "openrouter/deepseek/deepseek-v4-flash-0731",
+  "multiplier": 3,
+  "documents": [
+    {
+      "document": "evaluation/eval-probes-and-docs.md",
+      "grounded": 10,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "evaluation/harness-and-benchmarking.md",
+      "grounded": 26,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 6,
+          "detail": "appears nowhere in the source this document was written from"
+        }
+      ]
+    },
+    {
+      "document": "evaluation/index.md",
+      "grounded": 22,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "evaluation/overview-and-structure.md",
+      "grounded": 7,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "foundation/extensions-and-skills.md",
+      "grounded": 0,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 3,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 5,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 15,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 18,
+          "detail": "appears nowhere in the source this document was written from"
+        }
+      ]
+    },
+    {
+      "document": "foundation/index.md",
+      "grounded": 0,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 1,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 3,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 7,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 9,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 20,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 22,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 23,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "padding",
+          "claim": "etc.",
+          "line": 20,
+          "detail": "\"etc.\" would read identically for any codebase"
+        }
+      ]
+    },
+    {
+      "document": "foundation/overview-of-pi-directory.md",
+      "grounded": 0,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 3,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 5,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 7,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 50,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 54,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 61,
+          "detail": "appears nowhere in the source this document was written from"
+        }
+      ]
+    },
+    {
+      "document": "foundation/themes-and-configuration.md",
+      "grounded": 3,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "impact-model/index.md",
+      "grounded": 16,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_file",
+          "claim": "predict.ts:177-224",
+          "line": 16,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "predict.ts:226-235",
+          "line": 24,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "predict.ts:16-18",
+          "line": 37,
+          "detail": "the repository contains no such file"
+        }
+      ]
+    },
+    {
+      "document": "impact-model/overview-and-types.md",
+      "grounded": 13,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "impact-model/prediction-process.md",
+      "grounded": 17,
+      "uncovered": [
+        "renderImpact"
+      ],
+      "coverage": 0.8571428571428571,
+      "defects": [
+        {
+          "kind": "uncovered_export",
+          "claim": "renderImpact",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "impact-model/rendering.md",
+      "grounded": 7,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "kaioken-core/action-and-delivery-modules.md",
+      "grounded": 2,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 56,
+          "detail": "appears nowhere in the source this document was written from"
+        }
+      ]
+    },
+    {
+      "document": "kaioken-core/core-analysis-modules.md",
+      "grounded": 0,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "kaioken-core/framework-overview.md",
+      "grounded": 6,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_symbol",
+          "claim": "ReactDOMServer",
+          "line": 76,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "SkillTemplate",
+          "line": 88,
+          "detail": "appears nowhere in the source this document was written from"
+        }
+      ]
+    },
+    {
+      "document": "kaioken-core/index.md",
+      "grounded": 2,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_symbol",
+          "claim": "PredictionInput",
+          "line": 23,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "PredictionModel",
+          "line": 24,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "PredictionInput",
+          "line": 24,
+          "detail": "appears nowhere in the source this document was written from"
+        }
+      ]
+    },
+    {
+      "document": "knowledge-graph/graph-construction.md",
+      "grounded": 35,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "knowledge-graph/graph-rendering-and-export.md",
+      "grounded": 33,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_symbol",
+          "claim": "clusterBy",
+          "line": 31,
+          "detail": "appears nowhere in the source this document was written from"
+        }
+      ]
+    },
+    {
+      "document": "knowledge-graph/graph-types-and-artifacts.md",
+      "grounded": 39,
+      "uncovered": [
+        "MermaidOptions",
+        "assertGraphIntegrity",
+        "buildCodeGraph",
+        "buildGraph",
+        "exportGraphJson",
+        "graphStats",
+        "nodeKindFor",
+        "renderGraphJson",
+        "renderGraphMarkdown",
+        "renderGraphMermaid",
+        "renderMermaid",
+        "splitDocumentId",
+        "toCytoscapeGraph",
+        "toD3Graph"
+      ],
+      "coverage": 0.5882352941176471,
+      "defects": [
+        {
+          "kind": "uncovered_export",
+          "claim": "MermaidOptions",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "assertGraphIntegrity",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "buildCodeGraph",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "buildGraph",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "exportGraphJson",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "graphStats",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "nodeKindFor",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "renderGraphJson",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "renderGraphMarkdown",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "renderGraphMermaid",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "renderMermaid",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "splitDocumentId",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "toCytoscapeGraph",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "toD3Graph",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "knowledge-graph/index.md",
+      "grounded": 67,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "planning/card-generation.md",
+      "grounded": 54,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "planning/index.md",
+      "grounded": 104,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_file",
+          "claim": "kaizen/module-plan.yaml",
+          "line": 50,
+          "detail": "the repository contains no such file"
+        }
+      ]
+    },
+    {
+      "document": "planning/module-plan-generation.md",
+      "grounded": 31,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "planning/planning-overview.md",
+      "grounded": 42,
+      "uncovered": [
+        "CardResult",
+        "DirectoryEvidence",
+        "ModuleEvidence",
+        "ModuleFileEvidence",
+        "ProposeResult",
+        "RepositoryEvidence",
+        "buildCardPrompt",
+        "buildPrompt",
+        "expandDirectories",
+        "findModule",
+        "flatten",
+        "gatherEvidence",
+        "gatherModuleEvidence",
+        "generateCard",
+        "generateCards",
+        "moduleScope",
+        "proposeHeuristicModules",
+        "proposeModulePlan",
+        "validatePlan",
+        "verifyCard"
+      ],
+      "coverage": 0.4594594594594595,
+      "defects": [
+        {
+          "kind": "uncovered_export",
+          "claim": "CardResult",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "DirectoryEvidence",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ModuleEvidence",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ModuleFileEvidence",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ProposeResult",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "RepositoryEvidence",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "buildCardPrompt",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "buildPrompt",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "expandDirectories",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "findModule",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "flatten",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "gatherEvidence",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "gatherModuleEvidence",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "generateCard",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "generateCards",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "moduleScope",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "proposeHeuristicModules",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "proposeModulePlan",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "validatePlan",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "verifyCard",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "provenance-and-staleness/index.md",
+      "grounded": 32,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_file",
+          "claim": "types.ts:118-141",
+          "line": 29,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "types.ts:59-66",
+          "line": 39,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "types.ts:68-78",
+          "line": 39,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "staleness.ts:211-220",
+          "line": 43,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "staleness.ts:177-208",
+          "line": 65,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "staleness.ts:149-167",
+          "line": 67,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "types.ts:81-106",
+          "line": 71,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "staleness.ts:272-307",
+          "line": 77,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "types.ts:52-56",
+          "line": 79,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "padding",
+          "claim": "etc.",
+          "line": 77,
+          "detail": "\"etc.\" would read identically for any codebase"
+        }
+      ]
+    },
+    {
+      "document": "provenance-and-staleness/invalidation-detection.md",
+      "grounded": 21,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "padding",
+          "claim": "etc.",
+          "line": 38,
+          "detail": "\"etc.\" would read identically for any codebase"
+        }
+      ]
+    },
+    {
+      "document": "provenance-and-staleness/provenance-model.md",
+      "grounded": 40,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "unknown_symbol",
+          "claim": "capturedAt",
+          "line": 20,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "artifactId",
+          "line": 34,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "includeSourceContent",
+          "line": 88,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "capturedAt",
+          "line": 88,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "compareContent",
+          "line": 88,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "maxStalenessMs",
+          "line": 88,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "includeDescendants",
+          "line": 102,
+          "detail": "appears nowhere in the source this document was written from"
+        }
+      ]
+    },
+    {
+      "document": "provenance-and-staleness/staleness-computation.md",
+      "grounded": 60,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "research/gathering-and-generation.md",
+      "grounded": 24,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "research/index.md",
+      "grounded": 47,
+      "uncovered": [
+        "BREADTH_THRESHOLD",
+        "Citation",
+        "CitationDefect",
+        "CitationDefectKind",
+        "MAX_MULTIPLIER",
+        "MIN_MULTIPLIER",
+        "RESEARCH_DIR",
+        "ResearchDepth",
+        "ResearchDocument",
+        "ResearchVerification",
+        "asProvenance",
+        "depthFor",
+        "documentPath",
+        "parseArtifact",
+        "parseMultiplier",
+        "readResearchDocuments",
+        "renderMarkdown",
+        "researchDir",
+        "uncitedSentences",
+        "verifyCitations",
+        "writeResearchDocument"
+      ],
+      "coverage": 0.5531914893617021,
+      "defects": [
+        {
+          "kind": "padding",
+          "claim": "etc.",
+          "line": 9,
+          "detail": "\"etc.\" would read identically for any codebase"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "BREADTH_THRESHOLD",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Citation",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "CitationDefect",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "CitationDefectKind",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "MAX_MULTIPLIER",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "MIN_MULTIPLIER",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "RESEARCH_DIR",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ResearchDepth",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ResearchDocument",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ResearchVerification",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "asProvenance",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "depthFor",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "documentPath",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "parseArtifact",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "parseMultiplier",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "readResearchDocuments",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "renderMarkdown",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "researchDir",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "uncitedSentences",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "verifyCitations",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "writeResearchDocument",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "research/ports-and-fetching.md",
+      "grounded": 33,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "research/sanitization-and-extraction.md",
+      "grounded": 14,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "scan-and-search/index.md",
+      "grounded": 9,
+      "uncovered": [
+        "Chunk",
+        "Corpus",
+        "DEFAULT_IGNORES",
+        "Doc",
+        "EmbeddingProvider",
+        "FileRecord",
+        "IgnoreStack",
+        "IgnoreStackOptions",
+        "KAIOKEN_DIR",
+        "Kind",
+        "Lexicon",
+        "Posting",
+        "RRF_K",
+        "Ranked",
+        "Risk",
+        "SCAN_ARTIFACT",
+        "SEARCH_DIR",
+        "ScanOptions",
+        "ScanResult",
+        "SearchHit",
+        "SearchIndex",
+        "SearchQuery",
+        "analyze",
+        "classifyRisk",
+        "collect",
+        "cosine",
+        "detectLanguage",
+        "extensionOf",
+        "firstHeading",
+        "hasCredentialContent",
+        "hasPrivateKeyContent",
+        "isBinary",
+        "isStopword",
+        "languageFromShebang",
+        "looksLikeLiveSecret",
+        "parseIgnoreText",
+        "phraseBonus",
+        "readIgnoreFiles",
+        "readScanArtifact",
+        "rrf",
+        "scanArtifactPath",
+        "searchIndexPath",
+        "splitIdentifier",
+        "splitMarkdown",
+        "stem",
+        "toPosix",
+        "topN",
+        "writeScanArtifact"
+      ],
+      "coverage": 0.04,
+      "defects": [
+        {
+          "kind": "uncovered_export",
+          "claim": "Chunk",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Corpus",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "DEFAULT_IGNORES",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Doc",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "EmbeddingProvider",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "FileRecord",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "IgnoreStack",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "IgnoreStackOptions",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "KAIOKEN_DIR",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Kind",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Lexicon",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Posting",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "RRF_K",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Ranked",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Risk",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SCAN_ARTIFACT",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SEARCH_DIR",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ScanOptions",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ScanResult",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SearchHit",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SearchIndex",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SearchQuery",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "analyze",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "classifyRisk",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "collect",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "scan-and-search/integration.md",
+      "grounded": 5,
+      "uncovered": [
+        "DEFAULT_IGNORES",
+        "FileRecord",
+        "IgnoreStack",
+        "IgnoreStackOptions",
+        "KAIOKEN_DIR",
+        "Risk",
+        "SCAN_ARTIFACT",
+        "ScanOptions",
+        "ScanResult",
+        "classifyRisk",
+        "detectLanguage",
+        "extensionOf",
+        "hasCredentialContent",
+        "hasPrivateKeyContent",
+        "isBinary",
+        "languageFromShebang",
+        "looksLikeLiveSecret",
+        "parseIgnoreText",
+        "readIgnoreFiles",
+        "readScanArtifact",
+        "scanArtifactPath",
+        "toPosix",
+        "writeScanArtifact"
+      ],
+      "coverage": 0.08,
+      "defects": [
+        {
+          "kind": "uncovered_export",
+          "claim": "DEFAULT_IGNORES",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "FileRecord",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "IgnoreStack",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "IgnoreStackOptions",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "KAIOKEN_DIR",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Risk",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SCAN_ARTIFACT",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ScanOptions",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ScanResult",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "classifyRisk",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "detectLanguage",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "extensionOf",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "hasCredentialContent",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "hasPrivateKeyContent",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "isBinary",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "languageFromShebang",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "looksLikeLiveSecret",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "parseIgnoreText",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "readIgnoreFiles",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "readScanArtifact",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "scanArtifactPath",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "toPosix",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "writeScanArtifact",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "scan-and-search/scan-module.md",
+      "grounded": 5,
+      "uncovered": [
+        "DEFAULT_IGNORES",
+        "FileRecord",
+        "IgnoreStack",
+        "IgnoreStackOptions",
+        "KAIOKEN_DIR",
+        "Risk",
+        "SCAN_ARTIFACT",
+        "ScanOptions",
+        "ScanResult",
+        "classifyRisk",
+        "detectLanguage",
+        "extensionOf",
+        "hasCredentialContent",
+        "hasPrivateKeyContent",
+        "isBinary",
+        "languageFromShebang",
+        "looksLikeLiveSecret",
+        "parseIgnoreText",
+        "readIgnoreFiles",
+        "readScanArtifact",
+        "scanArtifactPath",
+        "toPosix",
+        "writeScanArtifact"
+      ],
+      "coverage": 0.041666666666666664,
+      "defects": [
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 13,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 17,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "DEFAULT_IGNORES",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "FileRecord",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "IgnoreStack",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "IgnoreStackOptions",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "KAIOKEN_DIR",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Risk",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SCAN_ARTIFACT",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ScanOptions",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ScanResult",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "classifyRisk",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "detectLanguage",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "extensionOf",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "hasCredentialContent",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "hasPrivateKeyContent",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "isBinary",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "languageFromShebang",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "looksLikeLiveSecret",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "parseIgnoreText",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "readIgnoreFiles",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "readScanArtifact",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "scanArtifactPath",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "toPosix",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "writeScanArtifact",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "scan-and-search/search-module.md",
+      "grounded": 5,
+      "uncovered": [
+        "Chunk",
+        "Corpus",
+        "Doc",
+        "EmbeddingProvider",
+        "Kind",
+        "Lexicon",
+        "Posting",
+        "RRF_K",
+        "Ranked",
+        "SEARCH_DIR",
+        "SearchHit",
+        "SearchIndex",
+        "SearchQuery",
+        "analyze",
+        "collect",
+        "cosine",
+        "firstHeading",
+        "isStopword",
+        "phraseBonus",
+        "rrf",
+        "searchIndexPath",
+        "splitIdentifier",
+        "splitMarkdown",
+        "stem",
+        "topN"
+      ],
+      "coverage": 0.038461538461538464,
+      "defects": [
+        {
+          "kind": "uncovered_export",
+          "claim": "Chunk",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Corpus",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Doc",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "EmbeddingProvider",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Kind",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Lexicon",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Posting",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "RRF_K",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "Ranked",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SEARCH_DIR",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SearchHit",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SearchIndex",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SearchQuery",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "analyze",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "collect",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "cosine",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "firstHeading",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "isStopword",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "phraseBonus",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "rrf",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "searchIndexPath",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "splitIdentifier",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "splitMarkdown",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "stem",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "topN",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "serve-and-presentation/document-and-card-views.md",
+      "grounded": 7,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "serve-and-presentation/graph-and-search.md",
+      "grounded": 20,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "serve-and-presentation/index.md",
+      "grounded": 44,
+      "uncovered": [
+        "DocVerification",
+        "RunningServer",
+        "ServeOptions",
+        "escapeAttr",
+        "escapeHtml",
+        "handle",
+        "highlight",
+        "isSafeUrl",
+        "queryTerms",
+        "renderMarkdown",
+        "slug"
+      ],
+      "coverage": 0.819672131147541,
+      "defects": [
+        {
+          "kind": "padding",
+          "claim": "etc.",
+          "line": 55,
+          "detail": "\"etc.\" would read identically for any codebase"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "DocVerification",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "RunningServer",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ServeOptions",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "escapeAttr",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "escapeHtml",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "handle",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "highlight",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "isSafeUrl",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "queryTerms",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "renderMarkdown",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "slug",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "serve-and-presentation/overview-and-library.md",
+      "grounded": 37,
+      "uncovered": [
+        "Heading",
+        "RunningServer",
+        "ServeOptions",
+        "buildGraph",
+        "escapeAttr",
+        "escapeHtml",
+        "highlight",
+        "isSafeUrl",
+        "outline",
+        "queryTerms",
+        "renderMarkdown"
+      ],
+      "coverage": 0.7380952380952381,
+      "defects": [
+        {
+          "kind": "uncovered_export",
+          "claim": "Heading",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "RunningServer",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "ServeOptions",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "buildGraph",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "escapeAttr",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "escapeHtml",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "highlight",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "isSafeUrl",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "outline",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "queryTerms",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "renderMarkdown",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "skill-generation/index.md",
+      "grounded": 34,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "padding",
+          "claim": "etc.",
+          "line": 25,
+          "detail": "\"etc.\" would read identically for any codebase"
+        }
+      ]
+    },
+    {
+      "document": "skill-generation/package-and-module-exports.md",
+      "grounded": 9,
+      "uncovered": [
+        "ProposeInput",
+        "SkillProposal",
+        "WriteSkillInput",
+        "WrittenSkill",
+        "discoverRepoCommands",
+        "extractPrescribedCommands",
+        "proposeSkills",
+        "skillExists",
+        "slug",
+        "validateVerificationCommands",
+        "writeSkill"
+      ],
+      "coverage": 0,
+      "defects": [
+        {
+          "kind": "uncovered_export",
+          "claim": "ProposeInput",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "SkillProposal",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "WriteSkillInput",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "WrittenSkill",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "discoverRepoCommands",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "extractPrescribedCommands",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "proposeSkills",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "skillExists",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "slug",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "validateVerificationCommands",
+          "detail": "exported declaration in scope that the document never mentions"
+        },
+        {
+          "kind": "uncovered_export",
+          "claim": "writeSkill",
+          "detail": "exported declaration in scope that the document never mentions"
+        }
+      ]
+    },
+    {
+      "document": "skill-generation/proposal-generation.md",
+      "grounded": 12,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "skill-generation/skill-writing-and-validation.md",
+      "grounded": 22,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "padding",
+          "claim": "etc.",
+          "line": 36,
+          "detail": "\"etc.\" would read identically for any codebase"
+        }
+      ]
+    },
+    {
+      "document": "workspace-structure/index.md",
+      "grounded": 11,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "workspace-structure/package-configuration.md",
+      "grounded": 8,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    },
+    {
+      "document": "workspace-structure/repository-layout.md",
+      "grounded": 18,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": [
+        {
+          "kind": "excerpt_not_found",
+          "claim": "{",
+          "line": 9,
+          "detail": "the attributed file does not contain that text"
+        },
+        {
+          "kind": "unknown_file",
+          "claim": "packages/evals/src/index.ts",
+          "line": 33,
+          "detail": "the repository contains no such file"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 65,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 71,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "unknown_symbol",
+          "claim": "_pi",
+          "line": 80,
+          "detail": "appears nowhere in the source this document was written from"
+        },
+        {
+          "kind": "padding",
+          "claim": "etc.",
+          "line": 33,
+          "detail": "\"etc.\" would read identically for any codebase"
+        },
+        {
+          "kind": "padding",
+          "claim": "etc.",
+          "line": 71,
+          "detail": "\"etc.\" would read identically for any codebase"
+        }
+      ]
+    },
+    {
+      "document": "workspace-structure/workspace-source-paths.md",
+      "grounded": 12,
+      "uncovered": [],
+      "coverage": 1,
+      "defects": []
+    }
+  ]
+}

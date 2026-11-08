@@ -1,0 +1,149 @@
+{
+  "moduleId": "kaioken-wiki",
+  "name": "Kaioken Wiki",
+  "generatedAt": "2026-09-23T15:11:42.969Z",
+  "summary": "Kaioken Wiki is a structural module that generates, verifies, and maintains a multi-chapter technical wiki for a codebase. It orchestrates LLM-driven planning and generation of wiki chapters from scanned repository evidence, enforces grounding by requiring all claims to reference actual files and declarations, and persists artifacts like the wiki plan, provenance, state, verification reports, and an architecture brief. The pipeline moves from global outline to per-chapter sections to document generation, with corrective loops based on defect reports and scoring against a rubric.",
+  "keyPoints": [
+    "The module orchestrates a multi-step LLM pipeline: global wiki planning (plan.ts), section planning (plan.ts), document generation (generate.ts), verification against repository evidence (verify.ts), and correction/refinement loops, orchestrated by runWiki in run.ts.",
+    "All artifacts are written under a KAIOKEN_DIR root: wiki-plan.yaml, provenance.json, wiki-state.json, verification.json, architecture.md, and a wiki/ directory for generated documents (artifact.ts).",
+    "Grounding is strict: every backticked symbol or file path in generated chapters must appear in the evidence given to the model; a claim about a file listed nowhere is reported as a defect rather than silently believed (generate.ts prompts, verify.ts).",
+    "The architecture brief is a shared, editable document injected into every chapter prompt, ensuring consistent terminology and component names across chapters; deleting it triggers regeneration (brief.ts).",
+    "Generation includes iterative refinement: if a verification report shows defects, a repair prompt fixes exactly those claims; if output has padding or low coverage, a critique prompt revises the document, with depth limiting iterations (generate.ts)."
+  ],
+  "entryPoints": [
+    {
+      "name": "runWiki",
+      "file": "kaioken/wiki/src/run.ts",
+      "note": "Main orchestration entry point: takes RunInput, runs the full wiki-generation pipeline (plan → sections → generate → verify → persist), returns RunOutput."
+    },
+    {
+      "name": "planWiki",
+      "file": "kaioken/wiki/src/plan.ts",
+      "note": "Generates the global wiki plan (chapters with goals and file assignments) via LLM, coerces output into WikiPlan."
+    },
+    {
+      "name": "planSections",
+      "file": "kaioken/wiki/src/plan.ts",
+      "note": "Plans the subsections of one chapter, assigning each section a subset of the chapter's files from which it is written."
+    },
+    {
+      "name": "generateDocument",
+      "file": "kaioken/wiki/src/generate.ts",
+      "note": "Generates a single wiki document for a chapter (or section) via LLM, using the chapter system prompt and evidence; returns WikiDocument."
+    },
+    {
+      "name": "verifyDocument",
+      "file": "kaioken/wiki/src/verify.ts",
+      "note": "Checks a generated document against repository evidence, producing a VerificationReport of defects such as ungrounded claims and broken links."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/wiki/package.json",
+      "hash": "d9cbbb5888eb2ad735962f9e4844b9154a89864bc3801f6a74667c99812eee19"
+    },
+    {
+      "path": "kaioken/wiki/src/artifact.ts",
+      "hash": "4aa01b0c7222f0c31a7bc07adad0d3bc2e4694c3d179e28f44e39b7576aa21b2"
+    },
+    {
+      "path": "kaioken/wiki/src/brief.ts",
+      "hash": "0d8404d8b9a2ee70cacb2eb0f5d9fe9c0b87f8f94afd0c6b0f862a716c7c0a11"
+    },
+    {
+      "path": "kaioken/wiki/src/claims.ts",
+      "hash": "092753d8864a68a06e9543d7a8e42903e39627a74856332dd2a3ccff4fb4b887"
+    },
+    {
+      "path": "kaioken/wiki/src/generate.ts",
+      "hash": "efde2ff45d46e9304c2e59d33c6632d5482fb06b9ffbfa22821e6fa793357312"
+    },
+    {
+      "path": "kaioken/wiki/src/index.ts",
+      "hash": "bc1ba6fe0d575524366721f26fd184d388a79ac6aff0f39393b7940b6de4259a"
+    },
+    {
+      "path": "kaioken/wiki/src/plan.ts",
+      "hash": "e583f9d7a6aba687eeeb6d3e68fa402489dfa1c82946d8325f4a663693b6a19c"
+    },
+    {
+      "path": "kaioken/wiki/src/run.ts",
+      "hash": "c16d1f9b9df5abf50a04f4c0c11592d9c55ef9dda16a27585b11e32a5eec4eb6"
+    },
+    {
+      "path": "kaioken/wiki/src/types.ts",
+      "hash": "598064650a4756e1cd503ff932aa42ee67f0f8cdbf86f2b2759252ac7d6d70ff"
+    },
+    {
+      "path": "kaioken/wiki/src/verify.ts",
+      "hash": "250225210cb887a01031a6d9120169fb1611f727f5246f0f053bc7d382eddd04"
+    },
+    {
+      "path": "kaioken/wiki/test/wiki.test.ts",
+      "hash": "a76555e8178a3b117a20c41c0b030c2440aa67574e70595b11453551b174d04e"
+    },
+    {
+      "path": "kaioken/wiki/tsconfig.json",
+      "hash": "bd4429a3d2bcf6870a32c14c7e913489daeed4b1bb2be8e4f579d5acf8007817"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "WIKI_PLAN_ARTIFACT",
+      "WIKI_DIR",
+      "PROVENANCE_ARTIFACT",
+      "WIKI_STATE_ARTIFACT",
+      "VERIFICATION_ARTIFACT",
+      "BRIEF_ARTIFACT",
+      "wikiPlanPath",
+      "wikiDir",
+      "provenancePath",
+      "wikiStatePath",
+      "briefPath",
+      "writeWikiPlan",
+      "readWikiPlan",
+      "normalisePlan",
+      "writeWikiDocument",
+      "writeProvenance",
+      "readProvenance",
+      "readWikiState",
+      "writeWikiState",
+      "VerificationRecord",
+      "VerificationIndex",
+      "verificationPath",
+      "writeVerification",
+      "readVerification",
+      "locate",
+      "writeWikiIndex",
+      "BriefInput",
+      "readBrief",
+      "writeBrief",
+      "buildBrief",
+      "GenerateInput",
+      "documentPath",
+      "buildPrompt",
+      "titleOf",
+      "GlobalPlanInput",
+      "SectionPlanInput",
+      "buildGlobalPrompt",
+      "RunInput",
+      "RunOutput",
+      "sourceReader",
+      "Defect",
+      "VerificationReport",
+      "Chapter",
+      "Section",
+      "WikiPlan",
+      "WikiDocument",
+      "RunFailure",
+      "WikiRunState",
+      "summariseDefects",
+      "VerifyInput",
+      "groundingDefects",
+      "checkRelativeLinks"
+    ]
+  }
+}

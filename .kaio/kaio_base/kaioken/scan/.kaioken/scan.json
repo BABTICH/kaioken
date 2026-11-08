@@ -1,0 +1,598 @@
+{
+  "root": "D:\\project\\ai_now_know\\kaiopi\\kaioken\\scan",
+  "scannedAt": "2026-09-23T23:48:41.533Z",
+  "fileCount": 47,
+  "totalBytes": 183907,
+  "files": [
+    {
+      "path": "dist/artifact.d.ts",
+      "hash": "88e49df65ace09e29c2cbe17dd2688f443767bc9a752c81f4e85f7e8ea7e2913",
+      "size": 689,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/artifact.d.ts.map",
+      "hash": "1636685068993c2a6997e865208126bd20bf4464a7facf186c7545c9490a350c",
+      "size": 469,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/artifact.js",
+      "hash": "ef5ad4b75f59422a84700ef9de435a34306bc97e8e061f64cd7cad64e2f875f4",
+      "size": 1063,
+      "language": "javascript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/artifact.js.map",
+      "hash": "0171e57b6bdc02cf6ec3504ae3d77d310be7fa81f7279771af5ec63d85b958e2",
+      "size": 2256,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/ignore.d.ts",
+      "hash": "55f83d56e395eb4660b921227e33d6089e151d68dabafb9ba20c94e18d435b55",
+      "size": 1723,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/ignore.d.ts.map",
+      "hash": "c770127d07b78a1d4857ba385c154592aa806ecc36a8530b06cf1b988777c423",
+      "size": 714,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/ignore.js",
+      "hash": "4604e76bf610c34e5e6a47505e0ea9f9906e5ca5b56f92b97a78face5dc0cf7c",
+      "size": 4602,
+      "language": "javascript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/ignore.js.map",
+      "hash": "52dcc1738ee0eb62a21f612fb09d6cb7f14e280a095ae620c8c79fcfdf1b9bfd",
+      "size": 8440,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/index.d.ts",
+      "hash": "dc378441d4b9642c91fc5420207b94b24d0511cf042acd02a96fbefb730182e1",
+      "size": 589,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/index.d.ts.map",
+      "hash": "789d6df86408ab0fd32e461912c326be295f81a82b2278da95a4b61c467af5a1",
+      "size": 552,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/index.js",
+      "hash": "c6f24cf98f17305bf69bfd875afa34c1a2c09fb786196e84e11a0cd6023b2c9e",
+      "size": 485,
+      "language": "javascript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/index.js.map",
+      "hash": "199f52f7644aa76d4102a2f83e6fa75f57b3687b602668601211512aea331d3e",
+      "size": 1073,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/language.d.ts",
+      "hash": "a98c902c79f3117237840041fe434f72d573c76fe3a5f86288824b880929c5c4",
+      "size": 623,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/language.d.ts.map",
+      "hash": "3932f114fa6a8f60f7de79748b654fe7d8479499c2d57f04cdafd47ad296586f",
+      "size": 338,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/language.js",
+      "hash": "09fb8d7f248419e5f22960aa5161720908e4a32533032825e268ae73f9d5a1df",
+      "size": 4103,
+      "language": "javascript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/language.js.map",
+      "hash": "21bdb824d159dbbd8bb46c217e122e7cf22a509982b51f80c3ed85d567bf45de",
+      "size": 8572,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/risk.d.ts",
+      "hash": "af5f8181c3fa272b63d2afe05dd9e6f51fee791b2cd2e0492118107ca82b7718",
+      "size": 769,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/risk.d.ts.map",
+      "hash": "0abcd2b902f64b67049e60922c35d864efce30afa736b3553504f9991962e900",
+      "size": 620,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/risk.js",
+      "hash": "902974663423747ad896b4af506031f1d1fda1dc52ca2b50c890739913658e8c",
+      "size": 9199,
+      "language": "javascript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/risk.js.map",
+      "hash": "2979d05447ca51945b1b1609012a97c40b8c57bbb4422dd4f6b75fe1b11b32f9",
+      "size": 16329,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/scan.d.ts",
+      "hash": "f465eaa97a15816d0fac0977df457c30f5aa73093e16d3d321163e60907bc551",
+      "size": 545,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/scan.d.ts.map",
+      "hash": "cf9df7bfd95ce3eef65c7b39488785c3abfee51add4a676dc37f82dd44478bfe",
+      "size": 328,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/scan.js",
+      "hash": "0c4b9c36d265b8980477c9e1683b4916c4207bbaa4b8210ffa62a0636dba49da",
+      "size": 9393,
+      "language": "javascript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/scan.js.map",
+      "hash": "4c195d79471eef848705f4ea2b006a2961004963e7bbe2ea55f53562045227bf",
+      "size": 17748,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/types.d.ts",
+      "hash": "c51d4381c80937a62119cffc0836ef5e5534794aa47408375af7518c399000f9",
+      "size": 1693,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/types.d.ts.map",
+      "hash": "7758f4d9d3e2baa55aca8966d84772569a381060a2e8fb3d6cbac1876d2ea94b",
+      "size": 955,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/types.js",
+      "hash": "01ae2a5b120382f9a648ced7ee8507493a134f216d100fc61600c6c9738235d2",
+      "size": 44,
+      "language": "javascript",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "dist/types.js.map",
+      "hash": "f2eaff4e6722d7f8a5c77921585b2420922a5f9e0de27430b300d6fd4336660c",
+      "size": 1796,
+      "language": "unknown",
+      "binary": false,
+      "risk": [
+        "generated"
+      ]
+    },
+    {
+      "path": "package.json",
+      "hash": "de6930efe1e19deacea3be74f70b560cd901126f35536a06ee0683b248f61d2b",
+      "size": 404,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/artifact.ts",
+      "hash": "2479ffd31a19ac4cf6a1b20bd2ad4d942d6c2173d10699930afd4e2ef5583b44",
+      "size": 1134,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/entropy.ts",
+      "hash": "4f8a82a49d054c0a41357296c5df18d68f67fd35ff66fe67fe36dfc60b0d4484",
+      "size": 7178,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/ignore.ts",
+      "hash": "f3da445dcc48b54976aae6a4582cbde63af228e7a4e76a839a475f57831ab912",
+      "size": 4613,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/index.ts",
+      "hash": "4f4ad85899e811886605cb87178ca14996695a0cff794d4eb15b4565fcf5e037",
+      "size": 1348,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/language.ts",
+      "hash": "151632b2db24588a1c82f3e4d2f043c306288cacf117248446b7f19ee57885c8",
+      "size": 3892,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/pool.ts",
+      "hash": "abc3f03bbd04afc5202f8692da68c50b780e74a07cc8d4585b6330831e916ad9",
+      "size": 1193,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/quarantine.ts",
+      "hash": "dca13b1ecbebe98670e73c2f935996021f3d1722f44af889a9b9dced590e4200",
+      "size": 6585,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/risk.ts",
+      "hash": "1e4db0fa7f4d242d05682a682cfbc31d032a964257b1ffb3a392ef4df99e43e4",
+      "size": 12807,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/scan.ts",
+      "hash": "b66f3bd4eda15fa022d879da0dbe4c16b5ce68363a7dc52288dc2cc1c1e40e6a",
+      "size": 9509,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/sliding-window.ts",
+      "hash": "edf895b341d4f8e24f2d18299db1bd8fcbe7c05431c7dc44d4b87ae2028c0547",
+      "size": 4838,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "src/types.ts",
+      "hash": "1fcd95618a1bafad90bc1c3980c5624b0d32345667f93382af3ec7dbcbf9b249",
+      "size": 2639,
+      "language": "typescript",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "test/entropy.test.ts",
+      "hash": "1bacddfd6d8a79249754cdc66a901400a37ffa8431afc07a3883e17d2b20c668",
+      "size": 3932,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "credentials"
+      ]
+    },
+    {
+      "path": "test/quarantine.test.ts",
+      "hash": "ec040f64739baadceacce69b7939f7ace26c5c0c692dc9cf0aa6db119bae3650",
+      "size": 4032,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "private_key"
+      ]
+    },
+    {
+      "path": "test/risk.test.ts",
+      "hash": "737fa8db76ebdda15ae0ca365d3f8da70c51e545bd93258d646327cb87378433",
+      "size": 10610,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "credentials",
+        "private_key"
+      ]
+    },
+    {
+      "path": "test/scan.test.ts",
+      "hash": "fad020e75383e1336f07cc66a08fd86d4a475696a944d6a68f638452e3933368",
+      "size": 10946,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "credentials",
+        "private_key"
+      ]
+    },
+    {
+      "path": "test/sliding-window.test.ts",
+      "hash": "36efd1c104b951f9b7a4bf0f9422f95b53500843716f88eb0e1b5597df0abb01",
+      "size": 2236,
+      "language": "typescript",
+      "binary": false,
+      "risk": [
+        "credentials"
+      ]
+    },
+    {
+      "path": "tsconfig.json",
+      "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652",
+      "size": 149,
+      "language": "json",
+      "binary": false,
+      "risk": []
+    },
+    {
+      "path": "tsconfig.tsbuildinfo",
+      "hash": "31283e76598624419d816dd49a222c2afed819e6488ea11d9da523daa9ba359c",
+      "size": 152,
+      "language": "unknown",
+      "binary": false,
+      "risk": []
+    }
+  ],
+  "secretFindings": [
+    {
+      "path": "test/quarantine.test.ts",
+      "category": "Private Key Certificate",
+      "line": 114,
+      "maskedToken": "cons********\\n\";",
+      "severity": "CRITICAL",
+      "recommendedAction": "Move private key to secure keystore and add to .gitignore"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "Private Key Certificate",
+      "line": 22,
+      "maskedToken": "\"---********--\",",
+      "severity": "CRITICAL",
+      "recommendedAction": "Move private key to secure keystore and add to .gitignore"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "Private Key Certificate",
+      "line": 55,
+      "maskedToken": "\"---********--\",",
+      "severity": "CRITICAL",
+      "recommendedAction": "Move private key to secure keystore and add to .gitignore"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "Private Key Certificate",
+      "line": 64,
+      "maskedToken": "\"---********--\",",
+      "severity": "CRITICAL",
+      "recommendedAction": "Move private key to secure keystore and add to .gitignore"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "AWS Access Key",
+      "line": 73,
+      "maskedToken": "AKIA********MPLE",
+      "severity": "CRITICAL",
+      "recommendedAction": "Quarantine and rotate AWS IAM credentials"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "AWS Temp Key",
+      "line": 74,
+      "maskedToken": "ASIA********MPLE",
+      "severity": "HIGH",
+      "recommendedAction": "Quarantine temporary AWS credentials"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "Google API Key",
+      "line": 77,
+      "maskedToken": "AIza********5P6Q",
+      "severity": "HIGH",
+      "recommendedAction": "Restrict API key scope in Google Cloud Console"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "GCP OAuth Token",
+      "line": 106,
+      "maskedToken": "ya29********WXYZ",
+      "severity": "CRITICAL",
+      "recommendedAction": "Revoke OAuth token and quarantine file"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "JWT Token",
+      "line": 112,
+      "maskedToken": "eyJh********sR8U",
+      "severity": "MEDIUM",
+      "recommendedAction": "Investigate whether JWT contains sensitive claims"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "Azure Storage Connection String",
+      "line": 122,
+      "maskedToken": "Defa********.net",
+      "severity": "CRITICAL",
+      "recommendedAction": "Rotate storage keys in Azure portal"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "Azure Account Access Key",
+      "line": 122,
+      "maskedToken": "Acco********GMGw",
+      "severity": "CRITICAL",
+      "recommendedAction": "Regenerate account key in Azure"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "Azure SAS Token",
+      "line": 128,
+      "maskedToken": "Shar********0000",
+      "severity": "HIGH",
+      "recommendedAction": "Expire SAS token and update storage policy"
+    },
+    {
+      "path": "test/risk.test.ts",
+      "category": "Bearer Authorization Header",
+      "line": 132,
+      "maskedToken": "Bear********6789",
+      "severity": "HIGH",
+      "recommendedAction": "Remove hardcoded Authorization header"
+    },
+    {
+      "path": "test/scan.test.ts",
+      "category": "Private Key Certificate",
+      "line": 207,
+      "maskedToken": "cons********\\n\";",
+      "severity": "CRITICAL",
+      "recommendedAction": "Move private key to secure keystore and add to .gitignore"
+    },
+    {
+      "path": "test/scan.test.ts",
+      "category": "AWS Access Key",
+      "line": 196,
+      "maskedToken": "AKIA********MPLE",
+      "severity": "CRITICAL",
+      "recommendedAction": "Quarantine and rotate AWS IAM credentials"
+    },
+    {
+      "path": "test/scan.test.ts",
+      "category": "AWS Access Key",
+      "line": 218,
+      "maskedToken": "AKIA********MPLE",
+      "severity": "CRITICAL",
+      "recommendedAction": "Quarantine and rotate AWS IAM credentials"
+    },
+    {
+      "path": "test/sliding-window.test.ts",
+      "category": "AWS Access Key",
+      "line": 7,
+      "maskedToken": "AKIA********MPLE",
+      "severity": "CRITICAL",
+      "recommendedAction": "Quarantine and rotate AWS IAM credentials"
+    },
+    {
+      "path": "test/sliding-window.test.ts",
+      "category": "AWS Access Key",
+      "line": 54,
+      "maskedToken": "AKIA********MPLE",
+      "severity": "CRITICAL",
+      "recommendedAction": "Quarantine and rotate AWS IAM credentials"
+    }
+  ]
+}

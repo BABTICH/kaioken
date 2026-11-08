@@ -1,0 +1,74 @@
+{
+  "moduleId": "index",
+  "name": "Symbol Index",
+  "generatedAt": "2026-08-30T16:17:01.435Z",
+  "summary": "Tree-sitter driven symbol extractor that parses six languages (typescript, tsx, javascript, jsx, python, go, rust) via bundled WASM grammars and per-language .scm queries, then exposes the results through a SymbolOracle that supports name-based, file-based, and export-filtered lookups.",
+  "keyPoints": [
+    "extractFile is the single-file entry point: it loads the grammar for the requested language, runs the language's .scm query against the tree, and returns a FileMap via the collect() helper, which only keeps records whose kind is in KINDS (function, method, class, interface, type, struct, enum, trait, impl, const, var, module).",
+    "Export visibility is determined by walking outward from the declaration to unwrap DOC_WRAPPERS (export_statement, decorated_definition, lexical_declaration, variable_declaration, expression_statement); Python uses a separate pythonDocstring path and isExported also checks hasExportAncestor plus restricted-member rules, so TS/JS, Rust, Go, and Python each have distinct export semantics in one place.",
+    "grammars.ts keeps a Promise-cached loader so each language's WASM and .scm query is fetched at most once via loadGrammar(); newParser() returns a Parser already configured for a Language, and oracle.ts builds two indexes from an IndexResult — byName for cross-file symbol resolution (with unknownNames/exported filters) and byPath for per-file FileMap access via hasFile/file/lookupIn."
+  ],
+  "entryPoints": [
+    {
+      "name": "extractFile",
+      "file": "packages/index/src/extract.ts",
+      "note": "Main per-file entry: parses source with tree-sitter, runs the language's query, and returns a FileMap of SymbolRecord entries."
+    },
+    {
+      "name": "loadGrammar",
+      "file": "packages/index/src/grammars.ts",
+      "note": "Resolves and caches a language's WASM grammar plus its .scm query file, returning a LoadedGrammar or null for unsupported languages."
+    },
+    {
+      "name": "newParser",
+      "file": "packages/index/src/grammars.ts",
+      "note": "Constructs a tree-sitter Parser wired to a Language, the lower-level building block extractFile relies on."
+    },
+    {
+      "name": "SymbolOracle",
+      "file": "packages/index/src/oracle.ts",
+      "note": "Queryable view over an IndexResult exposing lookup/has/lookupIn/hasFile/file/unknownNames/exported/symbolCount for downstream consumers."
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/index/src/extract.ts",
+      "hash": "7dc2aa42606a40829209c5f8d28a93ce715e7661d034c4847709e032e3525206"
+    },
+    {
+      "path": "packages/index/src/grammars.ts",
+      "hash": "05e1afbf40208b91bd3358b5e3ad345ee9c50ab7e89a54c872b433075dcc4574"
+    },
+    {
+      "path": "packages/index/src/oracle.ts",
+      "hash": "569d7fd75e9ea0d0f316d2d138e99ea1fb23b809aeb72b49b9e5391231d01f8b"
+    }
+  ],
+  "verification": {
+    "grounded": 4,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "ExtractInput",
+      "signatureOf",
+      "docOf",
+      "isExported",
+      "stripCommentMarkers",
+      "stripPythonString",
+      "isSupportedLanguage",
+      "supportedLanguages",
+      "LoadedGrammar",
+      "initParser",
+      "SymbolLocation",
+      "constructor",
+      "has",
+      "lookup",
+      "lookupIn",
+      "hasFile",
+      "file",
+      "unknownNames",
+      "exported",
+      "symbolCount"
+    ]
+  }
+}

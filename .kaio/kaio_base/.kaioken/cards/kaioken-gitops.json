@@ -1,0 +1,113 @@
+{
+  "moduleId": "kaioken-gitops",
+  "name": "Kaioken Gitops",
+  "generatedAt": "2026-09-23T15:07:41.452Z",
+  "summary": "Structural module bundling git operations for kaioken/gitops, providing diff reading, post-commit hook management, worktree handling, and a thin git command wrapper.",
+  "keyPoints": [
+    "All git commands go through run.ts's promisified execFile, capped at 16MB output, with helpers gitLine/gitDir/isRepo.",
+    "diff.ts computes diffs (budget 96KB), including untracked files via a handcrafted patch, and offers recentSubjects and currentBranch.",
+    "hook.ts installs a post-commit hook by injecting a guarded block between markers, handling shebang and Node executable resolution.",
+    "worktree.ts manages throwaway worktrees with descriptive failure/conflict/dirty messages and fast-forward merges.",
+    "index.ts is nearly empty; tests create real repos under temp roots for integration-style coverage."
+  ],
+  "entryPoints": [
+    {
+      "name": "readDiff",
+      "file": "kaioken/gitops/src/diff.ts",
+      "note": "Returns diff snapshot with insertions/deletions and untracked patch, or null when clean."
+    },
+    {
+      "name": "hookStatus",
+      "file": "kaioken/gitops/src/hook.ts",
+      "note": "Reports whether the post-commit hook is installed and its command, using marker-based detection."
+    },
+    {
+      "name": "installPostCommit",
+      "file": "kaioken/gitops/src/hook.ts",
+      "note": "Installs or replaces the post-commit hook with a shebang and kaioken command block."
+    },
+    {
+      "name": "git",
+      "file": "kaioken/gitops/src/run.ts",
+      "note": "Executes arbitrary git command in the repo, returning stdout/stderr/exit code."
+    },
+    {
+      "name": "createWorktree",
+      "file": "kaioken/gitops/src/worktree.ts",
+      "note": "Adds a worktree, returning its path or throwing with a descriptive message on failure."
+    },
+    {
+      "name": "ffMerge",
+      "file": "kaioken/gitops/src/worktree.ts",
+      "note": "Performs a fast-forward merge of the worktree branch, reporting success or a reason (conflict/dirty)."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/gitops/package.json",
+      "hash": "bf2a2d9e48b05653306533317386bcef9bc53b99b1a2f1a532349edca9fef494"
+    },
+    {
+      "path": "kaioken/gitops/src/diff.ts",
+      "hash": "eab47df7566260d2bf69bbb2d7214e429a56b6c773320771189cc06f88ea00fe"
+    },
+    {
+      "path": "kaioken/gitops/src/hook.ts",
+      "hash": "3fce89fd831e7ad70b724ed4d8e4542012ea406ed6404572b1b356b3665402fe"
+    },
+    {
+      "path": "kaioken/gitops/src/index.ts",
+      "hash": "cc403b156ae3c3436d4b8058722bff4a3226049e09e9672f714ecf3172d8ed2d"
+    },
+    {
+      "path": "kaioken/gitops/src/run.ts",
+      "hash": "a609c6f2b5a73c0a613c1dc30a2e8f1fc0e379d6a9fe1157cfc56776aa472ca9"
+    },
+    {
+      "path": "kaioken/gitops/src/worktree.ts",
+      "hash": "da67e0b03132b70af3b100ab0bc39c0a520753f868afcb9ee4e0e098141a4b55"
+    },
+    {
+      "path": "kaioken/gitops/test/diff.test.ts",
+      "hash": "e2e1c2a09cfc9f2eeec760cf8aa17a1ddef5aacee9dceb9340c7cac4127e6202"
+    },
+    {
+      "path": "kaioken/gitops/test/hook-logging.test.ts",
+      "hash": "ea489acd30f219b257c82304b853be5de363ab978b21775823b8816e82a4a289"
+    },
+    {
+      "path": "kaioken/gitops/test/hook.test.ts",
+      "hash": "b1db31e5b99e1639f59f85e979ffb75ef4baa80d5713c2d9d6c7d4487f5ea05c"
+    },
+    {
+      "path": "kaioken/gitops/test/worktree.test.ts",
+      "hash": "ca4cba9d0bf88470d054cf421944a738c358aa0493006d493b40cea3fa3078fd"
+    },
+    {
+      "path": "kaioken/gitops/tsconfig.json",
+      "hash": "ef4e152a40b6c90a3449215083fe2445cbd142888af1f9c1fd27f48e0fdec22f"
+    }
+  ],
+  "verification": {
+    "grounded": 6,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "DiffSnapshot",
+      "recentSubjects",
+      "currentBranch",
+      "HookStatus",
+      "hookPath",
+      "removePostCommit",
+      "GitResult",
+      "gitLine",
+      "isRepo",
+      "gitDir",
+      "WorktreeStatus",
+      "worktreeStatus",
+      "slug",
+      "worktreePath",
+      "removeWorktree"
+    ]
+  }
+}

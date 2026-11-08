@@ -1,0 +1,127 @@
+{
+  "moduleId": "kaioken-graph",
+  "name": "Kaioken Graph",
+  "generatedAt": "2026-09-23T15:07:57.863Z",
+  "summary": "Structural module for kaioken/graph, building, persisting, and rendering a knowledge graph that links repository source files to documentation chapters, sections, cards, and skills via provenance, claims, and import relationships.",
+  "keyPoints": [
+    "GRAPH_ARTIFACT is defined as join(KAIOKEN_DIR, 'graph.json') and functions graphPath, writeGraph, readGraph manage reading/writing the graph JSON artifact relative to a root directory.",
+    "writeExportTree writes a bundle of files under subdirectories cards/, wiki/, skills/ and returns the written paths, using safeJoin to prevent path traversal.",
+    "buildGraph constructs a KnowledgeGraph from GraphBuildInput, and buildCodeGraph builds a code-level graph; node kinds are derived from document IDs via nodeKindFor and splitDocumentId, with edge kinds distinguishing written_from, shared_source, references, imports, and reexports.",
+    "render.ts provides multiple rendering targets: renderGraphMarkdown, renderGraphMermaid, toD3Graph, toCytoscapeGraph, and exportGraphJson; renderMermaid and renderGraphJson are aliases.",
+    "assertGraphIntegrity validates the graph structure before use, and graphStats computes coverage statistics including isolated nodes and coverage percentage.",
+    "Type definitions in types.ts define NodeKind, GraphNode, EdgeKind, GraphEdge, KnowledgeGraph, GraphStats, and input/output shapes (GraphBuildInput, CodeGraphInput, D3Graph, CytoscapeGraph)."
+  ],
+  "entryPoints": [
+    {
+      "name": "buildGraph",
+      "file": "kaioken/graph/src/build.ts",
+      "note": "Main entry to construct a KnowledgeGraph from provenance, claims, and skill inputs."
+    },
+    {
+      "name": "writeGraph",
+      "file": "kaioken/graph/src/artifact.ts",
+      "note": "Persists a KnowledgeGraph to graph.json under the given root."
+    },
+    {
+      "name": "readGraph",
+      "file": "kaioken/graph/src/artifact.ts",
+      "note": "Loads a KnowledgeGraph from graph.json, returning null if absent."
+    },
+    {
+      "name": "renderGraphMarkdown",
+      "file": "kaioken/graph/src/render.ts",
+      "note": "Renders the graph as human-readable markdown, typically with stats."
+    },
+    {
+      "name": "renderGraphMermaid",
+      "file": "kaioken/graph/src/render.ts",
+      "note": "Renders the graph as a Mermaid diagram with clustering and labels."
+    },
+    {
+      "name": "exportGraphJson",
+      "file": "kaioken/graph/src/render.ts",
+      "note": "Exports the graph to D3 or Cytoscape JSON format."
+    },
+    {
+      "name": "graphStats",
+      "file": "kaioken/graph/src/render.ts",
+      "note": "Computes node/edge counts, coverage, and isolated nodes with optional scan paths."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/graph/package.json",
+      "hash": "2dd428129ed51e7076d0b524f554c065b0f3fe42813d2d74705f8918801100b9"
+    },
+    {
+      "path": "kaioken/graph/src/artifact.ts",
+      "hash": "bb4fca844af4c0f8ae411fa11f6b2f497e4efdbd09ab0ce6d4735eece41cf824"
+    },
+    {
+      "path": "kaioken/graph/src/build.ts",
+      "hash": "0d761cf5b5bfefcdcfe7befce88881ca5a56d795195b709eb4f34bfe96d1a421"
+    },
+    {
+      "path": "kaioken/graph/src/index.ts",
+      "hash": "c555d651d0fc0fc9ac626b229e5ed7e53e6e61997089c5fdd708ef743ab76e72"
+    },
+    {
+      "path": "kaioken/graph/src/render.ts",
+      "hash": "133b269015dc9a22731014180fb3ddbbd707f1dd986139b46960ddc34019925a"
+    },
+    {
+      "path": "kaioken/graph/src/types.ts",
+      "hash": "b8f2bd55674ed8bc2d89f4a7c354292eecad8946533043a86ad2d6b68713ecdb"
+    },
+    {
+      "path": "kaioken/graph/test/artifact.test.ts",
+      "hash": "5a3a8d46de558c95d4428ddff34a8551de3cc3690d79f84b31f38dd3764d8e0f"
+    },
+    {
+      "path": "kaioken/graph/test/build.test.ts",
+      "hash": "74d3385e78b9440189b56e10015e3ba37070c56c4fada10af40184a0a2da0e52"
+    },
+    {
+      "path": "kaioken/graph/test/render.test.ts",
+      "hash": "e77f36d3365b48d986ff72702285e3dbe8f990293c34ae6f192d97a7ef4b87fb"
+    },
+    {
+      "path": "kaioken/graph/tsconfig.json",
+      "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+    }
+  ],
+  "verification": {
+    "grounded": 7,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "GRAPH_ARTIFACT",
+      "graphPath",
+      "ExportManifest",
+      "CARD_DIR",
+      "WIKI_DIR",
+      "SKILL_DIR",
+      "writeExportTree",
+      "readWikiTree",
+      "assertGraphIntegrity",
+      "buildCodeGraph",
+      "nodeKindFor",
+      "splitDocumentId",
+      "MermaidOptions",
+      "renderMermaid",
+      "toD3Graph",
+      "toCytoscapeGraph",
+      "renderGraphJson",
+      "NodeKind",
+      "GraphNode",
+      "EdgeKind",
+      "GraphEdge",
+      "KnowledgeGraph",
+      "GraphStats",
+      "GraphBuildInput",
+      "CodeGraphInput",
+      "D3Graph",
+      "CytoscapeGraph"
+    ]
+  }
+}

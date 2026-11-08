@@ -1,0 +1,79 @@
+{
+  "moduleId": "kaioken-skills",
+  "name": "Kaioken Skills",
+  "generatedAt": "2026-09-23T15:10:53.192Z",
+  "summary": "This module loads and parses \"skills\" — markdown files with YAML frontmatter — from a set of standard directories relative to a repository root. It discovers skill files, extracts their name/description/metadata, and returns a structured list. It also provides a helper to load a single skill by name. The module is structural: it doesn't execute skills, only finds and reads them.",
+  "keyPoints": [
+    "Skill discovery searches a fixed list of standard directories: the Kaioken dir's `skills/`, plus `.agents/skills`, `.pi/skills`, and `.github/skills` under the repo root.",
+    "The core loader `loadSkills` returns a `LoadedSkills` object containing skills found across all candidate directories; a per-directory helper `skillsDirs` resolves those candidates from a root.",
+    "Each skill is parsed from raw markdown text via `parseSkill`, which reads YAML frontmatter (delimited by `---`) for metadata like `name` and `description`, falling back to a derived default name when one is missing.",
+    "A single-skill loader `loadSkill` reads one named skill file from the root, used when you know exactly which skill you need rather than enumerating all.",
+    "The module is deliberately read-only and structural — it discovers, reads, and parses skill definitions but contains no logic for executing or applying them."
+  ],
+  "entryPoints": [
+    {
+      "name": "loadSkill",
+      "file": "kaioken/skills/src/load.ts",
+      "note": "Async; loads a single skill by name from a repo root, returning the raw markdown string."
+    },
+    {
+      "name": "loadSkills",
+      "file": "kaioken/skills/src/skills.ts",
+      "note": "Async; scans all standard skill directories (SKILLS_DIR plus `.agents`, `.pi`, `.github` under root) and returns structured LoadedSkills."
+    },
+    {
+      "name": "parseSkill",
+      "file": "kaioken/skills/src/skills.ts",
+      "note": "Synchronous; parses raw markdown frontmatter into a Skill minus its path, or returns a reason string on failure."
+    },
+    {
+      "name": "skillsDirs",
+      "file": "kaioken/skills/src/skills.ts",
+      "note": "Returns the ordered list of candidate skill directories for a root, respecting options that alter the search."
+    },
+    {
+      "name": "skillsDir",
+      "file": "kaioken/skills/src/skills.ts",
+      "note": "Returns the Kaioken-specific skills directory for a given root (join(KAIOKEN_DIR, 'skills'))."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/skills/package.json",
+      "hash": "39edf9cc24f51effdde539544304daac2cb1317579f15cbdb7eb289dd8a877e2"
+    },
+    {
+      "path": "kaioken/skills/src/index.ts",
+      "hash": "ab153fa05882756dc51b9aa594dd0a42845d630c04f1b4ad22865482f1b97076"
+    },
+    {
+      "path": "kaioken/skills/src/load.ts",
+      "hash": "bfb7df30b3326871d2a0c29a0e78424dff451a78757563887eb164d3c716b9c3"
+    },
+    {
+      "path": "kaioken/skills/src/skills.ts",
+      "hash": "d928049cad11eba14e2137ae585ed07670f1d3b985c3446180687f1950623bbd"
+    },
+    {
+      "path": "kaioken/skills/test/skills.test.ts",
+      "hash": "a75abaea6a6aa682b864abf7b131aedd120c5350eb057ec9523d7fb102a68238"
+    },
+    {
+      "path": "kaioken/skills/tsconfig.json",
+      "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "SKILLS_DIR",
+      "STANDARD_SKILL_DIRS",
+      "Skill",
+      "SkillProblem",
+      "LoadedSkills",
+      "LoadSkillsOptions"
+    ]
+  }
+}

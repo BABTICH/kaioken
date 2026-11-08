@@ -1,0 +1,8 @@
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { ArrowRight } from "lucide-react";
+import Icon from "@/components/Icon";
+import { Action, Eyebrow, Lead, ListRow, RowGroup, Section, } from "@/mobile/components/primitives";
+import { DOCS_NAV, DOC_ORDER } from "@/data/docs-nav";
+export default function DocsIndex() {
+    return (_jsxs(_Fragment, { children: [_jsxs("header", { className: "px-4 pt-6", children: [_jsx(Eyebrow, { children: "documentation" }), _jsx("h1", { className: "mt-3 font-mono text-[26px] leading-[1.2] font-bold tracking-tight text-foreground", children: "Docs" }), _jsxs(Lead, { className: "mt-3", children: [DOC_ORDER.length, " pages: how to install it, how the TUI behaves, what the engine generates, and every knob in ", _jsx("code", { className: "font-mono text-kai-amber", children: "config.yaml" }), "."] }), _jsxs(Action, { to: "/docs/install", className: "mt-5", children: ["Start with Install", _jsx(ArrowRight, { className: "size-4", "aria-hidden": true })] })] }), DOCS_NAV.map((section, i) => (_jsxs(Section, { first: i === 0, className: "pt-8", children: [_jsx(Eyebrow, { index: String(i + 1).padStart(2, "0"), children: section.heading }), _jsx(RowGroup, { className: "mt-3.5", children: section.links.map((link) => (_jsx(ListRow, { to: link.to, title: link.label, subtitle: link.blurb, glyph: _jsx("span", { className: "flex size-8 items-center justify-center rounded-sm border border-kai-orange/25 bg-kai-orange/10", children: _jsx(Icon, { name: link.icon, className: "size-4 text-kai-orange", "aria-hidden": true }) }) }, link.to))) })] }, section.heading)))] }));
+}

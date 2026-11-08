@@ -1,0 +1,126 @@
+{
+  "moduleId": "kaioken-scan",
+  "name": "Kaioken Scan",
+  "generatedAt": "2026-09-23T15:09:46.755Z",
+  "summary": "Structural module for kaioken/scan. Scans a repository tree, walks directories respecting layered ignore rules, detects language, classifies risk (private keys, credentials, generated files, lockfiles, large binaries), and writes/reads a scan.json artifact. The scan result is a list of FileRecords with hash and risk annotations, capped by read-size budgets to avoid choking on large repos.",
+  "keyPoints": [
+    "Artifact lifecycle: `writeScanArtifact`/`readScanArtifact`/`scanArtifactPath` persist the scan result to `<root>/.kaioken/scan.json` (const `KAIOKEN_DIR`/`SCAN_ARTIFACT` in artifact.ts).",
+    "Ignore handling: `IgnoreStack` merges default ignores (`.git/`, `node_modules/`, etc.), per-directory `.gitignore`/`.kaiokenignore` files, and case-insensitive options. Layers build on each other so child dirs can add patterns but not remove parent ones (ignore.ts).",
+    "Language detection: `detectLanguage` uses extension maps (`BY_EXTENSION`), filename maps (`BY_FILENAME`), and shebang interpreter lookup (`BY_INTERPRETER`, via `languageFromShebang`) — covers 50+ extensions and common scripts (language.ts).",
+    "Risk classification: `classifyRisk` returns `private_key`, `credentials`, `generated`, `large_binary`, `lockfile` based on filename/content regexes (AWS keys, JWTs, bearer tokens, generated banners) and size thresholds; helper predicates `hasPrivateKeyContent`, `hasCredentialContent`, `looksLikeLiveSecret`, `isBinary` (risk.ts).",
+    "Scan pipeline: `scan` walks the tree (`walk`) using an `IgnoreStack`, reads files (cap at `DEFAULT_MAX_READ_BYTES`), streams hash and secret scanning (max `DEFAULT_MAX_SECRET_SCAN_BYTES`), and produces a `ScanResult` of `FileRecord` entries (scan.ts)."
+  ],
+  "entryPoints": [
+    {
+      "name": "scan",
+      "file": "kaioken/scan/src/scan.ts",
+      "note": "Entry point: async, returns ScanResult for a root path with options."
+    },
+    {
+      "name": "walk",
+      "file": "kaioken/scan/src/scan.ts",
+      "note": "Recursively traverses directories, propagating IgnoreStack."
+    },
+    {
+      "name": "writeScanArtifact",
+      "file": "kaioken/scan/src/artifact.ts",
+      "note": "Writes scan result to .kaioken/scan.json."
+    },
+    {
+      "name": "readScanArtifact",
+      "file": "kaioken/scan/src/artifact.ts",
+      "note": "Reads scan artifact back as ScanResult or null."
+    },
+    {
+      "name": "classifyRisk",
+      "file": "kaioken/scan/src/risk.ts",
+      "note": "Determines risk categories for a file record."
+    },
+    {
+      "name": "detectLanguage",
+      "file": "kaioken/scan/src/language.ts",
+      "note": "Returns language string from path or shebang."
+    },
+    {
+      "name": "IgnoreStack.fromPatterns",
+      "file": "kaioken/scan/src/ignore.ts",
+      "note": "Builds an ignore stack from root patterns plus ignore files."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/scan/package.json",
+      "hash": "de6930efe1e19deacea3be74f70b560cd901126f35536a06ee0683b248f61d2b"
+    },
+    {
+      "path": "kaioken/scan/src/artifact.ts",
+      "hash": "2479ffd31a19ac4cf6a1b20bd2ad4d942d6c2173d10699930afd4e2ef5583b44"
+    },
+    {
+      "path": "kaioken/scan/src/ignore.ts",
+      "hash": "f3da445dcc48b54976aae6a4582cbde63af228e7a4e76a839a475f57831ab912"
+    },
+    {
+      "path": "kaioken/scan/src/index.ts",
+      "hash": "f5ea9b5466255732f20feb730808401f4be4f29645f27ef4dc8e287b0c50af92"
+    },
+    {
+      "path": "kaioken/scan/src/language.ts",
+      "hash": "151632b2db24588a1c82f3e4d2f043c306288cacf117248446b7f19ee57885c8"
+    },
+    {
+      "path": "kaioken/scan/src/risk.ts",
+      "hash": "6a9979eceda5725700be35f66c5059ff229afd10ef8dd5f67eec730e721e8b34"
+    },
+    {
+      "path": "kaioken/scan/src/scan.ts",
+      "hash": "cdcdcc08acd92f1db4cc539080130d54ca17e8e5d2005834f3af2e21a3110ff6"
+    },
+    {
+      "path": "kaioken/scan/src/types.ts",
+      "hash": "2fc65ecbb00f627908583e44fef14b2491f35bad2e347c183eea30d1a07882b4"
+    },
+    {
+      "path": "kaioken/scan/test/risk.test.ts",
+      "hash": "737fa8db76ebdda15ae0ca365d3f8da70c51e545bd93258d646327cb87378433"
+    },
+    {
+      "path": "kaioken/scan/test/scan.test.ts",
+      "hash": "ea89ef53b425c74c579b4acb301405349e738f897ba0f73ab9344ec1e6707120"
+    },
+    {
+      "path": "kaioken/scan/tsconfig.json",
+      "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+    }
+  ],
+  "verification": {
+    "grounded": 7,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "KAIOKEN_DIR",
+      "SCAN_ARTIFACT",
+      "scanArtifactPath",
+      "DEFAULT_IGNORES",
+      "IgnoreStackOptions",
+      "IgnoreStack",
+      "withLayer",
+      "ignores",
+      "readIgnoreFiles",
+      "parseIgnoreText",
+      "extensionOf",
+      "languageFromShebang",
+      "RiskInput",
+      "hasPrivateKeyContent",
+      "hasCredentialContent",
+      "looksLikeLiveSecret",
+      "isBinary",
+      "readFile",
+      "toPosix",
+      "Risk",
+      "FileRecord",
+      "ScanResult",
+      "ScanOptions"
+    ]
+  }
+}

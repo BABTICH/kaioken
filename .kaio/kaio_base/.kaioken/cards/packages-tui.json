@@ -1,0 +1,898 @@
+{
+  "moduleId": "packages-tui",
+  "name": "Packages Tui",
+  "generatedAt": "2026-09-23T15:17:06.149Z",
+  "summary": "The @earendil-works/pi-tui package is a terminal user interface library for Node.js. It provides a component model (Container, Text, Box, VStack/HStack, ScrollView), an editor with line editing, autocomplete, and undo, a full-screen alt-screen view with layout, mouse handling, selection, and search, terminal capability detection and image rendering (Kitty/iTerm2), keyboard input parsing (including Kitty and legacy sequences), LaTeX-to-Unicode rendering, and native platform helpers for clipboard and modifier keys on macOS, Linux, and Windows. It also defines a configurable keybinding system and a layout engine for full-screen mode. Native code for Linux and macOS lives in subdirectories with build scripts, while Windows builds are orchestrated by a Node script supporting MSVC or MinGW toolchains.",
+  "keyPoints": [
+    "Component tree with layout: Container, Text, Box, HStack, VStack, ScrollView, Spacer, Loader, Image, Markdown, Input, Editor, SelectList, SettingsList, and overlay support via TUI.showOverlay; rendering is width-driven returning string[] lines.",
+    "Editor (src/components/editor.ts) is a full multiline editor with grapheme/word segmentation, kill-ring, undo stack, history, paste markers, autocomplete provider interface, and word-wrap; Input (src/components/input.ts) is a single-line version.",
+    "TuiAltScreen (src/tui-alt-screen.ts) provides fullscreen rendering with layout frame, mouse events (selection, click, wheel, scrollbar drag), search (AltScreenSearchComponent), Kitty image caching, and flash messages; TuiMainScreen (src/tui-main-screen.ts) handles regular terminal mode with diff-based rendering and image cleanup.",
+    "Input handling: keys.ts parses Kitty protocol, modifyOtherKeys, and legacy escape sequences into KeyIds; stdin-buffer.ts assembles chunks and detects bracketed paste; terminal.ts negotiates Kitty keyboard protocol and supports ProcessTerminal; keybindings.ts defines default keybindings for editor, input, select, and alt-screen.",
+    "LaTeX support (src/latex.ts) converts LaTeX commands and environments to Unicode with layout markers for fractions, roots, matrices, and operators; Markdown component (src/components/markdown.ts) renders Markdown with custom theme and LaTeX extensions.",
+    "Image support: terminal-image.ts detects capabilities via environment variables, encodes Kitty and iTerm2 image sequences, parses PNG/JPEG/GIF/WebP dimensions, and provides fallback placeholders.",
+    "Native platform integration: native-platform.ts loads platform-specific clipboard/helper modules; native-module-path.ts resolves native binary candidates; build.mjs (win32) chooses MSVC or MinGW toolchains based on environment.",
+    "Utility functions in utils.ts handle ANSI-aware text wrapping, truncation, slicing by column, background application, visible width, and grapheme segmentation; separate modules cover word navigation, fuzzy matching, kill-ring, and undo stack."
+  ],
+  "entryPoints": [
+    {
+      "name": "TUI",
+      "file": "packages/tui/src/tui.ts",
+      "note": "Main interface for the TUI object; start/stop, render, focus, overlays, input listeners, and color scheme queries."
+    },
+    {
+      "name": "TuiMainScreen",
+      "file": "packages/tui/src/tui-main-screen.ts",
+      "note": "Regular terminal mode implementation of TUI with diff-based rendering and image cleanup."
+    },
+    {
+      "name": "TuiAltScreen",
+      "file": "packages/tui/src/tui-alt-screen.ts",
+      "note": "Fullscreen mode with layout, mouse, selection, search, and image caching."
+    },
+    {
+      "name": "Editor",
+      "file": "packages/tui/src/components/editor.ts",
+      "note": "Multiline editor component with autocomplete, history, kill-ring, undo, and paste handling."
+    },
+    {
+      "name": "ProcessTerminal",
+      "file": "packages/tui/src/terminal.ts",
+      "note": "Terminal implementation for real stdio with Kitty protocol negotiation and modifyOtherKeys."
+    },
+    {
+      "name": "StdinBuffer",
+      "file": "packages/tui/src/stdin-buffer.ts",
+      "note": "Buffers stdin chunks and emits complete sequences with timeout handling for incomplete escape sequences."
+    },
+    {
+      "name": "KeybindingsManager",
+      "file": "packages/tui/src/keybindings.ts",
+      "note": "Manages default and user keybindings, matching input data to keybinding IDs and reporting conflicts."
+    },
+    {
+      "name": "CombinedAutocompleteProvider",
+      "file": "packages/tui/src/autocomplete.ts",
+      "note": "Autocomplete provider combining slash commands and file path/fuzzy completions using fd when available."
+    },
+    {
+      "name": "renderLatex",
+      "file": "packages/tui/src/latex.ts",
+      "note": "Converts LaTeX source to Unicode string for terminal display."
+    },
+    {
+      "name": "Markdown",
+      "file": "packages/tui/src/components/markdown.ts",
+      "note": "Renders Markdown with theme, tables, lists, and LaTeX extensions."
+    },
+    {
+      "name": "ScrollView",
+      "file": "packages/tui/src/components/scroll-view.ts",
+      "note": "Scrollable container with scrollbar modes, follow-end behavior, and scrollTo API."
+    },
+    {
+      "name": "getNativePlatformHelper",
+      "file": "packages/tui/src/native-platform.ts",
+      "note": "Loads per-platform native clipboard and modifier key helper."
+    },
+    {
+      "name": "renderImage",
+      "file": "packages/tui/src/terminal-image.ts",
+      "note": "Encodes and returns terminal image sequences (Kitty or iTerm2) or fallback text."
+    },
+    {
+      "name": "getScrollbarGeometry",
+      "file": "packages/tui/src/layout.ts",
+      "note": "Computes scrollbar geometry from layout frames; also in that module renderLayoutFrame drives the layout engine."
+    },
+    {
+      "name": "fuzzyMatch",
+      "file": "packages/tui/src/fuzzy.ts",
+      "note": "Fuzzy matching and filtering utility used by autocomplete."
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/tui/CHANGELOG.md",
+      "hash": "fe9bc596674f1f46ed73e25b2a5a44a1cdf8c1558f73ece4221c439a6034587a"
+    },
+    {
+      "path": "packages/tui/README.md",
+      "hash": "2d5942aca418ea3be98b63c8fe9d358a4ca6db5dabfa40aeff1a6c5008e60ede"
+    },
+    {
+      "path": "packages/tui/native/clipboard.h",
+      "hash": "72b2325b896f5acc8160e6f8f4cdcffd782cda12dced8e3ba555f7cd2dd0051c"
+    },
+    {
+      "path": "packages/tui/native/darwin/README.md",
+      "hash": "ec3381466d5d61f3977d309f9005c7229ef567303239a5bd764928fe24c624b0"
+    },
+    {
+      "path": "packages/tui/native/darwin/build.sh",
+      "hash": "5eadcaf6f73a10ea107b21825c20d7c16bdb593c08a9f2ce794769223a6595b7"
+    },
+    {
+      "path": "packages/tui/native/darwin/src/darwin-platform.m",
+      "hash": "8f7430c96f6f3331ed1499b774f85e784cfaab9b9b6e0c7abef4c9a0e43563e0"
+    },
+    {
+      "path": "packages/tui/native/linux/README.md",
+      "hash": "a06e3ff9ed53919f7d6147f2d016e837cbe780e01615053d01002754d83a522d"
+    },
+    {
+      "path": "packages/tui/native/linux/build.sh",
+      "hash": "9d09704c600594d1449222da731d8f0d89efafe27b1624a7098475142099b423"
+    },
+    {
+      "path": "packages/tui/native/linux/src/clipboard-worker.h",
+      "hash": "a4a670338d49e97002e4ffb9c0e22e28e9536938ec182d7beb7fa8f69856cd81"
+    },
+    {
+      "path": "packages/tui/native/linux/src/linux-platform-x11.c",
+      "hash": "4b355976f1e40c087a606689e218e9e2eb39b9caeb6c7318938ab1f9434759e7"
+    },
+    {
+      "path": "packages/tui/native/napi.h",
+      "hash": "cd14a97aa34f1f8516e751ed66fc807df38228908dc254edaabb6e80d053d2fb"
+    },
+    {
+      "path": "packages/tui/native/win32/README.md",
+      "hash": "5b00a5533ea3b8bea1667d0fe2f34345d97a7164bec3652bcbf03b4eee53d991"
+    },
+    {
+      "path": "packages/tui/native/win32/build.mjs",
+      "hash": "2e77f5ab24f95e1354398ef6503926f73925119e414f1e08baac36025d0a7c27"
+    },
+    {
+      "path": "packages/tui/native/win32/src/win32-platform.c",
+      "hash": "5b0d373af1358ca9bf9257085a36ad8f74dadcfc1e9b7fd53320fc21833b8389"
+    },
+    {
+      "path": "packages/tui/package.json",
+      "hash": "1a076a6a3f0552f4922754739ff8ededaa9c7b151df40a275289f0e75b5e8906"
+    },
+    {
+      "path": "packages/tui/src/alt-screen-search.ts",
+      "hash": "7d339e83cf0f160847335dc9be0d1f1db2a0945c463c3d636c7b84ceb9665d40"
+    },
+    {
+      "path": "packages/tui/src/autocomplete.ts",
+      "hash": "30779661607871ec7d6dfce4aa34fc532c7d9fe11ae0539ee691bbe779db5bbe"
+    },
+    {
+      "path": "packages/tui/src/components/alt-screen-flash.ts",
+      "hash": "6d341546b59958e93e4d33fdc1766b10d13c98a779031e2c01b827f0a4c6e30c"
+    },
+    {
+      "path": "packages/tui/src/components/box.ts",
+      "hash": "f79d30c9c263064df656dc55674b5d951bf765ffbbf658f400f449c44f6dab98"
+    },
+    {
+      "path": "packages/tui/src/components/cancellable-loader.ts",
+      "hash": "5f0ae0a56f299e5f6c9585c79bbe16c38a845f038a7254f8dffe7a44f6082e16"
+    },
+    {
+      "path": "packages/tui/src/components/editor.ts",
+      "hash": "241695859d48f49c6aaba9b9cfc14c6cd28639c6c247adb4fe2c202a9e2c6e20"
+    },
+    {
+      "path": "packages/tui/src/components/h-stack.ts",
+      "hash": "6622e1e2605e500a420c3cdf3ffcae0548b2d86ec496a0f6bf1dd5c95aeb0b6b"
+    },
+    {
+      "path": "packages/tui/src/components/image.ts",
+      "hash": "cdef2f757008ce2fecfde6c0108366ebdc160bac70355db855fd264aec8d53f8"
+    },
+    {
+      "path": "packages/tui/src/components/input.ts",
+      "hash": "416ceeb28f10b7146f6a284f276589797763b604d439574fbdc2a3ca52c00234"
+    },
+    {
+      "path": "packages/tui/src/components/loader.ts",
+      "hash": "614b39cd2f493e289a12ee4f42404f779cc3a5784735066760c1d9f13bf5d287"
+    },
+    {
+      "path": "packages/tui/src/components/markdown.ts",
+      "hash": "704c1c714a7ff6bdec55573ab38393726fa73a7b47cf4c1161ccc4f08530ac28"
+    },
+    {
+      "path": "packages/tui/src/components/mouse-region.ts",
+      "hash": "9dbcac616e8f8271b522b374bae29ab0b829d3771ce0ed228d6ae3da1c2be759"
+    },
+    {
+      "path": "packages/tui/src/components/scroll-view.ts",
+      "hash": "76dfd9f8a88cabc064f0652b83f16a945fbc988c9fe7c0423a4cd796907ef77d"
+    },
+    {
+      "path": "packages/tui/src/components/select-list.ts",
+      "hash": "0fc369801e745eff15567d72829bf67887f5efec8bc6816aaf1ee65338618373"
+    },
+    {
+      "path": "packages/tui/src/components/settings-list.ts",
+      "hash": "8d6b91d3c4aaaf11225854847d42ae6da852ef2646d54542c5b51a97dde15605"
+    },
+    {
+      "path": "packages/tui/src/components/spacer.ts",
+      "hash": "b511acec1d33885dad23e7ab2108b2d04dff0589b3bfda53b1f7458be4381e66"
+    },
+    {
+      "path": "packages/tui/src/components/stack.ts",
+      "hash": "93208d326fa43431b930eaa3250a1e19747063d696e97ec2f002f5feaa54fc18"
+    },
+    {
+      "path": "packages/tui/src/components/text.ts",
+      "hash": "3042e09dd8dcb870c23506e6fafb2dfcc095e7e375adad2fb62e447da17e5e3b"
+    },
+    {
+      "path": "packages/tui/src/components/truncated-text.ts",
+      "hash": "c383487099d1864b51493a5838dd28a1bd3e5e440a675ec1dbcaf0177534fad0"
+    },
+    {
+      "path": "packages/tui/src/components/v-stack.ts",
+      "hash": "0f36c9417bfffe5f6b9cc5fd40d420390cf9bebae70a073a409ac5f931f1f813"
+    },
+    {
+      "path": "packages/tui/src/editor-component.ts",
+      "hash": "0e40ba454b74e2ce21dfc6d831c185e5fb5619b0987fa158be98ed98564e8716"
+    },
+    {
+      "path": "packages/tui/src/fuzzy.ts",
+      "hash": "0ae2bedc6a4f043d875ec415202a6e3d9e45405741359d7d2dc2855240dff633"
+    },
+    {
+      "path": "packages/tui/src/index.ts",
+      "hash": "24b4decd4a28bdd1e501bffec9ddc8abdc6a2a6e3f5649ec41d04c30d4832341"
+    },
+    {
+      "path": "packages/tui/src/keybindings.ts",
+      "hash": "eea5e3fe258ad50337595bb5320955a6d97bac0c8f6c0a838f988d75079bcf38"
+    },
+    {
+      "path": "packages/tui/src/keys.ts",
+      "hash": "b972facce4233a4623239fc38029e28cae15d0fb326558c0c09dc02cf4345fa7"
+    },
+    {
+      "path": "packages/tui/src/kill-ring.ts",
+      "hash": "d829ae816560b12d2800a38db9f7278f76d9ef43d0e53e004a86add9b56c559a"
+    },
+    {
+      "path": "packages/tui/src/latex.ts",
+      "hash": "6488a1d90ee99ca8f59855e6a38c45fa6b750f835dd1e95d086b4742af8f8cba"
+    },
+    {
+      "path": "packages/tui/src/layout-node.ts",
+      "hash": "31dd68c9edafdc4f882bbb6c16f8deb1c514111020b647f0037b34d6b8c70a85"
+    },
+    {
+      "path": "packages/tui/src/layout.ts",
+      "hash": "7530a8eaa30f44fef82e8b7020b5068ba89d34884463c6cb526073b20fcdeef0"
+    },
+    {
+      "path": "packages/tui/src/native-modifiers.ts",
+      "hash": "8bfe66389dee2e6e962cb82f54050f8fe10df0d0b26d56186a581a00f70d6d8e"
+    },
+    {
+      "path": "packages/tui/src/native-module-path.ts",
+      "hash": "e0955c6d733085d89cc81ef4d991e2a04368a54b52007273c0a688b23abba28b"
+    },
+    {
+      "path": "packages/tui/src/native-platform.ts",
+      "hash": "6559bfaa34aa0870f0dd6f9ebbc5d560cd532198c34555ae970063516eed783c"
+    },
+    {
+      "path": "packages/tui/src/stdin-buffer.ts",
+      "hash": "a96af34c1c304a033b482b57ded426f4a51a5d1158f01c2d9daee5225fe60914"
+    },
+    {
+      "path": "packages/tui/src/terminal-colors.ts",
+      "hash": "2aa702f6e59dc51d78be64516f40c46981780a00d1f0900fb5504ad9da67b9e6"
+    },
+    {
+      "path": "packages/tui/src/terminal-image.ts",
+      "hash": "f29572354977fd4ef4cc76878d31cce3cb5c45cebdfc9b5c49b50ad9cfb3171f"
+    },
+    {
+      "path": "packages/tui/src/terminal.ts",
+      "hash": "d281681398b9832d98a9a2d75d18a5f586190b601d9a7c82fa92927be5fae3b4"
+    },
+    {
+      "path": "packages/tui/src/tui-alt-screen.ts",
+      "hash": "472be375227c254d30e2f2d3d24d68a841e5b8f4b3e7d1df58e78154aa0c3055"
+    },
+    {
+      "path": "packages/tui/src/tui-main-screen.ts",
+      "hash": "d2271afc2ce0d2302014ae0c20ab1b6af6a9765de90254b21cef0ce2c6ca062d"
+    },
+    {
+      "path": "packages/tui/src/tui.ts",
+      "hash": "2ca47c56f4a4f24b8c6a4c9c9f2a06004bfc312d9dbcd0ac1921a2cae32bc675"
+    },
+    {
+      "path": "packages/tui/src/undo-stack.ts",
+      "hash": "1373c1e0a1e2c58ac90c93d32a9e5c1226d7f53314c77dd3d0f8ec349d2b3627"
+    },
+    {
+      "path": "packages/tui/src/utils.ts",
+      "hash": "8cda2d53e2361ac5aaf6d7345b2fee058c8df5743eae4e4e90c89a7072c026c3"
+    },
+    {
+      "path": "packages/tui/src/word-navigation.ts",
+      "hash": "b73e915a524926ac8881731e89026b0bc7b5b0bd465de67257af81a420465c7f"
+    },
+    {
+      "path": "packages/tui/test/alt-screen-large-transcript-bench.ts",
+      "hash": "f9d01c2c3945aa360fdd5213867715fe8ff5dc25a0f65e85e0e224e1f1383601"
+    },
+    {
+      "path": "packages/tui/test/autocomplete.test.ts",
+      "hash": "23d6aaa52acc11f9a36d667e6783ca2fb9041509aadacc127a9701768f93b40f"
+    },
+    {
+      "path": "packages/tui/test/bug-regression-isimageline-startswith-bug.test.ts",
+      "hash": "89f2ce2cf538aedb404b872aba345309b92c6f44375ea1882e0540c4900dfb00"
+    },
+    {
+      "path": "packages/tui/test/chat-simple.ts",
+      "hash": "02933bdc7f18c246f0aed5a0d7c0ca216c04211b9c6fbb7a18f734efcb42b7a7"
+    },
+    {
+      "path": "packages/tui/test/editor-history-keybindings.test.ts",
+      "hash": "a055311e76a141062038a1a835fae1271108d29034fe0d0eec7521c6c79cb948"
+    },
+    {
+      "path": "packages/tui/test/editor.test.ts",
+      "hash": "b25d663eda552a486aa35965441b6fae056414b2b5750ddec96b69faec72bdd6"
+    },
+    {
+      "path": "packages/tui/test/fixtures/clipboard-reader.cjs",
+      "hash": "8f04b0e4e32a87e618b2024eb56468b27e6241ea0d851751d5b177a6e7f5e091"
+    },
+    {
+      "path": "packages/tui/test/fixtures/clipboard-worker-test.c",
+      "hash": "f90894d31ac421455a97db3f294437f0187ab564fdcb30cfac8dd3981df24138"
+    },
+    {
+      "path": "packages/tui/test/fixtures/clipboard-worker-test.cjs",
+      "hash": "41a3cfd191e37bde92f7edd66640a5d6dd41769e6d955d338a38481fb43efc7b"
+    },
+    {
+      "path": "packages/tui/test/fixtures/clipboard-x11-test.c",
+      "hash": "31ec958a65ccbac9d80fb58e15d95402baf04880e718b505de8671c29ba2398e"
+    },
+    {
+      "path": "packages/tui/test/fuzzy.test.ts",
+      "hash": "5945d422c5728860dff14331a69f56a30f781d0343c87ab18b4e1a2454766798"
+    },
+    {
+      "path": "packages/tui/test/image-test.ts",
+      "hash": "c4843461bb6d41f02d09811cc05046394ed062ce1c33f03dc771e1cfc6c5b30f"
+    },
+    {
+      "path": "packages/tui/test/input.test.ts",
+      "hash": "dcbed4da6d52e41dd52faaef9861ee4662806d5529e33b612f22e691e9a51386"
+    },
+    {
+      "path": "packages/tui/test/key-tester.ts",
+      "hash": "a54171c55aa237a43f74d6d92993f8a216c4c755954e030776fff64f074042ff"
+    },
+    {
+      "path": "packages/tui/test/keybindings.test.ts",
+      "hash": "c3c102e5f10c01bc34eeb9a009372f422640988d033d19ae1cecf6ea5d6763f4"
+    },
+    {
+      "path": "packages/tui/test/keys.test.ts",
+      "hash": "a5fd7e9285669f79a5ee5d242e05e5d5b90e9fc358913f3175b9d393461750d9"
+    },
+    {
+      "path": "packages/tui/test/latex.test.ts",
+      "hash": "e14761fc5da9de05c49cb5228f4d8440e185adffbb6baeb8cdcbce0bb5c06efa"
+    },
+    {
+      "path": "packages/tui/test/layout.test.ts",
+      "hash": "7f2c34277e65a32b80a5bc559b1551ac9b1b5eb51afd9011a3cac01c920fd0fb"
+    },
+    {
+      "path": "packages/tui/test/markdown.test.ts",
+      "hash": "0c7efb9cd5641e2db0d95975d8701966b863bd71d0730dd615bd178b0bf0baa4"
+    },
+    {
+      "path": "packages/tui/test/mouse-components.test.ts",
+      "hash": "2f24456f3d3a0cda99e6018e055f9522b64fa51d37315bd97b0cb6d2cb2a6e63"
+    },
+    {
+      "path": "packages/tui/test/native-clipboard-linux.test.ts",
+      "hash": "22b36f35cd4427ebeecaa5edebcfe920a9800ccb8b48a9c822db5f85c8f373f8"
+    },
+    {
+      "path": "packages/tui/test/native-module-path.test.ts",
+      "hash": "8f5f0eb78e719c1818d7b109e6745b706b76d70add323dce84a3e83df7917f75"
+    },
+    {
+      "path": "packages/tui/test/native-platform.test.ts",
+      "hash": "d6ba0d7bbb3a367a4dc677798772fa9e4c4e37570151f10133a0fdc0b9c26189"
+    },
+    {
+      "path": "packages/tui/test/overlay-non-capturing.test.ts",
+      "hash": "353c51e18e087c648addf59316455e8fa923e8b0bcebab1be217ea3ed0ea1cef"
+    },
+    {
+      "path": "packages/tui/test/overlay-options.test.ts",
+      "hash": "45b9a7cb0245dfd6f4e65dabe94c1094827fb540f980f05a154e22f8199c99f6"
+    },
+    {
+      "path": "packages/tui/test/overlay-short-content.test.ts",
+      "hash": "f26889d16c098a5f389d7f0e03c8ff2a89e2db5e661072904fc862dfa124923b"
+    },
+    {
+      "path": "packages/tui/test/regression-overlay-cjk-boundary.test.ts",
+      "hash": "51438c36784bb4ffb6304e1d179eb9daa046b8b93c80582c87c41f6415449b20"
+    },
+    {
+      "path": "packages/tui/test/regression-regional-indicator-width.test.ts",
+      "hash": "a057bc5b61cd287e2f2f554e878222ebace84a515e6cf67b87191eba5c91ae47"
+    },
+    {
+      "path": "packages/tui/test/regression-sigwinch-kill-eacces.test.ts",
+      "hash": "3d0c18e07d973784433ba298fe8d228021b970fd0d772737c49a8be3040e7ce3"
+    },
+    {
+      "path": "packages/tui/test/render-churn-bench.ts",
+      "hash": "d7d74dd11b394fb32d3422f5bf307dbfd333c01301af2f35648d4ee381ffae39"
+    },
+    {
+      "path": "packages/tui/test/select-list.test.ts",
+      "hash": "0135b531ef8dfe52de6625c2004a4ed95566214bc9860068106c862efcf22376"
+    },
+    {
+      "path": "packages/tui/test/settings-list.test.ts",
+      "hash": "36418fe2495b92835c24a15129c5371f2dcffdfb72d0ecce7208b1ab0056062d"
+    },
+    {
+      "path": "packages/tui/test/stdin-buffer.test.ts",
+      "hash": "750cd76af81de27bd8bfa5ef8b6f0ca4eff73c0bf977d7a8349b0d31756baff8"
+    },
+    {
+      "path": "packages/tui/test/tab-width.test.ts",
+      "hash": "59fff93aeecb3809f41f7bf68d88ef8ba9f0f38cd3a2db785a1f16a0ac114419"
+    },
+    {
+      "path": "packages/tui/test/terminal-colors.test.ts",
+      "hash": "83299038dbb51f1496c2985f0d7f95c8e67c3e1d1be0f65dd1d214277d888566"
+    },
+    {
+      "path": "packages/tui/test/terminal-image.test.ts",
+      "hash": "d4e7e72dc1ef01aa5f1d217228db5d1f79bc447ef991986dde0ec2006d02cfd2"
+    },
+    {
+      "path": "packages/tui/test/terminal.test.ts",
+      "hash": "b63dbc3886282a7642c5af452a28ada1888d941352e1e514a1049ff1bed0ced4"
+    },
+    {
+      "path": "packages/tui/test/test-themes.ts",
+      "hash": "06aee61407827856f09c7d7017dac4d79e17d617622cab603abde6f128753d00"
+    },
+    {
+      "path": "packages/tui/test/truncate-to-width.test.ts",
+      "hash": "fd75a99d47ff465d56a1f3ede16e37ca7d29aa910e2322881e824e6c2937b7b8"
+    },
+    {
+      "path": "packages/tui/test/truncated-text.test.ts",
+      "hash": "ba67883169e19dcb2013498d4b6659daa82b63daf01399f8471dc2b88b598141"
+    },
+    {
+      "path": "packages/tui/test/tui-alt-screen.test.ts",
+      "hash": "9be15e6cf3896ffd872449792d051044288dab3b3634f4b4806e5d5c04128703"
+    },
+    {
+      "path": "packages/tui/test/tui-cell-size-input.test.ts",
+      "hash": "156fc72cd71f7ad65a11b300baaf2a37a2e6bc2ec7498d66f52ac6a0e17ab2d8"
+    },
+    {
+      "path": "packages/tui/test/tui-overlay-style-leak.test.ts",
+      "hash": "ef6da1f722856ab3a1d5543b7ed80a2be8bf3df70d9c17f910ad9289998c669e"
+    },
+    {
+      "path": "packages/tui/test/tui-render.test.ts",
+      "hash": "ace909b9dfca424f4c0e08e348163ecb98e86513d55c3f4fef5028a715fb9896"
+    },
+    {
+      "path": "packages/tui/test/tui-shrink.test.ts",
+      "hash": "c136db2c4e886c43509f48e36a74bdf2c0897cd3c989b4cca1bd689697a3bf03"
+    },
+    {
+      "path": "packages/tui/test/viewport-overwrite-repro.ts",
+      "hash": "8e7ed863616677263d84e2bc218fbeb32372d4a90af58c464a270548f7566f17"
+    },
+    {
+      "path": "packages/tui/test/virtual-terminal.ts",
+      "hash": "5c9ff8da3b5afb888448bfd6eb4dede89d301db1dc1fd3ca7e32d8149f10085a"
+    },
+    {
+      "path": "packages/tui/test/word-navigation.test.ts",
+      "hash": "63ad66c3b23643ef248292a8c72cbf38e8126bc43da3df69a83b71397bc635ac"
+    },
+    {
+      "path": "packages/tui/test/wrap-ansi.test.ts",
+      "hash": "9c238d85ad676ca6d4e063caa8d44d493b0c220dd9aba9ea11a31d51c92d791d"
+    },
+    {
+      "path": "packages/tui/tsconfig.build.json",
+      "hash": "d666ba0c2a900cf47541404ace5c4977f13c6d9fc82ed91588f74aa6b2b9099c"
+    }
+  ],
+  "verification": {
+    "grounded": 15,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "AltScreenSearchSegment",
+      "AltScreenSearchMatch",
+      "AltScreenSearchResult",
+      "AltScreenSearchIndex",
+      "search",
+      "findAltScreenSearchMatches",
+      "getAltScreenSearchMatchKey",
+      "AltScreenSearchComponent",
+      "constructor",
+      "focused",
+      "setResult",
+      "getNavigationDirectionAt",
+      "setHoveredNavigationDirection",
+      "handleInput",
+      "invalidate",
+      "render",
+      "AutocompleteItem",
+      "SlashCommand",
+      "getArgumentCompletions",
+      "AutocompleteSuggestions",
+      "AutocompleteProvider",
+      "getSuggestions",
+      "applyCompletion",
+      "shouldTriggerFileCompletion",
+      "AltScreenFlashContainer",
+      "flash",
+      "dispose",
+      "Box",
+      "children",
+      "addChild",
+      "removeChild",
+      "clear",
+      "setBgFn",
+      "handleMouse",
+      "CancellableLoader",
+      "onAbort",
+      "signal",
+      "aborted",
+      "TextChunk",
+      "wordWrapLine",
+      "EditorTheme",
+      "EditorOptions",
+      "borderColor",
+      "onSubmit",
+      "onChange",
+      "disableSubmit",
+      "getPaddingX",
+      "setPaddingX",
+      "getAutocompleteMaxVisible",
+      "setAutocompleteMaxVisible",
+      "setAutocompleteProvider",
+      "addToHistory",
+      "getText",
+      "getExpandedText",
+      "getLines",
+      "getCursor",
+      "setText",
+      "insertTextAtCursor",
+      "isShowingAutocomplete",
+      "HStack",
+      "ImageTheme",
+      "ImageOptions",
+      "Image",
+      "getImageId",
+      "InputOptions",
+      "Input",
+      "onEscape",
+      "getValue",
+      "setValue",
+      "LoaderIndicatorOptions",
+      "Loader",
+      "start",
+      "stop",
+      "setMessage",
+      "setIndicator",
+      "DefaultTextStyle",
+      "MarkdownTheme",
+      "MarkdownOptions",
+      "MouseRegionHandler",
+      "MouseRegion",
+      "ScrollViewScrollbar",
+      "ScrollViewOptions",
+      "ScrollViewScrollToOptions",
+      "followEnd",
+      "primary",
+      "overscroll",
+      "scrollbarTrackStyle",
+      "scrollbarThumbStyle",
+      "scrollTop",
+      "isFollowingEnd",
+      "viewportHeight",
+      "scrollbar",
+      "isScrollbarVisible",
+      "isScrollbarActive",
+      "setScrollbar",
+      "getContentWidth",
+      "setScrollbarActive",
+      "scrollTo",
+      "scrollBy",
+      "scrollToStart",
+      "scrollToEnd",
+      "updateLayout",
+      "SelectItem",
+      "SelectListTheme",
+      "SelectListTruncatePrimaryContext",
+      "SelectListLayoutOptions",
+      "SelectList",
+      "onSelect",
+      "onCancel",
+      "onSelectionChange",
+      "setFilter",
+      "setSelectedIndex",
+      "getSelectedItem",
+      "SettingItem",
+      "SettingsListTheme",
+      "SettingsListOptions",
+      "SettingsList",
+      "updateValue",
+      "selectItem",
+      "Spacer",
+      "setLines",
+      "StackEntryOptions",
+      "StackEntry",
+      "StackChild",
+      "StackOptions",
+      "visibleStackEntries",
+      "allocateStackSizes",
+      "Text",
+      "setCustomBgFn",
+      "TruncatedText",
+      "VStack",
+      "EditorComponent",
+      "FuzzyMatch",
+      "fuzzyFilter",
+      "Keybindings",
+      "Keybinding",
+      "KeybindingDefinition",
+      "KeybindingDefinitions",
+      "KeybindingsConfig",
+      "TUI_KEYBINDINGS",
+      "KeybindingConflict",
+      "matches",
+      "getKeys",
+      "getDefinition",
+      "getConflicts",
+      "setUserBindings",
+      "getUserBindings",
+      "getResolvedBindings",
+      "setKeybindings",
+      "getKeybindings",
+      "setKittyProtocolActive",
+      "isKittyProtocolActive",
+      "KeyId",
+      "Key",
+      "KeyEventType",
+      "isKeyRelease",
+      "isKeyRepeat",
+      "matchesKey",
+      "parseKey",
+      "decodeKittyPrintable",
+      "decodePrintableKey",
+      "KillRing",
+      "push",
+      "peek",
+      "rotate",
+      "length",
+      "RenderLatexOptions",
+      "LAYOUT_NODE",
+      "LayoutViewport",
+      "StackLayoutEntry",
+      "StackLayoutNode",
+      "ScrollLayoutState",
+      "ScrollLayoutNode",
+      "LayoutNode",
+      "LayoutComponent",
+      "getLayoutNode",
+      "LayoutRect",
+      "LayoutBox",
+      "LayoutFrame",
+      "ScrollbarGeometry",
+      "renderLayoutFrame",
+      "getLayoutBoxesAt",
+      "getScrollViewBox",
+      "getScrollViewsAt",
+      "isNativeModifierPressed",
+      "NativeModuleCandidateOptions",
+      "getNativeModuleCandidates",
+      "ModifierKey",
+      "NativeClipboard",
+      "getImage",
+      "getNativeClipboard",
+      "StdinBufferOptions",
+      "StdinBufferEventMap",
+      "process",
+      "flush",
+      "getBuffer",
+      "destroy",
+      "RgbColor",
+      "TerminalColorScheme",
+      "isOsc11BackgroundColorResponse",
+      "parseOsc11BackgroundColor",
+      "parseTerminalColorSchemeReport",
+      "ImageProtocol",
+      "TerminalCapabilities",
+      "CellDimensions",
+      "ImageDimensions",
+      "ImageRenderOptions",
+      "getCellDimensions",
+      "setCellDimensions",
+      "detectCapabilities",
+      "getCapabilities",
+      "resetCapabilitiesCache",
+      "setCapabilityOverrides",
+      "setCapabilities",
+      "isImageLine",
+      "allocateImageId",
+      "encodeKitty",
+      "deleteKittyImage",
+      "deleteAllKittyImages",
+      "deleteAllKittyPlacements",
+      "encodeITerm2",
+      "ImageCellSize",
+      "KittyImageMetadata",
+      "KittyImagePlacement",
+      "registerKittyImageMetadata",
+      "getKittyImageMetadata",
+      "getKittyImagePlacement",
+      "cropKittyImageLine",
+      "calculateImageCellSize",
+      "calculateImageRows",
+      "getPngDimensions",
+      "getJpegDimensions",
+      "getGifDimensions",
+      "getWebpDimensions",
+      "getImageDimensions",
+      "hyperlink",
+      "imageFallback",
+      "KeyboardProtocolNegotiationSequence",
+      "parseKeyboardProtocolNegotiationSequence",
+      "isAppleTerminalSession",
+      "refreshTerminalDimensions",
+      "normalizeNativeShiftEnterInput",
+      "normalizeAppleTerminalInput",
+      "Terminal",
+      "drainInput",
+      "write",
+      "columns",
+      "rows",
+      "kittyProtocolActive",
+      "moveBy",
+      "hideCursor",
+      "showCursor",
+      "clearLine",
+      "clearFromCursor",
+      "clearScreen",
+      "setTitle",
+      "setProgress",
+      "resolveEscapeTimeoutMs",
+      "modifyOtherKeysActive",
+      "TuiAltScreenOptions",
+      "mode",
+      "viewportTop",
+      "isFollowingOutput",
+      "getCopyOnSelect",
+      "setCopyOnSelect",
+      "hasActiveSelection",
+      "copyActiveSelectionToClipboard",
+      "setLayoutRoot",
+      "scrollToTop",
+      "scrollToBottom",
+      "TuiMainScreenRenderState",
+      "captureRenderState",
+      "restoreRenderState",
+      "TuiMouseEventType",
+      "TuiMouseButton",
+      "TuiMouseEvent",
+      "TuiMouseEventResult",
+      "TuiMouseDispatchTarget",
+      "TuiMouseDispatchResult",
+      "dispatchMouseEvent",
+      "retargetMouseEvent",
+      "Component",
+      "TuiInputListenerResult",
+      "TuiInputListener",
+      "Focusable",
+      "isFocusable",
+      "CURSOR_MARKER",
+      "OverlayAnchor",
+      "OverlayMargin",
+      "SizeValue",
+      "OverlayOptions",
+      "OverlayUnfocusOptions",
+      "OverlayBounds",
+      "OverlayHandle",
+      "hide",
+      "setHidden",
+      "isHidden",
+      "focus",
+      "unfocus",
+      "isFocused",
+      "getBounds",
+      "Container",
+      "compositeTuiLine",
+      "TuiMode",
+      "TuiStopOptions",
+      "getShowHardwareCursor",
+      "setShowHardwareCursor",
+      "getClearOnShrink",
+      "setClearOnShrink",
+      "setFocus",
+      "showOverlay",
+      "hideOverlay",
+      "hasOverlay",
+      "renderNow",
+      "requestRender",
+      "addInputListener",
+      "removeInputListener",
+      "onTerminalColorSchemeChange",
+      "setTerminalColorSchemeNotifications",
+      "queryTerminalBackgroundColor",
+      "queryTerminalColorScheme",
+      "VIEWPORT_TUI",
+      "ViewportTUI",
+      "isViewportTUI",
+      "terminal",
+      "onDebug",
+      "hasOverlayEntries",
+      "fullRedraws",
+      "getFocusedComponent",
+      "UndoStack",
+      "pop",
+      "getGraphemeSegmenter",
+      "getWordSegmenter",
+      "cjkBreakRegex",
+      "cjkPunctuationRegex",
+      "autocompleteSeparatorRegex",
+      "autocompleteBoundaryRegex",
+      "visibleWidth",
+      "stripTerminalSequences",
+      "getGraphemeCellRange",
+      "getOsc8LinkAtColumn",
+      "normalizeTerminalOutput",
+      "extractAnsiCode",
+      "getActiveBackgroundAnsi",
+      "wrapTextWithAnsi",
+      "PUNCTUATION_REGEX",
+      "isWhitespaceChar",
+      "isPunctuationChar",
+      "applyBackgroundToLine",
+      "truncateToWidth",
+      "sliceByColumn",
+      "sliceWithWidth",
+      "extractSegments",
+      "WordNavigationOptions",
+      "findWordBackward",
+      "findWordForward",
+      "defaultSelectListTheme",
+      "defaultMarkdownTheme",
+      "defaultEditorTheme",
+      "VirtualTerminal",
+      "sendInput",
+      "resize",
+      "flushAndGetViewport",
+      "getViewport",
+      "getScrollBuffer",
+      "reset",
+      "getCursorPosition",
+      "waitForRender"
+    ]
+  }
+}

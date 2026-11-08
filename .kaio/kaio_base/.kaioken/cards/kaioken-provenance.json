@@ -1,0 +1,94 @@
+{
+  "moduleId": "kaioken-provenance",
+  "name": "Kaioken Provenance",
+  "generatedAt": "2026-09-23T15:09:10.510Z",
+  "summary": "The Kaioken provenance module tracks which source files a generated document (e.g., an API reference or doc page) was derived from, and detects staleness. It groups sources by binding keys (full path, symbol, or line range) to handle moves, renames, and symbol/range shifts. Export-oriented entry points compute staleness across a set of documents or invalidate documents from changed paths; internal helpers classify individual sources or records. File-level heuristics decide whether a file is 'documentable' (excluded lockfiles and config basenames).",
+  "keyPoints": [
+    "Staleness is computed per document rather than just listing changed sources: `computeStaleness` runs `changedSourcesFor` on each record, then maps source changes to document freshness via `freshnessOf` (current/stale/orphaned/unknown).",
+    "Sources are keyed for tracking across edits: symbols use `path#symbol`, ranges use `path#start-end`, and files use the path itself; `bindingKeyFor` returns null for orphans, which then register as 'unknown' freshness.",
+    "A source counts as 'changed' not only when its path is modified but when its binding key is absent from the current scan—indicating a move or rewrite—unless it is a lockfile/config basename, which are always allowed to change harmlessly.",
+    "Artifact provenance is gathered from the filesystem: `readProvenanceIndex` reads the .kaioken index, `readCardsSafe` falls back to a fresh `gatherProvenance` scan on error, and `checkDrift` compares the stored index against a live scan to produce a `StalenessReport`.",
+    "File-documentability judgment is centralized in `isDocumentableFile`, which rejects known lockfiles (npm, pnpm, yarn, cargo, pip, etc.) and common config basenames (package.json, Makefile, Dockerfile, .editorconfig) so they don't become provenance sources.",
+    "The module's types distinguish a 'stale' record (all its sources changed) from 'current' (at least one changed) and 'orphaned' (no recorded sources), giving consumers a spectrum of refresh urgency.",
+    "Binding keys are prioritized: a changed source produces a `ChangedSource` with either a symbol binding, a range binding, or a path binding, letting callers trace exactly which part of a file invalidated a document."
+  ],
+  "entryPoints": [
+    {
+      "name": "computeStaleness",
+      "file": "kaioken/provenance/src/staleness.ts",
+      "note": "Top-level staleness check: for each document, identify changed sources and derive a document status; returns a StalenessReport."
+    },
+    {
+      "name": "invalidatedBy",
+      "file": "kaioken/provenance/src/staleness.ts",
+      "note": "Given a set of changed file paths (from a scan), returns the documents that are now stale, optionally restricted by invalidation options."
+    },
+    {
+      "name": "changedSourcesFor",
+      "file": "kaioken/provenance/src/staleness.ts",
+      "note": "Per-record check: returns the list of ChangedSource entries for a single provenance record, using the scan result and optional symbol hashes."
+    },
+    {
+      "name": "gatherProvenance",
+      "file": "kaioken/provenance/src/status.ts",
+      "note": "Scans the repository root and builds a current provenance index from .kaioken cards."
+    },
+    {
+      "name": "checkDrift",
+      "file": "kaioken/provenance/src/status.ts",
+      "note": "Reads the stored provenance index, gathers a fresh one, and returns a StalenessReport describing which documents have drifted."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/provenance/package.json",
+      "hash": "d5196231a4ae4927b28d18f6dd1be23b9e802d49113dae96d7a5c306df4a1968"
+    },
+    {
+      "path": "kaioken/provenance/src/index.ts",
+      "hash": "a8819e6bc651d97413567e88a40784b56f0b316dcb220656d23b37a336fd6361"
+    },
+    {
+      "path": "kaioken/provenance/src/staleness.ts",
+      "hash": "a50728729d7165e737fac54af4b19cab44e610f9df01981b4963d76e8831a0a4"
+    },
+    {
+      "path": "kaioken/provenance/src/status.ts",
+      "hash": "11726e41ca362cc33e8f738cacea2ab0c64e6f9c47acf2b50eec919129c95961"
+    },
+    {
+      "path": "kaioken/provenance/src/types.ts",
+      "hash": "ea2d3a37c854e5d59e6d7cdcaebbd437206ba7923d05a85eb3aff3a93414e039"
+    },
+    {
+      "path": "kaioken/provenance/test/staleness.test.ts",
+      "hash": "65c3d35eaded04eb9b2cce2b4fa4f03b8be725e271f53805dc848be1639db1bb"
+    },
+    {
+      "path": "kaioken/provenance/tsconfig.json",
+      "hash": "c1b8652e80a60cbe6a34ad80b4f3724f6171374542958493e5996b3c8710ebed"
+    }
+  ],
+  "verification": {
+    "grounded": 5,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "bindingKeyFor",
+      "symbolBindingKey",
+      "rangeBindingKey",
+      "isDocumentableFile",
+      "readProvenanceIndex",
+      "readCardsSafe",
+      "ProvenanceSource",
+      "Provenance",
+      "ProvenanceIndex",
+      "Freshness",
+      "DocumentStatus",
+      "StalenessOptions",
+      "InvalidationOptions",
+      "ChangedSource",
+      "StalenessReport"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+appId: com.kaioken.desktop-studio
+productName: Kaioken Desktop Studio
+copyright: Copyright © 2026 Kaioken Labs
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - "out/**/*"
+  - "!node_modules/**/*"
+  - "node_modules/**/*"
+  
+asar: true
+compression: maximum
+
+# Publish configuration generates latest.yml / latest-mac.yml / latest-linux.yml
+publish:
+  provider: github
+  owner: babtix
+  repo: kaioken-desktop
+  releaseType: release
+
+win:
+  target:
+    - target: nsis
+      arch: [x64, arm64]
+  icon: build/icon.ico
+  artifactName: ${productName}-Setup-${version}-${arch}.${ext}
+  # Certificate Subject Name (populated via CI secret WIN_CSC_NAME)
+  # certificateSubjectName: "Kaioken Labs"
+
+mac:
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+    - target: zip
+      arch: [x64, arm64]
+  icon: build/icon.icns
+  category: public.app-category.developer-tools
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  artifactName: ${productName}-${version}-${arch}.${ext}
+  notarize: true
+
+linux:
+  target:
+    - target: AppImage
+      arch: [x64, arm64]
+    - target: deb
+      arch: [x64, arm64]
+  icon: build/icons
+  category: Development
+  artifactName: ${productName}-${version}-${arch}.${ext}
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true

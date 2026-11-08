@@ -1,0 +1,96 @@
+{
+  "moduleId": ".github",
+  "name": ".github",
+  "generatedAt": "2026-09-23T15:04:59.686Z",
+  "summary": "GitHub repository metadata: issue templates, contributor approval list, and CI/CD workflows for builds, dependency auditing, issue triage/gating, and publishing a model catalog.",
+  "keyPoints": [
+    "Issue templates cover bugs, contributions, package reports, and a config file with blank issues settings.",
+    "Workflows enforce gates: contributor approval, PR gating, issue gating, and automatic label triage.",
+    "Build workflows compile binaries and run continuous integration tests, with separate job for kaioken (a specific framework/component).",
+    "Dependency security handled via npm-audit workflow; model catalog publishing pipeline also defined.",
+    "Automation removes in-progress label on issue/PR close to keep repository state tidy."
+  ],
+  "entryPoints": [
+    {
+      "name": "No indexed declarations",
+      "file": ".github",
+      "note": "All files are configuration (YAML, issue templates, contributor list) without indexed code declarations; entry points are implicit via workflow triggers."
+    }
+  ],
+  "sources": [
+    {
+      "path": ".github/APPROVED_CONTRIBUTORS",
+      "hash": "1eab2ca5920969b2e9345ce777b4d3aa4a409118fecac123aef61f21f5fe9eec"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug.yml",
+      "hash": "78b2829aa64f575586e163a1027680e4a07045bb2cbee689541d8f8ac2e8bb25"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/config.yml",
+      "hash": "3a32be43d6687f8fd5f16575693e67c71be87dd942d1ec3a5e78ac77401a2d99"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/contribution.yml",
+      "hash": "12bf2a1e164ea98748fe396a30cdc4bc9efc162facb656dbbb13a5f0d09b5975"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/package-report.yml",
+      "hash": "f927f61635e862984df89ab636b60e56a720fba3228757c1c09f52d9faefbbac"
+    },
+    {
+      "path": ".github/workflows/approve-contributor.yml",
+      "hash": "c326b172723f48fce44d750dc54c2a0605ef283011f6b2da8f2a6412b5ce83ea"
+    },
+    {
+      "path": ".github/workflows/build-binaries.yml",
+      "hash": "6b876f123566f29e37e20be454bf3f09fe1d9f2a8d3b81b50e279e56e392803a"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "hash": "6801f6d48b174233550821721a8ca6ae8c481dd7df1d0b0f338b2e8802db4ed3"
+    },
+    {
+      "path": ".github/workflows/issue-analysis.yml",
+      "hash": "61e9c0c2a0b86a3d81b1246b4573d291fe198a157ce2414fd1a7d23b66b6512e"
+    },
+    {
+      "path": ".github/workflows/issue-gate.yml",
+      "hash": "00c80ec4476324e8c33934ef7d75ebaec8421fd2753cd2485cd5e67db1925f28"
+    },
+    {
+      "path": ".github/workflows/issue-triage-labels.yml",
+      "hash": "7615bed676701f8429e6731f3a8df853935d14a8149594ae1d9b6e6a2b2511c8"
+    },
+    {
+      "path": ".github/workflows/kaioken.yml",
+      "hash": "7d864ff505a0f46f5826536f4288247566ca0496c641a7a5c3425fe6291e4001"
+    },
+    {
+      "path": ".github/workflows/npm-audit.yml",
+      "hash": "013b5a9945a0eadb95fdf08fd76747bbbb4a3fd0fe12e5280fe32a5e4af5cf9f"
+    },
+    {
+      "path": ".github/workflows/pr-gate.yml",
+      "hash": "bab4731f186b0ba061f496a7059fed4eb78d801e3f771ec8e1327a5e7cdc550a"
+    },
+    {
+      "path": ".github/workflows/publish-model-catalog.yml",
+      "hash": "218ab4918baaabc4d68093fe575f77cdf75077824cf0419a0674d21f154a9b78"
+    },
+    {
+      "path": ".github/workflows/remove-inprogress-on-close.yml",
+      "hash": "d73af6b20621fc453a081b3015d6a6ad1dc0eec897abdf3c95b2186617ef3790"
+    }
+  ],
+  "verification": {
+    "grounded": 0,
+    "ungrounded": [
+      "No indexed declarations"
+    ],
+    "unknownFiles": [
+      ".github"
+    ],
+    "uncovered": []
+  }
+}

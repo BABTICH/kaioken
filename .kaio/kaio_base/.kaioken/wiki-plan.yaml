@@ -1,0 +1,463 @@
+# Kaioken wiki plan — edit this file.
+#
+# The outline is a checkpoint, not an output. Reordering chapters, rewriting a
+# goal, or moving a file between chapters costs nothing here and changes what
+# gets written; the same correction after generation costs every chapter.
+#
+# "goal" steers what each chapter argues. "files" is the only evidence that
+# chapter may draw on — a claim about a file listed nowhere is reported as a
+# defect rather than silently believed.
+
+version: 1
+generatedAt: 2026-09-23T16:11:20.879Z
+multiplier: 3
+chapters:
+  - id: workspace-structure
+    title: Workspace Overview
+    goal: Understand the top-level repository layout and key files such as README, package.json,
+      and workspace export configuration.
+    files:
+      - ../README.md
+      - ../package.json
+      - ../workspaceSourcePaths
+    sections:
+      - id: repository-layout
+        title: Repository Layout
+        summary: Overview of the top-level directory structure and how the main components (core,
+          modules, packages) are organized within the workspace.
+        files:
+          - ../README.md
+      - id: package-configuration
+        title: Package Configuration
+        summary: Explanation of the root package.json, its scripts, dependencies, and how it
+          orchestrates the workspace's build and development tasks.
+        files:
+          - ../package.json
+      - id: workspace-source-paths
+        title: Workspace Source Paths
+        summary: Description of the workspaceSourcePaths file, which defines the source directories
+          that are part of the workspace and how they are used for tooling and exports.
+        files:
+          - ../workspaceSourcePaths
+  - id: foundation
+    title: Foundation
+    goal: Describe the core infrastructure provided by the `_pi` directory, including
+      extensions, skills, themes, and related configuration artifacts.
+    files:
+      - .pi
+      - .pi/prompts
+      - .pi/skills
+      - .pi/themes
+      - .pi/extensions
+      - .pi/extensions/kaioken
+      - .pi/git
+      - .pi/npm
+    sections:
+      - id: overview-of-pi-directory
+        title: Overview of the _pi Directory
+        summary: "This section provides a high-level description of the _pi directory structure, its
+          purpose as the core infrastructure of the workspace, and the main categories of
+          artifacts it contains: prompts, skills, themes, extensions, and configuration
+          directories for git and npm."
+        files:
+          - .pi
+      - id: extensions-and-skills
+        title: Extensions and Skills
+        summary: This section details the extensions directory, focusing on the Kaioken extension,
+          and the skills directory, explaining how they extend the core environment and
+          enable specialized functionality.
+        files:
+          - .pi/extensions
+          - .pi/extensions/kaioken
+          - .pi/skills
+      - id: themes-and-configuration
+        title: Themes and Configuration Artifacts
+        summary: This section covers the themes directory for visual theming and the configuration
+          artifacts for git and npm, along with the prompts directory, describing their
+          roles in customizing the user experience and setting up tooling.
+        files:
+          - .pi/themes
+          - .pi/git
+          - .pi/npm
+          - .pi/prompts
+  - id: kaioken-core
+    title: Kaioken Core Concepts
+    goal: Explain the Kaioken framework and its primary building blocks such as graph, impact,
+      provenance, plan, verify, serve, and skillgen modules.
+    files:
+      - kaioken
+      - kaioken/README.md
+      - kaioken/CHANGELOG.md
+      - kaioken/graph
+      - kaioken/impact
+      - kaioken/provenance
+      - kaioken/plan
+      - kaioken/verify
+      - kaioken/skillgen
+      - kaioken/verifycore
+    sections:
+      - id: framework-overview
+        title: Kaioken Framework Overview
+        summary: An overview of the Kaioken framework, its purpose, main capabilities, and the
+          relationship between its core modules, based on the top-level package
+          documentation.
+        files:
+          - kaioken/README.md
+          - kaioken/CHANGELOG.md
+      - id: core-analysis-modules
+        title: "Analysis Modules: Graph, Impact, and Provenance"
+        summary: Detailed description of the graph, impact, and provenance modules, including their
+          roles in indexing, impact modeling, and staleness tracking.
+        files:
+          - kaioken/graph
+          - kaioken/impact
+          - kaioken/provenance
+      - id: action-and-delivery-modules
+        title: "Action and Delivery Modules: Plan, Verify, Serve, and Skillgen"
+        summary: Detailed description of the plan, verify, serve, and skillgen modules, including
+          their responsibilities in planning, verification, presentation, and skill
+          generation, along with the verifycore variant.
+        files:
+          - kaioken/plan
+          - kaioken/verify
+          - kaioken/skillgen
+          - kaioken/verifycore
+  - id: knowledge-graph
+    title: Knowledge Graph
+    goal: Detail the graph module, including how documents are indexed, artifacts are managed,
+      and related graph operations are performed.
+    files:
+      - kaioken/graph/package.json
+      - kaioken/graph/tsconfig.json
+      - kaioken/graph/src/index.ts
+      - kaioken/graph/src/artifact.ts
+      - kaioken/graph/src/build.ts
+      - kaioken/graph/src/render.ts
+      - kaioken/graph/src/types.ts
+    sections:
+      - id: graph-types-and-artifacts
+        title: Graph Types and Artifact Persistence
+        summary: Define the KnowledgeGraph data model—node kinds, edge kinds, and the graph
+          container—and explain how graphs are persisted to and read from disk via the
+          graph.json artifact, including the export tree and wiki reading utilities.
+        files:
+          - kaioken/graph/src/types.ts
+          - kaioken/graph/src/artifact.ts
+          - kaioken/graph/src/index.ts
+      - id: graph-construction
+        title: Graph Construction from Documents and Code
+        summary: Cover the buildGraph and buildCodeGraph functions, integrity checks, node kind
+          inference, document ID splitting, source path resolution, import extraction, and
+          specifier resolution that produce the graph.
+        files:
+          - kaioken/graph/src/build.ts
+      - id: graph-rendering-and-export
+        title: Graph Rendering and Export Formats
+        summary: Describe how graphs are rendered to Markdown, Mermaid, D3, and Cytoscape formats,
+          along with statistics computation and coverage reporting.
+        files:
+          - kaioken/graph/src/render.ts
+  - id: impact-model
+    title: Impact Modeling
+    goal: Describe the impact module, covering PredictionInput, PredictionModel, ImpactReport,
+      and rendering logic.
+    files:
+      - kaioken/impact/package.json
+      - kaioken/impact/tsconfig.json
+      - kaioken/impact/src/index.ts
+      - kaioken/impact/src/predict.ts
+      - kaioken/impact/src/render.ts
+    sections:
+      - id: overview-and-types
+        title: Overview and Core Types
+        summary: "Introduces the impact module's purpose and its primary data structures:
+          PredictInput, ImpactReport, and supporting interfaces like ModelClient and
+          IndexFile. It explains what impact prediction means and the shape of the output
+          report."
+        files:
+          - kaioken/impact/src/index.ts
+          - kaioken/impact/src/predict.ts
+      - id: prediction-process
+        title: Prediction Process
+        summary: "Details how predictImpact and predictImpactForSymbol work: from candidate
+          generation via the model and matching, through source file sweeping, dependency
+          resolution, and affected module/document/skill discovery, to the final report
+          assembly."
+        files:
+          - kaioken/impact/src/predict.ts
+          - kaioken/impact/src/index.ts
+      - id: rendering
+        title: Rendering the Report
+        summary: Describes how the impact report is rendered into a human-readable output via the
+          renderImpact function, including the format of sections and how report components
+          are presented.
+        files:
+          - kaioken/impact/src/render.ts
+  - id: provenance-and-staleness
+    title: Provenance and Staleness
+    goal: Explain how provenance is tracked, how staleness is computed, and how changes are
+      detected.
+    files:
+      - kaioken/provenance/package.json
+      - kaioken/provenance/tsconfig.json
+      - kaioken/provenance/src/index.ts
+      - kaioken/provenance/src/staleness.ts
+      - kaioken/provenance/src/types.ts
+    sections:
+      - id: provenance-model
+        title: Provenance Model
+        summary: "Define the data model for provenance: Provenance, ProvenanceSource,
+          ProvenanceIndex, Freshness, and related types, explaining how source materials are
+          recorded and bound to documents."
+        files:
+          - kaioken/provenance/src/types.ts
+          - kaioken/provenance/src/index.ts
+      - id: staleness-computation
+        title: Computing Staleness
+        summary: Explain how staleness is determined by comparing provenance records against the
+          current scan, including the status classification, freshness rules, and the
+          computeStaleness function.
+        files:
+          - kaioken/provenance/src/staleness.ts
+          - kaioken/provenance/src/types.ts
+      - id: invalidation-detection
+        title: Change Detection and Invalidation
+        summary: Describe how changed sources are identified via binding keys and symbol/range
+          hashes, and how invalidatedBy returns documents that need regeneration.
+        files:
+          - kaioken/provenance/src/staleness.ts
+  - id: planning
+    title: Planning Module
+    goal: Detail the planning module and its API for module planning, card generation, and
+      related validation.
+    files:
+      - kaioken/plan/package.json
+      - kaioken/plan/tsconfig.json
+      - kaioken/plan/src/index.ts
+      - kaioken/plan/src/cards.ts
+      - kaioken/plan/src/propose.ts
+      - kaioken/plan/src/validate.ts
+      - kaioken/plan/src/types.ts
+      - kaioken/plan/src/artifact.ts
+    sections:
+      - id: planning-overview
+        title: Module Planning Overview
+        summary: "Introduce the planning module, its purpose, and the key concepts: ModulePlan,
+          Module, Card, and the artifacts it reads and writes."
+        files:
+          - kaioken/plan/src/types.ts
+          - kaioken/plan/src/index.ts
+          - kaioken/plan/src/artifact.ts
+      - id: module-plan-generation
+        title: Module Plan Generation and Validation
+        summary: Explain how module plans are proposed (via model or heuristics), validated,
+          expanded, and flattened, including the validation defects.
+        files:
+          - kaioken/plan/src/propose.ts
+          - kaioken/plan/src/validate.ts
+      - id: card-generation
+        title: Card Generation and Verification
+        summary: Describe how knowledge cards are generated for modules, verified for correctness,
+          corrected, and written to disk, including incremental regeneration.
+        files:
+          - kaioken/plan/src/cards.ts
+  - id: serve-and-presentation
+    title: Serve and Presentation
+    goal: Describe the serve module and its UI components used to render documentation, cards,
+      files, and graphs for end users.
+    files:
+      - kaioken/serve/package.json
+      - kaioken/serve/tsconfig.json
+      - kaioken/serve/src/index.ts
+      - kaioken/serve/src/graph.ts
+      - kaioken/serve/src/library.ts
+      - kaioken/serve/src/pages/widget
+      - kaioken/serve/src/pages/cardsView.ts
+      - kaioken/serve/src/pages/filesView.ts
+      - kaioken/serve/src/pages/graphView.ts
+      - kaioken/serve/src/pages/layout.ts
+      - kaioken/serve/src/pages/overviewView.ts
+      - kaioken/serve/src/pages/searchView.ts
+      - kaioken/serve/src/pages/wikiView.ts
+      - kaioken/serve/src/pages/*.ts
+    sections:
+      - id: overview-and-library
+        title: Overview and Library
+        summary: Introduces the serve module, including the Site interface, the library model that
+          powers all views, and the shared layout used across the UI.
+        files:
+          - kaioken/serve/src/index.ts
+          - kaioken/serve/src/library.ts
+          - kaioken/serve/src/pages/layout.ts
+          - kaioken/serve/src/pages/overviewView.ts
+      - id: document-and-card-views
+        title: Document and Card Views
+        summary: Describes how wiki documentation, skill pages, and card views are rendered,
+          including the right rail, verification badges, and provenance panels.
+        files:
+          - kaioken/serve/src/pages/wikiView.ts
+          - kaioken/serve/src/pages/cardsView.ts
+          - kaioken/serve/src/pages/filesView.ts
+      - id: graph-and-search
+        title: Graph and Search
+        summary: Explains the interactive knowledge graph view and the search page, including graph
+          construction, filtering, and hit presentation.
+        files:
+          - kaioken/serve/src/graph.ts
+          - kaioken/serve/src/pages/graphView.ts
+          - kaioken/serve/src/pages/searchView.ts
+  - id: skill-generation
+    title: Skill Generation
+    goal: Explain the skill generation system, including proposals, skill templates, and writing
+      skills.
+    files:
+      - kaioken/skillgen/package.json
+      - kaioken/skillgen/tsconfig.json
+      - kaioken/skillgen/src/index.ts
+      - kaioken/skillgen/src/propose.ts
+      - kaioken/skillgen/src/write.ts
+    sections:
+      - id: proposal-generation
+        title: Proposal Generation
+        summary: Propose repository-specific skills from a plan prompt, repository evidence, and
+          available chapters.
+        files:
+          - kaioken/skillgen/src/propose.ts
+      - id: skill-writing-and-validation
+        title: Skill Writing and Validation
+        summary: Write a skill document grounded in real repository files, then ensure cited files
+          and verification commands exist.
+        files:
+          - kaioken/skillgen/src/write.ts
+      - id: package-and-module-exports
+        title: Package and Module Exports
+        summary: Expose the skill generation API through the package entry point and declare
+          dependencies.
+        files:
+          - kaioken/skillgen/src/index.ts
+          - kaioken/skillgen/package.json
+          - kaioken/skillgen/tsconfig.json
+  - id: research
+    title: Research Infrastructure
+    goal: Detail the research module, covering discovery, fetching, sanitization, and writing of
+      research documents.
+    files:
+      - kaioken/research/package.json
+      - kaioken/research/tsconfig.json
+      - kaioken/research/src/index.ts
+      - kaioken/research/src/ports.ts
+      - kaioken/research/src/run.ts
+      - kaioken/research/src/sanitize.ts
+    sections:
+      - id: ports-and-fetching
+        title: Ports, Fetching, and URL Safety
+        summary: This section introduces the research module's ports—WebSearchPort and
+          WebFetchPort—and how they abstract search and fetch operations. It also explains
+          the URL safety checks, including host suffix blocking and DNS-based private IP
+          detection, that prevent SSRF and other unsafe requests.
+        files:
+          - kaioken/research/src/ports.ts
+      - id: gathering-and-generation
+        title: Source Gathering and Answer Generation
+        summary: "This section describes the core pipeline: how gatherSources concurrently fetches
+          sources with deduplication and caches them by hash, how generateResearch
+          constructs a prompt with numbered excerpts and invokes the model, how the model's
+          draft is parsed, and how a repair step fixes citation defects using a separate
+          verification report."
+        files:
+          - kaioken/research/src/run.ts
+      - id: sanitization-and-extraction
+        title: HTML Sanitization and Excerpt Extraction
+        summary: This section covers how fetched HTML is converted to clean text by stripping
+          scripting/style tags and block elements, how entities are decoded, how excerpts
+          are generated with character limits, and how content is fenced to prevent prompt
+          injection during source presentation.
+        files:
+          - kaioken/research/src/sanitize.ts
+  - id: scan-and-search
+    title: Scan and Search
+    goal: Explain the scan module for directory scanning and the search module for indexing and
+      querying content.
+    files:
+      - kaioken/scan/package.json
+      - kaioken/scan/tsconfig.json
+      - kaioken/scan/src/index.ts
+      - kaioken/search/package.json
+      - kaioken/search/tsconfig.json
+      - kaioken/search/src/index.ts
+      - kaioken/search/src/search.ts
+    sections:
+      - id: scan-module
+        title: "Scan Module: Directory Scanning"
+        summary: Explore the scan module's purpose and implementation for traversing and indexing
+          directory structures.
+        files:
+          - kaioken/scan/package.json
+          - kaioken/scan/tsconfig.json
+          - kaioken/scan/src/index.ts
+      - id: search-module
+        title: "Search Module: Indexing and Querying"
+        summary: Understand how the search module uses BM25 to index content and retrieve relevant
+          results from a given root directory.
+        files:
+          - kaioken/search/package.json
+          - kaioken/search/tsconfig.json
+          - kaioken/search/src/index.ts
+          - kaioken/search/src/search.ts
+      - id: integration
+        title: Integration and Usage
+        summary: Learn how the scan and search modules work together to provide a complete file
+          discovery and content retrieval pipeline.
+        files:
+          - kaioken/scan/src/index.ts
+          - kaioken/search/src/search.ts
+  - id: evaluation
+    title: Evaluation Framework
+    goal: Describe the evals package and how probes, fixtures, and benchmarking are organized.
+    files:
+      - evals/.gitignore
+      - evals/README.md
+      - evals/package.json
+      - evals/tsconfig.json
+      - evals/evals/acme-server.ts
+      - evals/evals/custom-provider.docs.eval.ts
+      - evals/evals/documentation-audit.eval.ts
+      - evals/evals/models.docs.eval.ts
+      - evals/evals/openai-provider.docs.eval.ts
+      - evals/evals/smoke.eval.ts
+      - evals/evals/tui.docs.eval.ts
+      - evals/src/cli.ts
+      - evals/src/harness.ts
+      - evals/src/plan.ts
+      - evals/src/report.ts
+    sections:
+      - id: overview-and-structure
+        title: Overview and Structure
+        summary: "Introduce the evals package: its purpose, top-level layout (README, package.json,
+          tsconfig, .gitignore), and what it is used for in the project."
+        files:
+          - evals/README.md
+          - evals/package.json
+          - evals/tsconfig.json
+          - evals/.gitignore
+      - id: eval-probes-and-docs
+        title: Eval Probes and Documentation Tests
+        summary: Describe the eval files in evals/evals/ that serve as probes for documentation,
+          model outputs, and smoke tests, including custom and OpenAI providers.
+        files:
+          - evals/evals/acme-server.ts
+          - evals/evals/custom-provider.docs.eval.ts
+          - evals/evals/documentation-audit.eval.ts
+          - evals/evals/models.docs.eval.ts
+          - evals/evals/openai-provider.docs.eval.ts
+          - evals/evals/smoke.eval.ts
+          - evals/evals/tui.docs.eval.ts
+      - id: harness-and-benchmarking
+        title: Harness and Benchmarking Tooling
+        summary: Explain the core harness, CLI, plan generation, and report output that tie the eval
+          probes together for benchmarking.
+        files:
+          - evals/src/cli.ts
+          - evals/src/harness.ts
+          - evals/src/plan.ts
+          - evals/src/report.ts

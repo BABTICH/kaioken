@@ -1,0 +1,67 @@
+{
+  "moduleId": "kaioken-impact",
+  "name": "Kaioken Impact",
+  "generatedAt": "2026-09-23T15:08:07.392Z",
+  "summary": "Predicts which files are affected by a described code change by combining an LLM call that extracts candidate symbol/file names with a heuristic graph-based sweep across the repository. The sweep resolves imports, scores text matches (filtering out generic names), and walks dependent modules to build a report of affected modules, documents, and skills. Rendering converts the report to markdown-ish strings. Includes safety limits (file size, file count, concurrency) and a test suite using sample repos.",
+  "keyPoints": [
+    "predictImpact orchestrates: LLM extraction of candidate names → repository sweep for dependents → module/document/skill impact aggregation.",
+    "The sweep builds a TextMatcher per candidate name, filters generic names (GENERIC_NAMES set), and uses strong-match heuristics on code-only content to find mentions.",
+    "Import resolution handles TS/JS relative imports and Python module specs (tryPythonCandidates, resolvePythonModule, normalizePosix).",
+    "Concurrency is capped via SWEEP_CONCURRENCY (24) and file scanning limited to MAX_FILES_SWEPT (8000) and MAX_FILE_BYTES (512 KiB).",
+    "Output ImpactReport includes affected modules, documents, and skills; renderImpact converts it to an array of strings (e.g., markdown bullets)."
+  ],
+  "entryPoints": [
+    {
+      "name": "predictImpact",
+      "file": "kaioken/impact/src/predict.ts",
+      "note": "Main entry: takes PredictInput (likely root + description), returns ImpactReport by running LLM extraction and sweep."
+    },
+    {
+      "name": "predictImpactForSymbol",
+      "file": "kaioken/impact/src/predict.ts",
+      "note": "Convenience wrapper for symbol-focused prediction (no LLM)."
+    },
+    {
+      "name": "renderImpact",
+      "file": "kaioken/impact/src/render.ts",
+      "note": "Converts ImpactReport into human-readable string list."
+    }
+  ],
+  "sources": [
+    {
+      "path": "kaioken/impact/package.json",
+      "hash": "3b1df8ff6664df9a418f16eb0b286090cd8d5d6badab1127e2b2d8823da79f7a"
+    },
+    {
+      "path": "kaioken/impact/src/index.ts",
+      "hash": "1583fe1f0436ba81053ab6ca25dce7d0e092a46ac1325f059e3146e33520f2c7"
+    },
+    {
+      "path": "kaioken/impact/src/predict.ts",
+      "hash": "ce4bef2453ec5b0634fff6c1a185427910aebb8dff2631b07c1426c1d0358c46"
+    },
+    {
+      "path": "kaioken/impact/src/render.ts",
+      "hash": "b92b07e09596c37d8e243f5fb35446dc8be4b909bb06d2f8eccac91f15972278"
+    },
+    {
+      "path": "kaioken/impact/test/impact.test.ts",
+      "hash": "c530a1ed5ab0bc8ebebda57e9a91286e0de19641558cca753922564112efe185"
+    },
+    {
+      "path": "kaioken/impact/tsconfig.json",
+      "hash": "0b02c328fe16ed729f1dee80c34f6967958c976919d1b3e40952ae331b821652"
+    }
+  ],
+  "verification": {
+    "grounded": 3,
+    "ungrounded": [],
+    "unknownFiles": [],
+    "uncovered": [
+      "ModelClient",
+      "complete",
+      "ImpactReport",
+      "PredictInput"
+    ]
+  }
+}

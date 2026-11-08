@@ -1,0 +1,56 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import CodeBlock from "@/components/CodeBlock";
+import TerminalWindow from "@/components/TerminalWindow";
+import { C, Callout, DocPage, H2, H3, LI, P, UL } from "@/components/docs/parts";
+const MODES = [
+    {
+        name: "build",
+        tag: "default",
+        body: "Full access. Every write, edit and command still shows a diff and waits for y/n unless /yolo is on.",
+    },
+    {
+        name: "plan",
+        body: "Read-only. The agent inspects and proposes, but changes nothing — for when you want a proposal to review before anything is touched.",
+    },
+    {
+        name: "explore",
+        body: "Read-only as well, for when you are only asking questions about the code.",
+    },
+    {
+        name: "review",
+        body: "Read-only code review mode for security audits, diff analysis, and architecture inspection.",
+    },
+    {
+        name: "prism",
+        body: "Precision knowledge retrieval mode — automatically retrieves and grounds answers in imported PRISM documents on every turn.",
+    },
+    {
+        name: "general",
+        body: "Every tool available, but a mandatory prompt on every change — even with /yolo on.",
+    },
+];
+const TOOLS = [
+    { name: "read_file", body: "open a file, or a line range of one" },
+    { name: "list_files", body: "walk the tree inside the target repo" },
+    { name: "search", body: "grep the repo for a pattern" },
+    { name: "query_prism", body: "hybrid BM25 + semantic vector search with relevance gating over imported PRISM documents" },
+    { name: "write_file", body: "create or replace a file — behind approval" },
+    { name: "edit_file", body: "a unique-match replacement — behind approval" },
+    { name: "run_command", body: "run a shell command in the repo — behind approval" },
+    { name: "read_knowledge", body: "open any generated card, wiki chapter or skill" },
+    { name: "todo", body: "keep a visible plan for a multi-step task" },
+    { name: "task", body: "spawn a read-only sub-agent with its own context" },
+    { name: "delegate", body: "hand a writable sub-task to an isolated git worktree" },
+    { name: "remember / recall", body: "write a note about this repo, or find one from a past session" },
+];
+export default function Agent() {
+    return (_jsxs(DocPage, { title: "Modes & memory", lead: "The chat half of Kaioken: what the agent may do, how you steer it mid-run, how a wrong turn gets rewound, and what survives the session.", children: [_jsx(H2, { id: "modes", children: "Permission modes" }), _jsxs(P, { children: [_jsx(C, { children: "/mode" }), " switches how much the agent is allowed to do. The switch is announced to the model mid-conversation, so it stops offering edits it can no longer make, and the mode is saved with the session \u2014 ", _jsx(C, { children: "/resume" }), " restores it."] }), _jsx("div", { className: "mt-4 overflow-hidden rounded-sm border border-border", children: MODES.map((m) => (_jsxs("div", { className: "grid gap-1 border-b border-border bg-card px-4 py-3 last:border-b-0 sm:grid-cols-[9rem_1fr] sm:items-baseline sm:gap-4", children: [_jsxs("div", { className: "flex items-baseline gap-2 font-mono text-[13px]", children: [_jsxs("span", { className: "font-semibold text-kai-blue", children: ["/mode ", m.name] }), m.tag ? (_jsx("span", { className: "rounded-sm bg-kai-green/12 px-1.5 py-px text-[10.5px] text-kai-green", children: m.tag })) : null] }), _jsx("p", { className: "font-sans text-[13.5px] leading-relaxed text-muted-foreground", children: m.body })] }, m.name))) }), _jsxs(Callout, { kind: "warn", title: "/yolo is exactly as risky as it sounds", children: ["It skips the prompt entirely for the rest of the session. ", _jsx(C, { children: "/undo" }), " still works afterwards, and ", _jsx(C, { children: "/mode general" }), " keeps the prompt mandatory even with yolo on."] }), _jsx(H2, { id: "tools", children: "What the agent can reach" }), _jsxs(P, { children: ["Every path is confined to the target repo \u2014 no ", _jsx(C, { children: ".." }), " escapes \u2014 and a declined action never touches disk. Trusted extensions and connected MCP servers can add more tools; those go through the same approval prompt."] }), _jsx("div", { className: "mt-4 overflow-hidden rounded-sm border border-border", children: TOOLS.map((t) => (_jsxs("div", { className: "grid gap-1 border-b border-border bg-card px-4 py-2.5 last:border-b-0 sm:grid-cols-[12rem_1fr] sm:items-baseline sm:gap-4", children: [_jsx("span", { className: "font-mono text-[13px] font-semibold text-kai-amber", children: t.name }), _jsx("p", { className: "font-sans text-[13.5px] leading-relaxed text-muted-foreground", children: t.body })] }, t.name))) }), _jsx(H2, { id: "steering", children: "Steering instead of cancelling" }), _jsx(P, { children: "While the agent is working, anything you type is queued and joins the conversation after its current step \u2014 it reads your correction before deciding what to do next. So when you see it heading down the wrong path, just type the correction; there is no need to cancel and start over." }), _jsx("div", { className: "pt-4", children: _jsx(CodeBlock, { title: "tui", code: `/queue              # how many messages are waiting
+/queue clear        # drop them before the agent reads them
+/stop               # abandon the whole turn instead (esc, ctrl+c)` }) }), _jsxs(P, { children: ["Text the model already streamed survives a ", _jsx(C, { children: "/stop" }), " rather than being discarded."] }), _jsx(H2, { id: "branching", children: "Rewinding a wrong turn" }), _jsxs(P, { children: ["Re-explaining a failed approach poisons the context. ", _jsx(C, { children: "/fork" }), " rewinds the active branch past the bad turns instead, and the next message you send grows a sibling branch. Nothing is deleted \u2014 the abandoned turns stay in the session tree."] }), _jsx("div", { className: "pt-4", children: _jsxs(TerminalWindow, { title: "kaioken \u2014 /tree", bodyClassName: "text-[12.5px]", children: [_jsx("div", { className: "text-kai-amber", children: "\u2605 1  \u201Cuse a worker pool here\u201D         2m ago" }), _jsx("div", { className: "text-kai-dim", children: "  2  \u201Crewrite it with channels\u201D      18m ago" }), _jsx("div", { className: "text-kai-dim", children: "  3  \u201Cfirst attempt, compacted\u201D      41m ago" }), _jsx("div", { className: "mt-1 text-kai-dim", children: "  /tree 2 switches \u00B7 /tree 2 summarize also briefs the model" })] }) }), _jsxs(P, { children: ["Branches accumulate from every fork, retry and auto-compaction. ", _jsx(C, { children: "/tree" }), " lists the tips with their newest prompt and age, and switching replays the transcript so you can see where that branch stands. The ", _jsx(C, { children: "summarize" }), " variant costs one model call and carries the abandoned branch's lessons across."] }), _jsx(H2, { id: "context", children: "Context that manages itself" }), _jsxs(P, { children: ["When a turn would not fit, Kaioken reduces context on its own: first by dropping stale tool output \u2014 free, and the conversation is untouched \u2014 then by summarizing if that was not enough. ", _jsx(C, { children: "/compact" }), " runs it by hand when you would rather choose the moment, such as before starting a long task."] }), _jsxs(P, { children: [_jsx(C, { children: "/thinking off|low|medium|high" }), " sets how many tokens a reasoning model may spend before it answers. It is a budget dial, not a quality switch: a rename needs none, an architecture question earns high. Applied where the backend endpoint supports extended chain-of-thought tokens and left alone elsewhere rather than risking a rejected request."] }), _jsx(H2, { id: "memory", children: "Memory" }), _jsx(P, { children: "Sessions are saved per repo, but memory is the part that outlives them." }), _jsxs(UL, { children: [_jsxs(LI, { children: [_jsx(C, { children: "remember" }), " writes a durable note about this repo; ", _jsx(C, { children: "recall" }), " finds one again \u2014 and finds the digest written beside each closed session, so past work is searchable without re-reading whole transcripts."] }), _jsxs(LI, { children: [_jsx(C, { children: "/learn" }), " reviews the session and, if it taught something worth keeping, writes or patches a skill in ", _jsx(C, { children: ".kaioken/skills/" }), " so the agent loads it before doing that task again. It also reinforces any skill the session consulted."] }), _jsxs(LI, { children: ["Learning runs on its own at session end once ", _jsx(C, { children: "memory.learn" }), " turns are in;", " ", _jsx(C, { children: "/learn" }), " forces it now, and ", _jsx(C, { children: "memory.disable" }), " turns the whole thing off."] })] }), _jsx(H2, { id: "sessions", children: "Sessions" }), _jsx("div", { className: "pt-4", children: _jsx(CodeBlock, { title: "tui", code: `/sessions           # list them, newest first
+/resume [id]        # reopen one (no id = searchable picker)
+/switch [id]        # save this one, then open another
+/import <path>      # bring an external transcript in as a session
+/new                # start clean; the current session is saved
+/handoff            # write a continuation briefing from a session` }) }), _jsx(H2, { id: "templates", children: "Prompt templates" }), _jsxs(P, { children: ["A request you keep retyping belongs in a file the whole team shares. Templates live in", " ", _jsx(C, { children: ".kaioken/templates/<name>.md" }), "; ", _jsx(C, { children: "{{placeholders}}" }), " are filled from", " ", _jsx(C, { children: "key=value" }), " arguments and leftover words land in ", _jsx(C, { children: "{{args}}" }), "."] }), _jsx("div", { className: "pt-4", children: _jsx(CodeBlock, { title: "tui", code: `/templates                                # list them and their placeholders
+/t:review file=main.go error handling     # expand and send` }) }), _jsx(P, { children: "A placeholder left unfilled stops the send and is named, so a half-filled prompt never reaches the model silently." }), _jsx(H2, { id: "delegation", children: "Sub-agents and worktrees" }), _jsx(H3, { children: "Read-only sub-agents" }), _jsxs(P, { children: ["The ", _jsx(C, { children: "task" }), " tool spawns a sub-agent with its own context for work that would otherwise flood the main conversation \u2014 surveying a large area of the codebase, checking a hypothesis across many files. It returns a compressed answer, not a transcript."] }), _jsx(H3, { children: "Writable delegation" }), _jsxs(P, { children: [_jsx(C, { children: "delegate" }), " hands a sub-task to an agent working in an isolated temporary git worktree. Untrusted draft edits cannot corrupt your working tree, and the changes land in the main repo only when you approve the combined diff."] }), _jsx(H2, { id: "learn-more", children: "Learn it from inside" }), _jsxs(P, { children: [_jsx(C, { children: "/tutorial" }), " is a guided walkthrough \u2014 pass a chapter to go deeper, or any command name to see just that one. ", _jsx(C, { children: "/explain <command>" }), " prints a full reference page for one command, and ", _jsx(C, { children: "/explain all" }), " prints the whole manual."] })] }));
+}
