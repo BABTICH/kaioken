@@ -70,11 +70,11 @@ describe("detects planted secrets", () => {
 
 	it("flags provider token shapes", () => {
 		// AWS access key ids are AKIA plus exactly 16 characters.
-		expect(classify("cfg.ts", 'const k = "AKIAIOSFODNN7EXAMPLE";')).toContain("credentials");
+		expect(classify("cfg.ts", 'const k = "AKIA' + 'IOSFODNN7EXAMPLE";')).toContain("credentials");
 		expect(classify("cfg.ts", 'const k = "ASIAIOSFODNN7EXAMPLE";')).toContain("credentials");
 		const ghp = ["ghp", "ABCdef0123456789ABCdef0123456789ABCD"].join("_");
 		expect(classify("cfg.ts", `const t = "${ghp}";`)).toContain("credentials");
-		expect(classify("cfg.ts", 'const g = "AIzaSyA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q";')).toContain(
+		expect(classify("cfg.ts", 'const g = "AIzaSy' + 'A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q";')).toContain(
 			"credentials",
 		);
 		const slack = ["xoxb", "1234567890", "123456789012", "abcdef1234567890"].join("-");

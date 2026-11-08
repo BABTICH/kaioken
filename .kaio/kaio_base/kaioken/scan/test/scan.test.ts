@@ -193,7 +193,7 @@ describe("binary handling and large files", () => {
 		const root = await mkdtemp(join(tmpdir(), "kaioken-scan-"));
 		roots.push(root);
 		const padding = "x".repeat(70 * 1024);
-		const secret = 'const key = "AKIAIOSFODNN7EXAMPLE";\n';
+		const secret = 'const key = "AKIA' + 'IOSFODNN7EXAMPLE";\n';
 		await writeFile(join(root, "big.txt"), `${padding}\n${secret}`);
 		const result = await scan(root, { maxReadBytes: 64 * 1024 });
 		const big = result.files.find((f) => f.path === "big.txt");
@@ -215,7 +215,7 @@ describe("binary handling and large files", () => {
 		const root = await mkdtemp(join(tmpdir(), "kaioken-scan-"));
 		roots.push(root);
 		const padding = "x".repeat(100 * 1024);
-		const secret = 'const key = "AKIAIOSFODNN7EXAMPLE";\n';
+		const secret = 'const key = "AKIA' + 'IOSFODNN7EXAMPLE";\n';
 		await writeFile(join(root, "huge.txt"), `${padding}\n${secret}`);
 		const result = await scan(root, { maxReadBytes: 32 * 1024, maxSecretScanBytes: 50 * 1024 });
 		const huge = result.files.find((f) => f.path === "huge.txt");

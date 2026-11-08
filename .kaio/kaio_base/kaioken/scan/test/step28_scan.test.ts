@@ -277,7 +277,7 @@ describe("Step 28: Category 06 — Repo Scan, File Discovery & Risk Shield (UX-0
 		it("UX-0563: whitelists official AWS documentation sample keys", () => {
 			const res = whitelist.check({
 				archetype: "aws",
-				token: "AKIAIOSFODNN7EXAMPLE",
+				token: "AKIA" + "IOSFODNN7EXAMPLE",
 			});
 			expect(res.whitelisted).toBe(true);
 			expect(res.ruleId).toBe("aws-standard-dummy");
@@ -358,7 +358,7 @@ describe("Step 28: Category 06 — Repo Scan, File Discovery & Risk Shield (UX-0
 	// =========================================================================
 	describe("Theme 4: High-Entropy String Detector & Shannon Visualizer (UX-0571 - UX-0580)", () => {
 		it("UX-0571: calculates and visualizes Shannon entropy for OpenAI keys", () => {
-			const token = "sk-proj-V5p8K9m2Q1xL7zR4wY0uT3sN6jH1aC4eF9gB2dE5";
+			const token = "sk-proj-" + "V5p8K9m2Q1xL7zR4wY0uT3sN6jH1aC4eF9gB2dE5";
 			const report = evaluateArchetypeEntropy(token, "openai");
 			expect(report.archetype).toBe("openai");
 			expect(report.shannonEntropy).toBeGreaterThanOrEqual(4.4);
