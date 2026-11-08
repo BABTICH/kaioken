@@ -13,7 +13,7 @@
   <a href="#repository-structure"><img src="https://img.shields.io/badge/Architecture-Pi%20Monorepo%20%7C%20Offline--First-orange.svg" alt="Architecture"></a>
   <a href="kaiopi/docs/roadmap/README.md"><img src="https://img.shields.io/badge/Roadmap-2%2C000%20Features%20Complete-brightgreen.svg" alt="Roadmap"></a>
   <a href="#testing--quality-assurance"><img src="https://img.shields.io/badge/Tests-2%2C078%2B%20Offline%20Passing-brightgreen.svg" alt="Tests"></a>
-  <a href="https://github.com/babtix/kaioken"><img src="https://img.shields.io/badge/Docs%20%26%20Showcase-Live-purple.svg" alt="Website"></a>
+  <a href="https://kaioken.vercel.app"><img src="https://img.shields.io/badge/Docs%20%26%20Showcase-Live-purple.svg" alt="Website"></a>
   <a href="#license--authors"><img src="https://img.shields.io/badge/License-License%20Zero-yellow.svg" alt="License"></a>
 </p>
 
@@ -194,8 +194,8 @@ Unified experience across 5 dedicated surfaces governed by [DESIGN.md](DESIGN.md
 ## Contributing & License
 
 - **Contributing**: Pull requests are welcome under the [License Zero Noncommercial Public License 2.0.1](LICENSE). See [CONTRIBUTING.md](CONTRIBUTING.md) for offline-first guidelines.
-- **Author & Architect**: [Babtix / Babtich El Habib](https://github.com/babtix)
-- **Repository**: [https://github.com/babtix/kaioken](https://github.com/babtix/kaioken)
+- **Author & Architect**: [Babtix / Babtich El Habib](https://github.com/BABTICH)
+- **Repository**: [https://github.com/BABTICH/kaioken](https://github.com/BABTICH/kaioken)
 - **News & Announcements**: [kaioken-news.vercel.app](https://kaioken-news.vercel.app)
 - **License**: [License Zero Noncommercial Public License 2.0.1](LICENSE) (Commercial licenses available; subcomponents under MIT where indicated).
 
