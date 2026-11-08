@@ -196,7 +196,7 @@ Unified experience across 5 dedicated surfaces governed by [DESIGN.md](.kaio/DES
 - **Contributing**: Pull requests are welcome under the [License Zero Noncommercial Public License 2.0.1](LICENSE). See [CONTRIBUTING.md](CONTRIBUTING.md) for offline-first guidelines.
 - **Author & Architect**: [Babtix / Babtich El Habib](https://github.com/babtix)
 - **Repository**: [https://github.com/babtix/kaioken](https://github.com/babtix/kaioken)
-- **News & Announcements**: [https://kaioken-news.vercel.app](https://kaioken-news.vercel.app)
+- **News & Announcements**: [kaioken-news.vercel.app](https://kaioken-news.vercel.app)
 - **License**: [License Zero Noncommercial Public License 2.0.1](LICENSE) (Commercial licenses available; subcomponents under MIT where indicated).
 
 ---
