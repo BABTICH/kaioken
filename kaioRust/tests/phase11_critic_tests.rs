@@ -2,8 +2,8 @@ use std::fs;
 use std::sync::Arc;
 use tempfile::TempDir;
 
-use kaioken::agent::AgentLoop;
 use kaioken::agent::tools::ToolRegistry;
+use kaioken::agent::AgentLoop;
 use kaioken::config::Config;
 use kaioken::critic::diagnostics::{CompilerDiagnostic, DiagnosticParser};
 use kaioken::critic::engine::{Critic, CriticEngine, CriticReport, MockCritic};
@@ -70,18 +70,17 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
     // 4. Test Panic
     assert_eq!(diagnostics[3].severity, "panic");
-    assert_eq!(diagnostics[3].file_path.as_deref(), Some("tests/unit_tests.rs"));
+    assert_eq!(
+        diagnostics[3].file_path.as_deref(),
+        Some("tests/unit_tests.rs")
+    );
     assert_eq!(diagnostics[3].line, Some(55));
     assert_eq!(diagnostics[3].col, Some(9));
     assert!(diagnostics[3].message.contains("assertion failed"));
 
     // Formatted feedback block
-    let feedback = DiagnosticParser::format_feedback_block(
-        "cargo test",
-        101,
-        &diagnostics,
-        raw_rustc_output,
-    );
+    let feedback =
+        DiagnosticParser::format_feedback_block("cargo test", 101, &diagnostics, raw_rustc_output);
     assert!(feedback.contains("CRITIC FEEDBACK"));
     assert!(feedback.contains("cargo test"));
     assert!(feedback.contains("[E0308]"));
@@ -94,7 +93,11 @@ async fn test_critic_engine_identifies_clean_build() {
     let temp = TempDir::new().unwrap();
     let root = temp.path();
 
-    let clean_cmd = if cfg!(windows) { "cmd.exe /c exit 0" } else { "true" };
+    let clean_cmd = if cfg!(windows) {
+        "cmd.exe /c exit 0"
+    } else {
+        "true"
+    };
     let engine = CriticEngine::new().with_command(clean_cmd);
 
     let report = engine.evaluate(root).await.unwrap();
@@ -131,7 +134,10 @@ async fn test_critic_engine_identifies_broken_build() {
     assert_eq!(report.exit_code, 1);
     assert_eq!(report.diagnostics.len(), 1);
     assert_eq!(report.diagnostics[0].error_code.as_deref(), Some("E0425"));
-    assert_eq!(report.diagnostics[0].file_path.as_deref(), Some("src/lib.rs"));
+    assert_eq!(
+        report.diagnostics[0].file_path.as_deref(),
+        Some("src/lib.rs")
+    );
     assert_eq!(report.diagnostics[0].line, Some(14));
     assert_eq!(report.diagnostics[0].col, Some(5));
 }
@@ -174,7 +180,10 @@ fn test_failure_memory_insert_and_resolve_lifecycle() {
     assert_eq!(unresolved_after.len(), 0);
 
     // 5. Verify resolved record details
-    let resolved_rec = memory.get_failure_by_id(failure_id).unwrap().expect("Record must exist");
+    let resolved_rec = memory
+        .get_failure_by_id(failure_id)
+        .unwrap()
+        .expect("Record must exist");
     assert_eq!(resolved_rec.status.as_deref(), Some("resolved"));
     assert_eq!(resolved_rec.fix_summary.as_deref(), Some(fix_note));
     assert!(resolved_rec.resolved_at.is_some());
@@ -203,7 +212,8 @@ async fn test_critic_blocks_premature_completion_on_compiler_error() {
                     call_type: "function".to_string(),
                     function: FunctionCall {
                         name: "create_file".to_string(),
-                        arguments: r#"{"path": "src/broken.rs", "content": "fn bad() { 123 }"}"#.to_string(),
+                        arguments: r#"{"path": "src/broken.rs", "content": "fn bad() { 123 }"}"#
+                            .to_string(),
                     },
                 }]),
             ),
@@ -217,10 +227,7 @@ async fn test_critic_blocks_premature_completion_on_compiler_error() {
         id: "step-2".to_string(),
         choices: vec![ChatChoice {
             index: Some(0),
-            message: ChatMessage::assistant(
-                Some("I am done with the file!".to_string()),
-                None,
-            ),
+            message: ChatMessage::assistant(Some("I am done with the file!".to_string()), None),
             finish_reason: Some("stop".to_string()),
         }],
         usage: None,
@@ -241,9 +248,7 @@ async fn test_critic_blocks_premature_completion_on_compiler_error() {
     };
 
     let mock_llm = Arc::new(MockLlmClient::with_responses(vec![
-        step1_resp,
-        step2_resp,
-        step3_resp,
+        step1_resp, step2_resp, step3_resp,
     ]));
 
     // Critic always fails
@@ -383,10 +388,7 @@ async fn test_autonomous_agent_self_corrects_compiler_error_and_records_fix() {
     };
 
     let mock_llm = Arc::new(MockLlmClient::with_responses(vec![
-        step1_resp,
-        step2_resp,
-        step3_resp,
-        step4_resp,
+        step1_resp, step2_resp, step3_resp, step4_resp,
     ]));
 
     // Critic sequence:
@@ -410,10 +412,7 @@ async fn test_autonomous_agent_self_corrects_compiler_error_and_records_fix() {
     );
     let pass_report = CriticReport::success("cargo check", 20);
 
-    let mock_critic = Arc::new(MockCritic::with_reports(vec![
-        fail_report,
-        pass_report,
-    ]));
+    let mock_critic = Arc::new(MockCritic::with_reports(vec![fail_report, pass_report]));
 
     let agent_loop = AgentLoop::new(tools, mock_llm, Some(memory.clone()), root.clone(), config)
         .with_critic(mock_critic)
@@ -428,7 +427,9 @@ async fn test_autonomous_agent_self_corrects_compiler_error_and_records_fix() {
     // 1. Verify summary metrics
     assert_eq!(summary.status, "completed");
     assert_eq!(summary.critic_iterations, 1);
-    assert!(summary.final_response.contains("Self-correction applied and verified"));
+    assert!(summary
+        .final_response
+        .contains("Self-correction applied and verified"));
 
     // 2. Verify file on disk has the corrected code
     let file_content = fs::read_to_string(root.join("src/calc.rs")).unwrap();
@@ -439,11 +440,19 @@ async fn test_autonomous_agent_self_corrects_compiler_error_and_records_fix() {
     // 3. Verify Gate 2 DOD in SQLite Failure Memory:
     // Unresolved failures count must be 0
     let unresolved = memory.get_unresolved_failures().unwrap();
-    assert_eq!(unresolved.len(), 0, "No unresolved failures should remain after successful fix");
+    assert_eq!(
+        unresolved.len(),
+        0,
+        "No unresolved failures should remain after successful fix"
+    );
 
     // All recent failures should show status = 'resolved' with fix_summary populated
     let recent = memory.get_recent_failures(10).unwrap();
-    assert_eq!(recent.len(), 1, "Exactly one failure record should be tracked");
+    assert_eq!(
+        recent.len(),
+        1,
+        "Exactly one failure record should be tracked"
+    );
     let failure_record = &recent[0];
     assert_eq!(failure_record.status.as_deref(), Some("resolved"));
     assert_eq!(failure_record.error_type, "compiler");

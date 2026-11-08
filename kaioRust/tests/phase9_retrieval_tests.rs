@@ -8,9 +8,8 @@ use kaioken::memory::{
     DocRecord, EdgeRecord, FailureRecord, FileRecord, MemoryEngine, SymbolRecord,
 };
 use kaioken::retrieval::{
-    BudgetConfig, BudgetManager, ContextPacket, DocLookup, FailureLookup,
-    FileContextSnippet, GraphQueryEngine, RetrievalCacheStore, RetrievalEngine,
-    RetrievalOptions, SymbolContextSummary,
+    BudgetConfig, BudgetManager, ContextPacket, DocLookup, FailureLookup, FileContextSnippet,
+    GraphQueryEngine, RetrievalCacheStore, RetrievalEngine, RetrievalOptions, SymbolContextSummary,
 };
 use kaioken::safety::RedactionEngine;
 
@@ -39,18 +38,29 @@ fn test_context_packet_assembly_and_serialization() {
         token_estimate: 15,
     });
 
-    packet.dependency_graph_subset.direct_callers.push("src/api/auth.rs::login_handler (fn)".to_string());
-    packet.dependency_graph_subset.affected_tests.push("tests/auth_tests.rs".to_string());
+    packet
+        .dependency_graph_subset
+        .direct_callers
+        .push("src/api/auth.rs::login_handler (fn)".to_string());
+    packet
+        .dependency_graph_subset
+        .affected_tests
+        .push("tests/auth_tests.rs".to_string());
 
-    packet.recommended_verification_commands.push("cargo test --test auth_tests".to_string());
+    packet
+        .recommended_verification_commands
+        .push("cargo test --test auth_tests".to_string());
 
     // JSON serialization test
-    let json = packet.to_json().expect("Serialization to JSON should succeed");
+    let json = packet
+        .to_json()
+        .expect("Serialization to JSON should succeed");
     assert!(json.contains("validate_session"));
     assert!(json.contains("auth_tests.rs"));
 
     // Deserialization roundtrip
-    let deserialized: ContextPacket = serde_json::from_str(&json).expect("Deserialization should succeed");
+    let deserialized: ContextPacket =
+        serde_json::from_str(&json).expect("Deserialization should succeed");
     assert_eq!(deserialized.task_summary, packet.task_summary);
     assert_eq!(deserialized.relevant_files.len(), 1);
 
@@ -137,11 +147,17 @@ fn test_secret_redaction_api_keys_and_tokens() {
 
     // Sensitive files filter
     assert!(RedactionEngine::is_sensitive_file(Path::new(".env")));
-    assert!(RedactionEngine::is_sensitive_file(Path::new(".env.production")));
-    assert!(RedactionEngine::is_sensitive_file(Path::new("credentials.json")));
+    assert!(RedactionEngine::is_sensitive_file(Path::new(
+        ".env.production"
+    )));
+    assert!(RedactionEngine::is_sensitive_file(Path::new(
+        "credentials.json"
+    )));
     assert!(RedactionEngine::is_sensitive_file(Path::new("id_rsa")));
     assert!(RedactionEngine::is_sensitive_file(Path::new("server.key")));
-    assert!(!RedactionEngine::is_sensitive_file(Path::new("src/main.rs")));
+    assert!(!RedactionEngine::is_sensitive_file(Path::new(
+        "src/main.rs"
+    )));
     assert!(!RedactionEngine::is_sensitive_file(Path::new("Cargo.toml")));
 }
 
@@ -189,10 +205,17 @@ fn test_retrieval_cache_hit_miss_and_invalidation() {
     assert_eq!(cached.unwrap().task_summary, "Test task");
 
     // Modify file on disk -> cache should invalidate
-    fs::write(&file_path, "pub fn add(a: i32, b: i32) -> i32 { a + b + 1 }").unwrap();
+    fs::write(
+        &file_path,
+        "pub fn add(a: i32, b: i32) -> i32 { a + b + 1 }",
+    )
+    .unwrap();
 
     let after_mod = cache_store.get(&key, repo_root).unwrap();
-    assert!(after_mod.is_none(), "Cache must be invalidated when file on disk changes hash");
+    assert!(
+        after_mod.is_none(),
+        "Cache must be invalidated when file on disk changes hash"
+    );
 }
 
 #[test]
@@ -200,50 +223,56 @@ fn test_graph_impact_callers_and_affected_tests() {
     let memory = MemoryEngine::open_in_memory().unwrap();
 
     // Insert files
-    let lib_id = memory.upsert_file(&FileRecord {
-        id: None,
-        path: "src/core.rs".to_string(),
-        language: Some("rust".to_string()),
-        size: 100,
-        source_hash: Some("h1".to_string()),
-        parse_status: Some("ok".to_string()),
-        last_commit: None,
-        last_modified: None,
-        summary: None,
-        risk_level: None,
-        doc_path: None,
-        doc_status: None,
-    }).unwrap();
+    let lib_id = memory
+        .upsert_file(&FileRecord {
+            id: None,
+            path: "src/core.rs".to_string(),
+            language: Some("rust".to_string()),
+            size: 100,
+            source_hash: Some("h1".to_string()),
+            parse_status: Some("ok".to_string()),
+            last_commit: None,
+            last_modified: None,
+            summary: None,
+            risk_level: None,
+            doc_path: None,
+            doc_status: None,
+        })
+        .unwrap();
 
-    let caller_file_id = memory.upsert_file(&FileRecord {
-        id: None,
-        path: "src/service.rs".to_string(),
-        language: Some("rust".to_string()),
-        size: 100,
-        source_hash: Some("h2".to_string()),
-        parse_status: Some("ok".to_string()),
-        last_commit: None,
-        last_modified: None,
-        summary: None,
-        risk_level: None,
-        doc_path: None,
-        doc_status: None,
-    }).unwrap();
+    let caller_file_id = memory
+        .upsert_file(&FileRecord {
+            id: None,
+            path: "src/service.rs".to_string(),
+            language: Some("rust".to_string()),
+            size: 100,
+            source_hash: Some("h2".to_string()),
+            parse_status: Some("ok".to_string()),
+            last_commit: None,
+            last_modified: None,
+            summary: None,
+            risk_level: None,
+            doc_path: None,
+            doc_status: None,
+        })
+        .unwrap();
 
-    let test_file_id = memory.upsert_file(&FileRecord {
-        id: None,
-        path: "tests/core_test.rs".to_string(),
-        language: Some("rust".to_string()),
-        size: 100,
-        source_hash: Some("h3".to_string()),
-        parse_status: Some("ok".to_string()),
-        last_commit: None,
-        last_modified: None,
-        summary: None,
-        risk_level: None,
-        doc_path: None,
-        doc_status: None,
-    }).unwrap();
+    let test_file_id = memory
+        .upsert_file(&FileRecord {
+            id: None,
+            path: "tests/core_test.rs".to_string(),
+            language: Some("rust".to_string()),
+            size: 100,
+            source_hash: Some("h3".to_string()),
+            parse_status: Some("ok".to_string()),
+            last_commit: None,
+            last_modified: None,
+            summary: None,
+            risk_level: None,
+            doc_path: None,
+            doc_status: None,
+        })
+        .unwrap();
 
     // Insert symbols
     let target_sym = SymbolRecord {
@@ -259,7 +288,9 @@ fn test_graph_impact_callers_and_affected_tests() {
         parent: None,
     };
     memory.insert_symbols(lib_id, &[target_sym]).unwrap();
-    let target_sym_id = memory.find_symbols_by_name("calculate_tax").unwrap()[0].id.unwrap();
+    let target_sym_id = memory.find_symbols_by_name("calculate_tax").unwrap()[0]
+        .id
+        .unwrap();
 
     let caller_sym = SymbolRecord {
         id: None,
@@ -273,8 +304,12 @@ fn test_graph_impact_callers_and_affected_tests() {
         summary: None,
         parent: None,
     };
-    memory.insert_symbols(caller_file_id, &[caller_sym]).unwrap();
-    let caller_sym_id = memory.find_symbols_by_name("process_checkout").unwrap()[0].id.unwrap();
+    memory
+        .insert_symbols(caller_file_id, &[caller_sym])
+        .unwrap();
+    let caller_sym_id = memory.find_symbols_by_name("process_checkout").unwrap()[0]
+        .id
+        .unwrap();
 
     let test_sym = SymbolRecord {
         id: None,
@@ -289,53 +324,70 @@ fn test_graph_impact_callers_and_affected_tests() {
         parent: None,
     };
     memory.insert_symbols(test_file_id, &[test_sym]).unwrap();
-    let test_sym_id = memory.find_symbols_by_name("test_calculate_tax").unwrap()[0].id.unwrap();
+    let test_sym_id = memory.find_symbols_by_name("test_calculate_tax").unwrap()[0]
+        .id
+        .unwrap();
 
     // Insert edges (caller -> target, test -> target)
-    memory.insert_edge(&EdgeRecord {
-        id: None,
-        source_symbol_id: Some(caller_sym_id),
-        target_symbol_id: Some(target_sym_id),
-        edge_type: "calls".to_string(),
-    }).unwrap();
+    memory
+        .insert_edge(&EdgeRecord {
+            id: None,
+            source_symbol_id: Some(caller_sym_id),
+            target_symbol_id: Some(target_sym_id),
+            edge_type: "calls".to_string(),
+        })
+        .unwrap();
 
-    memory.insert_edge(&EdgeRecord {
-        id: None,
-        source_symbol_id: Some(test_sym_id),
-        target_symbol_id: Some(target_sym_id),
-        edge_type: "calls".to_string(),
-    }).unwrap();
+    memory
+        .insert_edge(&EdgeRecord {
+            id: None,
+            source_symbol_id: Some(test_sym_id),
+            target_symbol_id: Some(target_sym_id),
+            edge_type: "calls".to_string(),
+        })
+        .unwrap();
 
     let graph_engine = GraphQueryEngine::new(&memory);
-    let subset = graph_engine.query_subgraph(&[target_sym_id], &[lib_id], 1).unwrap();
+    let subset = graph_engine
+        .query_subgraph(&[target_sym_id], &[lib_id], 1)
+        .unwrap();
 
-    assert!(subset.direct_callers.iter().any(|c| c.contains("process_checkout")));
-    assert!(subset.affected_tests.iter().any(|t| t.contains("tests/core_test.rs")));
+    assert!(subset
+        .direct_callers
+        .iter()
+        .any(|c| c.contains("process_checkout")));
+    assert!(subset
+        .affected_tests
+        .iter()
+        .any(|t| t.contains("tests/core_test.rs")));
 }
 
 #[test]
 fn test_failure_memory_lookup_and_warnings() {
     let memory = MemoryEngine::open_in_memory().unwrap();
 
-    let file_id = memory.upsert_file(&FileRecord {
-        id: None,
-        path: "src/auth/token.rs".to_string(),
-        language: Some("rust".to_string()),
-        size: 50,
-        source_hash: Some("hash".to_string()),
-        parse_status: Some("ok".to_string()),
-        last_commit: None,
-        last_modified: None,
-        summary: None,
-        risk_level: None,
-        doc_path: None,
-        doc_status: None,
-    }).unwrap();
+    let file_id = memory
+        .upsert_file(&FileRecord {
+            id: None,
+            path: "src/auth/token.rs".to_string(),
+            language: Some("rust".to_string()),
+            size: 50,
+            source_hash: Some("hash".to_string()),
+            parse_status: Some("ok".to_string()),
+            last_commit: None,
+            last_modified: None,
+            summary: None,
+            risk_level: None,
+            doc_path: None,
+            doc_status: None,
+        })
+        .unwrap();
 
     let failure = FailureRecord {
         id: None,
         error_type: "compiler".to_string(),
-        message: "cannot borrow `token` as mutable, as it is also borrowed as immutable".to_string(),
+        message: "cannot borrow `token` as mutable, as it is also borrowed as immutable"
+            .to_string(),
         file_id: Some(file_id),
         symbol_id: None,
         fix_summary: Some("Cloned token prior to entering verification block".to_string()),
@@ -347,12 +399,18 @@ fn test_failure_memory_lookup_and_warnings() {
     memory.insert_failure(&failure).unwrap();
 
     let lookup = FailureLookup::new(&memory);
-    let results = lookup.find_failures(&[file_id], &[], "token borrowing error", 5).unwrap();
+    let results = lookup
+        .find_failures(&[file_id], &[], "token borrowing error", 5)
+        .unwrap();
 
     assert_eq!(results.len(), 1);
     assert_eq!(results[0].error_type, "compiler");
     assert!(results[0].message.contains("cannot borrow `token`"));
-    assert!(results[0].fix_summary.as_ref().unwrap().contains("Cloned token"));
+    assert!(results[0]
+        .fix_summary
+        .as_ref()
+        .unwrap()
+        .contains("Cloned token"));
 }
 
 #[test]
@@ -361,31 +419,35 @@ fn test_doc_staleness_warning_generation() {
     let repo_root = temp_dir.path();
     let memory = MemoryEngine::open_in_memory().unwrap();
 
-    let file_id = memory.upsert_file(&FileRecord {
-        id: None,
-        path: "src/payment.rs".to_string(),
-        language: Some("rust".to_string()),
-        size: 80,
-        source_hash: Some("current_hash_xyz".to_string()),
-        parse_status: Some("ok".to_string()),
-        last_commit: None,
-        last_modified: None,
-        summary: None,
-        risk_level: None,
-        doc_path: Some(".agent-docs/src/payment.md".to_string()),
-        doc_status: Some("stale".to_string()),
-    }).unwrap();
+    let file_id = memory
+        .upsert_file(&FileRecord {
+            id: None,
+            path: "src/payment.rs".to_string(),
+            language: Some("rust".to_string()),
+            size: 80,
+            source_hash: Some("current_hash_xyz".to_string()),
+            parse_status: Some("ok".to_string()),
+            last_commit: None,
+            last_modified: None,
+            summary: None,
+            risk_level: None,
+            doc_path: Some(".agent-docs/src/payment.md".to_string()),
+            doc_status: Some("stale".to_string()),
+        })
+        .unwrap();
 
-    memory.upsert_doc(&DocRecord {
-        id: None,
-        file_id,
-        doc_path: ".agent-docs/src/payment.md".to_string(),
-        doc_level: 0,
-        source_hash: Some("outdated_hash_123".to_string()),
-        status: "stale".to_string(),
-        updated_at: "2026-10-18T00:00:00Z".to_string(),
-        stale_reason: Some("Signature modified in commit def456".to_string()),
-    }).unwrap();
+    memory
+        .upsert_doc(&DocRecord {
+            id: None,
+            file_id,
+            doc_path: ".agent-docs/src/payment.md".to_string(),
+            doc_level: 0,
+            source_hash: Some("outdated_hash_123".to_string()),
+            status: "stale".to_string(),
+            updated_at: "2026-10-18T00:00:00Z".to_string(),
+            stale_reason: Some("Signature modified in commit def456".to_string()),
+        })
+        .unwrap();
 
     let doc_lookup = DocLookup::new(&memory, repo_root);
     let warnings = doc_lookup.check_doc_staleness(&[file_id]).unwrap();
@@ -409,35 +471,46 @@ fn test_retrieval_engine_performance_under_200ms() {
         let rel_path = format!("src/module_{}.rs", i);
         let full_path = repo_root.join(&rel_path);
         fs::create_dir_all(full_path.parent().unwrap()).unwrap();
-        fs::write(&full_path, format!("pub fn compute_{}(x: i32) -> i32 {{ x * 2 }}", i)).unwrap();
+        fs::write(
+            &full_path,
+            format!("pub fn compute_{}(x: i32) -> i32 {{ x * 2 }}", i),
+        )
+        .unwrap();
 
-        let fid = memory.upsert_file(&FileRecord {
-            id: None,
-            path: rel_path.clone(),
-            language: Some("rust".to_string()),
-            size: 50,
-            source_hash: Some(format!("hash_{}", i)),
-            parse_status: Some("ok".to_string()),
-            last_commit: None,
-            last_modified: None,
-            summary: None,
-            risk_level: None,
-            doc_path: None,
-            doc_status: None,
-        }).unwrap();
+        let fid = memory
+            .upsert_file(&FileRecord {
+                id: None,
+                path: rel_path.clone(),
+                language: Some("rust".to_string()),
+                size: 50,
+                source_hash: Some(format!("hash_{}", i)),
+                parse_status: Some("ok".to_string()),
+                last_commit: None,
+                last_modified: None,
+                summary: None,
+                risk_level: None,
+                doc_path: None,
+                doc_status: None,
+            })
+            .unwrap();
 
-        memory.insert_symbols(fid, &[SymbolRecord {
-            id: None,
-            file_id: fid,
-            name: format!("compute_{}", i),
-            kind: "function".to_string(),
-            line_start: 1,
-            line_end: 1,
-            visibility: Some("pub".to_string()),
-            signature: Some(format!("pub fn compute_{}(x: i32) -> i32", i)),
-            summary: None,
-            parent: None,
-        }]).unwrap();
+        memory
+            .insert_symbols(
+                fid,
+                &[SymbolRecord {
+                    id: None,
+                    file_id: fid,
+                    name: format!("compute_{}", i),
+                    kind: "function".to_string(),
+                    line_start: 1,
+                    line_end: 1,
+                    visibility: Some("pub".to_string()),
+                    signature: Some(format!("pub fn compute_{}(x: i32) -> i32", i)),
+                    summary: None,
+                    parent: None,
+                }],
+            )
+            .unwrap();
     }
 
     let engine = RetrievalEngine::new(&memory, &config, repo_root);
@@ -449,10 +522,22 @@ fn test_retrieval_engine_performance_under_200ms() {
     };
 
     let start = Instant::now();
-    let packet = engine.retrieve_context("Fix issue in compute_5 and module_5.rs", &opts).unwrap();
+    let packet = engine
+        .retrieve_context("Fix issue in compute_5 and module_5.rs", &opts)
+        .unwrap();
     let duration = start.elapsed();
 
-    assert!(duration.as_millis() < 200, "Retrieval latency must be < 200ms (was {}ms)", duration.as_millis());
-    assert!(packet.relevant_files.iter().any(|f| f.path.contains("module_5")));
-    assert!(packet.relevant_symbols.iter().any(|s| s.name == "compute_5"));
+    assert!(
+        duration.as_millis() < 200,
+        "Retrieval latency must be < 200ms (was {}ms)",
+        duration.as_millis()
+    );
+    assert!(packet
+        .relevant_files
+        .iter()
+        .any(|f| f.path.contains("module_5")));
+    assert!(packet
+        .relevant_symbols
+        .iter()
+        .any(|s| s.name == "compute_5"));
 }

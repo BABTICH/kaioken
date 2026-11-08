@@ -83,7 +83,7 @@ export const Install: React.FC = () => {
                 Prefer a graphical desktop workspace?
               </p>
               <p className="font-sans text-[12px] text-[var(--fg-mute)]">
-                Kaioken also includes a dedicated 12-surface Desktop GUI for deep repo exploration.
+                Kaioken also includes an 11-surface native desktop cockpit, built in Rust on wry + tao.
               </p>
             </div>
           </div>

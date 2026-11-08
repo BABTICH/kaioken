@@ -1,5 +1,5 @@
-use std::path::Path;
 use regex::Regex;
+use std::path::Path;
 
 /// RedactionEngine sanitizes API keys, private keys, bearer tokens,
 /// and credentials before context packets or audit logs are stored or emitted.
@@ -40,15 +40,42 @@ impl RedactionEngine {
     pub fn redact(&self, input: &str) -> String {
         let mut result = input.to_string();
 
-        result = self.private_key_regex.replace_all(&result, "[REDACTED_PRIVATE_KEY]").to_string();
-        result = self.openrouter_key_regex.replace_all(&result, "[REDACTED_API_KEY]").to_string();
-        result = self.api_key_regex.replace_all(&result, "[REDACTED_API_KEY]").to_string();
-        result = self.github_token_regex.replace_all(&result, "[REDACTED_GITHUB_TOKEN]").to_string();
-        result = self.aws_key_regex.replace_all(&result, "[REDACTED_AWS_KEY]").to_string();
-        result = self.slack_token_regex.replace_all(&result, "[REDACTED_SLACK_TOKEN]").to_string();
-        result = self.bearer_token_regex.replace_all(&result, "Bearer [REDACTED_BEARER_TOKEN]").to_string();
-        result = self.uri_password_regex.replace_all(&result, "://$1:[REDACTED_PASSWORD]@").to_string();
-        result = self.env_secret_regex.replace_all(&result, "$1[REDACTED_SECRET]").to_string();
+        result = self
+            .private_key_regex
+            .replace_all(&result, "[REDACTED_PRIVATE_KEY]")
+            .to_string();
+        result = self
+            .openrouter_key_regex
+            .replace_all(&result, "[REDACTED_API_KEY]")
+            .to_string();
+        result = self
+            .api_key_regex
+            .replace_all(&result, "[REDACTED_API_KEY]")
+            .to_string();
+        result = self
+            .github_token_regex
+            .replace_all(&result, "[REDACTED_GITHUB_TOKEN]")
+            .to_string();
+        result = self
+            .aws_key_regex
+            .replace_all(&result, "[REDACTED_AWS_KEY]")
+            .to_string();
+        result = self
+            .slack_token_regex
+            .replace_all(&result, "[REDACTED_SLACK_TOKEN]")
+            .to_string();
+        result = self
+            .bearer_token_regex
+            .replace_all(&result, "Bearer [REDACTED_BEARER_TOKEN]")
+            .to_string();
+        result = self
+            .uri_password_regex
+            .replace_all(&result, "://$1:[REDACTED_PASSWORD]@")
+            .to_string();
+        result = self
+            .env_secret_regex
+            .replace_all(&result, "$1[REDACTED_SECRET]")
+            .to_string();
 
         result
     }
@@ -76,7 +103,8 @@ impl RedactionEngine {
 
         if let Some(ext) = path.extension().and_then(|e| e.to_str()) {
             let ext_lower = ext.to_lowercase();
-            if ext_lower == "pem" || ext_lower == "key" || ext_lower == "pfx" || ext_lower == "p12" {
+            if ext_lower == "pem" || ext_lower == "key" || ext_lower == "pfx" || ext_lower == "p12"
+            {
                 return true;
             }
         }
@@ -116,7 +144,7 @@ mod tests {
     #[test]
     fn test_redact_secrets() {
         let engine = RedactionEngine::new();
-        
+
         let text = "Here is my key: sk-abcdef1234567890abcdef123456 and token: ghp_123456789012345678901234567890123456";
         let redacted = engine.redact(text);
         assert!(!redacted.contains("sk-abcdef"));
@@ -127,9 +155,12 @@ mod tests {
         let openrouter_text = "OPENROUTER_API_KEY=sk-or-v1-abcdef1234567890abcdef1234567890";
         let redacted_or = engine.redact(openrouter_text);
         assert!(!redacted_or.contains("sk-or-v1-abcdef"));
-        assert!(redacted_or.contains("[REDACTED_SECRET]") || redacted_or.contains("[REDACTED_API_KEY]"));
+        assert!(
+            redacted_or.contains("[REDACTED_SECRET]") || redacted_or.contains("[REDACTED_API_KEY]")
+        );
 
-        let pem_text = "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0\n-----END RSA PRIVATE KEY-----";
+        let pem_text =
+            "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0\n-----END RSA PRIVATE KEY-----";
         let redacted_pem = engine.redact(pem_text);
         assert!(redacted_pem.contains("[REDACTED_PRIVATE_KEY]"));
     }
@@ -139,7 +170,11 @@ mod tests {
         assert!(RedactionEngine::is_sensitive_file(Path::new(".env")));
         assert!(RedactionEngine::is_sensitive_file(Path::new(".env.local")));
         assert!(RedactionEngine::is_sensitive_file(Path::new("secret.pem")));
-        assert!(RedactionEngine::is_sensitive_file(Path::new("credentials.json")));
-        assert!(!RedactionEngine::is_sensitive_file(Path::new("src/main.rs")));
+        assert!(RedactionEngine::is_sensitive_file(Path::new(
+            "credentials.json"
+        )));
+        assert!(!RedactionEngine::is_sensitive_file(Path::new(
+            "src/main.rs"
+        )));
     }
 }

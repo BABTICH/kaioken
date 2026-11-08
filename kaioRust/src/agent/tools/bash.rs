@@ -1,7 +1,7 @@
+use super::{BoxFuture, Tool, ToolContext, ToolResult};
+use crate::error::Result;
 use serde::Deserialize;
 use serde_json::{json, Value};
-use crate::error::Result;
-use super::{BoxFuture, Tool, ToolContext, ToolResult};
 
 pub struct BashTool;
 
@@ -32,7 +32,11 @@ impl Tool for BashTool {
         })
     }
 
-    fn execute<'a>(&'a self, args: &'a str, ctx: &'a ToolContext) -> BoxFuture<'a, Result<ToolResult>> {
+    fn execute<'a>(
+        &'a self,
+        args: &'a str,
+        ctx: &'a ToolContext,
+    ) -> BoxFuture<'a, Result<ToolResult>> {
         let repo_root = ctx.repo_root.clone();
         let command_guard = ctx.command_guard.clone();
         let audit_logger = ctx.audit_logger.clone();
@@ -40,7 +44,12 @@ impl Tool for BashTool {
         Box::pin(async move {
             let parsed: BashArgs = match serde_json::from_str(&args_str) {
                 Ok(a) => a,
-                Err(e) => return Ok(ToolResult::error(format!("Invalid arguments for bash: {}", e))),
+                Err(e) => {
+                    return Ok(ToolResult::error(format!(
+                        "Invalid arguments for bash: {}",
+                        e
+                    )))
+                }
             };
 
             // 1. Safety Policy & Blocklist inspection
@@ -54,25 +63,35 @@ impl Tool for BashTool {
                         )));
                     }
                     crate::safety::PermissionDecision::Denied(r) => {
-                        return Ok(ToolResult::error(format!("Command execution blocked by safety policy: {}", r)));
+                        return Ok(ToolResult::error(format!(
+                            "Command execution blocked by safety policy: {}",
+                            r
+                        )));
                     }
                 }
             } else if let Some(reason) = command_guard.is_blocked(&parsed.command) {
                 let _ = audit_logger.log("agent", "bash", &parsed.command, false, Some(&reason));
-                return Ok(ToolResult::error(format!("Command execution blocked by safety policy: {}", reason)));
+                return Ok(ToolResult::error(format!(
+                    "Command execution blocked by safety policy: {}",
+                    reason
+                )));
             }
 
             // 2. Execute command via CommandGuard with 120s ceiling
             let log_dir = repo_root.join(".agent").join("logs");
-            let exec_res = match command_guard.execute(
-                &parsed.command,
-                &repo_root,
-                Some(120),
-                Some(&log_dir),
-            ).await {
+            let exec_res = match command_guard
+                .execute(&parsed.command, &repo_root, Some(120), Some(&log_dir))
+                .await
+            {
                 Ok(res) => res,
                 Err(e) => {
-                    let _ = audit_logger.log("agent", "bash", &parsed.command, false, Some(&e.to_string()));
+                    let _ = audit_logger.log(
+                        "agent",
+                        "bash",
+                        &parsed.command,
+                        false,
+                        Some(&e.to_string()),
+                    );
                     return Ok(ToolResult::error(format!("Command error: {}", e)));
                 }
             };

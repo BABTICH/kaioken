@@ -1,20 +1,19 @@
-use std::collections::HashSet;
-use std::path::PathBuf;
-use std::sync::Arc;
-use std::time::Instant;
-use sha2::{Digest, Sha256};
+use crate::agent::tools::{ToolContext, ToolRegistry, ToolResult};
 use crate::config::Config;
 use crate::critic::{Critic, CriticEngine};
 use crate::docs::cascade::StalenessCascadeEngine;
 use crate::error::Result;
 use crate::llm::{
-    ChatCompletionRequest, ChatMessage, FunctionDefinition,
-    LlmProvider, ToolDefinition,
+    ChatCompletionRequest, ChatMessage, FunctionDefinition, LlmProvider, ToolDefinition,
 };
 use crate::memory::{FailureRecord, MemoryEngine, ToolCallRecord};
 use crate::retrieval::{RetrievalEngine, RetrievalOptions};
 use crate::safety::audit::AuditLogger;
-use crate::agent::tools::{ToolContext, ToolRegistry, ToolResult};
+use sha2::{Digest, Sha256};
+use std::collections::HashSet;
+use std::path::PathBuf;
+use std::sync::Arc;
+use std::time::Instant;
 
 #[derive(Debug, Clone)]
 pub struct AgentStepNotification {
@@ -188,9 +187,7 @@ impl AgentLoop {
             self.repo_root.display()
         );
 
-        let mut messages = vec![
-            ChatMessage::system(system_prompt),
-        ];
+        let mut messages = vec![ChatMessage::system(system_prompt)];
 
         if let Some(packet) = &context_packet {
             messages.push(ChatMessage::user(format!(
@@ -212,16 +209,19 @@ impl AgentLoop {
         let mut touched_files: HashSet<String> = HashSet::new();
 
         // Convert registry tools to tool definitions
-        let tool_definitions: Vec<ToolDefinition> = self.tools.list().iter().map(|t| {
-            ToolDefinition {
+        let tool_definitions: Vec<ToolDefinition> = self
+            .tools
+            .list()
+            .iter()
+            .map(|t| ToolDefinition {
                 tool_type: "function".to_string(),
                 function: FunctionDefinition {
                     name: t.name().to_string(),
                     description: t.description().to_string(),
                     parameters: t.schema(),
                 },
-            }
-        }).collect();
+            })
+            .collect();
 
         // 3. ReAct Autonomous Loop
         while step < self.max_steps {
@@ -252,7 +252,8 @@ impl AgentLoop {
                 Some(c) => c,
                 None => {
                     final_status = "failed";
-                    final_response = format!("Received empty response choices from LLM at step {}", step);
+                    final_response =
+                        format!("Received empty response choices from LLM at step {}", step);
                     break;
                 }
             };
@@ -286,7 +287,9 @@ impl AgentLoop {
                     // Log failure to SQLite failures table if not tracked yet
                     if active_failure_id.is_none() {
                         if let Some(mem) = &self.memory {
-                            let first_msg = critic_report.diagnostics.first()
+                            let first_msg = critic_report
+                                .diagnostics
+                                .first()
                                 .map(|d| d.message.clone())
                                 .unwrap_or_else(|| "Compiler/test verification failed".to_string());
                             let failure_record = FailureRecord {
@@ -320,9 +323,7 @@ impl AgentLoop {
                     messages.push(assistant_msg.clone());
                     let feedback = format!(
                         "{}\n\n[Critic Attempt {} of {}]",
-                        critic_report.feedback_message,
-                        critic_iterations,
-                        self.max_critic_retries
+                        critic_report.feedback_message, critic_iterations, self.max_critic_retries
                     );
                     messages.push(ChatMessage::user(feedback));
                     continue;
@@ -368,9 +369,17 @@ impl AgentLoop {
                         tool_name: tool_name.clone(),
                         input_json: tool_args.clone(),
                         output_summary: Some(tool_res.output.chars().take(200).collect()),
-                        status: if tool_res.success { "success".to_string() } else { "error".to_string() },
+                        status: if tool_res.success {
+                            "success".to_string()
+                        } else {
+                            "error".to_string()
+                        },
                         duration_ms: duration_ms as i64,
-                        error: if !tool_res.success { Some(tool_res.output.clone()) } else { None },
+                        error: if !tool_res.success {
+                            Some(tool_res.output.clone())
+                        } else {
+                            None
+                        },
                         created_at: chrono::Utc::now().to_rfc3339(),
                     });
                 }
@@ -389,11 +398,16 @@ impl AgentLoop {
                 }
 
                 // Append tool response to conversation
-                messages.push(ChatMessage::tool_response(&tc.id, tool_name, tool_res.output));
+                messages.push(ChatMessage::tool_response(
+                    &tc.id,
+                    tool_name,
+                    tool_res.output,
+                ));
 
                 if tool_calls_count >= self.max_tool_calls {
                     final_status = "aborted";
-                    final_response = format!("Max tool calls limit ({}) reached.", self.max_tool_calls);
+                    final_response =
+                        format!("Max tool calls limit ({}) reached.", self.max_tool_calls);
                     break;
                 }
             }
@@ -405,7 +419,10 @@ impl AgentLoop {
 
         if step >= self.max_steps && final_response.is_empty() {
             final_status = "aborted";
-            final_response = format!("Max iterations limit ({}) reached without final answer.", self.max_steps);
+            final_response = format!(
+                "Max iterations limit ({}) reached without final answer.",
+                self.max_steps
+            );
         }
 
         let touched_list: Vec<String> = touched_files.into_iter().collect();
@@ -413,13 +430,24 @@ impl AgentLoop {
         // 4. Update agent run in SQLite
         if let Some(mem) = &self.memory {
             let estimated_cost = (total_tokens as f64 / 1_000_000.0) * 3.0; // ~$3 per 1M tokens approximation
-            let error_msg = if final_status != "completed" { Some(final_response.as_str()) } else { None };
-            let _ = mem.finish_agent_run(run_id, final_status, total_tokens, estimated_cost, error_msg);
+            let error_msg = if final_status != "completed" {
+                Some(final_response.as_str())
+            } else {
+                None
+            };
+            let _ = mem.finish_agent_run(
+                run_id,
+                final_status,
+                total_tokens,
+                estimated_cost,
+                error_msg,
+            );
 
             // 5. Post-task memory and doc staleness synchronization (Phase 12)
             if final_status == "completed" && !touched_list.is_empty() {
                 // Cascade staleness to mirrored documentation
-                let _ = StalenessCascadeEngine::cascade_changes(&self.repo_root, &touched_list, mem);
+                let _ =
+                    StalenessCascadeEngine::cascade_changes(&self.repo_root, &touched_list, mem);
 
                 // Update file inventory hashes in SQLite files table
                 for rel_path in &touched_list {

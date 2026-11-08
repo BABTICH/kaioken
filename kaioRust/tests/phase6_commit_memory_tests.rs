@@ -3,9 +3,7 @@ use std::path::PathBuf;
 use std::process::Command;
 use tempfile::tempdir;
 
-use kaioken::memory::{
-    CommitAnalyzer, CommitChangeRecord, CommitRecord, MemoryEngine,
-};
+use kaioken::memory::{CommitAnalyzer, CommitChangeRecord, CommitRecord, MemoryEngine};
 use kaioken::scanner::{ChangeType, ChangedFile, GitCommitInfo, GitScanner, ScanLock};
 
 #[test]
@@ -134,7 +132,11 @@ fn test_sqlite_commit_crud_and_cascade() {
 
     // Test Cascade Deletion: deleting from commits should delete commit_changes
     let conn = memory.db().connection();
-    conn.execute("DELETE FROM commits WHERE id = ?1;", rusqlite::params![commit_id]).unwrap();
+    conn.execute(
+        "DELETE FROM commits WHERE id = ?1;",
+        rusqlite::params![commit_id],
+    )
+    .unwrap();
 
     assert_eq!(memory.count_commits().unwrap(), 0);
     assert_eq!(memory.count_commit_changes().unwrap(), 0);
@@ -148,7 +150,10 @@ fn test_commit_risk_assessment_rules() {
         change_type: ChangeType::Modified,
         old_path: None,
     }];
-    assert_eq!(CommitAnalyzer::calculate_risk_level(&changed_high, 0), "high");
+    assert_eq!(
+        CommitAnalyzer::calculate_risk_level(&changed_high, 0),
+        "high"
+    );
 
     // 2. Security/Auth path -> high
     let changed_auth = vec![ChangedFile {
@@ -156,7 +161,10 @@ fn test_commit_risk_assessment_rules() {
         change_type: ChangeType::Modified,
         old_path: None,
     }];
-    assert_eq!(CommitAnalyzer::calculate_risk_level(&changed_auth, 1), "high");
+    assert_eq!(
+        CommitAnalyzer::calculate_risk_level(&changed_auth, 1),
+        "high"
+    );
 
     // 3. Deletion -> high
     let changed_del = vec![ChangedFile {
@@ -164,7 +172,10 @@ fn test_commit_risk_assessment_rules() {
         change_type: ChangeType::Deleted,
         old_path: None,
     }];
-    assert_eq!(CommitAnalyzer::calculate_risk_level(&changed_del, 0), "high");
+    assert_eq!(
+        CommitAnalyzer::calculate_risk_level(&changed_del, 0),
+        "high"
+    );
 
     // 4. >2 files or >3 symbols touched -> medium
     let changed_med = vec![
@@ -184,7 +195,10 @@ fn test_commit_risk_assessment_rules() {
             old_path: None,
         },
     ];
-    assert_eq!(CommitAnalyzer::calculate_risk_level(&changed_med, 1), "medium");
+    assert_eq!(
+        CommitAnalyzer::calculate_risk_level(&changed_med, 1),
+        "medium"
+    );
 
     // 5. Small doc or single file edit -> low
     let changed_low = vec![ChangedFile {
@@ -205,25 +219,21 @@ fn test_deterministic_markdown_summary_generation() {
         message: "fix: resolve session bug".to_string(),
     };
 
-    let changed_files = vec![
-        ChangedFile {
-            path: PathBuf::from("src/session.rs"),
-            change_type: ChangeType::Modified,
-            old_path: None,
-        },
-    ];
+    let changed_files = vec![ChangedFile {
+        path: PathBuf::from("src/session.rs"),
+        change_type: ChangeType::Modified,
+        old_path: None,
+    }];
 
-    let touched_symbols = vec![
-        kaioken::memory::TouchedSymbolInfo {
-            symbol_id: Some(1),
-            symbol_name: "validate_token".to_string(),
-            symbol_kind: "function".to_string(),
-            file_path: "src/session.rs".to_string(),
-            line_start: 20,
-            line_end: 35,
-            change_type: "modified".to_string(),
-        },
-    ];
+    let touched_symbols = vec![kaioken::memory::TouchedSymbolInfo {
+        symbol_id: Some(1),
+        symbol_name: "validate_token".to_string(),
+        symbol_kind: "function".to_string(),
+        file_path: "src/session.rs".to_string(),
+        line_start: 20,
+        line_end: 35,
+        change_type: "modified".to_string(),
+    }];
 
     let summary = CommitAnalyzer::generate_markdown_summary(
         &commit_info,
@@ -279,14 +289,20 @@ pub fn multiply(a: i32, b: i32) -> i32 {
     run(&["add", "."]);
     run(&["commit", "-m", "Initial math functions"]);
 
-    let head_commit = GitScanner::get_head_commit(repo_dir).unwrap().expect("HEAD commit missing");
+    let head_commit = GitScanner::get_head_commit(repo_dir)
+        .unwrap()
+        .expect("HEAD commit missing");
     let memory = MemoryEngine::open_in_memory().unwrap();
 
     // 3. Analyze initial commit: both functions should be added
     let analysis1 = CommitAnalyzer::analyze(repo_dir, &head_commit, &memory).unwrap();
     assert_eq!(analysis1.changed_files_count, 1);
     assert_eq!(analysis1.affected_symbols_count, 2);
-    let sym_names: Vec<&str> = analysis1.touched_symbols.iter().map(|s| s.symbol_name.as_str()).collect();
+    let sym_names: Vec<&str> = analysis1
+        .touched_symbols
+        .iter()
+        .map(|s| s.symbol_name.as_str())
+        .collect();
     assert!(sym_names.contains(&"add"));
     assert!(sym_names.contains(&"multiply"));
 
@@ -309,7 +325,9 @@ pub fn multiply(a: i32, b: i32) -> i32 {
     run(&["add", "."]);
     run(&["commit", "-m", "Refactor add implementation"]);
 
-    let commit2 = GitScanner::get_head_commit(repo_dir).unwrap().expect("Commit 2 missing");
+    let commit2 = GitScanner::get_head_commit(repo_dir)
+        .unwrap()
+        .expect("Commit 2 missing");
     let analysis2 = CommitAnalyzer::analyze(repo_dir, &commit2, &memory).unwrap();
 
     assert_eq!(analysis2.changed_files_count, 1);
@@ -329,6 +347,9 @@ pub fn multiply(a: i32, b: i32) -> i32 {
     assert_eq!(recent[1].message, "Initial math functions");
 
     // Verify files table has updated last_commit
-    let file_rec = memory.get_file_by_path("src/math.rs").unwrap().expect("File missing");
+    let file_rec = memory
+        .get_file_by_path("src/math.rs")
+        .unwrap()
+        .expect("File missing");
     assert_eq!(file_rec.last_commit.as_deref(), Some(commit2.hash.as_str()));
 }

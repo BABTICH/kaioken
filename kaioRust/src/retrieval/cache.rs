@@ -1,10 +1,10 @@
-use std::path::Path;
-use chrono::{Duration, Utc};
-use rusqlite::params;
-use sha2::{Digest, Sha256};
 use crate::error::{KaiokenError, Result};
 use crate::memory::MemoryEngine;
 use crate::retrieval::context_packet::ContextPacket;
+use chrono::{Duration, Utc};
+use rusqlite::params;
+use sha2::{Digest, Sha256};
+use std::path::Path;
 
 pub struct RetrievalCacheStore<'a> {
     memory: &'a MemoryEngine,
@@ -46,7 +46,10 @@ impl<'a> RetrievalCacheStore<'a> {
 
         // Check TTL expiration
         if expires_at < now {
-            let _ = conn.execute("DELETE FROM retrieval_cache WHERE query_hash = ?1", params![query_key]);
+            let _ = conn.execute(
+                "DELETE FROM retrieval_cache WHERE query_hash = ?1",
+                params![query_key],
+            );
             return Ok(None);
         }
 
@@ -54,7 +57,10 @@ impl<'a> RetrievalCacheStore<'a> {
         let packet: ContextPacket = match serde_json::from_str(&context_json) {
             Ok(p) => p,
             Err(_) => {
-                let _ = conn.execute("DELETE FROM retrieval_cache WHERE query_hash = ?1", params![query_key]);
+                let _ = conn.execute(
+                    "DELETE FROM retrieval_cache WHERE query_hash = ?1",
+                    params![query_key],
+                );
                 return Ok(None);
             }
         };
@@ -69,13 +75,19 @@ impl<'a> RetrievalCacheStore<'a> {
                     let current_hash = format!("{:x}", hasher.finalize());
                     if current_hash != file.source_hash {
                         // Invalidate cache entry due to file modification
-                        let _ = conn.execute("DELETE FROM retrieval_cache WHERE query_hash = ?1", params![query_key]);
+                        let _ = conn.execute(
+                            "DELETE FROM retrieval_cache WHERE query_hash = ?1",
+                            params![query_key],
+                        );
                         return Ok(None);
                     }
                 }
             } else {
                 // File deleted or moved
-                let _ = conn.execute("DELETE FROM retrieval_cache WHERE query_hash = ?1", params![query_key]);
+                let _ = conn.execute(
+                    "DELETE FROM retrieval_cache WHERE query_hash = ?1",
+                    params![query_key],
+                );
                 return Ok(None);
             }
         }
@@ -89,8 +101,9 @@ impl<'a> RetrievalCacheStore<'a> {
         let now = Utc::now();
         let created_at = now.to_rfc3339();
         let expires_at = (now + Duration::seconds(ttl_seconds)).to_rfc3339();
-        let context_json = packet.to_json()
-            .map_err(|e| KaiokenError::RetrievalError(format!("Failed to serialize context packet: {}", e)))?;
+        let context_json = packet.to_json().map_err(|e| {
+            KaiokenError::RetrievalError(format!("Failed to serialize context packet: {}", e))
+        })?;
 
         conn.execute(
             "INSERT INTO retrieval_cache (query_hash, context_json, created_at, expires_at)
@@ -101,7 +114,9 @@ impl<'a> RetrievalCacheStore<'a> {
                expires_at = excluded.expires_at",
             params![query_key, context_json, created_at, expires_at],
         )
-        .map_err(|e| KaiokenError::MemoryError(format!("Failed to insert retrieval cache: {}", e)))?;
+        .map_err(|e| {
+            KaiokenError::MemoryError(format!("Failed to insert retrieval cache: {}", e))
+        })?;
 
         Ok(())
     }
@@ -109,8 +124,11 @@ impl<'a> RetrievalCacheStore<'a> {
     /// Clears all entries in the retrieval_cache table.
     pub fn clear(&self) -> Result<usize> {
         let conn = self.memory.db().connection();
-        let deleted = conn.execute("DELETE FROM retrieval_cache", [])
-            .map_err(|e| KaiokenError::MemoryError(format!("Failed to clear retrieval cache: {}", e)))?;
+        let deleted = conn
+            .execute("DELETE FROM retrieval_cache", [])
+            .map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to clear retrieval cache: {}", e))
+            })?;
         Ok(deleted)
     }
 
@@ -118,8 +136,14 @@ impl<'a> RetrievalCacheStore<'a> {
     pub fn clear_expired(&self) -> Result<usize> {
         let conn = self.memory.db().connection();
         let now = Utc::now().to_rfc3339();
-        let deleted = conn.execute("DELETE FROM retrieval_cache WHERE expires_at < ?1", params![now])
-            .map_err(|e| KaiokenError::MemoryError(format!("Failed to clear expired cache: {}", e)))?;
+        let deleted = conn
+            .execute(
+                "DELETE FROM retrieval_cache WHERE expires_at < ?1",
+                params![now],
+            )
+            .map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to clear expired cache: {}", e))
+            })?;
         Ok(deleted)
     }
 }

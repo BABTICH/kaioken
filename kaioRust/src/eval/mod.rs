@@ -4,8 +4,8 @@ pub mod metrics;
 pub use benchmarks::{BenchmarkRegistry, BenchmarkTask};
 pub use metrics::{BenchmarkResult, EvaluationScorecard};
 
-use std::time::Instant;
 use crate::error::Result;
+use std::time::Instant;
 
 pub struct EvaluationRunner {
     registry: BenchmarkRegistry,

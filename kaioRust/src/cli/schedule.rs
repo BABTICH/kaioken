@@ -1,8 +1,8 @@
+use chrono::Utc;
+use clap::Args;
 use std::fs;
 use std::path::PathBuf;
 use std::sync::Arc;
-use clap::Args;
-use chrono::Utc;
 
 use crate::config::Config;
 use crate::health::HealthAuditEngine;
@@ -75,12 +75,33 @@ pub async fn handle_schedule_command(args: ScheduleArgs) -> anyhow::Result<()> {
         fs::write(&target_path, &formatted)?;
 
         println!("✅ Health Audit Completed!");
-        println!("   Health Score: {}/100 (Grade: {})", report.score.score, report.score.grade);
-        println!("   Files Tracked: {} | AST Symbols: {}", report.overview.total_files, report.overview.total_symbols);
-        println!("   Docs: {} fresh, {} stale, {} missing", report.doc_health.fresh_count, report.doc_health.stale_count, report.doc_health.missing_docs_count);
-        println!("   Dead Code Hints: {} | Untested Files: {}", report.dead_code.unreferenced_symbols.len(), report.test_coverage.untested_files.len());
-        println!("   Unresolved Failures: {}", report.failure_memory.unresolved_count);
-        println!("\n📄 Saved comprehensive report to: {}\n", target_path.display());
+        println!(
+            "   Health Score: {}/100 (Grade: {})",
+            report.score.score, report.score.grade
+        );
+        println!(
+            "   Files Tracked: {} | AST Symbols: {}",
+            report.overview.total_files, report.overview.total_symbols
+        );
+        println!(
+            "   Docs: {} fresh, {} stale, {} missing",
+            report.doc_health.fresh_count,
+            report.doc_health.stale_count,
+            report.doc_health.missing_docs_count
+        );
+        println!(
+            "   Dead Code Hints: {} | Untested Files: {}",
+            report.dead_code.unreferenced_symbols.len(),
+            report.test_coverage.untested_files.len()
+        );
+        println!(
+            "   Unresolved Failures: {}",
+            report.failure_memory.unresolved_count
+        );
+        println!(
+            "\n📄 Saved comprehensive report to: {}\n",
+            target_path.display()
+        );
 
         if !report.recommendations.is_empty() {
             println!("💡 Top Actionable Recommendations:");
@@ -91,7 +112,10 @@ pub async fn handle_schedule_command(args: ScheduleArgs) -> anyhow::Result<()> {
         }
 
         if args.fix_stale && report.doc_health.stale_count > 0 {
-            println!("🔄 Automatically refreshing {} stale documentation files...", report.doc_health.stale_count);
+            println!(
+                "🔄 Automatically refreshing {} stale documentation files...",
+                report.doc_health.stale_count
+            );
             let generator = crate::docs::DocGenerator::new(&repo_root, &docs_root);
             let options = crate::docs::DocGenerateOptions {
                 level: 0,

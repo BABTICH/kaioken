@@ -1,12 +1,19 @@
 use clap::{Parser, Subcommand};
 
+pub mod audit;
 pub mod critic;
+pub mod desktop;
 pub mod docs;
+pub mod doctor;
 pub mod eval;
+pub mod hook;
 pub mod memory;
 pub mod retrieval;
+pub mod review;
 pub mod schedule;
 pub mod task;
+pub mod tui;
+pub mod watch;
 
 #[derive(Parser)]
 #[command(name = "kaioken")]
@@ -50,4 +57,21 @@ pub enum Commands {
     /// Run quantitative evaluation benchmarks and emit scorecard
     #[command(subcommand)]
     Eval(eval::EvalCommands),
+    /// Run environment diagnostic checks
+    Doctor(doctor::DoctorArgs),
+    /// Manage Git post-commit hooks for continuous memory sync
+    #[command(subcommand)]
+    Hook(hook::HookCommands),
+    /// Inspect security, approval, and tool execution audit trails
+    #[command(subcommand)]
+    Audit(audit::AuditCommands),
+    /// Analyze git diffs, detect breaking changes, test gaps and change risk
+    Review(review::ReviewArgs),
+    /// Real-time file watcher daemon with debounced memory synchronization
+    #[command(alias = "daemon")]
+    Watch(watch::WatchArgs),
+    /// Launch the native desktop cockpit
+    Desktop(desktop::DesktopArgs),
+    /// Launch the interactive terminal UI (ratatui dashboard)
+    Tui(tui::TuiArgs),
 }

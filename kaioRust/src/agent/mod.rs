@@ -1,7 +1,7 @@
-pub mod tools;
-pub mod planner;
 pub mod r#loop;
+pub mod planner;
+pub mod tools;
 
-pub use tools::{Tool, ToolRegistry, ToolContext, ToolResult};
-pub use planner::{Planner, TaskPlan, PlanStep};
-pub use r#loop::{AgentLoop, AgentExecutionSummary, AgentStepNotification};
+pub use planner::{PlanStep, Planner, TaskPlan};
+pub use r#loop::{AgentExecutionSummary, AgentLoop, AgentStepNotification};
+pub use tools::{Tool, ToolContext, ToolRegistry, ToolResult};

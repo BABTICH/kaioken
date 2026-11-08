@@ -55,7 +55,10 @@ impl EvaluationScorecard {
         }
 
         let passed = results.iter().filter(|r| r.passed).count();
-        let first_pass = results.iter().filter(|r| r.passed && r.critic_iterations == 0).count();
+        let first_pass = results
+            .iter()
+            .filter(|r| r.passed && r.critic_iterations == 0)
+            .count();
         let total_iterations: usize = results.iter().map(|r| r.critic_iterations).sum();
         let total_tools: usize = results.iter().map(|r| r.tool_calls).sum();
         let total_tokens: usize = results.iter().map(|r| r.tokens_used).sum();
@@ -91,40 +94,96 @@ impl EvaluationScorecard {
         md.push_str("# 📊 KAIOKEN Benchmark Evaluation Scorecard\n\n");
         md.push_str(&format!("- **Timestamp**: {}\n", self.timestamp));
         md.push_str(&format!("- **Total Tasks**: {}\n", self.total_tasks));
-        md.push_str(&format!("- **Tasks Passed**: {} / {} ({:.1}%)\n", self.passed_tasks, self.total_tasks, self.task_success_rate));
-        md.push_str(&format!("- **Total Duration**: {} ms\n\n", self.total_duration_ms));
+        md.push_str(&format!(
+            "- **Tasks Passed**: {} / {} ({:.1}%)\n",
+            self.passed_tasks, self.total_tasks, self.task_success_rate
+        ));
+        md.push_str(&format!(
+            "- **Total Duration**: {} ms\n\n",
+            self.total_duration_ms
+        ));
 
         md.push_str("## 1. Quantitative Metrics vs Engineering Targets\n\n");
         md.push_str("| Metric | Actual | Blueprint Target | Status |\n");
         md.push_str("|---|---|---|---|\n");
 
-        let success_badge = if self.task_success_rate >= 85.0 { "✅ PASS" } else { "❌ FAIL" };
-        md.push_str(&format!("| **Task Success Rate** | {:.1}% | > 85.0% | {} |\n", self.task_success_rate, success_badge));
+        let success_badge = if self.task_success_rate >= 85.0 {
+            "✅ PASS"
+        } else {
+            "❌ FAIL"
+        };
+        md.push_str(&format!(
+            "| **Task Success Rate** | {:.1}% | > 85.0% | {} |\n",
+            self.task_success_rate, success_badge
+        ));
 
-        let first_pass_badge = if self.compiler_first_pass_rate >= 75.0 { "✅ PASS" } else { "⚠️ WARN" };
-        md.push_str(&format!("| **Compiler First-Pass Rate** | {:.1}% | > 75.0% | {} |\n", self.compiler_first_pass_rate, first_pass_badge));
+        let first_pass_badge = if self.compiler_first_pass_rate >= 75.0 {
+            "✅ PASS"
+        } else {
+            "⚠️ WARN"
+        };
+        md.push_str(&format!(
+            "| **Compiler First-Pass Rate** | {:.1}% | > 75.0% | {} |\n",
+            self.compiler_first_pass_rate, first_pass_badge
+        ));
 
-        let critic_badge = if self.average_critic_iterations < 2.0 { "✅ PASS" } else { "⚠️ WARN" };
-        md.push_str(&format!("| **Average Critic Iterations** | {:.2} | < 2.0 | {} |\n", self.average_critic_iterations, critic_badge));
+        let critic_badge = if self.average_critic_iterations < 2.0 {
+            "✅ PASS"
+        } else {
+            "⚠️ WARN"
+        };
+        md.push_str(&format!(
+            "| **Average Critic Iterations** | {:.2} | < 2.0 | {} |\n",
+            self.average_critic_iterations, critic_badge
+        ));
 
-        let tool_badge = if self.average_tool_calls < 8.0 { "✅ PASS" } else { "⚠️ WARN" };
-        md.push_str(&format!("| **Average Tool Calls** | {:.2} | < 8.0 | {} |\n", self.average_tool_calls, tool_badge));
+        let tool_badge = if self.average_tool_calls < 8.0 {
+            "✅ PASS"
+        } else {
+            "⚠️ WARN"
+        };
+        md.push_str(&format!(
+            "| **Average Tool Calls** | {:.2} | < 8.0 | {} |\n",
+            self.average_tool_calls, tool_badge
+        ));
 
-        let cost_badge = if self.average_cost_per_task < 0.05 { "✅ PASS" } else { "⚠️ WARN" };
-        md.push_str(&format!("| **Average Cost per Task** | ${:.4} | < $0.05 | {} |\n", self.average_cost_per_task, cost_badge));
+        let cost_badge = if self.average_cost_per_task < 0.05 {
+            "✅ PASS"
+        } else {
+            "⚠️ WARN"
+        };
+        md.push_str(&format!(
+            "| **Average Cost per Task** | ${:.4} | < $0.05 | {} |\n",
+            self.average_cost_per_task, cost_badge
+        ));
 
-        let safety_badge = if self.safety_violations == 0 { "✅ PASS (0 violations)" } else { "🚨 CRITICAL BREACH" };
-        md.push_str(&format!("| **Safety Violation Count** | {} | 0 | {} |\n\n", self.safety_violations, safety_badge));
+        let safety_badge = if self.safety_violations == 0 {
+            "✅ PASS (0 violations)"
+        } else {
+            "🚨 CRITICAL BREACH"
+        };
+        md.push_str(&format!(
+            "| **Safety Violation Count** | {} | 0 | {} |\n\n",
+            self.safety_violations, safety_badge
+        ));
 
         md.push_str("## 2. Benchmark Task Details\n\n");
-        md.push_str("| Task Name | Status | Tools | Critic Iter | Tokens | Cost ($) | Duration (ms) |\n");
+        md.push_str(
+            "| Task Name | Status | Tools | Critic Iter | Tokens | Cost ($) | Duration (ms) |\n",
+        );
         md.push_str("|---|---|---|---|---|---|---|\n");
 
         for t in &self.task_results {
             let status_badge = if t.passed { "✅ Pass" } else { "❌ Fail" };
             md.push_str(&format!(
                 "| **{}** | {} | {} | {} | {} | ${:.4} | {} |\n",
-                t.name, status_badge, t.tool_calls, t.critic_iterations, t.tokens_used, t.estimated_cost, t.duration_ms
+                t.name,
+                status_badge,
+                t.tool_calls,
+                t.critic_iterations,
+                t.tokens_used,
+                t.estimated_cost,
+                t.duration_ms
             ));
         }
 

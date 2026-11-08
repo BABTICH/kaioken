@@ -1,9 +1,9 @@
-use clap::{Args, Subcommand};
 use crate::config::Config;
 use crate::memory::MemoryEngine;
 use crate::retrieval::cache::RetrievalCacheStore;
 use crate::retrieval::graph_query::GraphQueryEngine;
 use crate::retrieval::query::{RetrievalEngine, RetrievalOptions};
+use clap::{Args, Subcommand};
 
 #[derive(Subcommand, Debug)]
 pub enum RetrievalCommands {
@@ -95,7 +95,7 @@ pub async fn handle_retrieval_command(cmd: RetrievalCommands) -> anyhow::Result<
         }
         RetrievalCommands::Impact(args) => {
             let engine = GraphQueryEngine::new(&memory);
-            
+
             // Check if symbol or file
             let mut symbol_ids = Vec::new();
             let mut file_ids = Vec::new();
@@ -115,15 +115,39 @@ pub async fn handle_retrieval_command(cmd: RetrievalCommands) -> anyhow::Result<
             }
 
             if symbol_ids.is_empty() && file_ids.is_empty() {
-                println!("No matching symbol or file found in memory for: {}", args.target);
+                println!(
+                    "No matching symbol or file found in memory for: {}",
+                    args.target
+                );
                 return Ok(());
             }
 
             let subset = engine.query_subgraph(&symbol_ids, &file_ids, args.depth)?;
             println!("Impact Analysis for: '{}'", args.target);
-            println!("- Direct Callers: {}", if subset.direct_callers.is_empty() { "none".to_string() } else { subset.direct_callers.join(", ") });
-            println!("- Direct Callees: {}", if subset.direct_callees.is_empty() { "none".to_string() } else { subset.direct_callees.join(", ") });
-            println!("- Affected Tests: {}", if subset.affected_tests.is_empty() { "none".to_string() } else { subset.affected_tests.join(", ") });
+            println!(
+                "- Direct Callers: {}",
+                if subset.direct_callers.is_empty() {
+                    "none".to_string()
+                } else {
+                    subset.direct_callers.join(", ")
+                }
+            );
+            println!(
+                "- Direct Callees: {}",
+                if subset.direct_callees.is_empty() {
+                    "none".to_string()
+                } else {
+                    subset.direct_callees.join(", ")
+                }
+            );
+            println!(
+                "- Affected Tests: {}",
+                if subset.affected_tests.is_empty() {
+                    "none".to_string()
+                } else {
+                    subset.affected_tests.join(", ")
+                }
+            );
         }
         RetrievalCommands::Failures(args) => {
             let failures = if let Some(q) = args.query {
@@ -131,14 +155,16 @@ pub async fn handle_retrieval_command(cmd: RetrievalCommands) -> anyhow::Result<
                 lookup.find_failures(&[], &[], &q, args.limit)?
             } else {
                 let recs = memory.get_recent_failures(args.limit)?;
-                recs.into_iter().map(|f| crate::retrieval::FailureMemorySnippet {
-                    error_type: f.error_type,
-                    message: f.message,
-                    file_path: None,
-                    symbol_name: None,
-                    fix_summary: f.fix_summary,
-                    created_at: f.created_at,
-                }).collect()
+                recs.into_iter()
+                    .map(|f| crate::retrieval::FailureMemorySnippet {
+                        error_type: f.error_type,
+                        message: f.message,
+                        file_path: None,
+                        symbol_name: None,
+                        fix_summary: f.fix_summary,
+                        created_at: f.created_at,
+                    })
+                    .collect()
             };
 
             if failures.is_empty() {
@@ -160,7 +186,9 @@ pub async fn handle_retrieval_command(cmd: RetrievalCommands) -> anyhow::Result<
                 println!("Cleared {} cached retrieval packets.", cleared);
             } else {
                 let conn = memory.db().connection();
-                let count: i64 = conn.query_row("SELECT COUNT(*) FROM retrieval_cache", [], |r| r.get(0)).unwrap_or(0);
+                let count: i64 = conn
+                    .query_row("SELECT COUNT(*) FROM retrieval_cache", [], |r| r.get(0))
+                    .unwrap_or(0);
                 println!("Retrieval Cache: {} entries stored.", count);
             }
         }

@@ -1,6 +1,6 @@
+use chrono::Utc;
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
-use chrono::Utc;
 
 use crate::error::Result;
 use crate::health::report::{
@@ -93,7 +93,7 @@ impl HealthAuditEngine {
                 }
             })
             .collect();
-        modules.sort_by(|a, b| b.file_count.cmp(&a.file_count));
+        modules.sort_by_key(|a| std::cmp::Reverse(a.file_count));
 
         // 2. Documentation Health
         let mut fresh_docs = 0;
@@ -132,7 +132,10 @@ impl HealthAuditEngine {
         if stale_docs > 0 {
             let pts = (stale_docs as u32 * 5).min(20);
             deductions.push(ScoreDeduction {
-                reason: format!("{} stale documentation file(s) require regeneration", stale_docs),
+                reason: format!(
+                    "{} stale documentation file(s) require regeneration",
+                    stale_docs
+                ),
                 points: pts,
             });
             score -= pts as i32;
@@ -141,7 +144,10 @@ impl HealthAuditEngine {
         if !missing_doc_files.is_empty() {
             let pts = (missing_doc_files.len() as u32 * 3).min(15);
             deductions.push(ScoreDeduction {
-                reason: format!("{} source file(s) lack mirrored documentation", missing_doc_files.len()),
+                reason: format!(
+                    "{} source file(s) lack mirrored documentation",
+                    missing_doc_files.len()
+                ),
                 points: pts,
             });
             score -= pts as i32;
@@ -181,7 +187,10 @@ impl HealthAuditEngine {
         if !unreferenced_symbols.is_empty() {
             let pts = (unreferenced_symbols.len() as u32 * 2).min(15);
             deductions.push(ScoreDeduction {
-                reason: format!("{} unreferenced internal symbol(s) detected as dead code candidates", unreferenced_symbols.len()),
+                reason: format!(
+                    "{} unreferenced internal symbol(s) detected as dead code candidates",
+                    unreferenced_symbols.len()
+                ),
                 points: pts,
             });
             score -= pts as i32;
@@ -195,9 +204,7 @@ impl HealthAuditEngine {
                 .and_then(|s| s.to_str())
                 .unwrap_or("");
 
-            let has_matching_test = test_files.iter().any(|t| {
-                t.contains(base_name)
-            });
+            let has_matching_test = test_files.iter().any(|t| t.contains(base_name));
 
             if !has_matching_test && !impl_file.ends_with("main.rs") {
                 untested_files.push(impl_file.clone());
@@ -207,7 +214,10 @@ impl HealthAuditEngine {
         if !untested_files.is_empty() {
             let pts = (untested_files.len() as u32 * 2).min(15);
             deductions.push(ScoreDeduction {
-                reason: format!("{} source file(s) lack corresponding test coverage", untested_files.len()),
+                reason: format!(
+                    "{} source file(s) lack corresponding test coverage",
+                    untested_files.len()
+                ),
                 points: pts,
             });
             score -= pts as i32;
@@ -217,7 +227,10 @@ impl HealthAuditEngine {
         if !unresolved_imports.is_empty() {
             let pts = (unresolved_imports.len() as u32 * 2).min(10);
             deductions.push(ScoreDeduction {
-                reason: format!("{} unresolved raw import(s) detected in dependency graph", unresolved_imports.len()),
+                reason: format!(
+                    "{} unresolved raw import(s) detected in dependency graph",
+                    unresolved_imports.len()
+                ),
                 points: pts,
             });
             score -= pts as i32;
@@ -227,7 +240,10 @@ impl HealthAuditEngine {
         if !unresolved_failures.is_empty() {
             let pts = (unresolved_failures.len() as u32 * 5).min(20);
             deductions.push(ScoreDeduction {
-                reason: format!("{} unresolved compiler/test failure(s) pending resolution", unresolved_failures.len()),
+                reason: format!(
+                    "{} unresolved compiler/test failure(s) pending resolution",
+                    unresolved_failures.len()
+                ),
                 points: pts,
             });
             score -= pts as i32;
@@ -241,24 +257,37 @@ impl HealthAuditEngine {
             60..=74 => "C",
             40..=59 => "D",
             _ => "F",
-        }.to_string();
+        }
+        .to_string();
 
         // 7. Actionable Recommendations
         let mut recommendations = Vec::new();
         if stale_docs > 0 {
-            recommendations.push(format!("Run `kaioken docs generate --stale` to update {} stale doc(s).", stale_docs));
+            recommendations.push(format!(
+                "Run `kaioken docs generate --stale` to update {} stale doc(s).",
+                stale_docs
+            ));
         }
         if !missing_doc_files.is_empty() {
             recommendations.push(format!("Run `kaioken docs generate` to create initial documentation mirrors for {} file(s).", missing_doc_files.len()));
         }
         if !unresolved_failures.is_empty() {
-            recommendations.push(format!("Run `kaioken critic failures` to inspect and address {} active failure(s).", unresolved_failures.len()));
+            recommendations.push(format!(
+                "Run `kaioken critic failures` to inspect and address {} active failure(s).",
+                unresolved_failures.len()
+            ));
         }
         if !untested_files.is_empty() {
-            recommendations.push(format!("Add unit tests under `tests/` for {} untested module(s).", untested_files.len()));
+            recommendations.push(format!(
+                "Add unit tests under `tests/` for {} untested module(s).",
+                untested_files.len()
+            ));
         }
         if !unreferenced_symbols.is_empty() {
-            recommendations.push(format!("Review and remove or test {} dead code symbol candidate(s).", unreferenced_symbols.len()));
+            recommendations.push(format!(
+                "Review and remove or test {} dead code symbol candidate(s).",
+                unreferenced_symbols.len()
+            ));
         }
 
         Ok(HealthReport {
@@ -309,9 +338,10 @@ impl HealthAuditEngine {
             failure_memory: FailureMemorySummary {
                 unresolved_count: unresolved_failures.len(),
                 resolved_count: recent_failures.len() - unresolved_failures.len(),
-                unresolved_failures: unresolved_failures.iter().map(|f| {
-                    format!("[{}] {}", f.error_type, f.message)
-                }).collect(),
+                unresolved_failures: unresolved_failures
+                    .iter()
+                    .map(|f| format!("[{}] {}", f.error_type, f.message))
+                    .collect(),
             },
             recommendations,
         })

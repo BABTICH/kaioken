@@ -1,12 +1,14 @@
-use std::path::{Path, PathBuf};
-use std::sync::Arc;
 use crate::config::PermissionMode;
 use crate::error::Result;
-use crate::safety::approval::{ApprovalHandler, ApprovalRequest, AutoApprovalHandler, InteractiveCliApprovalHandler};
+use crate::safety::approval::{
+    ApprovalHandler, ApprovalRequest, AutoApprovalHandler, InteractiveCliApprovalHandler,
+};
 use crate::safety::audit::AuditLogger;
 use crate::safety::command_guard::CommandGuard;
 use crate::safety::path_guard::PathGuard;
 use crate::safety::redact::RedactionEngine;
+use std::path::{Path, PathBuf};
+use std::sync::Arc;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PermissionDecision {
@@ -65,7 +67,12 @@ impl SafetyPolicy {
     }
 
     /// Evaluates whether an agent action is permitted under the current mode and flags.
-    pub fn check_action(&self, action: &str, target: &str, details: &str) -> Result<PermissionDecision> {
+    pub fn check_action(
+        &self,
+        action: &str,
+        target: &str,
+        details: &str,
+    ) -> Result<PermissionDecision> {
         let decision = match action {
             // Read actions: permitted across all modes unless target is a secret file
             "read_file" | "grep" | "glob" => {
@@ -130,9 +137,7 @@ impl SafetyPolicy {
                     match self.mode {
                         PermissionMode::FullAuto => PermissionDecision::Allowed,
                         PermissionMode::SafeBash => {
-                            if self.is_command_in_allowlist(target) {
-                                PermissionDecision::Allowed
-                            } else if self.yes {
+                            if self.is_command_in_allowlist(target) || self.yes {
                                 PermissionDecision::Allowed
                             } else {
                                 let req = ApprovalRequest::new(action, target, details);
@@ -168,13 +173,18 @@ impl SafetyPolicy {
         };
 
         // Record decision in audit logger
-        let approved = matches!(decision, PermissionDecision::Allowed | PermissionDecision::SimulatedDryRun);
+        let approved = matches!(
+            decision,
+            PermissionDecision::Allowed | PermissionDecision::SimulatedDryRun
+        );
         let reason = match &decision {
             PermissionDecision::Allowed => None,
             PermissionDecision::SimulatedDryRun => Some("Dry-run simulation mode active"),
             PermissionDecision::Denied(r) => Some(r.as_str()),
         };
-        let _ = self.audit_logger.log("agent", action, target, approved, reason);
+        let _ = self
+            .audit_logger
+            .log("agent", action, target, approved, reason);
 
         Ok(decision)
     }

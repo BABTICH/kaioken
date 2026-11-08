@@ -1,12 +1,15 @@
+use kaioken::scanner::{ChangeType, GitScanner, ScanLock};
 use std::fs;
 use std::process::Command;
-use kaioken::scanner::{ChangeType, GitScanner, ScanLock};
 
 #[test]
 fn test_git_repo_root_discovery() {
     let current_dir = std::env::current_dir().unwrap();
     let root = GitScanner::find_repo_root(&current_dir);
-    assert!(root.is_ok(), "Current workspace should be inside a git repository");
+    assert!(
+        root.is_ok(),
+        "Current workspace should be inside a git repository"
+    );
 }
 
 #[test]
@@ -29,19 +32,31 @@ fn test_scan_lock_lifecycle_and_mutual_exclusion() {
     // 1. First lock acquisition succeeds
     let guard1 = ScanLock::acquire(&agent_dir).unwrap();
     let lock_file = agent_dir.join("scan.lock");
-    assert!(lock_file.exists(), "scan.lock file must exist while guard is held");
+    assert!(
+        lock_file.exists(),
+        "scan.lock file must exist while guard is held"
+    );
 
     // 2. Second concurrent acquisition must fail with LockError
     let guard2_res = ScanLock::acquire(&agent_dir);
-    assert!(guard2_res.is_err(), "Second acquisition must fail while first is active");
+    assert!(
+        guard2_res.is_err(),
+        "Second acquisition must fail while first is active"
+    );
 
     // 3. Dropping the first lock cleans up the file
     drop(guard1);
-    assert!(!lock_file.exists(), "scan.lock must be removed when guard is dropped");
+    assert!(
+        !lock_file.exists(),
+        "scan.lock must be removed when guard is dropped"
+    );
 
     // 4. Acquisition now succeeds again
     let guard3 = ScanLock::acquire(&agent_dir);
-    assert!(guard3.is_ok(), "Acquisition should succeed after previous guard is dropped");
+    assert!(
+        guard3.is_ok(),
+        "Acquisition should succeed after previous guard is dropped"
+    );
     drop(guard3);
 }
 
@@ -61,17 +76,32 @@ fn test_isolated_git_repo_change_detection() {
 
     // Configure local git identity for tests
     Command::new("git")
-        .args(["-C", repo_dir.to_str().unwrap(), "config", "user.name", "Test Runner"])
+        .args([
+            "-C",
+            repo_dir.to_str().unwrap(),
+            "config",
+            "user.name",
+            "Test Runner",
+        ])
         .output()
         .unwrap();
     Command::new("git")
-        .args(["-C", repo_dir.to_str().unwrap(), "config", "user.email", "test@kaioken.dev"])
+        .args([
+            "-C",
+            repo_dir.to_str().unwrap(),
+            "config",
+            "user.email",
+            "test@kaioken.dev",
+        ])
         .output()
         .unwrap();
 
     // Test fresh repo with 0 commits
     let head_initial = GitScanner::get_head_commit(repo_dir).unwrap();
-    assert!(head_initial.is_none(), "Fresh repo should have no HEAD commit");
+    assert!(
+        head_initial.is_none(),
+        "Fresh repo should have no HEAD commit"
+    );
 
     // Create and commit a file
     let file1 = repo_dir.join("hello.rs");
@@ -88,7 +118,13 @@ fn test_isolated_git_repo_change_detection() {
         .output()
         .unwrap();
     Command::new("git")
-        .args(["-C", repo_dir.to_str().unwrap(), "commit", "-m", "Initial commit"])
+        .args([
+            "-C",
+            repo_dir.to_str().unwrap(),
+            "commit",
+            "-m",
+            "Initial commit",
+        ])
         .output()
         .unwrap();
 
@@ -109,5 +145,8 @@ fn test_isolated_git_repo_change_detection() {
 
     // Test diff generation
     let diff = GitScanner::get_diff(repo_dir, None).unwrap();
-    assert!(diff.contains("updated"), "Diff should contain the updated modification");
+    assert!(
+        diff.contains("updated"),
+        "Diff should contain the updated modification"
+    );
 }

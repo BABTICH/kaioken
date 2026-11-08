@@ -1,8 +1,8 @@
-use std::collections::HashMap;
 use crate::retrieval::context_packet::{
-    ContextPacket, FileContextSnippet, SymbolContextSummary,
-    FailureMemorySnippet, CommitSummarySnippet, DecisionSnippet
+    CommitSummarySnippet, ContextPacket, DecisionSnippet, FailureMemorySnippet, FileContextSnippet,
+    SymbolContextSummary,
 };
+use std::collections::HashMap;
 
 pub struct TokenEstimator;
 
@@ -15,7 +15,7 @@ impl TokenEstimator {
         }
         // Count chars and adjust for punctuation / whitespace
         let char_count = text.chars().count();
-        (char_count + 3) / 4
+        char_count.div_ceil(4)
     }
 }
 
@@ -67,9 +67,13 @@ impl BudgetManager {
         let mut kept_failures: Vec<FailureMemorySnippet> = Vec::new();
         for f in packet.related_failures.drain(..) {
             let cost = TokenEstimator::estimate_tokens(&f.message)
-                + f.fix_summary.as_ref().map(|s| TokenEstimator::estimate_tokens(s)).unwrap_or(0)
+                + f.fix_summary
+                    .as_ref()
+                    .map(|s| TokenEstimator::estimate_tokens(s))
+                    .unwrap_or(0)
                 + 20;
-            if failures_tokens + cost <= self.config.max_failures_tokens || kept_failures.is_empty() {
+            if failures_tokens + cost <= self.config.max_failures_tokens || kept_failures.is_empty()
+            {
                 failures_tokens += cost;
                 kept_failures.push(f);
             } else {
@@ -110,7 +114,10 @@ impl BudgetManager {
                 if remaining_budget >= 100 {
                     let max_chars = remaining_budget * 4;
                     let truncated_content: String = file.content.chars().take(max_chars).collect();
-                    file.content = format!("{}\n// ... [TRUNCATED DUE TO TOKEN BUDGET]", truncated_content);
+                    file.content = format!(
+                        "{}\n// ... [TRUNCATED DUE TO TOKEN BUDGET]",
+                        truncated_content
+                    );
                     let new_cost = TokenEstimator::estimate_tokens(&file.content) + 20;
                     file.token_estimate = new_cost;
                     files_tokens += new_cost;
@@ -124,9 +131,24 @@ impl BudgetManager {
 
         // 4. Enforce Graph Section
         let mut graph_tokens = 0;
-        graph_tokens += packet.dependency_graph_subset.direct_callers.iter().map(|s| TokenEstimator::estimate_tokens(s)).sum::<usize>();
-        graph_tokens += packet.dependency_graph_subset.direct_callees.iter().map(|s| TokenEstimator::estimate_tokens(s)).sum::<usize>();
-        graph_tokens += packet.dependency_graph_subset.affected_tests.iter().map(|s| TokenEstimator::estimate_tokens(s)).sum::<usize>();
+        graph_tokens += packet
+            .dependency_graph_subset
+            .direct_callers
+            .iter()
+            .map(|s| TokenEstimator::estimate_tokens(s))
+            .sum::<usize>();
+        graph_tokens += packet
+            .dependency_graph_subset
+            .direct_callees
+            .iter()
+            .map(|s| TokenEstimator::estimate_tokens(s))
+            .sum::<usize>();
+        graph_tokens += packet
+            .dependency_graph_subset
+            .affected_tests
+            .iter()
+            .map(|s| TokenEstimator::estimate_tokens(s))
+            .sum::<usize>();
         if graph_tokens > self.config.max_graph_tokens {
             packet.dependency_graph_subset.direct_callers.truncate(10);
             packet.dependency_graph_subset.direct_callees.truncate(10);
@@ -167,12 +189,17 @@ impl BudgetManager {
         section_tokens.insert("commits".to_string(), commits_tokens);
 
         // Compute total tokens across all sections
-        let mut total_tokens = failures_tokens + symbols_tokens + files_tokens + graph_tokens + adr_tokens + commits_tokens;
+        let mut total_tokens = failures_tokens
+            + symbols_tokens
+            + files_tokens
+            + graph_tokens
+            + adr_tokens
+            + commits_tokens;
 
         // 7. Global Hard Ceiling Check: If total_tokens > total_budget_limit, apply Priority Dropping Sequence
         if total_tokens > self.config.total_budget_limit {
             truncated = true;
-            
+
             // Priority 1: Drop ADRs
             if !packet.architectural_decisions.is_empty() {
                 total_tokens -= adr_tokens;
@@ -181,7 +208,9 @@ impl BudgetManager {
             }
 
             // Priority 2: Drop Commits
-            if total_tokens > self.config.total_budget_limit && !packet.recent_related_commits.is_empty() {
+            if total_tokens > self.config.total_budget_limit
+                && !packet.recent_related_commits.is_empty()
+            {
                 total_tokens -= commits_tokens;
                 section_tokens.insert("commits".to_string(), 0);
                 packet.recent_related_commits.clear();
@@ -203,7 +232,10 @@ impl BudgetManager {
                 if current_chars > chars_to_drop + 100 {
                     let keep_chars = current_chars - chars_to_drop;
                     let truncated_content: String = file.content.chars().take(keep_chars).collect();
-                    file.content = format!("{}\n// ... [TRUNCATED TO FIT GLOBAL CEILING]", truncated_content);
+                    file.content = format!(
+                        "{}\n// ... [TRUNCATED TO FIT GLOBAL CEILING]",
+                        truncated_content
+                    );
                     file.token_estimate = TokenEstimator::estimate_tokens(&file.content) + 20;
                 }
                 total_tokens = self.config.total_budget_limit;
@@ -228,7 +260,7 @@ mod tests {
         let text = "Hello world! This is a test.";
         let tokens = TokenEstimator::estimate_tokens(text);
         assert!(tokens > 0);
-        assert_eq!(tokens, (text.chars().count() + 3) / 4);
+        assert_eq!(tokens, text.chars().count().div_ceil(4));
     }
 
     #[test]

@@ -44,7 +44,11 @@ impl ChatMessage {
         }
     }
 
-    pub fn tool_response(tool_call_id: impl Into<String>, name: impl Into<String>, content: impl Into<String>) -> Self {
+    pub fn tool_response(
+        tool_call_id: impl Into<String>,
+        name: impl Into<String>,
+        content: impl Into<String>,
+    ) -> Self {
         Self {
             role: "tool".to_string(),
             content: Some(content.into()),

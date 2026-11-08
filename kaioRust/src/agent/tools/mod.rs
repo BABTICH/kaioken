@@ -5,13 +5,13 @@ pub mod glob;
 pub mod grep;
 pub mod read_file;
 
-use std::future::Future;
-use std::path::PathBuf;
-use std::pin::Pin;
-use serde_json::Value;
 use crate::error::Result;
 use crate::safety::audit::AuditLogger;
 use crate::safety::command_guard::CommandGuard;
+use serde_json::Value;
+use std::future::Future;
+use std::path::PathBuf;
+use std::pin::Pin;
 
 pub type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
 
@@ -24,7 +24,11 @@ pub struct ToolContext {
 }
 
 impl ToolContext {
-    pub fn new(repo_root: PathBuf, command_guard: std::sync::Arc<CommandGuard>, audit_logger: AuditLogger) -> Self {
+    pub fn new(
+        repo_root: PathBuf,
+        command_guard: std::sync::Arc<CommandGuard>,
+        audit_logger: AuditLogger,
+    ) -> Self {
         Self {
             repo_root,
             command_guard,
@@ -33,7 +37,10 @@ impl ToolContext {
         }
     }
 
-    pub fn with_safety_policy(mut self, policy: std::sync::Arc<crate::safety::SafetyPolicy>) -> Self {
+    pub fn with_safety_policy(
+        mut self,
+        policy: std::sync::Arc<crate::safety::SafetyPolicy>,
+    ) -> Self {
         self.safety_policy = Some(policy);
         self
     }
@@ -68,7 +75,11 @@ pub trait Tool: Send + Sync {
     fn name(&self) -> &'static str;
     fn description(&self) -> &'static str;
     fn schema(&self) -> Value;
-    fn execute<'a>(&'a self, args: &'a str, ctx: &'a ToolContext) -> BoxFuture<'a, Result<ToolResult>>;
+    fn execute<'a>(
+        &'a self,
+        args: &'a str,
+        ctx: &'a ToolContext,
+    ) -> BoxFuture<'a, Result<ToolResult>>;
 }
 
 pub struct ToolRegistry {
@@ -97,7 +108,10 @@ impl ToolRegistry {
     }
 
     pub fn find(&self, name: &str) -> Option<&(dyn Tool + 'static)> {
-        self.tools.iter().find(|t| t.name() == name).map(|t| t.as_ref())
+        self.tools
+            .iter()
+            .find(|t| t.name() == name)
+            .map(|t| t.as_ref())
     }
 
     pub fn list(&self) -> &[Box<dyn Tool>] {

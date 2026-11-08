@@ -1,7 +1,7 @@
-use std::path::Path;
 use crate::error::Result;
 use crate::memory::MemoryEngine;
 use crate::retrieval::context_packet::DocStalenessWarning;
+use std::path::Path;
 
 pub struct DocLookup<'a> {
     memory: &'a MemoryEngine,

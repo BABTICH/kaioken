@@ -1,14 +1,14 @@
+use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
-use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
 
 use crate::error::Result;
 use crate::memory::file_memory::FileRecord;
 use crate::memory::symbol_memory::SymbolRecord;
 use crate::memory::MemoryEngine;
-use crate::scanner::git::{ChangedFile, ChangeType, GitCommitInfo, GitScanner};
+use crate::scanner::git::{ChangeType, ChangedFile, GitCommitInfo, GitScanner};
 use crate::scanner::languages::Language;
 use crate::scanner::tree_sitter::AstParser;
 
@@ -64,8 +64,10 @@ impl CommitAnalyzer {
         commit_info: &GitCommitInfo,
         memory: &MemoryEngine,
     ) -> Result<CommitAnalysis> {
-        let changed_files = GitScanner::get_commit_changed_files_for_hash(repo_root, &commit_info.hash)?;
-        let diff_text = GitScanner::get_commit_diff(repo_root, &commit_info.hash).unwrap_or_default();
+        let changed_files =
+            GitScanner::get_commit_changed_files_for_hash(repo_root, &commit_info.hash)?;
+        let diff_text =
+            GitScanner::get_commit_diff(repo_root, &commit_info.hash).unwrap_or_default();
         let hunk_lines_by_file = GitScanner::parse_diff_hunks_changed_lines(&diff_text);
 
         let mut changes = Vec::new();
@@ -126,7 +128,8 @@ impl CommitAnalyzer {
                                 if let Ok(ast_result) = AstParser::parse_source(content_str, lang) {
                                     memory.clear_symbols_for_file(fid)?;
                                     if !ast_result.symbols.is_empty() {
-                                        let sym_records: Vec<SymbolRecord> = ast_result.symbols
+                                        let sym_records: Vec<SymbolRecord> = ast_result
+                                            .symbols
                                             .iter()
                                             .map(|s| SymbolRecord {
                                                 id: None,
@@ -241,7 +244,8 @@ impl CommitAnalyzer {
             }
         }
 
-        let risk_level = Self::calculate_risk_level(&changed_files, touched_symbols.len()).to_string();
+        let risk_level =
+            Self::calculate_risk_level(&changed_files, touched_symbols.len()).to_string();
         let markdown_summary = Self::generate_markdown_summary(
             commit_info,
             &changed_files,
@@ -253,7 +257,10 @@ impl CommitAnalyzer {
             id: None,
             hash: commit_info.hash.clone(),
             message: commit_info.message.clone(),
-            author: Some(format!("{} <{}>", commit_info.author_name, commit_info.author_email)),
+            author: Some(format!(
+                "{} <{}>",
+                commit_info.author_name, commit_info.author_email
+            )),
             created_at: Some(commit_info.timestamp.clone()),
             summary: Some(markdown_summary.clone()),
             risk_level: Some(risk_level.clone()),
@@ -271,10 +278,18 @@ impl CommitAnalyzer {
     }
 
     /// Calculate deterministic risk level based on changed files, paths, and touched symbols.
-    pub fn calculate_risk_level(changed_files: &[ChangedFile], touched_symbols_count: usize) -> &'static str {
+    pub fn calculate_risk_level(
+        changed_files: &[ChangedFile],
+        touched_symbols_count: usize,
+    ) -> &'static str {
         let is_critical_config = changed_files.iter().any(|f| {
             let path_str = f.path.to_string_lossy().to_lowercase().replace('\\', "/");
-            let file_name = f.path.file_name().and_then(|n| n.to_str()).unwrap_or_default().to_lowercase();
+            let file_name = f
+                .path
+                .file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or_default()
+                .to_lowercase();
 
             file_name == "cargo.toml"
                 || file_name == "cargo.lock"
@@ -292,7 +307,9 @@ impl CommitAnalyzer {
                 || path_str.contains("/migrations/")
         });
 
-        let has_deletions = changed_files.iter().any(|f| f.change_type == ChangeType::Deleted);
+        let has_deletions = changed_files
+            .iter()
+            .any(|f| f.change_type == ChangeType::Deleted);
 
         if is_critical_config || has_deletions || changed_files.len() > 8 {
             "high"
@@ -317,7 +334,10 @@ impl CommitAnalyzer {
         };
 
         let mut out = String::new();
-        out.push_str(&format!("### Commit {}: {}\n", hash_short, commit_info.message));
+        out.push_str(&format!(
+            "### Commit {}: {}\n",
+            hash_short, commit_info.message
+        ));
         out.push_str(&format!(
             "- **Author:** {} <{}>\n- **Date:** {}\n- **Risk Level:** {}\n\n",
             commit_info.author_name, commit_info.author_email, commit_info.timestamp, risk_level
@@ -336,19 +356,32 @@ impl CommitAnalyzer {
         } else {
             for f in changed_files {
                 let p = f.path.to_string_lossy().replace('\\', "/");
-                out.push_str(&format!("- {} `{}` ({})\n", f.change_type.badge(), p, f.change_type.description()));
+                out.push_str(&format!(
+                    "- {} `{}` ({})\n",
+                    f.change_type.badge(),
+                    p,
+                    f.change_type.description()
+                ));
             }
             out.push('\n');
         }
 
-        out.push_str(&format!("#### Affected Symbols ({})\n", touched_symbols.len()));
+        out.push_str(&format!(
+            "#### Affected Symbols ({})\n",
+            touched_symbols.len()
+        ));
         if touched_symbols.is_empty() {
             out.push_str("*(No AST symbols directly touched by changed hunks)*\n\n");
         } else {
             for sym in touched_symbols {
                 out.push_str(&format!(
                     "- `{}` ({} in `{}`:L{}-L{}, {})\n",
-                    sym.symbol_name, sym.symbol_kind, sym.file_path, sym.line_start, sym.line_end, sym.change_type
+                    sym.symbol_name,
+                    sym.symbol_kind,
+                    sym.file_path,
+                    sym.line_start,
+                    sym.line_end,
+                    sym.change_type
                 ));
             }
             out.push('\n');

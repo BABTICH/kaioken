@@ -43,7 +43,8 @@ impl CriticReport {
         duration_ms: u128,
     ) -> Self {
         let cmd = command.into();
-        let feedback_message = DiagnosticParser::format_feedback_block(&cmd, exit_code, &diagnostics, &raw_output);
+        let feedback_message =
+            DiagnosticParser::format_feedback_block(&cmd, exit_code, &diagnostics, &raw_output);
         Self {
             passed: false,
             command: cmd,
@@ -89,7 +90,9 @@ impl CriticEngine {
             Some("cargo check".to_string())
         } else if repo_root.join("package.json").exists() {
             Some("npm test".to_string())
-        } else if repo_root.join("pyproject.toml").exists() || repo_root.join("requirements.txt").exists() {
+        } else if repo_root.join("pyproject.toml").exists()
+            || repo_root.join("requirements.txt").exists()
+        {
             Some("pytest".to_string())
         } else if repo_root.join("go.mod").exists() {
             Some("go test ./...".to_string())
@@ -113,7 +116,10 @@ impl Critic for CriticEngine {
                 Some(cmd) => cmd,
                 None => {
                     return Box::pin(async {
-                        Ok(CriticReport::success("none (no build manifest detected)", 0))
+                        Ok(CriticReport::success(
+                            "none (no build manifest detected)",
+                            0,
+                        ))
                     });
                 }
             },

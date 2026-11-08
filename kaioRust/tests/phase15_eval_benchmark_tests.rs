@@ -80,7 +80,11 @@ async fn test_evaluation_runner_executes_all_8_benchmarks() {
     assert!(scorecard.average_cost_per_task < 0.05);
 
     // Verify task names
-    let names: Vec<String> = scorecard.task_results.iter().map(|r| r.name.clone()).collect();
+    let names: Vec<String> = scorecard
+        .task_results
+        .iter()
+        .map(|r| r.name.clone())
+        .collect();
     assert!(names.contains(&"add_function".to_string()));
     assert!(names.contains(&"fix_compiler_error".to_string()));
     assert!(names.contains(&"fix_broken_test".to_string()));

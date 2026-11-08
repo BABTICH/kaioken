@@ -1,11 +1,11 @@
-use std::path::Path;
-use std::time::{Duration, Instant};
+use crate::error::{KaiokenError, Result};
+use crate::safety::redact::RedactionEngine;
 use chrono::Utc;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
+use std::path::Path;
+use std::time::{Duration, Instant};
 use tokio::process::Command;
-use crate::error::{KaiokenError, Result};
-use crate::safety::redact::RedactionEngine;
 
 pub const DEFAULT_COMMAND_TIMEOUT_SECS: u64 = 120;
 pub const MAX_OUTPUT_BYTES: usize = 100 * 1024; // 100 KB
@@ -62,7 +62,10 @@ impl CommandGuard {
     pub fn is_blocked(&self, command: &str) -> Option<String> {
         for pattern in &self.blocked_patterns {
             if pattern.is_match(command) {
-                return Some(format!("Command matches forbidden pattern: '{}'", pattern.as_str()));
+                return Some(format!(
+                    "Command matches forbidden pattern: '{}'",
+                    pattern.as_str()
+                ));
             }
         }
         None
@@ -89,7 +92,8 @@ impl CommandGuard {
     ) -> Result<CommandExecutionResult> {
         self.validate_command(command)?;
 
-        let timeout_duration = Duration::from_secs(timeout_secs.unwrap_or(DEFAULT_COMMAND_TIMEOUT_SECS));
+        let timeout_duration =
+            Duration::from_secs(timeout_secs.unwrap_or(DEFAULT_COMMAND_TIMEOUT_SECS));
         let start = Instant::now();
 
         // Spawn via platform shell
@@ -101,7 +105,9 @@ impl CommandGuard {
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .spawn()
-            .map_err(|e| KaiokenError::SafetyError(format!("Failed to spawn command '{}': {}", command, e)))?;
+            .map_err(|e| {
+                KaiokenError::SafetyError(format!("Failed to spawn command '{}': {}", command, e))
+            })?;
 
         #[cfg(not(target_os = "windows"))]
         let mut child = Command::new("sh")
@@ -111,7 +117,9 @@ impl CommandGuard {
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .spawn()
-            .map_err(|e| KaiokenError::SafetyError(format!("Failed to spawn command '{}': {}", command, e)))?;
+            .map_err(|e| {
+                KaiokenError::SafetyError(format!("Failed to spawn command '{}': {}", command, e))
+            })?;
 
         let mut stdout = child.stdout.take().ok_or_else(|| {
             KaiokenError::SafetyError("Failed to capture stdout pipe".to_string())
@@ -157,7 +165,9 @@ impl CommandGuard {
         if raw_stdout.len() > MAX_OUTPUT_BYTES {
             truncated = true;
             let log_file_notice = if let Some(ld) = log_dir {
-                let log_path = ld.join("commands").join(format!("cmd_{}.log", Utc::now().timestamp_millis()));
+                let log_path = ld
+                    .join("commands")
+                    .join(format!("cmd_{}.log", Utc::now().timestamp_millis()));
                 let _ = std::fs::create_dir_all(log_path.parent().unwrap());
                 let _ = std::fs::write(&log_path, &raw_stdout);
                 format!("Full raw output saved to {}", log_path.display())
@@ -217,7 +227,10 @@ mod tests {
         let guard = CommandGuard::default();
         let cur_dir = std::env::current_dir().unwrap();
 
-        let result = guard.execute("echo Hello Kaioken", &cur_dir, Some(10), None).await.unwrap();
+        let result = guard
+            .execute("echo Hello Kaioken", &cur_dir, Some(10), None)
+            .await
+            .unwrap();
         assert_eq!(result.exit_code, 0);
         assert!(result.stdout.contains("Hello Kaioken"));
         assert!(!result.truncated);

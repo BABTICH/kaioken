@@ -1,0 +1,37 @@
+name: Weekly Maintenance
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Monday 6 AM UTC
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: kaioRust
+
+jobs:
+  maintenance:
+    name: Weekly Scan & Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: kaioRust
+      - name: Build
+        run: cargo build --release
+      - name: Full repository scan
+        run: ./target/release/kaioken memory init && ./target/release/kaioken memory scan --no-llm
+      - name: Health audit
+        run: ./target/release/kaioken schedule --daily --json > weekly-report.json
+      - name: Security audit
+        run: cargo install cargo-audit && cargo audit
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-report-${{ github.run_number }}
+          path: kaioRust/weekly-report.json
+          retention-days: 90

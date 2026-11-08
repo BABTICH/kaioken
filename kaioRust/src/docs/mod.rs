@@ -1,11 +1,13 @@
+pub mod cascade;
 pub mod frontmatter;
+pub mod generator;
 pub mod markdown;
 pub mod stale;
-pub mod generator;
-pub mod cascade;
 
-pub use frontmatter::DocFrontmatter;
-pub use markdown::{FileDocTemplate, SymbolDocEntry, CommitDocEntry};
-pub use stale::{StalenessDetector, DocVerificationReport, DocVerificationItem, DocStalenessStatus};
-pub use generator::{DocGenerator, DocGenerateOptions, DocGenerationResult, DocBatchSummary};
 pub use cascade::{StalenessCascadeEngine, StalenessCascadeReport};
+pub use frontmatter::DocFrontmatter;
+pub use generator::{DocBatchSummary, DocGenerateOptions, DocGenerationResult, DocGenerator};
+pub use markdown::{CommitDocEntry, FileDocTemplate, SymbolDocEntry};
+pub use stale::{
+    DocStalenessStatus, DocVerificationItem, DocVerificationReport, StalenessDetector,
+};

@@ -1,0 +1,125 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+defaults:
+  run:
+    working-directory: kaioRust
+
+jobs:
+  # ─────────────────────────────────────────
+  # Job 1: Code Quality (Lint + Format)
+  # ─────────────────────────────────────────
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: kaioRust
+      - name: Check formatting
+        run: cargo fmt -- --check
+      - name: Run clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+  # ─────────────────────────────────────────
+  # Job 2: Build (Cross-Platform)
+  # ─────────────────────────────────────────
+  build:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: kaioRust
+          key: ${{ matrix.os }}
+      - name: Build
+        run: cargo build --verbose
+      - name: Build (release)
+        run: cargo build --release
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+  # ─────────────────────────────────────────
+  # Job 3: Tests
+  # ─────────────────────────────────────────
+  test:
+    name: Tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    needs: [lint]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: kaioRust
+          key: ${{ matrix.os }}-test
+      - name: Run tests
+        run: cargo test --verbose -- --nocapture
+      - name: Run tests (release mode)
+        run: cargo test --release
+        if: matrix.os == 'ubuntu-latest'
+
+  # ─────────────────────────────────────────
+  # Job 4: Security Audit
+  # ─────────────────────────────────────────
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: rustsec/audit-check@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: kaioRust
+
+  # ─────────────────────────────────────────
+  # Job 5: Health Audit (on main/master only)
+  # ─────────────────────────────────────────
+  health:
+    name: Health Audit
+    runs-on: ubuntu-latest
+    needs: [test]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for commit memory
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: kaioRust
+      - name: Build kaioken
+        run: cargo build --release
+      - name: Initialize memory
+        run: ./target/release/kaioken memory init
+      - name: Run full scan
+        run: ./target/release/kaioken memory scan --no-llm
+      - name: Generate health report
+        run: ./target/release/kaioken schedule --daily --json > health-report.json
+      - name: Upload health report
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-report
+          path: kaioRust/health-report.json

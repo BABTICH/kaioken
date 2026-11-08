@@ -1,12 +1,13 @@
 /**
- * Kaioken Desktop — content for /desktop and /docs/desktop.
+ * Kaioken Desktop — content for /desktop.
  *
- * Every claim here is read off the app itself rather than imagined:
- * surfaces from desktop/src/renderer/src/components, shortcuts,
- * window facts from electron main config, architecture from desktop/README.md.
+ * Every claim here is read off the shipped Rust app rather than imagined:
+ * routes and shortcuts from kaioRust/src/desktop/ui/app.js, window facts from
+ * kaioRust/src/desktop/gui.rs, the wire protocol from protocol.rs/ipc.rs, and
+ * the memory model from the watcher + SQLite engine.
  */
 
-export const DESKTOP_REPO_PATH = "https://github.com/babtix/kaioken/tree/master/desktop"
+export const DESKTOP_REPO_PATH = "https://github.com/BABTICH/kaioken/tree/master/kaioRust/src/desktop"
 
 /**
  * The /desktop wordmark, from website/DESKTOP APP-logo.html.
@@ -36,15 +37,16 @@ export const DESKTOP_ART = `██████╗  ███████╗ █�
 /* ── the window itself ──────────────────────────────────────────────────── */
 
 export const WINDOW = {
-  /** electron main window configuration */
-  width: 1440,
-  height: 900,
-  minWidth: 960,
-  minHeight: 640,
+  /** tao window configuration in src/desktop/gui.rs */
+  width: 1360,
+  height: 880,
+  minWidth: 1080,
+  minHeight: 680,
   /** decorations:false — the title bar is drawn by the app, not the OS */
   customChrome: true,
-  theme: "Dark",
-  background: "#080808",
+  theme: "Dark + Light",
+  /** design.css resolves the cockpit to ink-950 */
+  background: "#0a0a0b",
 }
 
 /* ── surfaces (the nav rail, in rail order) ─────────────────────────────── */
@@ -67,12 +69,12 @@ export const SURFACES: Surface[] = [
     icon: "MessageSquare",
     label: "Chat",
     key: "Ctrl+1",
-    headline: "The agent, with a real diff approver",
-    body: "The same tool-using agent as the TUI — read, list, search, write, edit, run — but every proposed change lands in a side-by-side diff with syntax highlighting instead of a y/n prompt over a unified patch.",
+    headline: "The agent, with a deny-first approval card",
+    body: "Streaming thoughts, tool results and session history in one thread. Every proposed tool call arrives as a card with its policy tier, target and diff — Enter approves, Escape denies, and dismissing is never authorization.",
     points: [
-      "Streams token by token; tool calls collapse into cards you can expand",
-      "Sessions live in .kaioken/sessions — the same ones /resume opens",
-      "Per-turn auto-approve and shell toggles, off by default",
+      "Sessions switch from the sidebar; compact a long conversation in place",
+      "WRITE_PROMPT and DANGEROUS proposals wait for an explicit decision",
+      "Auto-approve and allow-shell are per-turn toggles, off by default",
     ],
     tone: "blue",
   },
@@ -80,12 +82,12 @@ export const SURFACES: Surface[] = [
     icon: "Radar",
     label: "Research",
     key: "Ctrl+2",
-    headline: "Ask the web, get a cited report",
-    body: "A Perplexity-shaped surface wired to the daemon's research run: decompose the question, search, read, reason, gap-check, then write a report — with the ×N dial scaling how hard it works.",
+    headline: "Ask the web, get a cited dossier",
+    body: "The power meter is the actual budget: ×1–×9 stay on the normal path, ×10 runs the advanced dossier. The run streams its steps, keeps a receipt, and lands every source as a chip beside the answer.",
     points: [
-      "Every step streams as it happens, cancellable mid-run",
-      "Answers carry source chips you can open",
-      "Reports save to disk and reopen from history",
+      "Live step list with queries, pages read and grounded claims",
+      "Run receipt records path, rounds, duration and cost",
+      "Past research reopens from history without starting over",
     ],
     tone: "amber",
   },
@@ -93,12 +95,12 @@ export const SURFACES: Surface[] = [
     icon: "BookOpen",
     label: "Wiki",
     key: "Ctrl+3",
-    headline: "Read the wiki where it was written",
-    body: "kaioken serve exists because a two-thousand-line chapter with mermaid diagrams is unreadable in a terminal. The desktop app makes that browser the app: nav tree, search, rendered diagrams, no separate server to start.",
+    headline: "Read the generated wiki in place",
+    body: "A grouped chapter tree, search, table of contents and rendered markdown with provenance chips — no separate serve process to start and lose behind the IDE.",
     points: [
-      "Section tree mirrors .kaioken/wiki/ exactly",
-      "Mermaid rendered inline, code syntax-highlighted",
-      "Provenance footers link to the files a document cites",
+      "Chapters grouped by section, with reading time per page",
+      "TOC follows the active heading; code fences keep their language label",
+      "Docs health shows total, fresh and stale counts",
     ],
     tone: "orange",
   },
@@ -106,12 +108,12 @@ export const SURFACES: Surface[] = [
     icon: "Waypoints",
     label: "Graph",
     key: "Ctrl+4",
-    headline: "See what documents what",
-    body: "An Obsidian-style overview of the generated wiki. Orange nodes are pages, sage nodes are the repo files they cite — so a file with no edges is a file no document covers.",
+    headline: "See the AST, not a guess",
+    body: "The symbol topology held in .agent/memory.sqlite: functions, structs, enums and traits, with caller and dependency edges. Filter, zoom, then read deterministic documentation for the node you picked.",
     points: [
-      "Click a page to read it, a file to open it in the editor",
-      "Ctrl-click focuses a node's neighbourhood at depth N",
-      "Filter and search without leaving the canvas",
+      "Kind filters and search dim everything irrelevant",
+      "Inspector lists callers, dependencies and Level N docs",
+      "Every node carries its file path and caller count",
     ],
     tone: "sage",
   },
@@ -119,12 +121,12 @@ export const SURFACES: Surface[] = [
     icon: "Layers",
     label: "Cards",
     key: "Ctrl+5",
-    headline: "Knowledge cards, per module",
-    body: "The fixed five-file schema for every module, browsable — overview, architecture, conventions, tech stack, and setup commands when a module has its own.",
+    headline: "Failure memory, card by card",
+    body: "Every critic failure becomes a card: severity, occurrences, gotchas and anti-pattern rules. The rules the agent retrieves before it repeats the mistake are the same ones shown here.",
     points: [
-      "Freshness per module, straight from state.json hashes",
-      "Regenerate one module without re-billing the rest",
-      "modules.yaml stays editable — it is still your call",
+      "Filter by severity or what is still being watched",
+      "Detail names the module, last sighting and prevention rule",
+      "Cards accumulate from critic runs, not hand-written notes",
     ],
     tone: "green",
   },
@@ -132,12 +134,12 @@ export const SURFACES: Surface[] = [
     icon: "Code2",
     label: "Editor",
     key: "Ctrl+6",
-    headline: "Edit the plan without alt-tabbing",
-    body: "modules.yaml and wiki_plan.yaml are meant to be edited between passes. A CodeMirror 6 editor with a real terminal panel underneath means you never leave the app to do it.",
+    headline: "Code, diff, and a terminal rail",
+    body: "Open files in tabs beside the tree. Flip between code and a syntax-highlighted diff, read the review risk score, and drop a terminal drawer underneath — two terminals, one window.",
     points: [
-      "Go, Rust, Python, JS/TS, JSON, YAML, Markdown, HTML, CSS",
-      "Ctrl+S saves, Ctrl+F finds, Ctrl+P switches files",
-      "Ctrl+` opens a genuine PTY-backed shell, not a log view",
+      "Tabs and tree share dirty markers and close controls",
+      "Code / Diff segmented view with language and path chips",
+      "Ctrl+S saves; Ctrl+` opens a real terminal, not a log view",
     ],
     tone: "blue",
   },
@@ -146,11 +148,11 @@ export const SURFACES: Surface[] = [
     label: "Browser",
     key: "Ctrl+7",
     headline: "Tabs, in the app",
-    body: "Docs, the served wiki, and whatever the research run cited — opened in tabs beside your work rather than in a window you lose behind the IDE.",
+    body: "A tabbed surface for docs and web pages, plus an API inspector for the loopback daemon: method, status, latency, headers and JSON body. Pages that refuse framing open in the system browser instead.",
     points: [
-      "Tabs, history, bookmarks, a new-tab page with top sites",
-      "Search engine of your choosing from the address bar",
-      "Project destinations always one click away",
+      "Omnibox with back, forward, reload and external open",
+      "API inspector captures request and response side by side",
+      "New-tab page keeps project destinations one click away",
     ],
     tone: "amber",
   },
@@ -158,12 +160,12 @@ export const SURFACES: Surface[] = [
     icon: "Zap",
     label: "Activity",
     key: "Ctrl+8",
-    headline: "Several pipelines, one console",
-    body: "wiki, update, generate, skills and scan runs stream progress over SSE. Watch three at once, read the log of any of them, cancel the one that is going wrong.",
+    headline: "Runs, events, one ledger",
+    body: "Start a wiki, cards, skills, scan, update or doctor run and watch it stream. The same panel shows memory learning stats, the safety audit ledger and which daemon the app is talking to.",
     points: [
-      "Live per-run progress, not a spinner",
-      "A badge on the rail counts what is still moving",
-      "Failed sections are listed so /wiki retry knows where to look",
+      "Pipeline strip runs init → scan → plan → generate → wiki → update",
+      "Depth slider from ×1 fast to ×10 exhaustive",
+      "Live per-run progress and logs; history keeps the outcome",
     ],
     tone: "orange",
   },
@@ -172,11 +174,11 @@ export const SURFACES: Surface[] = [
     label: "Extensions",
     key: "Ctrl+9",
     headline: "Capabilities you opt into",
-    body: "Packages installed from GitHub releases. Declarative ones contribute skills and never execute code; MCP and WASM ones contribute agent tools and stay inert until you trust that exact installed version.",
+    body: "Four tabs — installed packages, the built-in tool registry, MCP servers and hooks, and the registry. Executable packages stay inert until you trust that exact installed version.",
     points: [
-      "The trust dialog names precisely what it would let run",
-      "Version-pinned trust — an update asks again",
-      "Browse the registry from the rail or the palette",
+      "Seven built-in tools across READ_ONLY, WRITE_PROMPT and DANGEROUS",
+      "Trust is version-pinned; an update asks again",
+      "Install from owner/repo@version, one install per machine",
     ],
     tone: "sage",
   },
@@ -185,11 +187,11 @@ export const SURFACES: Surface[] = [
     label: "Cost",
     key: "",
     headline: "Where the money went",
-    body: "The TUI hides spend behind /cost. Here it is a dashboard: 7, 30, 90 days or all time, broken down by model and by run, scoped to one workspace or across all of them.",
+    body: "Total spend, calls, tokens and local calls across 7, 30, 90 days or all time, scoped to one repo or every repo. Breakdowns by operation, model, provider and workspace sit above a daily bar chart.",
     points: [
-      "Breakdowns lead; the grand total is one line",
-      "Precision that survives fractions of a cent",
-      "Live token counter in the status bar besides",
+      "Provider-reported and catalog-estimated spend are separated",
+      "Pricing catalog freshness is stated, not implied",
+      "Per-workspace bars answer which repo is expensive",
     ],
     tone: "green",
   },
@@ -197,27 +199,14 @@ export const SURFACES: Surface[] = [
     icon: "Settings",
     label: "Settings",
     key: "Ctrl+,",
-    headline: "One config, both surfaces",
-    body: "Provider, model, keys, search backend and steering notes — written to the same ~/.kaioken/config.yaml the CLI reads. Change it here, the terminal sees it.",
+    headline: "One config, one daemon",
+    body: "Permission mode, model and base URL, research provider and page reader, API key presence, daemon mode and watcher debounce, and theme — saved back to the daemon configuration.",
     points: [
-      "~20 providers, most OpenAI-compatible, plus Anthropic native",
-      "Local models discovered from a running Ollama",
-      "Light and dark, toggled from the status bar",
+      "Read only, edit with approval, or full auto",
+      "Keys are never echoed back; the UI shows presence only",
+      "Embedded or daemon mode, with endpoint and debounce",
     ],
     tone: "blue",
-  },
-  {
-    icon: "FolderOpen",
-    label: "Repos",
-    key: "Ctrl+O",
-    headline: "Open, switch, drop",
-    body: "The workspace picker shows recent repos, their scan stats, and how stale each knowledge base is. Drop a folder onto the window or pick from recents.",
-    points: [
-      "Recent workspaces with module counts and freshness",
-      "Repository scan with language breakdown",
-      "Drag-and-drop a folder to open it instantly",
-    ],
-    tone: "sage",
   },
 ]
 
@@ -235,40 +224,40 @@ export interface Layer {
 
 export const LAYERS: Layer[] = [
   {
-    id: "webview",
-    title: "React front-end",
+    id: "cockpit",
+    title: "WebView cockpit",
     subtitle: "the surface",
     detail:
-      "React 19, Vite 6 and Tailwind 4 — the same design tokens as this website, which are themselves lifted from the TUI's ANSI palette. Route-level code splitting keeps the editor's language packs off the path of someone who only opens Chat.",
+      "Vanilla HTML, CSS and an ES state machine, compiled into the binary with include_str!. No React, no bundler, no dev server. Rust pushes a full snapshot; the UI deep-merges it by revision and keeps selection, drafts and toasts.",
     tone: "blue",
-    parts: ["React 19", "Vite 6", "Tailwind 4", "zustand", "CodeMirror 6", "xterm.js"],
+    parts: ["HTML/CSS/ES", "include_str!", "snapshot merge", "dark + light"],
   },
   {
-    id: "electron",
-    title: "Electron runtime shell",
-    subtitle: "context-isolated & multi-process",
+    id: "host",
+    title: "tao + wry host",
+    subtitle: "the native shell",
     detail:
-      "Electron supervises the engine daemon, orchestrates native OS windows, and provides isolated context bridges for secure IPC. No engine logic is locked inside the desktop wrapper, ensuring zero drift between CLI and desktop.",
+      "tao owns the window and event loop; wry embeds the WebView the OS already ships — WebView2, WKWebView or WebKitGTK. Borderless chrome, drag, 5px resize hit-testing, minimize and maximize are Rust events, not browser chrome.",
     tone: "orange",
-    parts: ["Electron 44", "main process", "preload bridge", "isolated IPC"],
+    parts: ["tao 0.28", "wry 0.42", "WebView2 / WKWebView", "borderless chrome"],
   },
   {
     id: "daemon",
-    title: "kaioken daemon",
-    subtitle: "the existing Go engine",
+    title: "kaioken watch",
+    subtitle: "the shared daemon",
     detail:
-      "A subcommand on the same binary the terminal runs. It exposes agent, wiki, skills, plan, generate, scan, session, config and cost over loopback HTTP, with Server-Sent Events for progress and token deltas. Because it is plain HTTP, every screen in the app is reproducible with curl.",
+      "A long-running Rust process that watches the workspace, re-parses changed ASTs and serves line-delimited JSON-RPC on 127.0.0.1:47890. Requests carry an id and a 10s deadline; FileChanged, MemoryUpdated and Heartbeat arrive as broadcast events. No daemon? The desktop starts an embedded runtime and says so.",
     tone: "amber",
-    parts: ["loopback only", "bearer token", "SSE stream", "curl-testable"],
+    parts: ["127.0.0.1:47890", "JSON-RPC", "broadcast events", "embedded fallback"],
   },
   {
     id: "disk",
-    title: ".kaioken/ on disk",
+    title: "SQLite memory",
     subtitle: "one source of truth",
     detail:
-      "No app-private database. Run kaioken wiki in a terminal and the result appears in the app; generate from the app and the CLI sees it. The app is a second window onto the same files, not a second system.",
+      "Tree-sitter parses Rust, TypeScript/JS and Python; SHA-256 hashes skip unchanged files. .agent/memory.sqlite runs in WAL mode and holds files, symbols, edges, docs, failures and audit entries — the state the desktop, TUI and CLI all read.",
     tone: "green",
-    parts: ["config.yaml", "modules.yaml", "wiki/", "knowledge/", "sessions/"],
+    parts: [".agent/memory.sqlite", "WAL", "tree-sitter", "SHA-256"],
   },
 ]
 
@@ -285,49 +274,55 @@ export interface Comparison {
 export const COMPARISON: Comparison[] = [
   {
     job: "Chatting with the agent",
-    tui: "Excellent — it is a terminal app in a terminal",
-    desktop: "The same agent, with rendered markdown",
+    tui: "Streams in the terminal",
+    desktop: "The same agent, rendered markdown",
     winner: "tie",
   },
   {
-    job: "Approving a diff",
+    job: "Approving a write",
     tui: "y/n over a unified patch",
-    desktop: "Side-by-side, syntax-highlighted, per-hunk",
+    desktop: "Tiered card, diff, Enter or Escape",
     winner: "desktop",
   },
   {
     job: "Reading a wiki chapter",
-    tui: "Not possible — serve renders it elsewhere",
-    desktop: "Nav tree, search, mermaid, in-app",
+    tui: "Not possible — use the preview",
+    desktop: "Tree, search and TOC in-app",
     winner: "desktop",
   },
   {
-    job: "Editing modules.yaml between passes",
-    tui: "Alt-tab to an editor and hope it still parses",
-    desktop: "Edit in place, validated, terminal underneath",
+    job: "Inspecting the symbol graph",
+    tui: "Memory commands only",
+    desktop: "Topology, callers and dependencies",
     winner: "desktop",
   },
   {
-    job: "Watching three runs at once",
+    job: "Editing files between passes",
+    tui: "Alt-tab to an editor",
+    desktop: "Tabs, diff mode, save and terminal",
+    winner: "desktop",
+  },
+  {
+    job: "Watching a long run",
     tui: "One foreground pipeline",
-    desktop: "A run console with live per-run progress",
+    desktop: "Live progress, logs and history",
     winner: "desktop",
   },
   {
     job: "Knowing what you spent",
-    tui: "/cost, when you remember to ask",
-    desktop: "Always in the status bar, dashboard behind it",
+    tui: "A usage command, when you remember",
+    desktop: "Cost dashboard and status bar",
     winner: "desktop",
   },
   {
     job: "Working over SSH on a box with no GUI",
     tui: "Exactly what it is for",
-    desktop: "Wrong tool — use the binary",
+    desktop: "Wrong tool — use the TUI",
     winner: "tui",
   },
   {
     job: "Scripting it in CI",
-    tui: "A single binary with subcommands and exit codes",
+    tui: "The binary and its subcommands",
     desktop: "Not the point",
     winner: "tui",
   },
@@ -337,60 +332,62 @@ export const COMPARISON: Comparison[] = [
 
 export const PRINCIPLES: { icon: string; title: string; body: string }[] = [
   {
-    icon: "ShieldCheck",
-    title: "Local and offline-first",
-    body: "No telemetry, no account, no phone-home. The only network traffic the app makes is to the LLM provider you configured — and to whatever you open in the browser tab.",
-  },
-  {
-    icon: "Boxes",
-    title: "No engine rewrite",
-    body: "Every capability comes from Go packages the CLI already shipped. The new Go code is transport, which is why the desktop app and the terminal cannot drift apart.",
+    icon: "Cpu",
+    title: "Native, not bundled",
+    body: "The window is the OS WebView driven by Rust. No Electron, no Chromium download, no Node runtime and no npm install.",
   },
   {
     icon: "GitMerge",
-    title: "One directory, two windows",
-    body: "The app reads and writes the same .kaioken/ as the CLI. Neither surface owns the state; the repository does.",
+    title: "One state model",
+    body: "Rust owns the snapshot; the WebView merges it by revision. A state push never reloads the page, so selection and drafts survive.",
+  },
+  {
+    icon: "ShieldCheck",
+    title: "Deny-first approvals",
+    body: "Writes and shell commands arrive as proposals. Escape denies, dismissal is never authorization, and DANGEROUS asks even under full-auto.",
   },
   {
     icon: "Plug",
-    title: "Loopback and locked down",
-    body: "The daemon binds to 127.0.0.1 with a per-session bearer token, and the WebView runs under a CSP that permits connections to nothing else.",
+    title: "Loopback only",
+    body: "The daemon binds 127.0.0.1, never a public interface. The desktop shares that socket and the same SQLite memory as the TUI.",
   },
 ]
 
-/* ── shortcuts (mirrors desktop/src/lib/shortcuts.ts) ───────────────────── */
+/* ── shortcuts (mirrors kaioRust/src/desktop/ui/app.js) ─────────────────── */
 
 export const SHORTCUT_GROUPS: { group: string; items: { keys: string; label: string }[] }[] = [
   {
     group: "General",
     items: [
       { keys: "Ctrl+K", label: "Command palette" },
-      { keys: "Ctrl+P", label: "Quick file switcher" },
-      { keys: "Ctrl+B", label: "Toggle explorer sidebar" },
+      { keys: "Ctrl+P", label: "Quick open file" },
+      { keys: "Ctrl+Shift+S", label: "Run codebase scan" },
+      { keys: "Ctrl+Shift+D", label: "Run environment doctor" },
       { keys: "?", label: "Shortcut help" },
-      { keys: "Esc", label: "Close dialog" },
+      { keys: "Esc", label: "Close dialog or deny tool" },
     ],
   },
   {
     group: "Navigation",
     items: [
-      { keys: "Ctrl+1…9", label: "Jump to any surface" },
+      { keys: "Ctrl+1…9", label: "Jump to a surface" },
       { keys: "Ctrl+,", label: "Settings" },
     ],
   },
   {
-    group: "Chat",
+    group: "Chat & Agent",
     items: [
       { keys: "Ctrl+N", label: "New chat session" },
-      { keys: "Enter", label: "Send message" },
+      { keys: "Ctrl+Shift+C", label: "Compact conversation" },
+      { keys: "Enter", label: "Send message / approve proposal" },
       { keys: "Alt+Enter", label: "New line" },
+      { keys: "Esc", label: "Deny proposal" },
     ],
   },
   {
-    group: "Editor",
+    group: "Editor & Terminal",
     items: [
       { keys: "Ctrl+S", label: "Save file" },
-      { keys: "Ctrl+F", label: "Find in file" },
       { keys: "Ctrl+`", label: "Toggle terminal" },
     ],
   },
@@ -403,11 +400,12 @@ export const SHORTCUT_GROUPS: { group: string; items: { keys: string; label: str
     ],
   },
   {
-    group: "Workspaces",
+    group: "Research",
     items: [
-      { keys: "Ctrl+O", label: "Open workspace" },
-      { keys: "Ctrl+R", label: "Reload workspace state" },
-      { keys: "Ctrl+Shift+F", label: "Global symbol search" },
+      { keys: "×1–×9", label: "Normal budget" },
+      { keys: "×10", label: "Advanced dossier" },
+      { keys: "Enter", label: "Start research" },
+      { keys: "Esc", label: "Stop or close" },
     ],
   },
 ]
@@ -417,7 +415,7 @@ export const SHORTCUT_GROUPS: { group: string; items: { keys: string; label: str
 export interface Platform {
   id: "windows" | "macos" | "linux"
   label: string
-  /** bundle targets from tauri.conf.json → bundle.targets */
+  /** the system WebView each platform provides */
   artifacts: string
   note: string
 }
@@ -426,55 +424,56 @@ export const PLATFORMS: Platform[] = [
   {
     id: "windows",
     label: "Windows",
-    artifacts: "NSIS installer (.exe) & Portable",
-    note: "High-performance Chromium rendering with native Windows frameless styling and DWM effects.",
+    artifacts: "WebView2 · Edge runtime",
+    note: "Borderless window with tao-managed drag, resize and maximize. WebView2 is already present on Windows 10/11.",
   },
   {
     id: "macos",
     label: "macOS",
-    artifacts: "DMG (.dmg) & Universal Binary",
-    note: "Native macOS menu bar integration, dark mode, and Apple Silicon + Intel packaging.",
+    artifacts: "WKWebView · universal binary",
+    note: "System WebView, dark and light palettes, Apple Silicon and Intel from one cargo build.",
   },
   {
     id: "linux",
     label: "Linux",
-    artifacts: "AppImage & Debian (.deb)",
-    note: "Zero-dependency portable AppImage or native system packages.",
+    artifacts: "WebKitGTK 4.1",
+    note: "Needs libwebkit2gtk-4.1. AppImage and .deb packaging are not wired yet, so run the release binary.",
   },
 ]
 
-/** Honest status of distribution — desktop studio is currently under construction. */
+/** Honest status of distribution — implemented, still growing. */
 export const DISTRIBUTION_NOTE =
-  "Kaioken 2 Desktop Studio is actively under construction and undergoing rapid feature development. The application has transitioned to Electron for enhanced stability and multi-process architecture. Developer builds run directly via npm run dev inside desktop/."
+  "Kaioken Desktop is implemented in Phase 24 and ships inside the Rust binary. The window, IPC, embedded fallback, approval flow, memory graph, diff review and docs health are live; chat history, research, wiki, extensions and cost panels still render seeded showcase data until their telemetry backends are wired to IPC. There are no signed installers yet — build from source and run kaioken desktop."
 
-export const BUILD_STEPS = `# prerequisites: Node >= 20, npm / pnpm
-# Pure Node/TypeScript toolchain (no Rust or C++ compiler required)
+export const BUILD_STEPS = `# prerequisites: Rust stable + the OS WebView runtime
+# Windows: WebView2 · macOS: WKWebView · Linux: libwebkit2gtk-4.1
 
-git clone https://github.com/babtix/kaioken
-cd kaioken/desktop
+git clone https://github.com/BABTICH/kaioken
+cd kaioken/kaioRust
 
-npm install
-npm run dev            # launches Electron in development with instant HMR
+cargo run -- watch --daemon --ipc-port 47890   # optional shared daemon
+cargo run -- desktop --tab chat                 # connect, or fall back embedded
+cargo run -- desktop --embedded --tab graph
 
-# package production installers for your platform
-npm run build
-npx electron-builder`
+cargo build --release                           # target/release/kaioken`
 
-export const CURL_PROOF = `# the app is only a client — the daemon answers plain HTTP
-kaioken daemon --port 54312
+export const RUN_PROOF = `# one binary: the daemon, the window, the terminal UI
+kaioken watch --daemon
+#   JSON-RPC on 127.0.0.1:47890
+#   FileChanged · MemoryUpdated · Heartbeat
 
-curl -H "Authorization: Bearer $KAIOKEN_TOKEN" \\
-  http://127.0.0.1:54312/api/workspace
+kaioken desktop
+#   probes the daemon for 1.5s
+#   no answer? embedded runtime, with a warning
 
-# and streams progress as Server-Sent Events
-curl -N -H "Authorization: Bearer $KAIOKEN_TOKEN" \\
-  http://127.0.0.1:54312/api/events`
+kaioken desktop --headless
+#   prints the cockpit as a terminal frame`
 
 /* ── numbers worth stating once ─────────────────────────────────────────── */
 
 export const DESKTOP_STATS: { value: string; label: string }[] = [
-  { value: "12", label: "surfaces" },
-  { value: "1", label: "extra process" },
-  { value: "0", label: "telemetry endpoints" },
-  { value: "3", label: "platforms" },
+  { value: "11", label: "surfaces" },
+  { value: "1", label: "Rust binary" },
+  { value: "0", label: "Node runtimes" },
+  { value: "3", label: "WebView backends" },
 ]

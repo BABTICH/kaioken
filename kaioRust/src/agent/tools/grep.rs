@@ -1,11 +1,11 @@
-use std::path::Path;
-use regex::Regex;
-use serde::Deserialize;
-use serde_json::{json, Value};
+use super::{BoxFuture, Tool, ToolContext, ToolResult};
 use crate::error::Result;
 use crate::safety::path_guard::PathGuard;
 use crate::safety::redact::RedactionEngine;
-use super::{BoxFuture, Tool, ToolContext, ToolResult};
+use regex::Regex;
+use serde::Deserialize;
+use serde_json::{json, Value};
+use std::path::Path;
 
 pub struct GrepTool;
 
@@ -41,14 +41,23 @@ impl Tool for GrepTool {
         })
     }
 
-    fn execute<'a>(&'a self, args: &'a str, ctx: &'a ToolContext) -> BoxFuture<'a, Result<ToolResult>> {
+    fn execute<'a>(
+        &'a self,
+        args: &'a str,
+        ctx: &'a ToolContext,
+    ) -> BoxFuture<'a, Result<ToolResult>> {
         let repo_root = ctx.repo_root.clone();
         let audit_logger = ctx.audit_logger.clone();
         let args_str = args.to_string();
         Box::pin(async move {
             let parsed: GrepArgs = match serde_json::from_str(&args_str) {
                 Ok(a) => a,
-                Err(e) => return Ok(ToolResult::error(format!("Invalid arguments for grep_search: {}", e))),
+                Err(e) => {
+                    return Ok(ToolResult::error(format!(
+                        "Invalid arguments for grep_search: {}",
+                        e
+                    )))
+                }
             };
 
             let search_dir = match &parsed.path {
@@ -61,7 +70,12 @@ impl Tool for GrepTool {
 
             let re = match Regex::new(&parsed.query) {
                 Ok(r) => r,
-                Err(e) => return Ok(ToolResult::error(format!("Invalid regex query '{}': {}", parsed.query, e))),
+                Err(e) => {
+                    return Ok(ToolResult::error(format!(
+                        "Invalid regex query '{}': {}",
+                        parsed.query, e
+                    )))
+                }
             };
 
             let mut matches = Vec::new();
@@ -70,19 +84,35 @@ impl Tool for GrepTool {
             let _ = audit_logger.log("agent", "grep_search", &parsed.query, true, None);
 
             if matches.is_empty() {
-                Ok(ToolResult::success(format!("No matches found for '{}'.", parsed.query)))
+                Ok(ToolResult::success(format!(
+                    "No matches found for '{}'.",
+                    parsed.query
+                )))
             } else {
                 let count = matches.len();
                 let output = matches.join("\n");
-                let notice = if count >= 100 { "\n[Output capped at 100 matches]" } else { "" };
-                Ok(ToolResult::success(format!("Found {} matches:\n{}{}", count, output, notice)))
+                let notice = if count >= 100 {
+                    "\n[Output capped at 100 matches]"
+                } else {
+                    ""
+                };
+                Ok(ToolResult::success(format!(
+                    "Found {} matches:\n{}{}",
+                    count, output, notice
+                )))
             }
         })
     }
 }
 
 impl GrepTool {
-    fn walk_and_grep(current: &Path, root: &Path, re: &Regex, matches: &mut Vec<String>, limit: usize) {
+    fn walk_and_grep(
+        current: &Path,
+        root: &Path,
+        re: &Regex,
+        matches: &mut Vec<String>,
+        limit: usize,
+    ) {
         if matches.len() >= limit {
             return;
         }
@@ -92,7 +122,11 @@ impl GrepTool {
                 return;
             }
             if let Ok(content) = std::fs::read_to_string(current) {
-                let rel = current.strip_prefix(root).unwrap_or(current).to_string_lossy().replace('\\', "/");
+                let rel = current
+                    .strip_prefix(root)
+                    .unwrap_or(current)
+                    .to_string_lossy()
+                    .replace('\\', "/");
                 for (idx, line) in content.lines().enumerate() {
                     if re.is_match(line) {
                         matches.push(format!("{}:{}: {}", rel, idx + 1, line.trim()));

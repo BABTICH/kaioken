@@ -1,7 +1,7 @@
+use crate::error::{KaiokenError, Result};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;
-use crate::error::{KaiokenError, Result};
 
 pub const SCAN_LOCK_FILE: &str = "scan.lock";
 pub const STALE_LOCK_TIMEOUT_SECS: u64 = 300; // 5 minutes

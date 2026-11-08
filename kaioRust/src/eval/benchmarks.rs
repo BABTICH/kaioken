@@ -133,7 +133,10 @@ impl BenchmarkTask for FixBrokenTestBenchmark {
             let file_path = temp.path().join("tests").join("math_test.rs");
             fs::create_dir_all(file_path.parent().unwrap())?;
             // Broken assertion
-            fs::write(&file_path, "#[test]\nfn test_sum() { assert_eq!(2 + 2, 5); }\n")?;
+            fs::write(
+                &file_path,
+                "#[test]\nfn test_sum() { assert_eq!(2 + 2, 5); }\n",
+            )?;
 
             // Repair assertion
             let repaired = "#[test]\nfn test_sum() { assert_eq!(2 + 2, 4); }\n";
@@ -183,8 +186,14 @@ impl BenchmarkTask for CrossFileRenameBenchmark {
             let file_c = src.join("main.rs");
 
             fs::write(&file_a, "pub struct LegacyUser { pub id: u64 }\n")?;
-            fs::write(&file_b, "use crate::models::LegacyUser;\npub fn process(u: LegacyUser) {}\n")?;
-            fs::write(&file_c, "use crate::models::LegacyUser;\nfn main() { let _u = LegacyUser { id: 1 }; }\n")?;
+            fs::write(
+                &file_b,
+                "use crate::models::LegacyUser;\npub fn process(u: LegacyUser) {}\n",
+            )?;
+            fs::write(
+                &file_c,
+                "use crate::models::LegacyUser;\nfn main() { let _u = LegacyUser { id: 1 }; }\n",
+            )?;
 
             // Perform rename LegacyUser -> ModernUser across all 3 files
             for path in [&file_a, &file_b, &file_c] {
@@ -236,7 +245,10 @@ impl BenchmarkTask for AddUnitTestBenchmark {
             let temp = TempDir::new()?;
             let file_path = temp.path().join("src").join("math.rs");
             fs::create_dir_all(file_path.parent().unwrap())?;
-            fs::write(&file_path, "pub fn is_even(n: i64) -> bool { n % 2 == 0 }\n")?;
+            fs::write(
+                &file_path,
+                "pub fn is_even(n: i64) -> bool { n % 2 == 0 }\n",
+            )?;
 
             // Add test suite
             let tests = "\n#[cfg(test)]\nmod tests {\n    use super::*;\n    #[test]\n    fn test_zero() { assert!(is_even(0)); }\n    #[test]\n    fn test_positive_even() { assert!(is_even(42)); }\n    #[test]\n    fn test_positive_odd() { assert!(!is_even(7)); }\n    #[test]\n    fn test_negative() { assert!(is_even(-4)); }\n}\n";
@@ -259,7 +271,8 @@ impl BenchmarkTask for AddUnitTestBenchmark {
                 tokens_used: 310,
                 estimated_cost: 0.0006,
                 safety_violations: 0,
-                notes: "Added 4 unit tests covering 0, positive, odd, and negative cases".to_string(),
+                notes: "Added 4 unit tests covering 0, positive, odd, and negative cases"
+                    .to_string(),
             })
         })
     }
@@ -379,9 +392,14 @@ impl BenchmarkTask for SyncMirroredDocsBenchmark {
 
             let doc_file = docs_root.join("src").join("api.md");
             let exists = doc_file.exists();
-            let content = if exists { fs::read_to_string(&doc_file)? } else { String::new() };
-            let (fm, _) = DocFrontmatter::parse_from_markdown(&content)
-                .ok_or_else(|| KaiokenError::DocError("Failed to parse doc frontmatter".to_string()))?;
+            let content = if exists {
+                fs::read_to_string(&doc_file)?
+            } else {
+                String::new()
+            };
+            let (fm, _) = DocFrontmatter::parse_from_markdown(&content).ok_or_else(|| {
+                KaiokenError::DocError("Failed to parse doc frontmatter".to_string())
+            })?;
             let passed = exists && fm.source_hash == "sha_version_2";
 
             Ok(BenchmarkResult {
@@ -462,8 +480,18 @@ impl BenchmarkTask for ImpactAnalysisBenchmark {
 
             memory.insert_symbols(f1, &[sym_login, sym_validate])?;
             let symbols = memory.get_symbols_for_file(f1)?;
-            let s_login = symbols.iter().find(|s| s.name == "login").unwrap().id.unwrap();
-            let s_validate = symbols.iter().find(|s| s.name == "validate_token").unwrap().id.unwrap();
+            let s_login = symbols
+                .iter()
+                .find(|s| s.name == "login")
+                .unwrap()
+                .id
+                .unwrap();
+            let s_validate = symbols
+                .iter()
+                .find(|s| s.name == "validate_token")
+                .unwrap()
+                .id
+                .unwrap();
 
             // login calls validate_token
             memory.insert_edge(&EdgeRecord {
@@ -475,7 +503,10 @@ impl BenchmarkTask for ImpactAnalysisBenchmark {
 
             let query_engine = GraphQueryEngine::new(&memory);
             let graph_subset = query_engine.query_subgraph(&[s_validate], &[f1], 1)?;
-            let passed = graph_subset.direct_callers.iter().any(|c| c.contains("login"));
+            let passed = graph_subset
+                .direct_callers
+                .iter()
+                .any(|c| c.contains("login"));
 
             Ok(BenchmarkResult {
                 name: self.name().to_string(),

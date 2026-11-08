@@ -1,7 +1,7 @@
+use crate::eval::{BenchmarkResult, EvaluationRunner};
+use clap::{Args, Subcommand};
 use std::fs;
 use std::path::PathBuf;
-use clap::{Args, Subcommand};
-use crate::eval::{BenchmarkResult, EvaluationRunner};
 
 #[derive(Subcommand, Debug)]
 pub enum EvalCommands {
@@ -44,7 +44,9 @@ pub async fn handle_eval_command(cmd: EvalCommands) -> anyhow::Result<()> {
                 );
             };
 
-            let scorecard = runner.run_all(args.filter.as_deref(), Some(&progress)).await?;
+            let scorecard = runner
+                .run_all(args.filter.as_deref(), Some(&progress))
+                .await?;
 
             println!("\n{}", scorecard.to_markdown());
 
@@ -68,7 +70,10 @@ pub async fn handle_eval_command(cmd: EvalCommands) -> anyhow::Result<()> {
             };
 
             fs::write(&report_path, content)?;
-            println!("📄 Saved evaluation scorecard to: {}", report_path.display());
+            println!(
+                "📄 Saved evaluation scorecard to: {}",
+                report_path.display()
+            );
         }
     }
 

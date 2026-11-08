@@ -1,7 +1,7 @@
-use std::fs;
-use std::path::{Path, PathBuf};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
+use std::fs;
+use std::path::{Path, PathBuf};
 
 use crate::docs::frontmatter::DocFrontmatter;
 use crate::docs::markdown::{CommitDocEntry, FileDocTemplate, SymbolDocEntry};
@@ -78,13 +78,29 @@ impl DocGenerator {
             let ext_lower = ext.to_lowercase();
             if matches!(
                 ext_lower.as_str(),
-                "rs" | "ts" | "tsx" | "js" | "jsx" | "py" | "go" | "c" | "cpp" | "h" | "hpp" | "java" | "cs" | "rb" | "php"
+                "rs" | "ts"
+                    | "tsx"
+                    | "js"
+                    | "jsx"
+                    | "py"
+                    | "go"
+                    | "c"
+                    | "cpp"
+                    | "h"
+                    | "hpp"
+                    | "java"
+                    | "cs"
+                    | "rb"
+                    | "php"
             ) {
                 mirrored.set_extension("md");
             } else if ext_lower == "md" {
                 // Already markdown, keep as is
             } else {
-                let filename = source_relative_path.file_name().unwrap_or_default().to_string_lossy();
+                let filename = source_relative_path
+                    .file_name()
+                    .unwrap_or_default()
+                    .to_string_lossy();
                 mirrored.set_file_name(format!("{}.md", filename));
             }
         } else {
@@ -157,7 +173,10 @@ impl DocGenerator {
             let entry = SymbolDocEntry {
                 name: sym.name.clone(),
                 kind: sym.kind.clone(),
-                visibility: sym.visibility.clone().unwrap_or_else(|| "private".to_string()),
+                visibility: sym
+                    .visibility
+                    .clone()
+                    .unwrap_or_else(|| "private".to_string()),
                 signature: sym.signature.clone(),
                 line_start: sym.line_start,
                 line_end: sym.line_end,
@@ -180,7 +199,11 @@ impl DocGenerator {
         let commit_entries: Vec<CommitDocEntry> = recent_commits
             .into_iter()
             .map(|c| CommitDocEntry {
-                hash_short: if c.hash.len() >= 8 { c.hash[0..8].to_string() } else { c.hash },
+                hash_short: if c.hash.len() >= 8 {
+                    c.hash[0..8].to_string()
+                } else {
+                    c.hash
+                },
                 message: c.message,
                 author: c.author,
                 date: c.created_at,
@@ -189,7 +212,11 @@ impl DocGenerator {
 
         // Infer Purpose (Level 0: deterministic fact-based heuristics)
         let purpose = file.summary.clone().unwrap_or_else(|| {
-            Self::infer_deterministic_purpose(&file.path, file.language.as_deref().unwrap_or("unknown"), &public_api)
+            Self::infer_deterministic_purpose(
+                &file.path,
+                file.language.as_deref().unwrap_or("unknown"),
+                &public_api,
+            )
         });
 
         // Risks
@@ -209,7 +236,11 @@ impl DocGenerator {
             source_hash: actual_source_hash.clone().unwrap_or_default(),
             doc_level: options.level,
             generated_at: chrono::Utc::now().to_rfc3339(),
-            generator: if options.no_llm { "deterministic".to_string() } else { "llm".to_string() },
+            generator: if options.no_llm {
+                "deterministic".to_string()
+            } else {
+                "llm".to_string()
+            },
             status: "fresh".to_string(),
         };
 
@@ -218,7 +249,10 @@ impl DocGenerator {
         let template = FileDocTemplate {
             frontmatter,
             file_path: file.path.clone(),
-            language: file.language.clone().unwrap_or_else(|| "unknown".to_string()),
+            language: file
+                .language
+                .clone()
+                .unwrap_or_else(|| "unknown".to_string()),
             purpose,
             public_api,
             internal_symbols,
@@ -261,7 +295,11 @@ impl DocGenerator {
             doc_level: options.level,
             symbols_count,
             imports_count,
-            status: if existing_doc.is_some() { "updated".to_string() } else { "generated".to_string() },
+            status: if existing_doc.is_some() {
+                "updated".to_string()
+            } else {
+                "generated".to_string()
+            },
         })
     }
 
@@ -309,31 +347,48 @@ impl DocGenerator {
         Ok(summary)
     }
 
-    fn infer_deterministic_purpose(path: &str, language: &str, public_api: &[SymbolDocEntry]) -> String {
+    fn infer_deterministic_purpose(
+        path: &str,
+        language: &str,
+        public_api: &[SymbolDocEntry],
+    ) -> String {
         let p = path.replace('\\', "/");
         if p.ends_with("main.rs") {
             "Executable application entry point and CLI runner.".to_string()
         } else if p.ends_with("lib.rs") {
             "Library root exposing modules and public crate interface.".to_string()
         } else if p.ends_with("mod.rs") {
-            format!("Module definition and re-exports for `{}` subsystem.", p.trim_end_matches("/mod.rs"))
+            format!(
+                "Module definition and re-exports for `{}` subsystem.",
+                p.trim_end_matches("/mod.rs")
+            )
         } else if p.contains("/db.rs") || p.contains("/database") {
             "Database connection lifecycle, schema migration, and SQL query interface.".to_string()
         } else if p.contains("/config") {
-            "Application configuration loading, serialization, and environment handling.".to_string()
+            "Application configuration loading, serialization, and environment handling."
+                .to_string()
         } else if p.contains("/error") {
-            "Error taxonomy, typed domain failures, and error conversion implementations.".to_string()
+            "Error taxonomy, typed domain failures, and error conversion implementations."
+                .to_string()
         } else if p.contains("/scanner") {
-            "Codebase scanner, filesystem traversal, Git change tracking, and AST extraction.".to_string()
+            "Codebase scanner, filesystem traversal, Git change tracking, and AST extraction."
+                .to_string()
         } else if p.contains("/memory") {
             "Relational codebase memory engine and SQLite synchronization.".to_string()
         } else if p.contains("/cli") {
             "Command-line arguments parser, subcommand dispatch, and terminal output.".to_string()
         } else if !public_api.is_empty() {
             let names: Vec<&str> = public_api.iter().take(3).map(|s| s.name.as_str()).collect();
-            format!("{} module providing public symbols: `{}`.", language, names.join("`, `"))
+            format!(
+                "{} module providing public symbols: `{}`.",
+                language,
+                names.join("`, `")
+            )
         } else {
-            format!("Source file for {} containing internal definitions.", language)
+            format!(
+                "Source file for {} containing internal definitions.",
+                language
+            )
         }
     }
 }

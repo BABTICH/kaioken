@@ -1,10 +1,10 @@
-use std::path::Path;
-use serde::Deserialize;
-use serde_json::{json, Value};
+use super::{BoxFuture, Tool, ToolContext, ToolResult};
 use crate::error::Result;
 use crate::safety::path_guard::PathGuard;
 use crate::safety::redact::RedactionEngine;
-use super::{BoxFuture, Tool, ToolContext, ToolResult};
+use serde::Deserialize;
+use serde_json::{json, Value};
+use std::path::Path;
 
 pub struct ReadFileTool;
 
@@ -45,40 +45,82 @@ impl Tool for ReadFileTool {
         })
     }
 
-    fn execute<'a>(&'a self, args: &'a str, ctx: &'a ToolContext) -> BoxFuture<'a, Result<ToolResult>> {
+    fn execute<'a>(
+        &'a self,
+        args: &'a str,
+        ctx: &'a ToolContext,
+    ) -> BoxFuture<'a, Result<ToolResult>> {
         let repo_root = ctx.repo_root.clone();
         let audit_logger = ctx.audit_logger.clone();
         let args_str = args.to_string();
         Box::pin(async move {
             let parsed: ReadFileArgs = match serde_json::from_str(&args_str) {
                 Ok(a) => a,
-                Err(e) => return Ok(ToolResult::error(format!("Invalid arguments for read_file: {}", e))),
+                Err(e) => {
+                    return Ok(ToolResult::error(format!(
+                        "Invalid arguments for read_file: {}",
+                        e
+                    )))
+                }
             };
 
             if let Some(policy) = &ctx.safety_policy {
-                if let crate::safety::PermissionDecision::Denied(r) = policy.check_action("read_file", &parsed.path, "")? {
-                    return Ok(ToolResult::error(format!("Access blocked by safety policy: {}", r)));
+                if let crate::safety::PermissionDecision::Denied(r) =
+                    policy.check_action("read_file", &parsed.path, "")?
+                {
+                    return Ok(ToolResult::error(format!(
+                        "Access blocked by safety policy: {}",
+                        r
+                    )));
                 }
             }
 
-            let validated_path = match PathGuard::validate_path(Path::new(&parsed.path), &repo_root, false) {
-                Ok(p) => p,
-                Err(e) => {
-                    let _ = audit_logger.log("agent", "read_file", &parsed.path, false, Some(&e.to_string()));
-                    return Ok(ToolResult::error(format!("Access blocked by path guard: {}", e)));
-                }
-            };
+            let validated_path =
+                match PathGuard::validate_path(Path::new(&parsed.path), &repo_root, false) {
+                    Ok(p) => p,
+                    Err(e) => {
+                        let _ = audit_logger.log(
+                            "agent",
+                            "read_file",
+                            &parsed.path,
+                            false,
+                            Some(&e.to_string()),
+                        );
+                        return Ok(ToolResult::error(format!(
+                            "Access blocked by path guard: {}",
+                            e
+                        )));
+                    }
+                };
 
             if !validated_path.exists() {
-                let _ = audit_logger.log("agent", "read_file", &parsed.path, false, Some("File not found"));
-                return Ok(ToolResult::error(format!("File '{}' does not exist.", parsed.path)));
+                let _ = audit_logger.log(
+                    "agent",
+                    "read_file",
+                    &parsed.path,
+                    false,
+                    Some("File not found"),
+                );
+                return Ok(ToolResult::error(format!(
+                    "File '{}' does not exist.",
+                    parsed.path
+                )));
             }
 
             let raw_content = match std::fs::read_to_string(&validated_path) {
                 Ok(c) => c,
                 Err(e) => {
-                    let _ = audit_logger.log("agent", "read_file", &parsed.path, false, Some(&e.to_string()));
-                    return Ok(ToolResult::error(format!("Failed to read file '{}': {}", parsed.path, e)));
+                    let _ = audit_logger.log(
+                        "agent",
+                        "read_file",
+                        &parsed.path,
+                        false,
+                        Some(&e.to_string()),
+                    );
+                    return Ok(ToolResult::error(format!(
+                        "Failed to read file '{}': {}",
+                        parsed.path, e
+                    )));
                 }
             };
 
@@ -95,7 +137,10 @@ impl Tool for ReadFileTool {
             };
 
             let output = if start > total_lines || start > end {
-                format!("File '{}' has {} lines. Requested range ({}-{}) is empty.", parsed.path, total_lines, start, end)
+                format!(
+                    "File '{}' has {} lines. Requested range ({}-{}) is empty.",
+                    parsed.path, total_lines, start, end
+                )
             } else {
                 let mut chunk = String::new();
                 for (idx, line) in lines[start - 1..end].iter().enumerate() {

@@ -1,8 +1,8 @@
-use std::sync::Arc;
-use clap::{Args, Subcommand};
 use crate::config::Config;
 use crate::critic::engine::{Critic, CriticEngine};
 use crate::memory::MemoryEngine;
+use clap::{Args, Subcommand};
+use std::sync::Arc;
 
 #[derive(Subcommand, Debug)]
 pub enum CriticCommands {
@@ -46,15 +46,27 @@ pub async fn handle_critic_command(cmd: CriticCommands) -> anyhow::Result<()> {
             if let Some(c) = args.command {
                 engine = engine.with_command(c);
             }
-            println!("🔍 Running deterministic verification for: {}", repo_root.display());
+            println!(
+                "🔍 Running deterministic verification for: {}",
+                repo_root.display()
+            );
             let report = engine.evaluate(&repo_root).await?;
 
             if report.passed {
-                println!("✅ Verification Passed: `{}` ({} ms)", report.command, report.duration_ms);
+                println!(
+                    "✅ Verification Passed: `{}` ({} ms)",
+                    report.command, report.duration_ms
+                );
             } else {
-                println!("❌ Verification Failed: `{}` (exit code: {})", report.command, report.exit_code);
+                println!(
+                    "❌ Verification Failed: `{}` (exit code: {})",
+                    report.command, report.exit_code
+                );
                 if !report.diagnostics.is_empty() {
-                    println!("\nStructured Diagnostics ({} found):", report.diagnostics.len());
+                    println!(
+                        "\nStructured Diagnostics ({} found):",
+                        report.diagnostics.len()
+                    );
                     for d in &report.diagnostics {
                         let loc = match (&d.file_path, d.line, d.col) {
                             (Some(p), Some(l), Some(c)) => format!("{}:{}:{}", p, l, c),
@@ -95,15 +107,27 @@ pub async fn handle_critic_command(cmd: CriticCommands) -> anyhow::Result<()> {
                 if args.all {
                     println!("No failure records found in memory.");
                 } else {
-                    println!("🎉 No unresolved failures found. (Use `--all` to view resolved failures)");
+                    println!(
+                        "🎉 No unresolved failures found. (Use `--all` to view resolved failures)"
+                    );
                 }
             } else {
-                let title = if args.all { "All Failure Records" } else { "Unresolved Compiler Failures" };
+                let title = if args.all {
+                    "All Failure Records"
+                } else {
+                    "Unresolved Compiler Failures"
+                };
                 println!("📋 {} ({} records):\n", title, records.len());
                 for r in records {
-                    let id = r.id.map(|i| format!("#{}", i)).unwrap_or_else(|| "#?".into());
+                    let id =
+                        r.id.map(|i| format!("#{}", i))
+                            .unwrap_or_else(|| "#?".into());
                     let is_resolved = r.status.as_deref() == Some("resolved");
-                    let status_badge = if is_resolved { "✅ RESOLVED" } else { "❌ UNRESOLVED" };
+                    let status_badge = if is_resolved {
+                        "✅ RESOLVED"
+                    } else {
+                        "❌ UNRESOLVED"
+                    };
                     println!("  {} [{}] [{}]", id, status_badge, r.error_type);
                     if let Some(fid) = r.file_id {
                         println!("     File ID: {}", fid);

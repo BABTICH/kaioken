@@ -1,18 +1,17 @@
-use std::path::Path;
 use crate::config::Config;
 use crate::error::Result;
 use crate::memory::MemoryEngine;
 use crate::retrieval::budget::{BudgetConfig, BudgetManager, TokenEstimator};
 use crate::retrieval::cache::RetrievalCacheStore;
 use crate::retrieval::context_packet::{
-    CommitSummarySnippet, ContextPacket, DecisionSnippet, FileContextSnippet,
-    SymbolContextSummary,
+    CommitSummarySnippet, ContextPacket, DecisionSnippet, FileContextSnippet, SymbolContextSummary,
 };
 use crate::retrieval::doc_lookup::DocLookup;
 use crate::retrieval::failure_lookup::FailureLookup;
 use crate::retrieval::graph_query::GraphQueryEngine;
 use crate::safety::redact::RedactionEngine;
 use crate::scanner::GitScanner;
+use std::path::Path;
 
 #[derive(Debug, Clone)]
 pub struct RetrievalOptions {
@@ -51,7 +50,11 @@ impl<'a> RetrievalEngine<'a> {
     }
 
     /// Assembles an immutable, sanitized, token-budgeted ContextPacket for a task.
-    pub fn retrieve_context(&self, task_prompt: &str, opts: &RetrievalOptions) -> Result<ContextPacket> {
+    pub fn retrieve_context(
+        &self,
+        task_prompt: &str,
+        opts: &RetrievalOptions,
+    ) -> Result<ContextPacket> {
         let sanitized_task = self.redactor.redact(task_prompt);
         let budget_limit = opts.budget_tokens.unwrap_or(8000);
 
@@ -77,7 +80,8 @@ impl<'a> RetrievalEngine<'a> {
         let (mentioned_paths, mentioned_symbols) = self.decompose_task(&sanitized_task)?;
 
         // 3. Changed Files Discovery (Git Layer integration)
-        let changed_files = GitScanner::get_working_tree_changed_files(self.repo_root).unwrap_or_default();
+        let changed_files =
+            GitScanner::get_working_tree_changed_files(self.repo_root).unwrap_or_default();
 
         // 4. Resolve Target Files & Build File Snippets
         let mut target_file_ids = Vec::new();
@@ -148,7 +152,9 @@ impl<'a> RetrievalEngine<'a> {
                     if let Some(sid) = s.id {
                         if !target_symbol_ids.contains(&sid) {
                             target_symbol_ids.push(sid);
-                            let file_path = self.memory.get_file_by_id(s.file_id)
+                            let file_path = self
+                                .memory
+                                .get_file_by_id(s.file_id)
                                 .ok()
                                 .flatten()
                                 .map(|f| f.path)
@@ -180,13 +186,16 @@ impl<'a> RetrievalEngine<'a> {
                         if let Some(sid) = s.id {
                             if !target_symbol_ids.contains(&sid) {
                                 target_symbol_ids.push(sid);
-                                let file_path = self.memory.get_file_by_id(s.file_id)
+                                let file_path = self
+                                    .memory
+                                    .get_file_by_id(s.file_id)
                                     .ok()
                                     .flatten()
                                     .map(|f| f.path)
                                     .unwrap_or_default();
 
-                                let sig = self.redactor.redact(s.signature.as_deref().unwrap_or(""));
+                                let sig =
+                                    self.redactor.redact(s.signature.as_deref().unwrap_or(""));
                                 let cost = TokenEstimator::estimate_tokens(&sig) + 15;
                                 relevant_symbols.push(SymbolContextSummary {
                                     name: s.name,
@@ -210,34 +219,35 @@ impl<'a> RetrievalEngine<'a> {
 
         // 6. Graph Neighbor Traversal
         let graph_engine = GraphQueryEngine::new(self.memory);
-        let dependency_graph_subset = graph_engine.query_subgraph(
-            &target_symbol_ids,
-            &target_file_ids,
-            opts.max_depth,
-        ).unwrap_or_default();
+        let dependency_graph_subset = graph_engine
+            .query_subgraph(&target_symbol_ids, &target_file_ids, opts.max_depth)
+            .unwrap_or_default();
 
         // 7. Failure Memory Lookup
         let failure_engine = FailureLookup::new(self.memory);
-        let related_failures = failure_engine.find_failures(
-            &target_file_ids,
-            &target_symbol_ids,
-            &sanitized_task,
-            5,
-        ).unwrap_or_default();
+        let related_failures = failure_engine
+            .find_failures(&target_file_ids, &target_symbol_ids, &sanitized_task, 5)
+            .unwrap_or_default();
 
         // 8. Documentation Staleness Check
         let doc_engine = DocLookup::new(self.memory, self.repo_root);
-        let stale_docs_warnings = doc_engine.check_doc_staleness(&target_file_ids).unwrap_or_default();
+        let stale_docs_warnings = doc_engine
+            .check_doc_staleness(&target_file_ids)
+            .unwrap_or_default();
 
         // 9. Architectural Decisions (ADRs)
-        let decisions = self.memory.list_decisions(Some("accepted")).unwrap_or_default();
-        let architectural_decisions: Vec<DecisionSnippet> = decisions.into_iter().map(|d| {
-            DecisionSnippet {
+        let decisions = self
+            .memory
+            .list_decisions(Some("accepted"))
+            .unwrap_or_default();
+        let architectural_decisions: Vec<DecisionSnippet> = decisions
+            .into_iter()
+            .map(|d| DecisionSnippet {
                 title: d.title,
                 description: self.redactor.redact(&d.description),
                 status: d.status,
-            }
-        }).collect();
+            })
+            .collect();
 
         // 10. Recent Commits
         let mut recent_related_commits = Vec::new();
@@ -245,7 +255,10 @@ impl<'a> RetrievalEngine<'a> {
             for &fid in &target_file_ids {
                 if let Ok(commits) = self.memory.get_commits_for_file(fid, 3) {
                     for c in commits {
-                        if !recent_related_commits.iter().any(|rc: &CommitSummarySnippet| rc.hash == c.hash) {
+                        if !recent_related_commits
+                            .iter()
+                            .any(|rc: &CommitSummarySnippet| rc.hash == c.hash)
+                        {
                             recent_related_commits.push(CommitSummarySnippet {
                                 hash: c.hash,
                                 message: self.redactor.redact(&c.message),
@@ -267,7 +280,8 @@ impl<'a> RetrievalEngine<'a> {
                 for t in &dependency_graph_subset.affected_tests {
                     if let Some(stem) = Path::new(t).file_stem().and_then(|s| s.to_str()) {
                         let test_name = stem.trim_start_matches("test_");
-                        recommended_verification_commands.push(format!("cargo test --test {}", test_name));
+                        recommended_verification_commands
+                            .push(format!("cargo test --test {}", test_name));
                     }
                 }
             } else {
@@ -316,7 +330,10 @@ impl<'a> RetrievalEngine<'a> {
         let all_files = self.memory.list_files()?;
         for f in &all_files {
             let path_str = &f.path;
-            let file_name = Path::new(path_str).file_name().and_then(|n| n.to_str()).unwrap_or("");
+            let file_name = Path::new(path_str)
+                .file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("");
 
             if task.contains(path_str) || (!file_name.is_empty() && task.contains(file_name)) {
                 paths.push(path_str.clone());

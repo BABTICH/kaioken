@@ -31,6 +31,36 @@ regex = "1.10"
 rusqlite = { version = "0.32", features = ["bundled"] }
 tree-sitter = "0.27.1"
 tree-sitter-rust = "0.24.2"
+tree-sitter-typescript = "0.23"
+tree-sitter-javascript = "0.23"
+tree-sitter-python = "0.23"
 tempfile = "3.12"
+notify = "6.1"
+ratatui = "0.28"
+crossterm = "0.28"
+wry = "0.42"
+tao = "0.28"
 
 [dev-dependencies]
+
+[profile.dev]
+opt-level = 0
+debug = 1
+
+[profile.test]
+opt-level = 0
+debug = 1
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(tokio_unstable)'] }
+
+[lints.clippy]
+arc_with_non_send_sync = "allow"
+too_many_arguments = "allow"
+type_complexity = "allow"
+doc_lazy_continuation = "allow"

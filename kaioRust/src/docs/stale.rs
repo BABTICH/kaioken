@@ -1,7 +1,7 @@
+use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 use std::fs;
 use std::path::Path;
-use sha2::{Digest, Sha256};
-use serde::{Deserialize, Serialize};
 
 use crate::docs::frontmatter::DocFrontmatter;
 use crate::error::Result;
@@ -88,7 +88,9 @@ impl StalenessDetector {
                 return Ok(DocVerificationItem {
                     file_path: file_path_str,
                     doc_path: doc.doc_path.clone(),
-                    status: DocStalenessStatus::CorruptedFrontmatter("Missing or invalid YAML header".to_string()),
+                    status: DocStalenessStatus::CorruptedFrontmatter(
+                        "Missing or invalid YAML header".to_string(),
+                    ),
                     is_valid: false,
                 });
             }
@@ -137,8 +139,10 @@ impl StalenessDetector {
         clean: bool,
     ) -> Result<DocVerificationReport> {
         let docs = memory.list_docs()?;
-        let mut report = DocVerificationReport::default();
-        report.total_docs = docs.len();
+        let mut report = DocVerificationReport {
+            total_docs: docs.len(),
+            ..Default::default()
+        };
 
         for d in docs {
             match Self::verify_doc(&d, repo_root, docs_root, memory) {

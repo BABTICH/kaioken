@@ -1,9 +1,9 @@
-use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct HealthScore {
-    pub score: u32, // 0 - 100
+    pub score: u32,    // 0 - 100
     pub grade: String, // "A", "B", "C", "D", "F"
     pub deductions: Vec<ScoreDeduction>,
 }
@@ -129,11 +129,26 @@ impl HealthReport {
         out.push_str("## 1. Repository Inventory Overview\n\n");
         out.push_str("| Metric | Count |\n");
         out.push_str("|---|---|\n");
-        out.push_str(&format!("| Total Tracked Files | {} |\n", self.overview.total_files));
-        out.push_str(&format!("| Extracted AST Symbols | {} |\n", self.overview.total_symbols));
-        out.push_str(&format!("| Dependency Graph Edges | {} |\n", self.overview.total_edges));
-        out.push_str(&format!("| Mirrored Documentation Files | {} |\n", self.overview.total_docs));
-        out.push_str(&format!("| Failure Memory Records | {} |\n\n", self.overview.total_failures));
+        out.push_str(&format!(
+            "| Total Tracked Files | {} |\n",
+            self.overview.total_files
+        ));
+        out.push_str(&format!(
+            "| Extracted AST Symbols | {} |\n",
+            self.overview.total_symbols
+        ));
+        out.push_str(&format!(
+            "| Dependency Graph Edges | {} |\n",
+            self.overview.total_edges
+        ));
+        out.push_str(&format!(
+            "| Mirrored Documentation Files | {} |\n",
+            self.overview.total_docs
+        ));
+        out.push_str(&format!(
+            "| Failure Memory Records | {} |\n\n",
+            self.overview.total_failures
+        ));
 
         if !self.overview.languages.is_empty() {
             out.push_str("**Language Breakdown**:\n");
@@ -149,20 +164,38 @@ impl HealthReport {
             out.push_str("| Module Area | Files | AST Symbols |\n");
             out.push_str("|---|---|---|\n");
             for m in &self.architecture.modules {
-                out.push_str(&format!("| `{}` | {} | {} |\n", m.module_name, m.file_count, m.symbol_count));
+                out.push_str(&format!(
+                    "| `{}` | {} | {} |\n",
+                    m.module_name, m.file_count, m.symbol_count
+                ));
             }
             out.push('\n');
         }
         if !self.architecture.core_dependencies.is_empty() {
-            out.push_str(&format!("- **Core Shared Dependencies**: {}\n\n", self.architecture.core_dependencies.join(", ")));
+            out.push_str(&format!(
+                "- **Core Shared Dependencies**: {}\n\n",
+                self.architecture.core_dependencies.join(", ")
+            ));
         }
 
         // 3. Documentation Health
         out.push_str("## 3. Documentation Mirror Health\n\n");
-        out.push_str(&format!("- **Fresh / Synchronized**: {}\n", self.doc_health.fresh_count));
-        out.push_str(&format!("- **Stale Docs**: {}\n", self.doc_health.stale_count));
-        out.push_str(&format!("- **Maybe-Stale Dependents**: {}\n", self.doc_health.maybe_stale_count));
-        out.push_str(&format!("- **Missing Docs**: {}\n\n", self.doc_health.missing_docs_count));
+        out.push_str(&format!(
+            "- **Fresh / Synchronized**: {}\n",
+            self.doc_health.fresh_count
+        ));
+        out.push_str(&format!(
+            "- **Stale Docs**: {}\n",
+            self.doc_health.stale_count
+        ));
+        out.push_str(&format!(
+            "- **Maybe-Stale Dependents**: {}\n",
+            self.doc_health.maybe_stale_count
+        ));
+        out.push_str(&format!(
+            "- **Missing Docs**: {}\n\n",
+            self.doc_health.missing_docs_count
+        ));
 
         if !self.doc_health.stale_doc_paths.is_empty() {
             out.push_str("### ⚠️ Stale Documentation Files\n");
@@ -182,13 +215,22 @@ impl HealthReport {
 
         // 4. Dead Code Hints
         out.push_str("## 4. Dead Code Detection & Hints\n\n");
-        if self.dead_code.unreferenced_symbols.is_empty() && self.dead_code.orphan_files.is_empty() {
-            out.push_str("✅ No obvious unreferenced private symbols or orphan files detected.\n\n");
+        if self.dead_code.unreferenced_symbols.is_empty() && self.dead_code.orphan_files.is_empty()
+        {
+            out.push_str(
+                "✅ No obvious unreferenced private symbols or orphan files detected.\n\n",
+            );
         } else {
             if !self.dead_code.unreferenced_symbols.is_empty() {
-                out.push_str(&format!("### 🔍 Unreferenced Internal Symbols ({} detected)\n", self.dead_code.unreferenced_symbols.len()));
+                out.push_str(&format!(
+                    "### 🔍 Unreferenced Internal Symbols ({} detected)\n",
+                    self.dead_code.unreferenced_symbols.len()
+                ));
                 for sym in &self.dead_code.unreferenced_symbols {
-                    out.push_str(&format!("- `{}` (`{}`) in `{}:{}`\n", sym.name, sym.kind, sym.file_path, sym.line));
+                    out.push_str(&format!(
+                        "- `{}` (`{}`) in `{}:{}`\n",
+                        sym.name, sym.kind, sym.file_path, sym.line
+                    ));
                 }
                 out.push('\n');
             }
@@ -203,7 +245,10 @@ impl HealthReport {
 
         // 5. Test Coverage Hints
         out.push_str("## 5. Test Coverage Hints\n\n");
-        out.push_str(&format!("- **Test Files**: {} | **Implementation Files**: {}\n\n", self.test_coverage.test_file_count, self.test_coverage.implementation_file_count));
+        out.push_str(&format!(
+            "- **Test Files**: {} | **Implementation Files**: {}\n\n",
+            self.test_coverage.test_file_count, self.test_coverage.implementation_file_count
+        ));
         if !self.test_coverage.untested_files.is_empty() {
             out.push_str("### 🧪 Source Files Lacking Dedicated Unit Tests\n");
             for f in &self.test_coverage.untested_files {
@@ -224,7 +269,10 @@ impl HealthReport {
         if self.graph_integrity.unresolved_imports.is_empty() {
             out.push_str("✅ All AST imports resolved cleanly across the workspace graph.\n\n");
         } else {
-            out.push_str(&format!("⚠️ **Unresolved Imports / Broken Links** ({}):\n", self.graph_integrity.unresolved_imports.len()));
+            out.push_str(&format!(
+                "⚠️ **Unresolved Imports / Broken Links** ({}):\n",
+                self.graph_integrity.unresolved_imports.len()
+            ));
             for (file, raw) in &self.graph_integrity.unresolved_imports {
                 out.push_str(&format!("- In `{}`: `{}`\n", file, raw));
             }
@@ -233,8 +281,14 @@ impl HealthReport {
 
         // 7. Failure Memory
         out.push_str("## 7. Failure Memory Status\n\n");
-        out.push_str(&format!("- **Unresolved Failures**: {}\n", self.failure_memory.unresolved_count));
-        out.push_str(&format!("- **Resolved Historical Fixes**: {}\n\n", self.failure_memory.resolved_count));
+        out.push_str(&format!(
+            "- **Unresolved Failures**: {}\n",
+            self.failure_memory.unresolved_count
+        ));
+        out.push_str(&format!(
+            "- **Resolved Historical Fixes**: {}\n\n",
+            self.failure_memory.resolved_count
+        ));
         if !self.failure_memory.unresolved_failures.is_empty() {
             out.push_str("### 🚨 Active Unresolved Failures\n");
             for f in &self.failure_memory.unresolved_failures {
@@ -246,7 +300,9 @@ impl HealthReport {
         // 8. Recommendations
         out.push_str("## 8. Actionable Recommendations\n\n");
         if self.recommendations.is_empty() {
-            out.push_str("🎉 Repository health is in excellent state! No immediate remediation needed.\n");
+            out.push_str(
+                "🎉 Repository health is in excellent state! No immediate remediation needed.\n",
+            );
         } else {
             for (i, rec) in self.recommendations.iter().enumerate() {
                 out.push_str(&format!("{}. {}\n", i + 1, rec));

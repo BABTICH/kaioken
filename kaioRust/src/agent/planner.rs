@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::retrieval::ContextPacket;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PlanStep {
@@ -53,7 +53,10 @@ impl TaskPlan {
                 Some(h) => format!(" (Tool: `{}`)", h),
                 None => String::new(),
             };
-            out.push_str(&format!("{}. {}{}\n", step.step_number, step.description, hint));
+            out.push_str(&format!(
+                "{}. {}{}\n",
+                step.step_number, step.description, hint
+            ));
         }
 
         if !self.recommended_checks.is_empty() {
@@ -87,7 +90,8 @@ impl Planner {
                 },
                 PlanStep {
                     step_number: 3,
-                    description: "Execute edits and verify with deterministic compiler/test checks".to_string(),
+                    description: "Execute edits and verify with deterministic compiler/test checks"
+                        .to_string(),
                     tool_hint: Some("edit_file".to_string()),
                 },
             ],
@@ -102,13 +106,31 @@ impl Planner {
         let mut steps = Vec::new();
         let mut step_num = 1;
 
-        let cited_symbols: Vec<String> = context.relevant_symbols.iter().map(|s| s.name.clone()).collect();
-        let cited_files: Vec<String> = context.relevant_files.iter().map(|f| f.path.clone()).collect();
-        let cited_failures: Vec<String> = context.related_failures.iter().map(|f| {
-            let loc = f.file_path.as_deref().unwrap_or("workspace");
-            let fix = f.fix_summary.as_deref().unwrap_or("No previous fix recorded");
-            format!("[{}] on `{}`: {} (Past Fix: {})", f.error_type, loc, f.message, fix)
-        }).collect();
+        let cited_symbols: Vec<String> = context
+            .relevant_symbols
+            .iter()
+            .map(|s| s.name.clone())
+            .collect();
+        let cited_files: Vec<String> = context
+            .relevant_files
+            .iter()
+            .map(|f| f.path.clone())
+            .collect();
+        let cited_failures: Vec<String> = context
+            .related_failures
+            .iter()
+            .map(|f| {
+                let loc = f.file_path.as_deref().unwrap_or("workspace");
+                let fix = f
+                    .fix_summary
+                    .as_deref()
+                    .unwrap_or("No previous fix recorded");
+                format!(
+                    "[{}] on `{}`: {} (Past Fix: {})",
+                    f.error_type, loc, f.message, fix
+                )
+            })
+            .collect();
 
         // Step 1: Past failure cautions if any exist in context
         if !context.related_failures.is_empty() {
@@ -127,7 +149,10 @@ impl Planner {
         if !cited_files.is_empty() {
             steps.push(PlanStep {
                 step_number: step_num,
-                description: format!("Read and inspect target file(s): {}", cited_files.join(", ")),
+                description: format!(
+                    "Read and inspect target file(s): {}",
+                    cited_files.join(", ")
+                ),
                 tool_hint: Some("read_file".to_string()),
             });
             step_num += 1;
@@ -150,7 +175,10 @@ impl Planner {
 
         // Step 4: Verification
         let verification_desc = if !context.recommended_verification_commands.is_empty() {
-            format!("Run verification commands: {}", context.recommended_verification_commands.join(" && "))
+            format!(
+                "Run verification commands: {}",
+                context.recommended_verification_commands.join(" && ")
+            )
         } else {
             "Run deterministic compiler and test verification".to_string()
         };

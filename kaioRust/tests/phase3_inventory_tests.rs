@@ -1,7 +1,5 @@
+use kaioken::scanner::{FileInventory, FileInventoryOptions, Language, ParseStatus};
 use std::fs;
-use kaioken::scanner::{
-    FileInventory, FileInventoryOptions, Language, ParseStatus,
-};
 
 #[test]
 fn test_inventory_walk_and_language_detection() {
@@ -18,12 +16,20 @@ fn test_inventory_walk_and_language_detection() {
     let summary = FileInventory::scan_dir(root, &[]).unwrap();
     assert_eq!(summary.total_files, 4);
 
-    let rust_file = summary.files.iter().find(|f| f.relative_path.to_str().unwrap().contains("main.rs")).unwrap();
+    let rust_file = summary
+        .files
+        .iter()
+        .find(|f| f.relative_path.to_str().unwrap().contains("main.rs"))
+        .unwrap();
     assert_eq!(rust_file.language, Language::Rust);
     assert_eq!(rust_file.parse_status, ParseStatus::Ok);
     assert!(rust_file.file_hash.is_some());
 
-    let ts_file = summary.files.iter().find(|f| f.relative_path.to_str().unwrap().contains("app.ts")).unwrap();
+    let ts_file = summary
+        .files
+        .iter()
+        .find(|f| f.relative_path.to_str().unwrap().contains("app.ts"))
+        .unwrap();
     assert_eq!(ts_file.language, Language::TypeScript);
     assert_eq!(ts_file.parse_status, ParseStatus::Ok);
 }
@@ -85,7 +91,11 @@ fn test_inventory_ignore_patterns() {
     let root = temp_dir.path();
 
     fs::create_dir_all(root.join("node_modules")).unwrap();
-    fs::write(root.join("node_modules").join("dep.js"), "module.exports = {};\n").unwrap();
+    fs::write(
+        root.join("node_modules").join("dep.js"),
+        "module.exports = {};\n",
+    )
+    .unwrap();
 
     fs::create_dir_all(root.join("target")).unwrap();
     fs::write(root.join("target").join("build.log"), "build done\n").unwrap();
@@ -95,7 +105,10 @@ fn test_inventory_ignore_patterns() {
 
     let summary = FileInventory::scan_dir(root, &[]).unwrap();
     assert_eq!(summary.total_files, 1);
-    assert_eq!(summary.files[0].relative_path.to_str().unwrap(), "src/lib.rs".replace('/', std::path::MAIN_SEPARATOR_STR));
+    assert_eq!(
+        summary.files[0].relative_path.to_str().unwrap(),
+        "src/lib.rs".replace('/', std::path::MAIN_SEPARATOR_STR)
+    );
 }
 
 #[test]
@@ -108,8 +121,12 @@ fn test_inventory_invalid_utf8_failure_status() {
     fs::write(&invalid_utf8_file, bad_bytes).unwrap();
 
     let options = FileInventoryOptions::default();
-    let discovered = FileInventory::inspect_file(temp_dir.path(), &invalid_utf8_file, &options).unwrap();
+    let discovered =
+        FileInventory::inspect_file(temp_dir.path(), &invalid_utf8_file, &options).unwrap();
 
     assert_eq!(discovered.parse_status, ParseStatus::Failed);
-    assert!(discovered.file_hash.is_some(), "File hash is still computed for failed encodings");
+    assert!(
+        discovered.file_hash.is_some(),
+        "File hash is still computed for failed encodings"
+    );
 }

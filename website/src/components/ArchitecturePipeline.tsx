@@ -43,7 +43,7 @@ const PIPELINE_STAGES: StageSummary[] = [
     step: '05',
     name: '5 Developer Surfaces',
     badge: 'DESIGN SYSTEM V2',
-    desc: 'Powers Terminal TUI, Standalone CLI (22 cmds), Local Preview (127.0.0.1:4173), Desktop Studio, and Web Portals.',
+    desc: 'Powers the Terminal TUI, the Rust CLI, the local preview, the native desktop cockpit (wry + tao), and the web portal.',
     icon: <Layers className="size-4 text-[var(--accent)]" />,
   },
 ];

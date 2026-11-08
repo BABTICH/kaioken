@@ -113,8 +113,8 @@ export const ROADMAP_CATEGORIES: RoadmapCategory[] = [
         body: "Split-pane chat + file viewer served by an extended serve.go with WebSocket agent streaming.",
       },
       {
-        title: "Desktop app (Electron · Kaioken 2)",
-        body: "Native desktop studio rebuilt on Electron + Vite + React 19 with isolated IPC, filesystem access, system tray, and deep engine integration (Under Active Construction).",
+        title: "Desktop cockpit (Rust · wry + tao)",
+        body: "Native cockpit implemented on tao + wry with a system WebView, loopback JSON-RPC daemon and embedded fallback. It ships inside the Rust binary; some panels still render seeded data.",
       },
       {
         title: "Interactive diff viewer",
@@ -406,7 +406,7 @@ export const ARCH_ENABLERS: RoadmapItem[] = [
   },
   {
     title: "Daemon mode",
-    body: "A long-running kaioken daemon holding the codemap index, wiki state, and sessions — thin clients connect over HTTP.",
+    body: "A long-running kaioken watch daemon holding symbol memory and audit state — desktop and TUI clients connect over loopback JSON-RPC.",
     done: true,
   },
   {

@@ -31,10 +31,10 @@ impl DocFrontmatter {
 
         // Find closing "---"
         let after_first = &trimmed[3..];
-        let after_first_trimmed = after_first.trim_start_matches(|c| c == '\r' || c == '\n');
+        let after_first_trimmed = after_first.trim_start_matches(['\r', '\n']);
         let close_idx = after_first_trimmed.find("---")?;
         let yaml_block = &after_first_trimmed[..close_idx];
-        let body = after_first_trimmed[close_idx + 3..].trim_start_matches(|c| c == '\r' || c == '\n');
+        let body = after_first_trimmed[close_idx + 3..].trim_start_matches(['\r', '\n']);
 
         let mut source_path = None;
         let mut source_hash = None;

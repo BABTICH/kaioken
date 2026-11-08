@@ -1,7 +1,7 @@
+use crate::error::KaiokenError;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
-use crate::error::KaiokenError;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Config {
@@ -43,20 +43,15 @@ pub struct LlmConfig {
     pub temperature: f32,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Default)]
 #[serde(rename_all = "kebab-case")]
 pub enum PermissionMode {
     ReadOnly,
+    #[default]
     EditWithApproval,
     AutoEdit,
     SafeBash,
     FullAuto,
-}
-
-impl Default for PermissionMode {
-    fn default() -> Self {
-        PermissionMode::EditWithApproval
-    }
 }
 
 impl std::str::FromStr for PermissionMode {

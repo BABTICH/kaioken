@@ -306,11 +306,11 @@
       <text x="378" y="32" class="node-sub" font-size="9.5" text-anchor="middle">kaioken serve</text>
       <text x="378" y="43" class="node-desc" font-size="8.5" text-anchor="middle">127.0.0.1:4173 · SSE</text>
 
-      <!-- Surface 4: Desktop Studio -->
+      <!-- Surface 4: Native Desktop -->
       <rect x="459" y="0" width="145" height="50" rx="0" fill="url(#surfaceCard)" stroke="#388bfd" stroke-width="1"/>
-      <text x="531" y="18" class="node-title" font-size="11.5" text-anchor="middle" fill="#58a6ff">Kaioken Studio</text>
-      <text x="531" y="32" class="node-sub" font-size="9.5" text-anchor="middle">desktop/ GUI App</text>
-      <text x="531" y="43" class="node-desc" font-size="8.5" text-anchor="middle">Electron + Vite + React 19</text>
+      <text x="531" y="18" class="node-title" font-size="11.5" text-anchor="middle" fill="#58a6ff">Kaioken Desktop</text>
+      <text x="531" y="32" class="node-sub" font-size="9.5" text-anchor="middle">kaioRust · src/desktop</text>
+      <text x="531" y="43" class="node-desc" font-size="8.5" text-anchor="middle">wry + tao · system WebView</text>
 
       <!-- Surface 5: Web Portal -->
       <rect x="612" y="0" width="138" height="50" rx="0" fill="url(#surfaceCard)" stroke="#388bfd" stroke-width="1"/>

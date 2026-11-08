@@ -25,7 +25,17 @@ impl CompilerDiagnostic {
             None => String::new(),
         };
 
-        format!("- {}: {}{}{}", loc, self.severity, if !code_str.is_empty() { format!(" {}", code_str) } else { ": ".to_string() }, self.message)
+        format!(
+            "- {}: {}{}{}",
+            loc,
+            self.severity,
+            if !code_str.is_empty() {
+                format!(" {}", code_str)
+            } else {
+                ": ".to_string()
+            },
+            self.message
+        )
     }
 }
 
@@ -44,9 +54,15 @@ impl DiagnosticParser {
         ).unwrap();
 
         for cap in rust_err_re.captures_iter(output) {
-            let severity = cap.get(1).map(|m| m.as_str().to_lowercase()).unwrap_or_else(|| "error".to_string());
+            let severity = cap
+                .get(1)
+                .map(|m| m.as_str().to_lowercase())
+                .unwrap_or_else(|| "error".to_string());
             let error_code = cap.get(2).map(|m| m.as_str().to_string());
-            let message = cap.get(3).map(|m| m.as_str().trim().to_string()).unwrap_or_default();
+            let message = cap
+                .get(3)
+                .map(|m| m.as_str().trim().to_string())
+                .unwrap_or_default();
             let file_path = cap.get(4).map(|m| m.as_str().replace('\\', "/"));
             let line = cap.get(5).and_then(|m| m.as_str().parse::<usize>().ok());
             let col = cap.get(6).and_then(|m| m.as_str().parse::<usize>().ok());
@@ -73,14 +89,20 @@ impl DiagnosticParser {
             let file_path = cap.get(1).map(|m| m.as_str().replace('\\', "/"));
             let line = cap.get(2).and_then(|m| m.as_str().parse::<usize>().ok());
             let col = cap.get(3).and_then(|m| m.as_str().parse::<usize>().ok());
-            let severity = cap.get(4).map(|m| m.as_str().to_lowercase()).unwrap_or_else(|| "error".to_string());
+            let severity = cap
+                .get(4)
+                .map(|m| m.as_str().to_lowercase())
+                .unwrap_or_else(|| "error".to_string());
             let error_code = cap.get(5).map(|m| m.as_str().to_string());
-            let message = cap.get(6).map(|m| m.as_str().trim().to_string()).unwrap_or_default();
+            let message = cap
+                .get(6)
+                .map(|m| m.as_str().trim().to_string())
+                .unwrap_or_default();
 
             // Avoid duplicates if already captured
-            let already_exists = diagnostics.iter().any(|d| {
-                d.file_path == file_path && d.line == line && d.message == message
-            });
+            let already_exists = diagnostics
+                .iter()
+                .any(|d| d.file_path == file_path && d.line == line && d.message == message);
 
             if !already_exists {
                 diagnostics.push(CompilerDiagnostic {
@@ -97,12 +119,14 @@ impl DiagnosticParser {
 
         // 3. Regex for test panics / assertion failures:
         // Format A: thread 'main' panicked at 'assertion failed: `(left == right)`', tests/unit_tests.rs:55:9
-        let panic_quoted_re = Regex::new(
-            r"(?s)panicked at\s+'(.*?)',\s*([^:\r\n]+):(\d+):(\d+)"
-        ).unwrap();
+        let panic_quoted_re =
+            Regex::new(r"(?s)panicked at\s+'(.*?)',\s*([^:\r\n]+):(\d+):(\d+)").unwrap();
 
         for cap in panic_quoted_re.captures_iter(output) {
-            let message = cap.get(1).map(|m| m.as_str().trim().to_string()).unwrap_or_default();
+            let message = cap
+                .get(1)
+                .map(|m| m.as_str().trim().to_string())
+                .unwrap_or_default();
             let file_path = cap.get(2).map(|m| m.as_str().replace('\\', "/"));
             let line = cap.get(3).and_then(|m| m.as_str().parse::<usize>().ok());
             let col = cap.get(4).and_then(|m| m.as_str().parse::<usize>().ok());
@@ -119,15 +143,17 @@ impl DiagnosticParser {
         }
 
         // Format B: thread 'test_add' panicked at tests/math_tests.rs:12:5: assertion `left == right` failed
-        let panic_loc_re = Regex::new(
-            r"(?m)panicked at ([^:\r\n]+):(\d+):(\d+):\s*([^\r\n]+)"
-        ).unwrap();
+        let panic_loc_re =
+            Regex::new(r"(?m)panicked at ([^:\r\n]+):(\d+):(\d+):\s*([^\r\n]+)").unwrap();
 
         for cap in panic_loc_re.captures_iter(output) {
             let file_path = cap.get(1).map(|m| m.as_str().replace('\\', "/"));
             let line = cap.get(2).and_then(|m| m.as_str().parse::<usize>().ok());
             let col = cap.get(3).and_then(|m| m.as_str().parse::<usize>().ok());
-            let message = cap.get(4).map(|m| m.as_str().trim().to_string()).unwrap_or_default();
+            let message = cap
+                .get(4)
+                .map(|m| m.as_str().trim().to_string())
+                .unwrap_or_default();
 
             diagnostics.push(CompilerDiagnostic {
                 file_path,
@@ -144,7 +170,12 @@ impl DiagnosticParser {
     }
 
     /// Formats a list of diagnostics into a markdown feedback block for the LLM.
-    pub fn format_feedback_block(command: &str, exit_code: i32, diagnostics: &[CompilerDiagnostic], raw_snippet: &str) -> String {
+    pub fn format_feedback_block(
+        command: &str,
+        exit_code: i32,
+        diagnostics: &[CompilerDiagnostic],
+        raw_snippet: &str,
+    ) -> String {
         let mut out = format!(
             "⚠️ CRITIC FEEDBACK: Deterministic verification failed\n\
              Command: `{}` (Exit Code: {})\n\n\
@@ -211,6 +242,8 @@ assertion `left == right` failed
         assert_eq!(diags.len(), 1);
         assert_eq!(diags[0].file_path.as_deref(), Some("tests/fib_tests.rs"));
         assert_eq!(diags[0].line, Some(25));
-        assert!(diags[0].message.contains("assertion `left == right` failed"));
+        assert!(diags[0]
+            .message
+            .contains("assertion `left == right` failed"));
     }
 }

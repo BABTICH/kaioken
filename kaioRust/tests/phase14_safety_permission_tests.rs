@@ -9,7 +9,9 @@ use kaioken::agent::tools::read_file::ReadFileTool;
 use kaioken::agent::tools::{Tool, ToolContext, ToolRegistry};
 use kaioken::agent::AgentLoop;
 use kaioken::config::{Config, PermissionMode};
-use kaioken::llm::{ChatChoice, ChatCompletionResponse, ChatMessage, FunctionCall, MockLlmClient, ToolCall};
+use kaioken::llm::{
+    ChatChoice, ChatCompletionResponse, ChatMessage, FunctionCall, MockLlmClient, ToolCall,
+};
 use kaioken::memory::MemoryEngine;
 use kaioken::safety::approval::{AutoApprovalHandler, DenyApprovalHandler, MockApprovalHandler};
 use kaioken::safety::audit::AuditLogger;
@@ -57,7 +59,9 @@ async fn test_permission_mode_read_only() {
         .await
         .unwrap();
     assert!(!create_res.success);
-    assert!(create_res.output.contains("strictly forbidden under 'read-only'"));
+    assert!(create_res
+        .output
+        .contains("strictly forbidden under 'read-only'"));
     assert!(!root.join("src").join("new.rs").exists());
 
     // 3. edit_file is forbidden in ReadOnly mode
@@ -70,7 +74,9 @@ async fn test_permission_mode_read_only() {
         .await
         .unwrap();
     assert!(!edit_res.success);
-    assert!(edit_res.output.contains("strictly forbidden under 'read-only'"));
+    assert!(edit_res
+        .output
+        .contains("strictly forbidden under 'read-only'"));
 
     // 4. bash is forbidden in ReadOnly mode
     let bash_tool = BashTool;
@@ -79,7 +85,9 @@ async fn test_permission_mode_read_only() {
         .await
         .unwrap();
     assert!(!bash_res.success);
-    assert!(bash_res.output.contains("strictly forbidden under 'read-only'"));
+    assert!(bash_res
+        .output
+        .contains("strictly forbidden under 'read-only'"));
 }
 
 #[tokio::test]
@@ -120,7 +128,10 @@ async fn test_permission_mode_edit_with_approval_and_mock_handler() {
         .await
         .unwrap();
     assert!(edit_res1.success);
-    assert_eq!(fs::read_to_string(&test_file).unwrap(), "const VERSION: &str = \"1.1\";");
+    assert_eq!(
+        fs::read_to_string(&test_file).unwrap(),
+        "const VERSION: &str = \"1.1\";"
+    );
 
     // 2nd edit is denied
     let edit_res2 = edit_tool
@@ -133,7 +144,10 @@ async fn test_permission_mode_edit_with_approval_and_mock_handler() {
     assert!(!edit_res2.success);
     assert!(edit_res2.output.contains("denied by approval policy"));
     // File content remains 1.1
-    assert_eq!(fs::read_to_string(&test_file).unwrap(), "const VERSION: &str = \"1.1\";");
+    assert_eq!(
+        fs::read_to_string(&test_file).unwrap(),
+        "const VERSION: &str = \"1.1\";"
+    );
 }
 
 #[tokio::test]
@@ -204,8 +218,12 @@ async fn test_permission_mode_safe_bash_allowlist_and_blocklist() {
     assert!(matches!(dec_prompt, PermissionDecision::Denied(_)));
 
     // 3. Blocklisted command is unconditionally blocked
-    let dec_blocklist = policy.check_action("bash", "git reset --hard HEAD", "").unwrap();
-    assert!(matches!(dec_blocklist, PermissionDecision::Denied(msg) if msg.contains("safety blocklist")));
+    let dec_blocklist = policy
+        .check_action("bash", "git reset --hard HEAD", "")
+        .unwrap();
+    assert!(
+        matches!(dec_blocklist, PermissionDecision::Denied(msg) if msg.contains("safety blocklist"))
+    );
 }
 
 #[tokio::test]
@@ -235,7 +253,10 @@ async fn test_dry_run_simulation_mode_creates_no_disk_side_effects() {
     // 1. Dry run create_file
     let create_tool = CreateFileTool;
     let create_res = create_tool
-        .execute(r#"{"path":"src/dry_file.rs","content":"pub struct Dry;"}"#, &ctx)
+        .execute(
+            r#"{"path":"src/dry_file.rs","content":"pub struct Dry;"}"#,
+            &ctx,
+        )
         .await
         .unwrap();
     assert!(create_res.success);
@@ -254,7 +275,10 @@ async fn test_dry_run_simulation_mode_creates_no_disk_side_effects() {
     assert!(edit_res.success);
     assert!(edit_res.output.contains("[DRY-RUN SIMULATION]"));
     // Disk content unchanged!
-    assert_eq!(fs::read_to_string(&test_file).unwrap(), "fn main() { println!(\"old\"); }");
+    assert_eq!(
+        fs::read_to_string(&test_file).unwrap(),
+        "fn main() { println!(\"old\"); }"
+    );
 
     // 3. Dry run bash
     let bash_tool = BashTool;
@@ -320,9 +344,15 @@ async fn test_enterprise_secret_redaction_and_sensitive_files() {
     assert!(redacted.contains("[REDACTED_PRIVATE_KEY]"));
     assert!(redacted.contains("[REDACTED_BEARER_TOKEN]"));
 
-    assert!(RedactionEngine::is_sensitive_file(std::path::Path::new(".env")));
-    assert!(RedactionEngine::is_sensitive_file(std::path::Path::new("credentials.json")));
-    assert!(!RedactionEngine::is_sensitive_file(std::path::Path::new("src/main.rs")));
+    assert!(RedactionEngine::is_sensitive_file(std::path::Path::new(
+        ".env"
+    )));
+    assert!(RedactionEngine::is_sensitive_file(std::path::Path::new(
+        "credentials.json"
+    )));
+    assert!(!RedactionEngine::is_sensitive_file(std::path::Path::new(
+        "src/main.rs"
+    )));
 }
 
 #[tokio::test]
@@ -362,7 +392,8 @@ async fn test_agent_loop_with_safety_policy_integration() {
                     call_type: "function".to_string(),
                     function: FunctionCall {
                         name: "create_file".to_string(),
-                        arguments: r#"{"path":"forbidden.rs","content":"pub struct X;"}"#.to_string(),
+                        arguments: r#"{"path":"forbidden.rs","content":"pub struct X;"}"#
+                            .to_string(),
                     },
                 }]),
             ),
@@ -392,7 +423,10 @@ async fn test_agent_loop_with_safety_policy_integration() {
         .with_safety_policy(policy)
         .with_retrieval(false);
 
-    let summary = agent_loop.execute_task("Create forbidden file", None).await.unwrap();
+    let summary = agent_loop
+        .execute_task("Create forbidden file", None)
+        .await
+        .unwrap();
 
     assert_eq!(summary.status, "completed");
     assert_eq!(summary.tool_calls_count, 1);

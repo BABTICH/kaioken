@@ -26,7 +26,12 @@ const CLI: CliGroup[] = [
         summary:
           "Drive the agent over JSON-RPC 2.0 on stdio — agent.prompt/steer/approve/cancel, events as notifications. For editors and embedding processes.",
       },
-      { cmd: "kaioken daemon", args: "[-port <n>]", summary: "Serve the engine over a loopback HTTP API — what Kaioken Desktop talks to." },
+      {
+        cmd: "kaioken desktop",
+        args: "[--embedded] [--tab <route>] [--theme <dark|light>] [--headless]",
+        summary:
+          "Launch the native Rust cockpit. It connects to kaioken watch, or starts the embedded runtime when no daemon answers.",
+      },
       { cmd: "kaioken upgrade", args: "[check]", summary: "Update kaioken itself from the latest GitHub release; check only reports." },
     ],
   },
@@ -66,7 +71,7 @@ const CLI: CliGroup[] = [
           "Review a diff against the repo's own documented conventions and skills. Exit code is the CI contract; -format json|sarif feeds a dashboard.",
       },
       { cmd: "kaioken verify", args: "", summary: "Run the repo's build/test commands green — an agent fixes failures, then the gate re-runs every command." },
-      { cmd: "kaioken watch", args: "[-interval <s>]", summary: "Poll the working tree and print a line when new changed paths appear." },
+      { cmd: "kaioken watch", args: "[--debounce <ms>] [--daemon] [--ipc-port <n>]", summary: "Watch the workspace, re-parse changed ASTs into SQLite, and serve the loopback JSON-RPC endpoint the desktop and TUI use." },
       { cmd: "kaioken usage", args: "[7d|all|refresh|prune]", summary: "What Kaioken has spent — by operation, model and workspace." },
       { cmd: "kaioken gitdraft", args: "[base]", summary: "LLM-drafted commit message + PR description grounded in the diff." },
       { cmd: "kaioken handoff", args: "[session-id] [-out]", summary: "Write a continuation briefing from a saved session." },

@@ -1,6 +1,6 @@
-use std::path::Path;
-use rusqlite::Connection;
 use crate::error::{KaiokenError, Result};
+use rusqlite::Connection;
+use std::path::Path;
 
 pub const SCHEMA_V1: &str = r#"
 -- 1. Files
@@ -185,9 +185,14 @@ impl Database {
         if let Some(parent) = path.parent() {
             std::fs::create_dir_all(parent)?;
         }
-        let conn = Connection::open(path)
-            .map_err(|e| KaiokenError::MemoryError(format!("Failed to open SQLite database at {}: {}", path.display(), e)))?;
-        
+        let conn = Connection::open(path).map_err(|e| {
+            KaiokenError::MemoryError(format!(
+                "Failed to open SQLite database at {}: {}",
+                path.display(),
+                e
+            ))
+        })?;
+
         Self::apply_pragmas(&conn)?;
         let db = Self { conn };
         db.init_schema()?;
@@ -195,8 +200,9 @@ impl Database {
     }
 
     pub fn open_in_memory() -> Result<Self> {
-        let conn = Connection::open_in_memory()
-            .map_err(|e| KaiokenError::MemoryError(format!("Failed to open in-memory SQLite database: {}", e)))?;
+        let conn = Connection::open_in_memory().map_err(|e| {
+            KaiokenError::MemoryError(format!("Failed to open in-memory SQLite database: {}", e))
+        })?;
         Self::apply_pragmas(&conn)?;
         let db = Self { conn };
         db.init_schema()?;
@@ -210,28 +216,43 @@ impl Database {
              PRAGMA foreign_keys = ON;
              PRAGMA synchronous = NORMAL;",
         )
-        .map_err(|e| KaiokenError::MemoryError(format!("Failed to configure SQLite pragmas: {}", e)))?;
+        .map_err(|e| {
+            KaiokenError::MemoryError(format!("Failed to configure SQLite pragmas: {}", e))
+        })?;
         Ok(())
     }
 
     pub fn init_schema(&self) -> Result<()> {
-        self.conn.execute_batch(SCHEMA_V1)
-            .map_err(|e| KaiokenError::MemoryError(format!("Failed to run schema migrations: {}", e)))?;
+        self.conn.execute_batch(SCHEMA_V1).map_err(|e| {
+            KaiokenError::MemoryError(format!("Failed to run schema migrations: {}", e))
+        })?;
 
         // Ensure unique index on docs(file_id) for ON CONFLICT upsert support
         // (Upgrades legacy non-unique index from older database instances)
-        let is_unique: bool = self.conn.query_row(
-            "SELECT \"unique\" FROM pragma_index_list('docs') WHERE name = 'idx_docs_file_id'",
-            [],
-            |r| r.get::<_, i32>(0).map(|u| u == 1),
-        ).unwrap_or(false);
+        let is_unique: bool = self
+            .conn
+            .query_row(
+                "SELECT \"unique\" FROM pragma_index_list('docs') WHERE name = 'idx_docs_file_id'",
+                [],
+                |r| r.get::<_, i32>(0).map(|u| u == 1),
+            )
+            .unwrap_or(false);
 
         if !is_unique {
-            let _ = self.conn.execute("DROP INDEX IF EXISTS idx_docs_file_id;", []);
-            self.conn.execute(
-                "CREATE UNIQUE INDEX IF NOT EXISTS idx_docs_file_id ON docs(file_id);",
-                [],
-            ).map_err(|e| KaiokenError::MemoryError(format!("Failed to create unique index on docs(file_id): {}", e)))?;
+            let _ = self
+                .conn
+                .execute("DROP INDEX IF EXISTS idx_docs_file_id;", []);
+            self.conn
+                .execute(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS idx_docs_file_id ON docs(file_id);",
+                    [],
+                )
+                .map_err(|e| {
+                    KaiokenError::MemoryError(format!(
+                        "Failed to create unique index on docs(file_id): {}",
+                        e
+                    ))
+                })?;
         }
 
         Ok(())

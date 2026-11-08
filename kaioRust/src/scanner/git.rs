@@ -1,7 +1,7 @@
+use crate::error::{KaiokenError, Result};
+use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use serde::{Deserialize, Serialize};
-use crate::error::{KaiokenError, Result};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct GitCommitInfo {
@@ -139,7 +139,9 @@ impl GitScanner {
             .arg("1")
             .arg(commit_ref)
             .output()
-            .map_err(|e| KaiokenError::ScannerError(format!("Failed to check commit parents: {}", e)))?;
+            .map_err(|e| {
+                KaiokenError::ScannerError(format!("Failed to check commit parents: {}", e))
+            })?;
 
         let stdout = String::from_utf8_lossy(&parents_output.stdout);
         let hashes: Vec<&str> = stdout.split_whitespace().collect();
@@ -278,7 +280,9 @@ impl GitScanner {
             .arg("1")
             .arg(commit_ref)
             .output()
-            .map_err(|e| KaiokenError::ScannerError(format!("Failed to check commit parents: {}", e)))?;
+            .map_err(|e| {
+                KaiokenError::ScannerError(format!("Failed to check commit parents: {}", e))
+            })?;
 
         let stdout = String::from_utf8_lossy(&parents_output.stdout);
         let hashes: Vec<&str> = stdout.split_whitespace().collect();
@@ -305,7 +309,9 @@ impl GitScanner {
                 .arg(commit_ref)
                 .output()
         }
-        .map_err(|e| KaiokenError::ScannerError(format!("Failed to run git diff for commit: {}", e)))?;
+        .map_err(|e| {
+            KaiokenError::ScannerError(format!("Failed to run git diff for commit: {}", e))
+        })?;
 
         if !output.status.success() {
             return Err(KaiokenError::ScannerError(format!(
@@ -326,8 +332,8 @@ impl GitScanner {
         let mut current_file: Option<PathBuf> = None;
 
         for line in diff_text.lines() {
-            if line.starts_with("+++ b/") {
-                let path_str = line["+++ b/".len()..].trim().trim_matches('"');
+            if let Some(path_str) = line.strip_prefix("+++ b/") {
+                let path_str = path_str.trim().trim_matches('"');
                 current_file = Some(PathBuf::from(path_str));
             } else if line.starts_with("+++ /dev/null") {
                 current_file = None;
@@ -360,8 +366,7 @@ impl GitScanner {
         let end_idx = line[3..].find("@@")? + 3;
         let content = line[3..end_idx].trim();
         for part in content.split_whitespace() {
-            if part.starts_with('+') {
-                let num_str = &part[1..];
+            if let Some(num_str) = part.strip_prefix('+') {
                 if let Some((start_s, count_s)) = num_str.split_once(',') {
                     let start = start_s.parse::<usize>().ok()?;
                     let count = count_s.parse::<usize>().ok()?;

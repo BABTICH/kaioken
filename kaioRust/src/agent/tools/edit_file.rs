@@ -1,9 +1,9 @@
-use std::path::Path;
-use serde::Deserialize;
-use serde_json::{json, Value};
+use super::{BoxFuture, Tool, ToolContext, ToolResult};
 use crate::error::Result;
 use crate::safety::path_guard::PathGuard;
-use super::{BoxFuture, Tool, ToolContext, ToolResult};
+use serde::Deserialize;
+use serde_json::{json, Value};
+use std::path::Path;
 
 pub struct EditFileTool;
 
@@ -44,31 +44,57 @@ impl Tool for EditFileTool {
         })
     }
 
-    fn execute<'a>(&'a self, args: &'a str, ctx: &'a ToolContext) -> BoxFuture<'a, Result<ToolResult>> {
+    fn execute<'a>(
+        &'a self,
+        args: &'a str,
+        ctx: &'a ToolContext,
+    ) -> BoxFuture<'a, Result<ToolResult>> {
         let repo_root = ctx.repo_root.clone();
         let audit_logger = ctx.audit_logger.clone();
         let args_str = args.to_string();
         Box::pin(async move {
             let parsed: EditFileArgs = match serde_json::from_str(&args_str) {
                 Ok(a) => a,
-                Err(e) => return Ok(ToolResult::error(format!("Invalid arguments for edit_file: {}", e))),
-            };
-
-            let validated_path = match PathGuard::validate_path(Path::new(&parsed.path), &repo_root, true) {
-                Ok(p) => p,
                 Err(e) => {
-                    let _ = audit_logger.log("agent", "edit_file", &parsed.path, false, Some(&e.to_string()));
-                    return Ok(ToolResult::error(format!("Edit blocked by path guard: {}", e)));
+                    return Ok(ToolResult::error(format!(
+                        "Invalid arguments for edit_file: {}",
+                        e
+                    )))
                 }
             };
 
+            let validated_path =
+                match PathGuard::validate_path(Path::new(&parsed.path), &repo_root, true) {
+                    Ok(p) => p,
+                    Err(e) => {
+                        let _ = audit_logger.log(
+                            "agent",
+                            "edit_file",
+                            &parsed.path,
+                            false,
+                            Some(&e.to_string()),
+                        );
+                        return Ok(ToolResult::error(format!(
+                            "Edit blocked by path guard: {}",
+                            e
+                        )));
+                    }
+                };
+
             let is_dry_run = if let Some(policy) = &ctx.safety_policy {
-                let details = format!("Replacing {} chars with {} chars", parsed.target_content.len(), parsed.replacement_content.len());
+                let details = format!(
+                    "Replacing {} chars with {} chars",
+                    parsed.target_content.len(),
+                    parsed.replacement_content.len()
+                );
                 match policy.check_action("edit_file", &parsed.path, &details)? {
                     crate::safety::PermissionDecision::Allowed => false,
                     crate::safety::PermissionDecision::SimulatedDryRun => true,
                     crate::safety::PermissionDecision::Denied(r) => {
-                        return Ok(ToolResult::error(format!("Edit blocked by safety policy: {}", r)));
+                        return Ok(ToolResult::error(format!(
+                            "Edit blocked by safety policy: {}",
+                            r
+                        )));
                     }
                 }
             } else {
@@ -76,15 +102,33 @@ impl Tool for EditFileTool {
             };
 
             if !validated_path.exists() {
-                let _ = audit_logger.log("agent", "edit_file", &parsed.path, false, Some("File not found"));
-                return Ok(ToolResult::error(format!("File '{}' does not exist. Use create_file to create new files.", parsed.path)));
+                let _ = audit_logger.log(
+                    "agent",
+                    "edit_file",
+                    &parsed.path,
+                    false,
+                    Some("File not found"),
+                );
+                return Ok(ToolResult::error(format!(
+                    "File '{}' does not exist. Use create_file to create new files.",
+                    parsed.path
+                )));
             }
 
             let existing_content = match std::fs::read_to_string(&validated_path) {
                 Ok(c) => c,
                 Err(e) => {
-                    let _ = audit_logger.log("agent", "edit_file", &parsed.path, false, Some(&e.to_string()));
-                    return Ok(ToolResult::error(format!("Failed to read file '{}': {}", parsed.path, e)));
+                    let _ = audit_logger.log(
+                        "agent",
+                        "edit_file",
+                        &parsed.path,
+                        false,
+                        Some(&e.to_string()),
+                    );
+                    return Ok(ToolResult::error(format!(
+                        "Failed to read file '{}': {}",
+                        parsed.path, e
+                    )));
                 }
             };
 
@@ -92,7 +136,13 @@ impl Tool for EditFileTool {
             let matches_count = existing_content.matches(&parsed.target_content).count();
 
             if matches_count == 0 {
-                let _ = audit_logger.log("agent", "edit_file", &parsed.path, false, Some("target_content not found"));
+                let _ = audit_logger.log(
+                    "agent",
+                    "edit_file",
+                    &parsed.path,
+                    false,
+                    Some("target_content not found"),
+                );
                 return Ok(ToolResult::error(format!(
                     "target_content was not found in '{}'. Use read_file to inspect current contents and ensure exact whitespace matching.",
                     parsed.path
@@ -100,7 +150,13 @@ impl Tool for EditFileTool {
             }
 
             if matches_count > 1 {
-                let _ = audit_logger.log("agent", "edit_file", &parsed.path, false, Some("target_content matches multiple times"));
+                let _ = audit_logger.log(
+                    "agent",
+                    "edit_file",
+                    &parsed.path,
+                    false,
+                    Some("target_content matches multiple times"),
+                );
                 return Ok(ToolResult::error(format!(
                     "target_content matched {} times in '{}'. Please provide a larger unique block of surrounding context lines.",
                     matches_count, parsed.path
@@ -108,7 +164,8 @@ impl Tool for EditFileTool {
             }
 
             // Replace single exact occurrence
-            let new_content = existing_content.replacen(&parsed.target_content, &parsed.replacement_content, 1);
+            let new_content =
+                existing_content.replacen(&parsed.target_content, &parsed.replacement_content, 1);
 
             if is_dry_run {
                 return Ok(ToolResult::success(format!(
@@ -118,12 +175,24 @@ impl Tool for EditFileTool {
             }
 
             if let Err(e) = std::fs::write(&validated_path, new_content) {
-                let _ = audit_logger.log("agent", "edit_file", &parsed.path, false, Some(&e.to_string()));
-                return Ok(ToolResult::error(format!("Failed to write updated file '{}': {}", parsed.path, e)));
+                let _ = audit_logger.log(
+                    "agent",
+                    "edit_file",
+                    &parsed.path,
+                    false,
+                    Some(&e.to_string()),
+                );
+                return Ok(ToolResult::error(format!(
+                    "Failed to write updated file '{}': {}",
+                    parsed.path, e
+                )));
             }
 
             let _ = audit_logger.log("agent", "edit_file", &parsed.path, true, None);
-            Ok(ToolResult::success(format!("Successfully applied search-and-replace edit to '{}'.", parsed.path)))
+            Ok(ToolResult::success(format!(
+                "Successfully applied search-and-replace edit to '{}'.",
+                parsed.path
+            )))
         })
     }
 }

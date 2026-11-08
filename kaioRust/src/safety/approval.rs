@@ -1,6 +1,6 @@
+use crate::error::Result;
 use std::io::{self, Write};
 use std::sync::{Arc, Mutex};
-use crate::error::Result;
 
 #[derive(Debug, Clone)]
 pub struct ApprovalRequest {
@@ -10,7 +10,11 @@ pub struct ApprovalRequest {
 }
 
 impl ApprovalRequest {
-    pub fn new(action: impl Into<String>, target: impl Into<String>, details: impl Into<String>) -> Self {
+    pub fn new(
+        action: impl Into<String>,
+        target: impl Into<String>,
+        details: impl Into<String>,
+    ) -> Self {
         Self {
             action: action.into(),
             target: target.into(),

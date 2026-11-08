@@ -1,11 +1,11 @@
+use super::languages::Language;
+use crate::error::Result;
+use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
 use std::fs::{self, File};
 use std::io::Read;
 use std::path::{Path, PathBuf};
-use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
-use crate::error::Result;
-use super::languages::Language;
 
 use super::tree_sitter::{AstParser, ExtractedSymbol};
 
@@ -311,7 +311,7 @@ impl FileInventory {
 
         match std::str::from_utf8(&full_bytes) {
             Ok(utf8_str) => {
-                if options.extract_ast && language == Language::Rust {
+                if options.extract_ast && language.is_ast_supported() {
                     match AstParser::parse_source(utf8_str, language) {
                         Ok(ast_res) => {
                             parse_status = ast_res.parse_status;
@@ -349,6 +349,6 @@ impl FileInventory {
 
     /// Check if byte slice contains null byte (0x00), indicating binary content.
     pub fn is_binary(bytes: &[u8]) -> bool {
-        bytes.iter().any(|&b| b == 0x00)
+        bytes.contains(&0x00)
     }
 }

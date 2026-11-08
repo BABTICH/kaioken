@@ -1,11 +1,10 @@
+use sha2::{Digest, Sha256};
 use std::fs;
 use std::path::{Path, PathBuf};
-use sha2::{Digest, Sha256};
 use tempfile::tempdir;
 
 use kaioken::docs::{
-    DocFrontmatter, DocGenerateOptions, DocGenerator, DocStalenessStatus,
-    StalenessDetector,
+    DocFrontmatter, DocGenerateOptions, DocGenerator, DocStalenessStatus, StalenessDetector,
 };
 use kaioken::memory::{DocRecord, FileRecord, MemoryEngine, SymbolRecord};
 use kaioken::scanner::{AstParser, Language};
@@ -30,7 +29,10 @@ fn test_doc_frontmatter_yaml_roundtrip_and_parsing() {
     assert!(yaml_header.contains("generator: deterministic"));
     assert!(yaml_header.contains("status: fresh"));
 
-    let markdown_doc = format!("{}# Documentation: src/scanner/git.rs\n\n## Purpose\nGit tracker.", yaml_header);
+    let markdown_doc = format!(
+        "{}# Documentation: src/scanner/git.rs\n\n## Purpose\nGit tracker.",
+        yaml_header
+    );
 
     let (parsed_fm, body) = DocFrontmatter::parse_from_markdown(&markdown_doc)
         .expect("Should parse frontmatter successfully");
@@ -109,7 +111,10 @@ fn test_sqlite_docs_crud_and_upsert() {
     assert_eq!(updated_retrieved.doc_level, 1);
     assert_eq!(updated_retrieved.source_hash.as_deref(), Some("hash67890"));
     assert_eq!(updated_retrieved.status, "stale");
-    assert_eq!(updated_retrieved.stale_reason, Some("Source file changed".to_string()));
+    assert_eq!(
+        updated_retrieved.stale_reason,
+        Some("Source file changed".to_string())
+    );
 
     let updated_status_counts = memory.count_docs_by_status().unwrap();
     assert_eq!(updated_status_counts.get("stale"), Some(&1));
@@ -127,7 +132,10 @@ fn test_doc_generator_mirror_path_calculation() {
 
     let src2 = Path::new("src/scanner/git.rs");
     let mirror2 = generator.mirror_path_for_source(src2);
-    assert_eq!(mirror2, docs_root.join("src").join("scanner").join("git.md"));
+    assert_eq!(
+        mirror2,
+        docs_root.join("src").join("scanner").join("git.md")
+    );
 
     let src3 = Path::new("README.md");
     let mirror3 = generator.mirror_path_for_source(src3);
@@ -210,7 +218,9 @@ fn internal_hash(s: &str) -> u64 {
     memory.insert_symbols(file_id, &sym_records).unwrap();
 
     // Save import into memory
-    memory.insert_raw_imports(file_id, &parsed_ast.imports_raw).unwrap();
+    memory
+        .insert_raw_imports(file_id, &parsed_ast.imports_raw)
+        .unwrap();
 
     // Generate documentation
     let options = DocGenerateOptions {
@@ -220,7 +230,9 @@ fn internal_hash(s: &str) -> u64 {
         no_llm: true,
         limit: None,
     };
-    let res = generator.generate_file_doc(&file_rec_with_id, &memory, &options).unwrap();
+    let res = generator
+        .generate_file_doc(&file_rec_with_id, &memory, &options)
+        .unwrap();
     assert_eq!(res.file_id, file_id);
     assert_eq!(res.source_path, "src/auth.rs");
     assert_eq!(res.relative_doc_path, "src/auth.md");
@@ -293,23 +305,31 @@ fn test_doc_staleness_detector_hash_mismatch_and_missing() {
         no_llm: true,
         limit: None,
     };
-    generator.generate_file_doc(&file_rec_with_id, &memory, &options).unwrap();
+    generator
+        .generate_file_doc(&file_rec_with_id, &memory, &options)
+        .unwrap();
 
     let doc_record = memory.get_doc_by_file_id(file_id).unwrap().unwrap();
 
     // 1. Initially fresh
-    let check1 = StalenessDetector::verify_doc(&doc_record, &repo_root, &docs_root, &memory).unwrap();
+    let check1 =
+        StalenessDetector::verify_doc(&doc_record, &repo_root, &docs_root, &memory).unwrap();
     assert!(check1.is_valid);
     assert_eq!(check1.status, DocStalenessStatus::Fresh);
 
     // 2. Modify source file content (triggers HashMismatch)
-    let modified_code = "pub fn add(a: i32, b: i32) -> i32 { a + b }\npub fn sub(a: i32, b: i32) -> i32 { a - b }";
+    let modified_code =
+        "pub fn add(a: i32, b: i32) -> i32 { a + b }\npub fn sub(a: i32, b: i32) -> i32 { a - b }";
     fs::write(&source_abs_path, modified_code).unwrap();
 
-    let check2 = StalenessDetector::verify_doc(&doc_record, &repo_root, &docs_root, &memory).unwrap();
+    let check2 =
+        StalenessDetector::verify_doc(&doc_record, &repo_root, &docs_root, &memory).unwrap();
     assert!(!check2.is_valid);
     match check2.status {
-        DocStalenessStatus::HashMismatch { ref doc_hash, ref source_hash } => {
+        DocStalenessStatus::HashMismatch {
+            ref doc_hash,
+            ref source_hash,
+        } => {
             assert_eq!(doc_hash, &initial_hash);
             assert_ne!(source_hash, &initial_hash);
         }
@@ -320,14 +340,16 @@ fn test_doc_staleness_detector_hash_mismatch_and_missing() {
     let doc_abs_path = docs_root.join(&doc_record.doc_path);
     fs::remove_file(&doc_abs_path).unwrap();
 
-    let check3 = StalenessDetector::verify_doc(&doc_record, &repo_root, &docs_root, &memory).unwrap();
+    let check3 =
+        StalenessDetector::verify_doc(&doc_record, &repo_root, &docs_root, &memory).unwrap();
     assert!(!check3.is_valid);
     assert_eq!(check3.status, DocStalenessStatus::MissingDocFile);
 
     // 4. Delete source file (triggers MissingSource)
     fs::remove_file(&source_abs_path).unwrap();
 
-    let check4 = StalenessDetector::verify_doc(&doc_record, &repo_root, &docs_root, &memory).unwrap();
+    let check4 =
+        StalenessDetector::verify_doc(&doc_record, &repo_root, &docs_root, &memory).unwrap();
     assert!(!check4.is_valid);
     assert_eq!(check4.status, DocStalenessStatus::MissingSource);
 }

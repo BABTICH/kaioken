@@ -1,7 +1,7 @@
-use std::collections::HashSet;
 use crate::error::Result;
 use crate::memory::MemoryEngine;
 use crate::retrieval::context_packet::FailureMemorySnippet;
+use std::collections::HashSet;
 
 pub struct FailureLookup<'a> {
     memory: &'a MemoryEngine,
@@ -100,9 +100,17 @@ impl<'a> FailureLookup<'a> {
         Ok(results)
     }
 
-    fn resolve_provenance(&self, file_id: Option<i64>, symbol_id: Option<i64>) -> (Option<String>, Option<String>) {
+    fn resolve_provenance(
+        &self,
+        file_id: Option<i64>,
+        symbol_id: Option<i64>,
+    ) -> (Option<String>, Option<String>) {
         let file_path = file_id.and_then(|id| {
-            self.memory.get_file_by_id(id).ok().flatten().map(|f| f.path)
+            self.memory
+                .get_file_by_id(id)
+                .ok()
+                .flatten()
+                .map(|f| f.path)
         });
 
         let symbol_name = symbol_id.and_then(|id| {
@@ -111,7 +119,8 @@ impl<'a> FailureLookup<'a> {
                 "SELECT name FROM symbols WHERE id = ?1",
                 rusqlite::params![id],
                 |row| row.get(0),
-            ).ok()
+            )
+            .ok()
         });
 
         (file_path, symbol_name)

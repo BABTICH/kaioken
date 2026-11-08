@@ -12,6 +12,11 @@
 /.kaioken
 /.kaioken_v1
 /.kaio_site_old
+/.kaio
+/kaioRust
+/target
+/website/dist
+/website/.vercel
 /dist
 node_modules
 **/node_modules

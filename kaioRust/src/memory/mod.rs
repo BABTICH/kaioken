@@ -1,26 +1,33 @@
-pub mod db;
-pub mod file_memory;
-pub mod symbol_memory;
 pub mod commit_memory;
-pub mod doc_memory;
-pub mod graph;
-pub mod failure_memory;
+pub mod db;
 pub mod decision_memory;
+pub mod doc_memory;
+pub mod failure_memory;
+pub mod file_memory;
+pub mod graph;
+pub mod introspection;
+pub mod symbol_memory;
 
-use std::path::Path;
-use rusqlite::{params, OptionalExtension};
-use serde::{Deserialize, Serialize};
 use crate::error::{KaiokenError, Result};
 use crate::scanner::file_inventory::InventorySummary;
+use rusqlite::{params, OptionalExtension};
+use serde::{Deserialize, Serialize};
+use std::path::Path;
 
+pub use commit_memory::{
+    CommitAnalysis, CommitAnalyzer, CommitChangeRecord, CommitRecord, TouchedSymbolInfo,
+};
 pub use db::Database;
-pub use file_memory::{FileRecord, RawImportRecord};
-pub use symbol_memory::SymbolRecord;
-pub use commit_memory::{CommitRecord, CommitChangeRecord, CommitAnalysis, CommitAnalyzer, TouchedSymbolInfo};
-pub use doc_memory::DocRecord;
-pub use graph::{EdgeRecord, DependencyGraph};
-pub use failure_memory::FailureRecord;
 pub use decision_memory::DecisionRecord;
+pub use doc_memory::DocRecord;
+pub use failure_memory::FailureRecord;
+pub use file_memory::{FileRecord, RawImportRecord};
+pub use graph::{DependencyGraph, EdgeRecord};
+pub use introspection::{
+    format_risk_badge, normalize_file_path, risk_rank, CommitMemoryDetail, DetailedEdge,
+    FileExplanation, MemoryRecentResult,
+};
+pub use symbol_memory::SymbolRecord;
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SyncStats {
@@ -83,11 +90,13 @@ impl MemoryEngine {
             ],
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let id: i64 = conn.query_row(
-            "SELECT id FROM files WHERE path = ?1;",
-            params![record.path],
-            |row| row.get(0),
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        let id: i64 = conn
+            .query_row(
+                "SELECT id FROM files WHERE path = ?1;",
+                params![record.path],
+                |row| row.get(0),
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         Ok(id)
     }
@@ -98,7 +107,8 @@ impl MemoryEngine {
         conn.execute(
             "UPDATE files SET source_hash = ?1, size = ?2, last_modified = ?3 WHERE path = ?4;",
             params![new_hash, size_bytes as i64, now, path],
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        )
+        .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         Ok(())
     }
 
@@ -109,23 +119,26 @@ impl MemoryEngine {
              FROM files WHERE path = ?1;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let file = stmt.query_row(params![path], |row| {
-            let size_i64: i64 = row.get(3)?;
-            Ok(FileRecord {
-                id: Some(row.get(0)?),
-                path: row.get(1)?,
-                language: row.get(2)?,
-                size: size_i64 as usize,
-                source_hash: row.get(4)?,
-                parse_status: row.get(5)?,
-                last_commit: row.get(6)?,
-                last_modified: row.get(7)?,
-                summary: row.get(8)?,
-                risk_level: row.get(9)?,
-                doc_path: row.get(10)?,
-                doc_status: row.get(11)?,
+        let file = stmt
+            .query_row(params![path], |row| {
+                let size_i64: i64 = row.get(3)?;
+                Ok(FileRecord {
+                    id: Some(row.get(0)?),
+                    path: row.get(1)?,
+                    language: row.get(2)?,
+                    size: size_i64 as usize,
+                    source_hash: row.get(4)?,
+                    parse_status: row.get(5)?,
+                    last_commit: row.get(6)?,
+                    last_modified: row.get(7)?,
+                    summary: row.get(8)?,
+                    risk_level: row.get(9)?,
+                    doc_path: row.get(10)?,
+                    doc_status: row.get(11)?,
+                })
             })
-        }).optional().map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .optional()
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         Ok(file)
     }
@@ -137,23 +150,26 @@ impl MemoryEngine {
              FROM files WHERE id = ?1;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let file = stmt.query_row(params![id], |row| {
-            let size_i64: i64 = row.get(3)?;
-            Ok(FileRecord {
-                id: Some(row.get(0)?),
-                path: row.get(1)?,
-                language: row.get(2)?,
-                size: size_i64 as usize,
-                source_hash: row.get(4)?,
-                parse_status: row.get(5)?,
-                last_commit: row.get(6)?,
-                last_modified: row.get(7)?,
-                summary: row.get(8)?,
-                risk_level: row.get(9)?,
-                doc_path: row.get(10)?,
-                doc_status: row.get(11)?,
+        let file = stmt
+            .query_row(params![id], |row| {
+                let size_i64: i64 = row.get(3)?;
+                Ok(FileRecord {
+                    id: Some(row.get(0)?),
+                    path: row.get(1)?,
+                    language: row.get(2)?,
+                    size: size_i64 as usize,
+                    source_hash: row.get(4)?,
+                    parse_status: row.get(5)?,
+                    last_commit: row.get(6)?,
+                    last_modified: row.get(7)?,
+                    summary: row.get(8)?,
+                    risk_level: row.get(9)?,
+                    doc_path: row.get(10)?,
+                    doc_status: row.get(11)?,
+                })
             })
-        }).optional().map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .optional()
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         Ok(file)
     }
@@ -165,23 +181,25 @@ impl MemoryEngine {
              FROM files ORDER BY path ASC;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map([], |row| {
-            let size_i64: i64 = row.get(3)?;
-            Ok(FileRecord {
-                id: Some(row.get(0)?),
-                path: row.get(1)?,
-                language: row.get(2)?,
-                size: size_i64 as usize,
-                source_hash: row.get(4)?,
-                parse_status: row.get(5)?,
-                last_commit: row.get(6)?,
-                last_modified: row.get(7)?,
-                summary: row.get(8)?,
-                risk_level: row.get(9)?,
-                doc_path: row.get(10)?,
-                doc_status: row.get(11)?,
+        let rows = stmt
+            .query_map([], |row| {
+                let size_i64: i64 = row.get(3)?;
+                Ok(FileRecord {
+                    id: Some(row.get(0)?),
+                    path: row.get(1)?,
+                    language: row.get(2)?,
+                    size: size_i64 as usize,
+                    source_hash: row.get(4)?,
+                    parse_status: row.get(5)?,
+                    last_commit: row.get(6)?,
+                    last_modified: row.get(7)?,
+                    summary: row.get(8)?,
+                    risk_level: row.get(9)?,
+                    doc_path: row.get(10)?,
+                    doc_status: row.get(11)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -199,7 +217,8 @@ impl MemoryEngine {
 
     pub fn count_files(&self) -> Result<usize> {
         let conn = self.db.connection();
-        let count: i64 = conn.query_row("SELECT COUNT(*) FROM files;", [], |r| r.get(0))
+        let count: i64 = conn
+            .query_row("SELECT COUNT(*) FROM files;", [], |r| r.get(0))
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         Ok(count as usize)
     }
@@ -226,7 +245,8 @@ impl MemoryEngine {
                 sym.signature,
                 sym.summary,
                 sym.parent,
-            ]).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            ])
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         }
         Ok(())
     }
@@ -238,22 +258,24 @@ impl MemoryEngine {
              FROM symbols WHERE file_id = ?1 ORDER BY line_start ASC;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map(params![file_id], |row| {
-            let start: i64 = row.get(4)?;
-            let end: i64 = row.get(5)?;
-            Ok(SymbolRecord {
-                id: Some(row.get(0)?),
-                file_id: row.get(1)?,
-                name: row.get(2)?,
-                kind: row.get(3)?,
-                line_start: start as usize,
-                line_end: end as usize,
-                visibility: row.get(6)?,
-                signature: row.get(7)?,
-                summary: row.get(8)?,
-                parent: row.get(9)?,
+        let rows = stmt
+            .query_map(params![file_id], |row| {
+                let start: i64 = row.get(4)?;
+                let end: i64 = row.get(5)?;
+                Ok(SymbolRecord {
+                    id: Some(row.get(0)?),
+                    file_id: row.get(1)?,
+                    name: row.get(2)?,
+                    kind: row.get(3)?,
+                    line_start: start as usize,
+                    line_end: end as usize,
+                    visibility: row.get(6)?,
+                    signature: row.get(7)?,
+                    summary: row.get(8)?,
+                    parent: row.get(9)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -269,22 +291,24 @@ impl MemoryEngine {
              FROM symbols WHERE name = ?1 ORDER BY id ASC;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map(params![name], |row| {
-            let start: i64 = row.get(4)?;
-            let end: i64 = row.get(5)?;
-            Ok(SymbolRecord {
-                id: Some(row.get(0)?),
-                file_id: row.get(1)?,
-                name: row.get(2)?,
-                kind: row.get(3)?,
-                line_start: start as usize,
-                line_end: end as usize,
-                visibility: row.get(6)?,
-                signature: row.get(7)?,
-                summary: row.get(8)?,
-                parent: row.get(9)?,
+        let rows = stmt
+            .query_map(params![name], |row| {
+                let start: i64 = row.get(4)?;
+                let end: i64 = row.get(5)?;
+                Ok(SymbolRecord {
+                    id: Some(row.get(0)?),
+                    file_id: row.get(1)?,
+                    name: row.get(2)?,
+                    kind: row.get(3)?,
+                    line_start: start as usize,
+                    line_end: end as usize,
+                    visibility: row.get(6)?,
+                    signature: row.get(7)?,
+                    summary: row.get(8)?,
+                    parent: row.get(9)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -302,7 +326,8 @@ impl MemoryEngine {
 
     pub fn count_symbols(&self) -> Result<usize> {
         let conn = self.db.connection();
-        let count: i64 = conn.query_row("SELECT COUNT(*) FROM symbols;", [], |r| r.get(0))
+        let count: i64 = conn
+            .query_row("SELECT COUNT(*) FROM symbols;", [], |r| r.get(0))
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         Ok(count as usize)
     }
@@ -314,22 +339,24 @@ impl MemoryEngine {
              FROM symbols ORDER BY id ASC;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map([], |row| {
-            let start: i64 = row.get(4)?;
-            let end: i64 = row.get(5)?;
-            Ok(SymbolRecord {
-                id: Some(row.get(0)?),
-                file_id: row.get(1)?,
-                name: row.get(2)?,
-                kind: row.get(3)?,
-                line_start: start as usize,
-                line_end: end as usize,
-                visibility: row.get(6)?,
-                signature: row.get(7)?,
-                summary: row.get(8)?,
-                parent: row.get(9)?,
+        let rows = stmt
+            .query_map([], |row| {
+                let start: i64 = row.get(4)?;
+                let end: i64 = row.get(5)?;
+                Ok(SymbolRecord {
+                    id: Some(row.get(0)?),
+                    file_id: row.get(1)?,
+                    name: row.get(2)?,
+                    kind: row.get(3)?,
+                    line_start: start as usize,
+                    line_end: end as usize,
+                    visibility: row.get(6)?,
+                    signature: row.get(7)?,
+                    summary: row.get(8)?,
+                    parent: row.get(9)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -344,8 +371,11 @@ impl MemoryEngine {
 
     pub fn insert_raw_imports(&self, file_id: i64, imports_raw: &[String]) -> Result<()> {
         let conn = self.db.connection();
-        conn.execute("DELETE FROM import_raw WHERE file_id = ?1;", params![file_id])
-            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        conn.execute(
+            "DELETE FROM import_raw WHERE file_id = ?1;",
+            params![file_id],
+        )
+        .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut stmt = conn.prepare(
             "INSERT INTO import_raw (file_id, raw_import, status) VALUES (?1, ?2, 'unresolved');",
@@ -360,21 +390,25 @@ impl MemoryEngine {
 
     pub fn get_raw_imports_for_file(&self, file_id: i64) -> Result<Vec<RawImportRecord>> {
         let conn = self.db.connection();
-        let mut stmt = conn.prepare(
-            "SELECT id, file_id, raw_import, resolved_file_id, resolved_symbol_id, status
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, file_id, raw_import, resolved_file_id, resolved_symbol_id, status
              FROM import_raw WHERE file_id = ?1 ORDER BY id ASC;",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map(params![file_id], |row| {
-            Ok(RawImportRecord {
-                id: Some(row.get(0)?),
-                file_id: row.get(1)?,
-                raw_import: row.get(2)?,
-                resolved_file_id: row.get(3)?,
-                resolved_symbol_id: row.get(4)?,
-                status: row.get(5)?,
+        let rows = stmt
+            .query_map(params![file_id], |row| {
+                Ok(RawImportRecord {
+                    id: Some(row.get(0)?),
+                    file_id: row.get(1)?,
+                    raw_import: row.get(2)?,
+                    resolved_file_id: row.get(3)?,
+                    resolved_symbol_id: row.get(4)?,
+                    status: row.get(5)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -385,24 +419,27 @@ impl MemoryEngine {
 
     pub fn count_raw_imports(&self) -> Result<usize> {
         let conn = self.db.connection();
-        let count: i64 = conn.query_row("SELECT COUNT(*) FROM import_raw;", [], |r| r.get(0))
+        let count: i64 = conn
+            .query_row("SELECT COUNT(*) FROM import_raw;", [], |r| r.get(0))
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         Ok(count as usize)
     }
 
     pub fn get_unresolved_imports(&self) -> Result<Vec<(String, String)>> {
         let conn = self.db.connection();
-        let mut stmt = conn.prepare(
-            "SELECT f.path, r.raw_import
+        let mut stmt = conn
+            .prepare(
+                "SELECT f.path, r.raw_import
              FROM import_raw r
              JOIN files f ON f.id = r.file_id
              WHERE r.status = 'unresolved'
              ORDER BY f.path ASC, r.raw_import ASC;",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map([], |row| {
-            Ok((row.get(0)?, row.get(1)?))
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        let rows = stmt
+            .query_map([], |row| Ok((row.get(0)?, row.get(1)?)))
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -428,19 +465,23 @@ impl MemoryEngine {
 
     pub fn get_edges_for_source(&self, source_symbol_id: i64) -> Result<Vec<EdgeRecord>> {
         let conn = self.db.connection();
-        let mut stmt = conn.prepare(
-            "SELECT id, source_symbol_id, target_symbol_id, edge_type
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, source_symbol_id, target_symbol_id, edge_type
              FROM edges WHERE source_symbol_id = ?1 ORDER BY id ASC;",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map(params![source_symbol_id], |row| {
-            Ok(EdgeRecord {
-                id: Some(row.get(0)?),
-                source_symbol_id: row.get(1)?,
-                target_symbol_id: row.get(2)?,
-                edge_type: row.get(3)?,
+        let rows = stmt
+            .query_map(params![source_symbol_id], |row| {
+                Ok(EdgeRecord {
+                    id: Some(row.get(0)?),
+                    source_symbol_id: row.get(1)?,
+                    target_symbol_id: row.get(2)?,
+                    edge_type: row.get(3)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -451,19 +492,23 @@ impl MemoryEngine {
 
     pub fn get_edges_for_target(&self, target_symbol_id: i64) -> Result<Vec<EdgeRecord>> {
         let conn = self.db.connection();
-        let mut stmt = conn.prepare(
-            "SELECT id, source_symbol_id, target_symbol_id, edge_type
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, source_symbol_id, target_symbol_id, edge_type
              FROM edges WHERE target_symbol_id = ?1 ORDER BY id ASC;",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map(params![target_symbol_id], |row| {
-            Ok(EdgeRecord {
-                id: Some(row.get(0)?),
-                source_symbol_id: row.get(1)?,
-                target_symbol_id: row.get(2)?,
-                edge_type: row.get(3)?,
+        let rows = stmt
+            .query_map(params![target_symbol_id], |row| {
+                Ok(EdgeRecord {
+                    id: Some(row.get(0)?),
+                    source_symbol_id: row.get(1)?,
+                    target_symbol_id: row.get(2)?,
+                    edge_type: row.get(3)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -474,26 +519,167 @@ impl MemoryEngine {
 
     pub fn count_edges(&self) -> Result<usize> {
         let conn = self.db.connection();
-        let count: i64 = conn.query_row("SELECT COUNT(*) FROM edges;", [], |r| r.get(0))
+        let count: i64 = conn
+            .query_row("SELECT COUNT(*) FROM edges;", [], |r| r.get(0))
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         Ok(count as usize)
     }
 
     pub fn get_all_edges(&self) -> Result<Vec<EdgeRecord>> {
         let conn = self.db.connection();
-        let mut stmt = conn.prepare(
-            "SELECT id, source_symbol_id, target_symbol_id, edge_type
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, source_symbol_id, target_symbol_id, edge_type
              FROM edges ORDER BY id ASC;",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map([], |row| {
-            Ok(EdgeRecord {
-                id: Some(row.get(0)?),
-                source_symbol_id: row.get(1)?,
-                target_symbol_id: row.get(2)?,
-                edge_type: row.get(3)?,
+        let rows = stmt
+            .query_map([], |row| {
+                Ok(EdgeRecord {
+                    id: Some(row.get(0)?),
+                    source_symbol_id: row.get(1)?,
+                    target_symbol_id: row.get(2)?,
+                    edge_type: row.get(3)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let mut list = Vec::new();
+        for r in rows {
+            list.push(r.map_err(|e| KaiokenError::MemoryError(e.to_string()))?);
+        }
+        Ok(list)
+    }
+
+    pub fn get_edges_from_file(&self, file_id: i64) -> Result<Vec<EdgeRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT e.id, e.source_symbol_id, e.target_symbol_id, e.edge_type
+             FROM edges e
+             JOIN symbols s ON e.source_symbol_id = s.id
+             WHERE s.file_id = ?1
+             ORDER BY e.id ASC;",
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let rows = stmt
+            .query_map(params![file_id], |row| {
+                Ok(EdgeRecord {
+                    id: Some(row.get(0)?),
+                    source_symbol_id: row.get(1)?,
+                    target_symbol_id: row.get(2)?,
+                    edge_type: row.get(3)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let mut list = Vec::new();
+        for r in rows {
+            list.push(r.map_err(|e| KaiokenError::MemoryError(e.to_string()))?);
+        }
+        Ok(list)
+    }
+
+    pub fn get_edges_to_file(&self, file_id: i64) -> Result<Vec<EdgeRecord>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT e.id, e.source_symbol_id, e.target_symbol_id, e.edge_type
+             FROM edges e
+             JOIN symbols s ON e.target_symbol_id = s.id
+             WHERE s.file_id = ?1
+             ORDER BY e.id ASC;",
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let rows = stmt
+            .query_map(params![file_id], |row| {
+                Ok(EdgeRecord {
+                    id: Some(row.get(0)?),
+                    source_symbol_id: row.get(1)?,
+                    target_symbol_id: row.get(2)?,
+                    edge_type: row.get(3)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let mut list = Vec::new();
+        for r in rows {
+            list.push(r.map_err(|e| KaiokenError::MemoryError(e.to_string()))?);
+        }
+        Ok(list)
+    }
+
+    pub fn get_detailed_edges_from_file(&self, file_id: i64) -> Result<Vec<DetailedEdge>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT e.id, e.source_symbol_id, s_src.name, f_src.path,
+                    e.target_symbol_id, s_tgt.name, f_tgt.path, e.edge_type
+             FROM edges e
+             JOIN symbols s_src ON e.source_symbol_id = s_src.id
+             JOIN files f_src ON s_src.file_id = f_src.id
+             LEFT JOIN symbols s_tgt ON e.target_symbol_id = s_tgt.id
+             LEFT JOIN files f_tgt ON s_tgt.file_id = f_tgt.id
+             WHERE s_src.file_id = ?1
+             ORDER BY e.id ASC;",
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let rows = stmt
+            .query_map(params![file_id], |row| {
+                Ok(DetailedEdge {
+                    id: Some(row.get(0)?),
+                    source_symbol_id: row.get(1)?,
+                    source_symbol_name: row.get(2)?,
+                    source_file_path: row.get(3)?,
+                    target_symbol_id: row.get(4)?,
+                    target_symbol_name: row.get(5)?,
+                    target_file_path: row.get(6)?,
+                    edge_type: row.get(7)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let mut list = Vec::new();
+        for r in rows {
+            list.push(r.map_err(|e| KaiokenError::MemoryError(e.to_string()))?);
+        }
+        Ok(list)
+    }
+
+    pub fn get_detailed_edges_to_file(&self, file_id: i64) -> Result<Vec<DetailedEdge>> {
+        let conn = self.db.connection();
+        let mut stmt = conn
+            .prepare(
+                "SELECT e.id, e.source_symbol_id, s_src.name, f_src.path,
+                    e.target_symbol_id, s_tgt.name, f_tgt.path, e.edge_type
+             FROM edges e
+             JOIN symbols s_tgt ON e.target_symbol_id = s_tgt.id
+             JOIN files f_tgt ON s_tgt.file_id = f_tgt.id
+             LEFT JOIN symbols s_src ON e.source_symbol_id = s_src.id
+             LEFT JOIN files f_src ON s_src.file_id = f_src.id
+             WHERE s_tgt.file_id = ?1
+             ORDER BY e.id ASC;",
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let rows = stmt
+            .query_map(params![file_id], |row| {
+                Ok(DetailedEdge {
+                    id: Some(row.get(0)?),
+                    source_symbol_id: row.get(1)?,
+                    source_symbol_name: row.get(2)?,
+                    source_file_path: row.get(3)?,
+                    target_symbol_id: row.get(4)?,
+                    target_symbol_name: row.get(5)?,
+                    target_file_path: row.get(6)?,
+                    edge_type: row.get(7)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -506,7 +692,11 @@ impl MemoryEngine {
     // 5. Commit Memory CRUD
     // ==========================================
 
-    pub fn record_commit(&self, commit: &CommitRecord, changes: &[CommitChangeRecord]) -> Result<i64> {
+    pub fn record_commit(
+        &self,
+        commit: &CommitRecord,
+        changes: &[CommitChangeRecord],
+    ) -> Result<i64> {
         let conn = self.db.connection();
         conn.execute(
             "INSERT INTO commits (hash, message, author, created_at, summary, risk_level)
@@ -525,32 +715,34 @@ impl MemoryEngine {
                 commit.summary,
                 commit.risk_level,
             ],
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        )
+        .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let commit_id: i64 = conn.query_row(
-            "SELECT id FROM commits WHERE hash = ?1;",
-            params![commit.hash],
-            |row| row.get(0),
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        let commit_id: i64 = conn
+            .query_row(
+                "SELECT id FROM commits WHERE hash = ?1;",
+                params![commit.hash],
+                |row| row.get(0),
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         // Clear previous changes if re-recording this commit
         conn.execute(
             "DELETE FROM commit_changes WHERE commit_id = ?1;",
             params![commit_id],
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        )
+        .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let mut stmt = conn.prepare(
-            "INSERT INTO commit_changes (commit_id, file_id, symbol_id, change_type)
+        let mut stmt = conn
+            .prepare(
+                "INSERT INTO commit_changes (commit_id, file_id, symbol_id, change_type)
              VALUES (?1, ?2, ?3, ?4);",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         for c in changes {
-            stmt.execute(params![
-                commit_id,
-                c.file_id,
-                c.symbol_id,
-                c.change_type,
-            ]).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            stmt.execute(params![commit_id, c.file_id, c.symbol_id, c.change_type,])
+                .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
             // If file_id is present, update files.last_commit
             if let Some(fid) = c.file_id {
@@ -569,7 +761,11 @@ impl MemoryEngine {
             }
         }
 
-        let short_hash = if commit.hash.len() >= 8 { &commit.hash[0..8] } else { &commit.hash };
+        let short_hash = if commit.hash.len() >= 8 {
+            &commit.hash[0..8]
+        } else {
+            &commit.hash
+        };
         let reason_direct = format!("Modified in commit {}", short_hash);
         for &fid in &touched_file_ids {
             let _ = self.mark_doc_status(fid, "stale", Some(&reason_direct));
@@ -578,11 +774,16 @@ impl MemoryEngine {
             if let Ok(dep_ids) = self.get_dependent_file_ids(fid) {
                 for dep_id in dep_ids {
                     if !touched_file_ids.contains(&dep_id) {
-                        let source_name = self.get_file_by_id(fid)
-                            .ok().flatten()
+                        let source_name = self
+                            .get_file_by_id(fid)
+                            .ok()
+                            .flatten()
                             .map(|f| f.path)
                             .unwrap_or_else(|| format!("file_id {}", fid));
-                        let reason_dep = format!("Dependency '{}' modified in commit {}", source_name, short_hash);
+                        let reason_dep = format!(
+                            "Dependency '{}' modified in commit {}",
+                            source_name, short_hash
+                        );
                         let _ = self.mark_doc_status(dep_id, "maybe_stale", Some(&reason_dep));
                     }
                 }
@@ -598,66 +799,80 @@ impl MemoryEngine {
 
     pub fn get_commit_by_hash(&self, hash: &str) -> Result<Option<CommitRecord>> {
         let conn = self.db.connection();
-        let mut stmt = conn.prepare(
-            "SELECT id, hash, message, author, created_at, summary, risk_level
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, hash, message, author, created_at, summary, risk_level
              FROM commits WHERE hash = ?1;",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let commit = stmt.query_row(params![hash], |row| {
-            Ok(CommitRecord {
-                id: Some(row.get(0)?),
-                hash: row.get(1)?,
-                message: row.get(2)?,
-                author: row.get(3)?,
-                created_at: row.get(4)?,
-                summary: row.get(5)?,
-                risk_level: row.get(6)?,
+        let commit = stmt
+            .query_row(params![hash], |row| {
+                Ok(CommitRecord {
+                    id: Some(row.get(0)?),
+                    hash: row.get(1)?,
+                    message: row.get(2)?,
+                    author: row.get(3)?,
+                    created_at: row.get(4)?,
+                    summary: row.get(5)?,
+                    risk_level: row.get(6)?,
+                })
             })
-        }).optional().map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .optional()
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         Ok(commit)
     }
 
     pub fn get_commit_by_id(&self, id: i64) -> Result<Option<CommitRecord>> {
         let conn = self.db.connection();
-        let mut stmt = conn.prepare(
-            "SELECT id, hash, message, author, created_at, summary, risk_level
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, hash, message, author, created_at, summary, risk_level
              FROM commits WHERE id = ?1;",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let commit = stmt.query_row(params![id], |row| {
-            Ok(CommitRecord {
-                id: Some(row.get(0)?),
-                hash: row.get(1)?,
-                message: row.get(2)?,
-                author: row.get(3)?,
-                created_at: row.get(4)?,
-                summary: row.get(5)?,
-                risk_level: row.get(6)?,
+        let commit = stmt
+            .query_row(params![id], |row| {
+                Ok(CommitRecord {
+                    id: Some(row.get(0)?),
+                    hash: row.get(1)?,
+                    message: row.get(2)?,
+                    author: row.get(3)?,
+                    created_at: row.get(4)?,
+                    summary: row.get(5)?,
+                    risk_level: row.get(6)?,
+                })
             })
-        }).optional().map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .optional()
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         Ok(commit)
     }
 
     pub fn get_recent_commits(&self, limit: usize) -> Result<Vec<CommitRecord>> {
         let conn = self.db.connection();
-        let mut stmt = conn.prepare(
-            "SELECT id, hash, message, author, created_at, summary, risk_level
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, hash, message, author, created_at, summary, risk_level
              FROM commits ORDER BY id DESC LIMIT ?1;",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map(params![limit as i64], |row| {
-            Ok(CommitRecord {
-                id: Some(row.get(0)?),
-                hash: row.get(1)?,
-                message: row.get(2)?,
-                author: row.get(3)?,
-                created_at: row.get(4)?,
-                summary: row.get(5)?,
-                risk_level: row.get(6)?,
+        let rows = stmt
+            .query_map(params![limit as i64], |row| {
+                Ok(CommitRecord {
+                    id: Some(row.get(0)?),
+                    hash: row.get(1)?,
+                    message: row.get(2)?,
+                    author: row.get(3)?,
+                    created_at: row.get(4)?,
+                    summary: row.get(5)?,
+                    risk_level: row.get(6)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -668,20 +883,24 @@ impl MemoryEngine {
 
     pub fn get_changes_for_commit(&self, commit_id: i64) -> Result<Vec<CommitChangeRecord>> {
         let conn = self.db.connection();
-        let mut stmt = conn.prepare(
-            "SELECT id, commit_id, file_id, symbol_id, change_type
+        let mut stmt = conn
+            .prepare(
+                "SELECT id, commit_id, file_id, symbol_id, change_type
              FROM commit_changes WHERE commit_id = ?1 ORDER BY id ASC;",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map(params![commit_id], |row| {
-            Ok(CommitChangeRecord {
-                id: Some(row.get(0)?),
-                commit_id: row.get(1)?,
-                file_id: row.get(2)?,
-                symbol_id: row.get(3)?,
-                change_type: row.get(4)?,
+        let rows = stmt
+            .query_map(params![commit_id], |row| {
+                Ok(CommitChangeRecord {
+                    id: Some(row.get(0)?),
+                    commit_id: row.get(1)?,
+                    file_id: row.get(2)?,
+                    symbol_id: row.get(3)?,
+                    change_type: row.get(4)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -692,14 +911,16 @@ impl MemoryEngine {
 
     pub fn count_commits(&self) -> Result<usize> {
         let conn = self.db.connection();
-        let count: i64 = conn.query_row("SELECT COUNT(*) FROM commits;", [], |r| r.get(0))
+        let count: i64 = conn
+            .query_row("SELECT COUNT(*) FROM commits;", [], |r| r.get(0))
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         Ok(count as usize)
     }
 
     pub fn count_commit_changes(&self) -> Result<usize> {
         let conn = self.db.connection();
-        let count: i64 = conn.query_row("SELECT COUNT(*) FROM commit_changes;", [], |r| r.get(0))
+        let count: i64 = conn
+            .query_row("SELECT COUNT(*) FROM commit_changes;", [], |r| r.get(0))
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         Ok(count as usize)
     }
@@ -731,11 +952,13 @@ impl MemoryEngine {
             ],
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let id: i64 = conn.query_row(
-            "SELECT id FROM docs WHERE file_id = ?1;",
-            params![doc.file_id],
-            |row| row.get(0),
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        let id: i64 = conn
+            .query_row(
+                "SELECT id FROM docs WHERE file_id = ?1;",
+                params![doc.file_id],
+                |row| row.get(0),
+            )
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         // Update files table metadata
         let _ = conn.execute(
@@ -753,19 +976,22 @@ impl MemoryEngine {
              FROM docs WHERE file_id = ?1;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let doc = stmt.query_row(params![file_id], |row| {
-            let level_i64: i64 = row.get(3)?;
-            Ok(DocRecord {
-                id: Some(row.get(0)?),
-                file_id: row.get(1)?,
-                doc_path: row.get(2)?,
-                doc_level: level_i64 as u8,
-                source_hash: row.get(4)?,
-                status: row.get(5)?,
-                updated_at: row.get(6)?,
-                stale_reason: row.get(7)?,
+        let doc = stmt
+            .query_row(params![file_id], |row| {
+                let level_i64: i64 = row.get(3)?;
+                Ok(DocRecord {
+                    id: Some(row.get(0)?),
+                    file_id: row.get(1)?,
+                    doc_path: row.get(2)?,
+                    doc_level: level_i64 as u8,
+                    source_hash: row.get(4)?,
+                    status: row.get(5)?,
+                    updated_at: row.get(6)?,
+                    stale_reason: row.get(7)?,
+                })
             })
-        }).optional().map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .optional()
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         Ok(doc)
     }
@@ -777,19 +1003,22 @@ impl MemoryEngine {
              FROM docs WHERE doc_path = ?1;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let doc = stmt.query_row(params![doc_path], |row| {
-            let level_i64: i64 = row.get(3)?;
-            Ok(DocRecord {
-                id: Some(row.get(0)?),
-                file_id: row.get(1)?,
-                doc_path: row.get(2)?,
-                doc_level: level_i64 as u8,
-                source_hash: row.get(4)?,
-                status: row.get(5)?,
-                updated_at: row.get(6)?,
-                stale_reason: row.get(7)?,
+        let doc = stmt
+            .query_row(params![doc_path], |row| {
+                let level_i64: i64 = row.get(3)?;
+                Ok(DocRecord {
+                    id: Some(row.get(0)?),
+                    file_id: row.get(1)?,
+                    doc_path: row.get(2)?,
+                    doc_level: level_i64 as u8,
+                    source_hash: row.get(4)?,
+                    status: row.get(5)?,
+                    updated_at: row.get(6)?,
+                    stale_reason: row.get(7)?,
+                })
             })
-        }).optional().map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .optional()
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         Ok(doc)
     }
@@ -801,19 +1030,21 @@ impl MemoryEngine {
              FROM docs ORDER BY id ASC;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map([], |row| {
-            let level_i64: i64 = row.get(3)?;
-            Ok(DocRecord {
-                id: Some(row.get(0)?),
-                file_id: row.get(1)?,
-                doc_path: row.get(2)?,
-                doc_level: level_i64 as u8,
-                source_hash: row.get(4)?,
-                status: row.get(5)?,
-                updated_at: row.get(6)?,
-                stale_reason: row.get(7)?,
+        let rows = stmt
+            .query_map([], |row| {
+                let level_i64: i64 = row.get(3)?;
+                Ok(DocRecord {
+                    id: Some(row.get(0)?),
+                    file_id: row.get(1)?,
+                    doc_path: row.get(2)?,
+                    doc_level: level_i64 as u8,
+                    source_hash: row.get(4)?,
+                    status: row.get(5)?,
+                    updated_at: row.get(6)?,
+                    stale_reason: row.get(7)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -824,21 +1055,25 @@ impl MemoryEngine {
 
     pub fn count_docs(&self) -> Result<usize> {
         let conn = self.db.connection();
-        let count: i64 = conn.query_row("SELECT COUNT(*) FROM docs;", [], |r| r.get(0))
+        let count: i64 = conn
+            .query_row("SELECT COUNT(*) FROM docs;", [], |r| r.get(0))
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         Ok(count as usize)
     }
 
     pub fn count_docs_by_status(&self) -> Result<std::collections::HashMap<String, usize>> {
         let conn = self.db.connection();
-        let mut stmt = conn.prepare("SELECT status, COUNT(*) FROM docs GROUP BY status;")
+        let mut stmt = conn
+            .prepare("SELECT status, COUNT(*) FROM docs GROUP BY status;")
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map([], |row| {
-            let status: String = row.get(0)?;
-            let count: i64 = row.get(1)?;
-            Ok((status, count as usize))
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        let rows = stmt
+            .query_map([], |row| {
+                let status: String = row.get(0)?;
+                let count: i64 = row.get(1)?;
+                Ok((status, count as usize))
+            })
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut map = std::collections::HashMap::new();
         for r in rows {
@@ -858,17 +1093,19 @@ impl MemoryEngine {
              ORDER BY c.id DESC LIMIT ?2;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
-        let rows = stmt.query_map(params![file_id, limit as i64], |row| {
-            Ok(CommitRecord {
-                id: Some(row.get(0)?),
-                hash: row.get(1)?,
-                message: row.get(2)?,
-                author: row.get(3)?,
-                created_at: row.get(4)?,
-                summary: row.get(5)?,
-                risk_level: row.get(6)?,
+        let rows = stmt
+            .query_map(params![file_id, limit as i64], |row| {
+                Ok(CommitRecord {
+                    id: Some(row.get(0)?),
+                    hash: row.get(1)?,
+                    message: row.get(2)?,
+                    author: row.get(3)?,
+                    created_at: row.get(4)?,
+                    summary: row.get(5)?,
+                    risk_level: row.get(6)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -885,28 +1122,28 @@ impl MemoryEngine {
         let mut stmt1 = conn.prepare(
             "SELECT DISTINCT file_id FROM import_raw WHERE resolved_file_id = ?1 AND file_id != ?1;",
         ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
-        let rows1 = stmt1.query_map(params![file_id], |r| r.get::<_, i64>(0))
+        let rows1 = stmt1
+            .query_map(params![file_id], |r| r.get::<_, i64>(0))
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
-        for r in rows1 {
-            if let Ok(id) = r {
-                dependents.insert(id);
-            }
+        for id in rows1.flatten() {
+            dependents.insert(id);
         }
 
         // 2. Edges match where target symbol belongs to file_id
-        let mut stmt2 = conn.prepare(
-            "SELECT DISTINCT s_src.file_id
+        let mut stmt2 = conn
+            .prepare(
+                "SELECT DISTINCT s_src.file_id
              FROM edges e
              JOIN symbols s_src ON e.source_symbol_id = s_src.id
              JOIN symbols s_tgt ON e.target_symbol_id = s_tgt.id
              WHERE s_tgt.file_id = ?1 AND s_src.file_id != ?1;",
-        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
-        let rows2 = stmt2.query_map(params![file_id], |r| r.get::<_, i64>(0))
+            )
             .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
-        for r in rows2 {
-            if let Ok(id) = r {
-                dependents.insert(id);
-            }
+        let rows2 = stmt2
+            .query_map(params![file_id], |r| r.get::<_, i64>(0))
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        for id in rows2.flatten() {
+            dependents.insert(id);
         }
 
         // 3. Module name heuristic for unresolved imports
@@ -916,16 +1153,17 @@ impl MemoryEngine {
                 if stem.len() >= 3 && stem != "mod" && stem != "lib" && stem != "main" {
                     let pattern1 = format!("%::{}%", stem);
                     let pattern2 = format!("%{}::%", stem);
-                    let mut stmt3 = conn.prepare(
-                        "SELECT DISTINCT file_id FROM import_raw 
+                    let mut stmt3 = conn
+                        .prepare(
+                            "SELECT DISTINCT file_id FROM import_raw 
                          WHERE file_id != ?1 AND (raw_import LIKE ?2 OR raw_import LIKE ?3);",
-                    ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
-                    let rows3 = stmt3.query_map(params![file_id, pattern1, pattern2], |r| r.get::<_, i64>(0))
+                        )
                         .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
-                    for r in rows3 {
-                        if let Ok(id) = r {
-                            dependents.insert(id);
-                        }
+                    let rows3 = stmt3
+                        .query_map(params![file_id, pattern1, pattern2], |r| r.get::<_, i64>(0))
+                        .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+                    for id in rows3.flatten() {
+                        dependents.insert(id);
                     }
                 }
             }
@@ -948,7 +1186,12 @@ impl MemoryEngine {
         Ok(paths)
     }
 
-    pub fn mark_doc_status(&self, file_id: i64, status: &str, stale_reason: Option<&str>) -> Result<bool> {
+    pub fn mark_doc_status(
+        &self,
+        file_id: i64,
+        status: &str,
+        stale_reason: Option<&str>,
+    ) -> Result<bool> {
         let conn = self.db.connection();
         let now = chrono::Utc::now().to_rfc3339();
 
@@ -999,22 +1242,26 @@ impl MemoryEngine {
             placeholders
         );
 
-        let mut stmt = conn.prepare(&query).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+        let mut stmt = conn
+            .prepare(&query)
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
         let rusqlite_params = rusqlite::params_from_iter(statuses.iter());
 
-        let rows = stmt.query_map(rusqlite_params, |row| {
-            let level_i64: i64 = row.get(3)?;
-            Ok(DocRecord {
-                id: Some(row.get(0)?),
-                file_id: row.get(1)?,
-                doc_path: row.get(2)?,
-                doc_level: level_i64 as u8,
-                source_hash: row.get(4)?,
-                status: row.get(5)?,
-                updated_at: row.get(6)?,
-                stale_reason: row.get(7)?,
+        let rows = stmt
+            .query_map(rusqlite_params, |row| {
+                let level_i64: i64 = row.get(3)?;
+                Ok(DocRecord {
+                    id: Some(row.get(0)?),
+                    file_id: row.get(1)?,
+                    doc_path: row.get(2)?,
+                    doc_level: level_i64 as u8,
+                    source_hash: row.get(4)?,
+                    status: row.get(5)?,
+                    updated_at: row.get(6)?,
+                    stale_reason: row.get(7)?,
+                })
             })
-        }).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
 
         let mut list = Vec::new();
         for r in rows {
@@ -1040,7 +1287,10 @@ impl MemoryEngine {
         let mut imports_synced = 0;
 
         for discovered in &summary.files {
-            let rel_path_str = discovered.relative_path.to_string_lossy().replace('\\', "/");
+            let rel_path_str = discovered
+                .relative_path
+                .to_string_lossy()
+                .replace('\\', "/");
             let file_rec = FileRecord {
                 id: None,
                 path: rel_path_str,
@@ -1062,8 +1312,10 @@ impl MemoryEngine {
             // Clear previous symbols and insert freshly extracted symbols
             self.clear_symbols_for_file(file_id)?;
             if !discovered.symbols.is_empty() {
-                let symbol_records: Vec<SymbolRecord> = discovered.symbols.iter().map(|s| {
-                    SymbolRecord {
+                let symbol_records: Vec<SymbolRecord> = discovered
+                    .symbols
+                    .iter()
+                    .map(|s| SymbolRecord {
                         id: None,
                         file_id,
                         name: s.name.clone(),
@@ -1074,8 +1326,8 @@ impl MemoryEngine {
                         signature: s.signature.clone(),
                         summary: None,
                         parent: s.parent.clone(),
-                    }
-                }).collect();
+                    })
+                    .collect();
 
                 self.insert_symbols(file_id, &symbol_records)?;
                 symbols_synced += symbol_records.len();
@@ -1148,7 +1400,9 @@ impl MemoryEngine {
 
         let mut results = Vec::new();
         for r in rows {
-            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read failure record: {}", e)))?);
+            results.push(r.map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to read failure record: {}", e))
+            })?);
         }
         Ok(results)
     }
@@ -1180,7 +1434,9 @@ impl MemoryEngine {
 
         let mut results = Vec::new();
         for r in rows {
-            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read failure record: {}", e)))?);
+            results.push(r.map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to read failure record: {}", e))
+            })?);
         }
         Ok(results)
     }
@@ -1208,11 +1464,15 @@ impl MemoryEngine {
                     created_at: row.get(8)?,
                 })
             })
-            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query recent failures: {}", e)))?;
+            .map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to query recent failures: {}", e))
+            })?;
 
         let mut results = Vec::new();
         for r in rows {
-            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read failure record: {}", e)))?);
+            results.push(r.map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to read failure record: {}", e))
+            })?);
         }
         Ok(results)
     }
@@ -1235,10 +1495,15 @@ impl MemoryEngine {
                  WHERE id = ?3",
                 params![fix_summary, now, failure_id],
             )
-            .map_err(|e| KaiokenError::MemoryError(format!("Failed to resolve failure record: {}", e)))?;
+            .map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to resolve failure record: {}", e))
+            })?;
 
         if rows_affected == 0 {
-            return Err(KaiokenError::MemoryError(format!("Failure record with id {} not found", failure_id)));
+            return Err(KaiokenError::MemoryError(format!(
+                "Failure record with id {} not found",
+                failure_id
+            )));
         }
         Ok(())
     }
@@ -1266,11 +1531,15 @@ impl MemoryEngine {
                     created_at: row.get(8)?,
                 })
             })
-            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query unresolved failures: {}", e)))?;
+            .map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to query unresolved failures: {}", e))
+            })?;
 
         let mut results = Vec::new();
         for r in rows {
-            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read failure record: {}", e)))?);
+            results.push(r.map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to read failure record: {}", e))
+            })?);
         }
         Ok(results)
     }
@@ -1299,7 +1568,9 @@ impl MemoryEngine {
                 })
             })
             .optional()
-            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query failure by id: {}", e)))?;
+            .map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to query failure by id: {}", e))
+            })?;
 
         Ok(failure)
     }
@@ -1320,7 +1591,9 @@ impl MemoryEngine {
                 record.created_at,
             ],
         )
-        .map_err(|e| KaiokenError::MemoryError(format!("Failed to insert decision record: {}", e)))?;
+        .map_err(|e| {
+            KaiokenError::MemoryError(format!("Failed to insert decision record: {}", e))
+        })?;
 
         Ok(conn.last_insert_rowid())
     }
@@ -1343,9 +1616,13 @@ impl MemoryEngine {
                         created_at: row.get(4)?,
                     })
                 })
-                .map_err(|e| KaiokenError::MemoryError(format!("Failed to query decisions: {}", e)))?;
+                .map_err(|e| {
+                    KaiokenError::MemoryError(format!("Failed to query decisions: {}", e))
+                })?;
             for r in rows {
-                results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read decision: {}", e)))?);
+                results.push(r.map_err(|e| {
+                    KaiokenError::MemoryError(format!("Failed to read decision: {}", e))
+                })?);
             }
         } else {
             let mut stmt = conn
@@ -1361,9 +1638,13 @@ impl MemoryEngine {
                         created_at: row.get(4)?,
                     })
                 })
-                .map_err(|e| KaiokenError::MemoryError(format!("Failed to query decisions: {}", e)))?;
+                .map_err(|e| {
+                    KaiokenError::MemoryError(format!("Failed to query decisions: {}", e))
+                })?;
             for r in rows {
-                results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read decision: {}", e)))?);
+                results.push(r.map_err(|e| {
+                    KaiokenError::MemoryError(format!("Failed to read decision: {}", e))
+                })?);
             }
         }
 
@@ -1479,11 +1760,15 @@ impl MemoryEngine {
                     error: row.get(9)?,
                 })
             })
-            .map_err(|e| KaiokenError::MemoryError(format!("Failed to query agent runs list: {}", e)))?;
+            .map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to query agent runs list: {}", e))
+            })?;
 
         let mut results = Vec::new();
         for r in rows {
-            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read agent run: {}", e)))?);
+            results.push(r.map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to read agent run: {}", e))
+            })?);
         }
         Ok(results)
     }
@@ -1536,9 +1821,290 @@ impl MemoryEngine {
 
         let mut results = Vec::new();
         for r in rows {
-            results.push(r.map_err(|e| KaiokenError::MemoryError(format!("Failed to read tool call: {}", e)))?);
+            results.push(r.map_err(|e| {
+                KaiokenError::MemoryError(format!("Failed to read tool call: {}", e))
+            })?);
         }
         Ok(results)
+    }
+
+    // ==========================================
+    // Introspection (Explain & Recent Commits)
+    // ==========================================
+
+    pub fn get_commits_touching_file(&self, path: &str, limit: usize) -> Result<Vec<CommitRecord>> {
+        if let Ok(Some(file)) = self.get_file_by_path(path) {
+            if let Some(fid) = file.id {
+                let res = self.get_commits_for_file(fid, limit)?;
+                if !res.is_empty() {
+                    return Ok(res);
+                }
+            }
+        }
+
+        let conn = self.db.connection();
+        let pattern = format!("%{}%", path);
+        let mut stmt = conn.prepare(
+            "SELECT DISTINCT c.id, c.hash, c.message, c.author, c.created_at, c.summary, c.risk_level
+             FROM commits c
+             LEFT JOIN commit_changes cc ON cc.commit_id = c.id
+             LEFT JOIN files f ON cc.file_id = f.id
+             WHERE f.path = ?1 OR f.path LIKE ?2 OR c.summary LIKE ?2 OR c.message LIKE ?2
+             ORDER BY c.id DESC LIMIT ?3;",
+        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let rows = stmt
+            .query_map(params![path, pattern, limit as i64], |row| {
+                Ok(CommitRecord {
+                    id: Some(row.get(0)?),
+                    hash: row.get(1)?,
+                    message: row.get(2)?,
+                    author: row.get(3)?,
+                    created_at: row.get(4)?,
+                    summary: row.get(5)?,
+                    risk_level: row.get(6)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let mut list = Vec::new();
+        for r in rows {
+            list.push(r.map_err(|e| KaiokenError::MemoryError(e.to_string()))?);
+        }
+        Ok(list)
+    }
+
+    pub fn get_failures_for_file_path(&self, path: &str) -> Result<Vec<FailureRecord>> {
+        if let Ok(Some(file)) = self.get_file_by_path(path) {
+            if let Some(fid) = file.id {
+                let res = self.get_failures_for_file(fid)?;
+                if !res.is_empty() {
+                    return Ok(res);
+                }
+            }
+        }
+
+        let conn = self.db.connection();
+        let pattern = format!("%{}%", path);
+        let mut stmt = conn.prepare(
+            "SELECT id, error_type, message, file_id, symbol_id, fix_summary, status, resolved_at, created_at
+             FROM failures
+             WHERE message LIKE ?1 OR fix_summary LIKE ?1
+             ORDER BY id DESC;",
+        ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let rows = stmt
+            .query_map(params![pattern], |row| {
+                Ok(FailureRecord {
+                    id: Some(row.get(0)?),
+                    error_type: row.get(1)?,
+                    message: row.get(2)?,
+                    file_id: row.get(3)?,
+                    symbol_id: row.get(4)?,
+                    fix_summary: row.get(5)?,
+                    status: row.get(6)?,
+                    resolved_at: row.get(7)?,
+                    created_at: row.get(8)?,
+                })
+            })
+            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+        let mut list = Vec::new();
+        for r in rows {
+            list.push(r.map_err(|e| KaiokenError::MemoryError(e.to_string()))?);
+        }
+        Ok(list)
+    }
+
+    pub fn explain_file(&self, path: &str) -> Result<FileExplanation> {
+        let file = match self.get_file_by_path(path)? {
+            Some(f) => f,
+            None => {
+                let conn = self.db.connection();
+                let pattern = format!("%{}", path);
+                let mut stmt = conn.prepare(
+                    "SELECT id, path, language, size, source_hash, parse_status, last_commit, last_modified, summary, risk_level, doc_path, doc_status
+                     FROM files WHERE path LIKE ?1 ORDER BY length(path) ASC LIMIT 1;",
+                ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+                let res = stmt
+                    .query_row(params![pattern], |row| {
+                        let size_i64: i64 = row.get(3)?;
+                        Ok(FileRecord {
+                            id: Some(row.get(0)?),
+                            path: row.get(1)?,
+                            language: row.get(2)?,
+                            size: size_i64 as usize,
+                            source_hash: row.get(4)?,
+                            parse_status: row.get(5)?,
+                            last_commit: row.get(6)?,
+                            last_modified: row.get(7)?,
+                            summary: row.get(8)?,
+                            risk_level: row.get(9)?,
+                            doc_path: row.get(10)?,
+                            doc_status: row.get(11)?,
+                        })
+                    })
+                    .optional()
+                    .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+
+                match res {
+                    Some(f) => f,
+                    None => {
+                        return Err(KaiokenError::MemoryError(format!(
+                            "File '{}' not found in memory",
+                            path
+                        )))
+                    }
+                }
+            }
+        };
+
+        let file_id = file
+            .id
+            .ok_or_else(|| KaiokenError::MemoryError("File record missing ID".to_string()))?;
+
+        let symbols = self.get_symbols_for_file(file_id)?;
+        let outgoing_edges = self.get_edges_from_file(file_id)?;
+        let incoming_edges = self.get_edges_to_file(file_id)?;
+        let raw_imports = self.get_raw_imports_for_file(file_id)?;
+        let documentation = self.get_doc_by_file_id(file_id)?;
+        let recent_commits = self.get_commits_touching_file(&file.path, 10)?;
+        let failures = match self.get_failures_for_file(file_id) {
+            Ok(f) if !f.is_empty() => f,
+            _ => self
+                .get_failures_for_file_path(&file.path)
+                .unwrap_or_default(),
+        };
+        let detailed_outgoing = self
+            .get_detailed_edges_from_file(file_id)
+            .unwrap_or_default();
+        let detailed_incoming = self.get_detailed_edges_to_file(file_id).unwrap_or_default();
+
+        Ok(FileExplanation {
+            file,
+            symbols,
+            outgoing_edges,
+            incoming_edges,
+            raw_imports,
+            documentation,
+            recent_commits,
+            failures,
+            detailed_outgoing,
+            detailed_incoming,
+        })
+    }
+
+    pub fn get_recent_commits_filtered(
+        &self,
+        limit: usize,
+        min_risk: Option<&str>,
+        file_filter: Option<&str>,
+    ) -> Result<MemoryRecentResult> {
+        let total_commits = self.count_commits()?;
+        let min_rank = min_risk.map(risk_rank).unwrap_or(0);
+
+        let candidate_commits = if let Some(file_path) = file_filter {
+            self.get_commits_touching_file(file_path, limit.max(50))?
+        } else {
+            self.get_recent_commits(limit.max(50))?
+        };
+
+        let mut filtered_commits = Vec::new();
+        for c in candidate_commits {
+            let r_rank = risk_rank(c.risk_level.as_deref().unwrap_or("low"));
+            if r_rank >= min_rank {
+                filtered_commits.push(c);
+            }
+            if filtered_commits.len() >= limit {
+                break;
+            }
+        }
+
+        let mut details = Vec::new();
+        for commit in filtered_commits {
+            let commit_id = match commit.id {
+                Some(id) => id,
+                None => {
+                    details.push(CommitMemoryDetail {
+                        commit,
+                        files: Vec::new(),
+                        symbols: Vec::new(),
+                        summary: None,
+                        fixes: Vec::new(),
+                    });
+                    continue;
+                }
+            };
+
+            let changes = self.get_changes_for_commit(commit_id).unwrap_or_default();
+            let mut files = Vec::new();
+            let mut symbols = Vec::new();
+
+            for ch in changes {
+                if let Some(fid) = ch.file_id {
+                    if let Ok(Some(f)) = self.get_file_by_id(fid) {
+                        if !files.contains(&f.path) {
+                            files.push(f.path);
+                        }
+                    }
+                }
+                if let Some(sid) = ch.symbol_id {
+                    let conn = self.db.connection();
+                    if let Ok(s_name) = conn.query_row(
+                        "SELECT name FROM symbols WHERE id = ?1",
+                        params![sid],
+                        |row| row.get::<_, String>(0),
+                    ) {
+                        if !symbols.contains(&s_name) {
+                            symbols.push(s_name);
+                        }
+                    }
+                }
+            }
+
+            let summary = commit.summary.clone();
+
+            let fixes = {
+                let conn = self.db.connection();
+                let short_h = if commit.hash.len() >= 7 {
+                    &commit.hash[0..7]
+                } else {
+                    &commit.hash
+                };
+                let pattern = format!("%{}%", short_h);
+                let mut stmt = conn.prepare(
+                    "SELECT error_type, message FROM failures WHERE status = 'resolved' AND (fix_summary LIKE ?1 OR resolved_at LIKE ?1)",
+                ).map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+                let rows = stmt
+                    .query_map(params![pattern], |row| {
+                        let et: String = row.get(0)?;
+                        let msg: String = row.get(1)?;
+                        Ok(format!("{}: {}", et, msg))
+                    })
+                    .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+                let mut fx = Vec::new();
+                for r in rows.flatten() {
+                    fx.push(r);
+                }
+                fx
+            };
+
+            details.push(CommitMemoryDetail {
+                commit,
+                files,
+                symbols,
+                summary,
+                fixes,
+            });
+        }
+
+        let shown_commits = details.len();
+        Ok(MemoryRecentResult {
+            total_commits,
+            shown_commits,
+            commits: details,
+        })
     }
 }
 

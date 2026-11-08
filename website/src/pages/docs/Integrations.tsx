@@ -163,9 +163,11 @@ kaioken run -p "summarise the auth flow" -mode plan -json`}
 
       <H3>Desktop</H3>
       <P>
-        <C>kaioken daemon</C> serves the engine over a loopback HTTP API — the same binary and the
-        same <C>.kaioken/</C> the CLI uses. It is what Kaioken Desktop talks to, with a bearer token
-        and an ephemeral port by default.
+        <C>kaioken watch --daemon</C> is the local engine: it watches the workspace, keeps{" "}
+        <C>.agent/memory.sqlite</C> current, and serves line-delimited JSON-RPC on{" "}
+        <C>127.0.0.1:47890</C>. <C>kaioken desktop</C> connects to it; when no daemon answers it
+        starts an in-process embedded runtime and says so. The socket is loopback-only and has no
+        authentication token yet.
       </P>
 
       <H2 id="portable">Taking it elsewhere</H2>

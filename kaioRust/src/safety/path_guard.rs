@@ -1,6 +1,6 @@
-use std::path::{Component, Path, PathBuf};
 use crate::error::{KaiokenError, Result};
 use crate::safety::redact::RedactionEngine;
+use std::path::{Component, Path, PathBuf};
 
 pub struct PathGuard;
 
@@ -33,7 +33,11 @@ impl PathGuard {
             }
         }
 
-        let canonical_root = strip_verbatim(&repo_root.canonicalize().unwrap_or_else(|_| repo_root.to_path_buf()));
+        let canonical_root = strip_verbatim(
+            &repo_root
+                .canonicalize()
+                .unwrap_or_else(|_| repo_root.to_path_buf()),
+        );
 
         // Resolve absolute target
         let resolved = if target_path.is_absolute() {
@@ -77,7 +81,9 @@ impl PathGuard {
         }
 
         // Relative path inside workspace
-        let rel_path = normalized.strip_prefix(&canonical_root).unwrap_or(&normalized);
+        let rel_path = normalized
+            .strip_prefix(&canonical_root)
+            .unwrap_or(&normalized);
         let rel_str = rel_path.to_string_lossy().replace('\\', "/");
 
         // 4. Protected Directory Quarantine
@@ -90,7 +96,8 @@ impl PathGuard {
 
             if rel_str == ".agent/memory.sqlite" || rel_str.ends_with("/memory.sqlite") {
                 return Err(KaiokenError::SafetyError(
-                    "Direct modifications to .agent/memory.sqlite are strictly prohibited".to_string(),
+                    "Direct modifications to .agent/memory.sqlite are strictly prohibited"
+                        .to_string(),
                 ));
             }
         }
@@ -133,7 +140,10 @@ mod tests {
         let outside = Path::new("../../etc/passwd");
         let result = PathGuard::validate_path(outside, root, false);
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains("outside workspace root"));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("outside workspace root"));
     }
 
     #[test]
@@ -144,7 +154,10 @@ mod tests {
         let env_file = Path::new(".env");
         let result = PathGuard::validate_path(env_file, root, false);
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains("sensitive credential"));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("sensitive credential"));
     }
 
     #[test]

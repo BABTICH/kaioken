@@ -1,8 +1,8 @@
-use std::collections::HashSet;
-use rusqlite::params;
 use crate::error::{KaiokenError, Result};
 use crate::memory::MemoryEngine;
 use crate::retrieval::context_packet::GraphSubset;
+use rusqlite::params;
+use std::collections::HashSet;
 
 pub struct GraphQueryEngine<'a> {
     memory: &'a MemoryEngine,
@@ -14,9 +14,14 @@ impl<'a> GraphQueryEngine<'a> {
     }
 
     /// Queries the dependency graph around a set of symbol IDs and file IDs up to specified depth.
-    pub fn query_subgraph(&self, symbol_ids: &[i64], file_ids: &[i64], max_depth: usize) -> Result<GraphSubset> {
+    pub fn query_subgraph(
+        &self,
+        symbol_ids: &[i64],
+        file_ids: &[i64],
+        max_depth: usize,
+    ) -> Result<GraphSubset> {
         let conn = self.memory.db().connection();
-        let depth = max_depth.min(2).max(1);
+        let depth = max_depth.clamp(1, 2);
 
         let mut direct_callers: Vec<String> = Vec::new();
         let mut direct_callees: Vec<String> = Vec::new();
@@ -35,68 +40,86 @@ impl<'a> GraphQueryEngine<'a> {
                 }
 
                 // 1. Callers: edges where target_symbol_id == sym_id
-                let mut caller_stmt = conn.prepare(
-                    "SELECT s.id, s.name, s.kind, f.path
+                let mut caller_stmt = conn
+                    .prepare(
+                        "SELECT s.id, s.name, s.kind, f.path
                      FROM edges e
                      JOIN symbols s ON e.source_symbol_id = s.id
                      JOIN files f ON s.file_id = f.id
-                     WHERE e.target_symbol_id = ?1"
-                ).map_err(|e| KaiokenError::RetrievalError(format!("Failed to prepare caller query: {}", e)))?;
+                     WHERE e.target_symbol_id = ?1",
+                    )
+                    .map_err(|e| {
+                        KaiokenError::RetrievalError(format!(
+                            "Failed to prepare caller query: {}",
+                            e
+                        ))
+                    })?;
 
-                let caller_rows = caller_stmt.query_map(params![sym_id], |row| {
-                    let id: i64 = row.get(0)?;
-                    let name: String = row.get(1)?;
-                    let kind: String = row.get(2)?;
-                    let path: String = row.get(3)?;
-                    Ok((id, name, kind, path))
-                }).map_err(|e| KaiokenError::RetrievalError(format!("Failed to query callers: {}", e)))?;
+                let caller_rows = caller_stmt
+                    .query_map(params![sym_id], |row| {
+                        let id: i64 = row.get(0)?;
+                        let name: String = row.get(1)?;
+                        let kind: String = row.get(2)?;
+                        let path: String = row.get(3)?;
+                        Ok((id, name, kind, path))
+                    })
+                    .map_err(|e| {
+                        KaiokenError::RetrievalError(format!("Failed to query callers: {}", e))
+                    })?;
 
-                for r in caller_rows {
-                    if let Ok((src_id, name, kind, path)) = r {
-                        if !self.is_excluded_path(&path) {
-                            let label = format!("{}::{} ({})", path, name, kind);
-                            if !direct_callers.contains(&label) {
-                                direct_callers.push(label);
-                            }
-                            if self.is_test_path(&path) || name.starts_with("test_") {
-                                if !affected_tests.contains(&path) {
-                                    affected_tests.push(path.clone());
-                                }
-                            }
-                            if visited_symbols.insert(src_id) {
-                                next_level_symbols.push(src_id);
-                            }
+                for (src_id, name, kind, path) in caller_rows.flatten() {
+                    if !self.is_excluded_path(&path) {
+                        let label = format!("{}::{} ({})", path, name, kind);
+                        if !direct_callers.contains(&label) {
+                            direct_callers.push(label);
+                        }
+                        if (self.is_test_path(&path) || name.starts_with("test_"))
+                            && !affected_tests.contains(&path)
+                        {
+                            affected_tests.push(path.clone());
+                        }
+                        if visited_symbols.insert(src_id) {
+                            next_level_symbols.push(src_id);
                         }
                     }
                 }
 
                 // 2. Callees: edges where source_symbol_id == sym_id
-                let mut callee_stmt = conn.prepare(
-                    "SELECT s.id, s.name, s.kind, f.path
+                let mut callee_stmt = conn
+                    .prepare(
+                        "SELECT s.id, s.name, s.kind, f.path
                      FROM edges e
                      JOIN symbols s ON e.target_symbol_id = s.id
                      JOIN files f ON s.file_id = f.id
-                     WHERE e.source_symbol_id = ?1"
-                ).map_err(|e| KaiokenError::RetrievalError(format!("Failed to prepare callee query: {}", e)))?;
+                     WHERE e.source_symbol_id = ?1",
+                    )
+                    .map_err(|e| {
+                        KaiokenError::RetrievalError(format!(
+                            "Failed to prepare callee query: {}",
+                            e
+                        ))
+                    })?;
 
-                let callee_rows = callee_stmt.query_map(params![sym_id], |row| {
-                    let id: i64 = row.get(0)?;
-                    let name: String = row.get(1)?;
-                    let kind: String = row.get(2)?;
-                    let path: String = row.get(3)?;
-                    Ok((id, name, kind, path))
-                }).map_err(|e| KaiokenError::RetrievalError(format!("Failed to query callees: {}", e)))?;
+                let callee_rows = callee_stmt
+                    .query_map(params![sym_id], |row| {
+                        let id: i64 = row.get(0)?;
+                        let name: String = row.get(1)?;
+                        let kind: String = row.get(2)?;
+                        let path: String = row.get(3)?;
+                        Ok((id, name, kind, path))
+                    })
+                    .map_err(|e| {
+                        KaiokenError::RetrievalError(format!("Failed to query callees: {}", e))
+                    })?;
 
-                for r in callee_rows {
-                    if let Ok((target_id, name, kind, path)) = r {
-                        if !self.is_excluded_path(&path) {
-                            let label = format!("{}::{} ({})", path, name, kind);
-                            if !direct_callees.contains(&label) {
-                                direct_callees.push(label);
-                            }
-                            if visited_symbols.insert(target_id) {
-                                next_level_symbols.push(target_id);
-                            }
+                for (target_id, name, kind, path) in callee_rows.flatten() {
+                    if !self.is_excluded_path(&path) {
+                        let label = format!("{}::{} ({})", path, name, kind);
+                        if !direct_callees.contains(&label) {
+                            direct_callees.push(label);
+                        }
+                        if visited_symbols.insert(target_id) {
+                            next_level_symbols.push(target_id);
                         }
                     }
                 }

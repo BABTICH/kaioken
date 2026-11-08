@@ -2,9 +2,9 @@ use std::fs;
 use std::sync::Arc;
 use tempfile::TempDir;
 
-use kaioken::agent::AgentLoop;
 use kaioken::agent::planner::Planner;
 use kaioken::agent::tools::ToolRegistry;
+use kaioken::agent::AgentLoop;
 use kaioken::config::Config;
 use kaioken::critic::engine::{CriticReport, MockCritic};
 use kaioken::llm::{
@@ -49,9 +49,12 @@ fn test_planner_cites_memory_symbols_and_past_failures() {
         created_at: "2026-10-18T10:00:00Z".to_string(),
     });
 
-    packet.recommended_verification_commands.push("cargo test --test billing_tests".to_string());
+    packet
+        .recommended_verification_commands
+        .push("cargo test --test billing_tests".to_string());
 
-    let plan = Planner::create_plan_with_context("Implement tax calculation with discount", &packet);
+    let plan =
+        Planner::create_plan_with_context("Implement tax calculation with discount", &packet);
 
     // 1. Verify citations
     assert_eq!(plan.cited_symbols, vec!["calculate_tax"]);
@@ -62,9 +65,16 @@ fn test_planner_cites_memory_symbols_and_past_failures() {
 
     // 2. Verify steps
     assert!(plan.steps.len() >= 4);
-    assert!(plan.steps[0].description.contains("past repository failure"));
+    assert!(plan.steps[0]
+        .description
+        .contains("past repository failure"));
     assert!(plan.steps[1].description.contains("src/billing.rs"));
-    assert!(plan.steps.last().unwrap().description.contains("cargo test --test billing_tests"));
+    assert!(plan
+        .steps
+        .last()
+        .unwrap()
+        .description
+        .contains("cargo test --test billing_tests"));
 
     // 3. Verify Markdown formatting
     let md = plan.format_markdown();
@@ -90,33 +100,40 @@ async fn test_agent_retrieves_context_packet_before_react_loop() {
     config.llm.coder_model = "test-mock-model".to_string();
 
     // Populate memory with file and symbol
-    let file_id = memory.upsert_file(&FileRecord {
-        id: None,
-        path: "src/math.rs".to_string(),
-        language: Some("rust".to_string()),
-        size: 45,
-        source_hash: Some("hash_initial".to_string()),
-        parse_status: Some("parsed".to_string()),
-        last_commit: None,
-        last_modified: None,
-        summary: Some("Math arithmetic functions".to_string()),
-        risk_level: None,
-        doc_path: None,
-        doc_status: None,
-    }).unwrap();
+    let file_id = memory
+        .upsert_file(&FileRecord {
+            id: None,
+            path: "src/math.rs".to_string(),
+            language: Some("rust".to_string()),
+            size: 45,
+            source_hash: Some("hash_initial".to_string()),
+            parse_status: Some("parsed".to_string()),
+            last_commit: None,
+            last_modified: None,
+            summary: Some("Math arithmetic functions".to_string()),
+            risk_level: None,
+            doc_path: None,
+            doc_status: None,
+        })
+        .unwrap();
 
-    memory.insert_symbols(file_id, &[SymbolRecord {
-        id: None,
-        file_id,
-        name: "add".to_string(),
-        kind: "function".to_string(),
-        line_start: 1,
-        line_end: 1,
-        visibility: Some("pub".to_string()),
-        signature: Some("pub fn add(a: i32, b: i32) -> i32".to_string()),
-        summary: None,
-        parent: None,
-    }]).unwrap();
+    memory
+        .insert_symbols(
+            file_id,
+            &[SymbolRecord {
+                id: None,
+                file_id,
+                name: "add".to_string(),
+                kind: "function".to_string(),
+                line_start: 1,
+                line_end: 1,
+                visibility: Some("pub".to_string()),
+                signature: Some("pub fn add(a: i32, b: i32) -> i32".to_string()),
+                summary: None,
+                parent: None,
+            }],
+        )
+        .unwrap();
 
     let tools = ToolRegistry::default_registry();
 
@@ -144,7 +161,10 @@ async fn test_agent_retrieves_context_packet_before_react_loop() {
         .expect("Agent execution should succeed");
 
     assert_eq!(summary.status, "completed");
-    assert!(summary.context_retrieved, "Memory context packet must be retrieved prior to loop");
+    assert!(
+        summary.context_retrieved,
+        "Memory context packet must be retrieved prior to loop"
+    );
 }
 
 #[tokio::test]
@@ -154,39 +174,49 @@ async fn test_agent_plan_explains_and_cites_past_failure() {
 
     let calc_file = root.join("src/calc.rs");
     fs::create_dir_all(calc_file.parent().unwrap()).unwrap();
-    fs::write(&calc_file, "pub fn mul(a: u32, b: u32) -> u64 { (a * b) as u64 }\n").unwrap();
+    fs::write(
+        &calc_file,
+        "pub fn mul(a: u32, b: u32) -> u64 { (a * b) as u64 }\n",
+    )
+    .unwrap();
 
     let memory = Arc::new(MemoryEngine::open_in_memory().unwrap());
     let mut config = Config::default_config();
     config.llm.coder_model = "test-mock-model".to_string();
 
-    let file_id = memory.upsert_file(&FileRecord {
-        id: None,
-        path: "src/calc.rs".to_string(),
-        language: Some("rust".to_string()),
-        size: 55,
-        source_hash: Some("hash_calc".to_string()),
-        parse_status: Some("parsed".to_string()),
-        last_commit: None,
-        last_modified: None,
-        summary: Some("Calculator module".to_string()),
-        risk_level: None,
-        doc_path: None,
-        doc_status: None,
-    }).unwrap();
+    let file_id = memory
+        .upsert_file(&FileRecord {
+            id: None,
+            path: "src/calc.rs".to_string(),
+            language: Some("rust".to_string()),
+            size: 55,
+            source_hash: Some("hash_calc".to_string()),
+            parse_status: Some("parsed".to_string()),
+            last_commit: None,
+            last_modified: None,
+            summary: Some("Calculator module".to_string()),
+            risk_level: None,
+            doc_path: None,
+            doc_status: None,
+        })
+        .unwrap();
 
     // Record past failure on this file
-    memory.insert_failure(&FailureRecord {
-        id: None,
-        error_type: "compiler".to_string(),
-        message: "error[E0308]: mismatched types: expected u64, found u32".to_string(),
-        file_id: Some(file_id),
-        symbol_id: None,
-        fix_summary: Some("Cast multiplication result explicitly to u64 before returning".to_string()),
-        status: Some("resolved".to_string()),
-        resolved_at: Some("2026-10-18T12:00:00Z".to_string()),
-        created_at: "2026-10-18T11:00:00Z".to_string(),
-    }).unwrap();
+    memory
+        .insert_failure(&FailureRecord {
+            id: None,
+            error_type: "compiler".to_string(),
+            message: "error[E0308]: mismatched types: expected u64, found u32".to_string(),
+            file_id: Some(file_id),
+            symbol_id: None,
+            fix_summary: Some(
+                "Cast multiplication result explicitly to u64 before returning".to_string(),
+            ),
+            status: Some("resolved".to_string()),
+            resolved_at: Some("2026-10-18T12:00:00Z".to_string()),
+            created_at: "2026-10-18T11:00:00Z".to_string(),
+        })
+        .unwrap();
 
     let tools = ToolRegistry::default_registry();
 
@@ -195,7 +225,10 @@ async fn test_agent_plan_explains_and_cites_past_failure() {
         choices: vec![ChatChoice {
             index: Some(0),
             message: ChatMessage::assistant(
-                Some("Noted past failure E0308 regarding u64 casting. Verified calculation.".to_string()),
+                Some(
+                    "Noted past failure E0308 regarding u64 casting. Verified calculation."
+                        .to_string(),
+                ),
                 None,
             ),
             finish_reason: Some("stop".to_string()),
@@ -204,8 +237,8 @@ async fn test_agent_plan_explains_and_cites_past_failure() {
     };
 
     let mock_llm = Arc::new(MockLlmClient::with_responses(vec![resp]));
-    let agent_loop = AgentLoop::new(tools, mock_llm, Some(memory.clone()), root, config)
-        .with_max_steps(5);
+    let agent_loop =
+        AgentLoop::new(tools, mock_llm, Some(memory.clone()), root, config).with_max_steps(5);
 
     let summary = agent_loop
         .execute_task("Review mul in src/calc.rs", None)
@@ -230,31 +263,35 @@ async fn test_post_task_memory_and_doc_staleness_synchronization() {
     let mut config = Config::default_config();
     config.llm.coder_model = "test-mock-model".to_string();
 
-    let file_id = memory.upsert_file(&FileRecord {
-        id: None,
-        path: "src/util.rs".to_string(),
-        language: Some("rust".to_string()),
-        size: 42,
-        source_hash: Some("old_hash_12345".to_string()),
-        parse_status: Some("parsed".to_string()),
-        last_commit: None,
-        last_modified: None,
-        summary: None,
-        risk_level: None,
-        doc_path: Some(".agent-docs/src/util.md".to_string()),
-        doc_status: Some("synced".to_string()),
-    }).unwrap();
+    let file_id = memory
+        .upsert_file(&FileRecord {
+            id: None,
+            path: "src/util.rs".to_string(),
+            language: Some("rust".to_string()),
+            size: 42,
+            source_hash: Some("old_hash_12345".to_string()),
+            parse_status: Some("parsed".to_string()),
+            last_commit: None,
+            last_modified: None,
+            summary: None,
+            risk_level: None,
+            doc_path: Some(".agent-docs/src/util.md".to_string()),
+            doc_status: Some("synced".to_string()),
+        })
+        .unwrap();
 
-    memory.upsert_doc(&DocRecord {
-        id: None,
-        file_id,
-        doc_path: ".agent-docs/src/util.md".to_string(),
-        source_hash: Some("old_hash_12345".to_string()),
-        doc_level: 0,
-        status: "synced".to_string(),
-        updated_at: "2026-10-18T00:00:00Z".to_string(),
-        stale_reason: None,
-    }).unwrap();
+    memory
+        .upsert_doc(&DocRecord {
+            id: None,
+            file_id,
+            doc_path: ".agent-docs/src/util.md".to_string(),
+            source_hash: Some("old_hash_12345".to_string()),
+            doc_level: 0,
+            status: "synced".to_string(),
+            updated_at: "2026-10-18T00:00:00Z".to_string(),
+            stale_reason: None,
+        })
+        .unwrap();
 
     let tools = ToolRegistry::default_registry();
 
@@ -306,12 +343,25 @@ async fn test_post_task_memory_and_doc_staleness_synchronization() {
     assert!(summary.touched_files.contains(&"src/util.rs".to_string()));
 
     // Verify documentation staleness cascade was triggered:
-    let doc = memory.get_doc_by_file_id(file_id).unwrap().expect("Doc must exist");
-    assert_eq!(doc.status, "stale", "Doc status must cascade to 'stale' after agent modifications");
+    let doc = memory
+        .get_doc_by_file_id(file_id)
+        .unwrap()
+        .expect("Doc must exist");
+    assert_eq!(
+        doc.status, "stale",
+        "Doc status must cascade to 'stale' after agent modifications"
+    );
 
     // Verify file hash in files table was synchronized to new on-disk hash:
-    let file_rec = memory.get_file_by_path("src/util.rs").unwrap().expect("File must exist");
-    assert_ne!(file_rec.source_hash.as_deref(), Some("old_hash_12345"), "File hash must be updated to match edited content");
+    let file_rec = memory
+        .get_file_by_path("src/util.rs")
+        .unwrap()
+        .expect("File must exist");
+    assert_ne!(
+        file_rec.source_hash.as_deref(),
+        Some("old_hash_12345"),
+        "File hash must be updated to match edited content"
+    );
 }
 
 #[tokio::test]
@@ -331,62 +381,79 @@ async fn test_gate3_end_to_end_memory_augmented_agent_loop() {
 
     let source_file = root.join("src/service.rs");
     fs::create_dir_all(source_file.parent().unwrap()).unwrap();
-    fs::write(&source_file, "pub fn get_status() -> &str {\n    \"pending\"\n}\n").unwrap();
+    fs::write(
+        &source_file,
+        "pub fn get_status() -> &str {\n    \"pending\"\n}\n",
+    )
+    .unwrap();
 
     let memory = Arc::new(MemoryEngine::open_in_memory().unwrap());
     let mut config = Config::default_config();
     config.llm.coder_model = "test-mock-model".to_string();
 
-    let file_id = memory.upsert_file(&FileRecord {
-        id: None,
-        path: "src/service.rs".to_string(),
-        language: Some("rust".to_string()),
-        size: 50,
-        source_hash: Some("initial_service_hash".to_string()),
-        parse_status: Some("parsed".to_string()),
-        last_commit: None,
-        last_modified: None,
-        summary: Some("Core service module".to_string()),
-        risk_level: None,
-        doc_path: Some(".agent-docs/src/service.md".to_string()),
-        doc_status: Some("synced".to_string()),
-    }).unwrap();
+    let file_id = memory
+        .upsert_file(&FileRecord {
+            id: None,
+            path: "src/service.rs".to_string(),
+            language: Some("rust".to_string()),
+            size: 50,
+            source_hash: Some("initial_service_hash".to_string()),
+            parse_status: Some("parsed".to_string()),
+            last_commit: None,
+            last_modified: None,
+            summary: Some("Core service module".to_string()),
+            risk_level: None,
+            doc_path: Some(".agent-docs/src/service.md".to_string()),
+            doc_status: Some("synced".to_string()),
+        })
+        .unwrap();
 
-    memory.upsert_doc(&DocRecord {
-        id: None,
-        file_id,
-        doc_path: ".agent-docs/src/service.md".to_string(),
-        source_hash: Some("initial_service_hash".to_string()),
-        doc_level: 0,
-        status: "synced".to_string(),
-        updated_at: "2026-10-18T00:00:00Z".to_string(),
-        stale_reason: None,
-    }).unwrap();
+    memory
+        .upsert_doc(&DocRecord {
+            id: None,
+            file_id,
+            doc_path: ".agent-docs/src/service.md".to_string(),
+            source_hash: Some("initial_service_hash".to_string()),
+            doc_level: 0,
+            status: "synced".to_string(),
+            updated_at: "2026-10-18T00:00:00Z".to_string(),
+            stale_reason: None,
+        })
+        .unwrap();
 
-    memory.insert_symbols(file_id, &[SymbolRecord {
-        id: None,
-        file_id,
-        name: "get_status".to_string(),
-        kind: "function".to_string(),
-        line_start: 1,
-        line_end: 3,
-        visibility: Some("pub".to_string()),
-        signature: Some("pub fn get_status() -> &str".to_string()),
-        summary: None,
-        parent: None,
-    }]).unwrap();
+    memory
+        .insert_symbols(
+            file_id,
+            &[SymbolRecord {
+                id: None,
+                file_id,
+                name: "get_status".to_string(),
+                kind: "function".to_string(),
+                line_start: 1,
+                line_end: 3,
+                visibility: Some("pub".to_string()),
+                signature: Some("pub fn get_status() -> &str".to_string()),
+                summary: None,
+                parent: None,
+            }],
+        )
+        .unwrap();
 
-    memory.insert_failure(&FailureRecord {
-        id: None,
-        error_type: "compiler".to_string(),
-        message: "error[E0308]: mismatched types: expected &str, found String".to_string(),
-        file_id: Some(file_id),
-        symbol_id: None,
-        fix_summary: Some("Return static string literal instead of allocated String".to_string()),
-        status: Some("resolved".to_string()),
-        resolved_at: Some("2026-10-18T10:00:00Z".to_string()),
-        created_at: "2026-10-18T09:00:00Z".to_string(),
-    }).unwrap();
+    memory
+        .insert_failure(&FailureRecord {
+            id: None,
+            error_type: "compiler".to_string(),
+            message: "error[E0308]: mismatched types: expected &str, found String".to_string(),
+            file_id: Some(file_id),
+            symbol_id: None,
+            fix_summary: Some(
+                "Return static string literal instead of allocated String".to_string(),
+            ),
+            status: Some("resolved".to_string()),
+            resolved_at: Some("2026-10-18T10:00:00Z".to_string()),
+            created_at: "2026-10-18T09:00:00Z".to_string(),
+        })
+        .unwrap();
 
     let tools = ToolRegistry::default_registry();
 
@@ -417,7 +484,10 @@ async fn test_gate3_end_to_end_memory_augmented_agent_loop() {
         choices: vec![ChatChoice {
             index: Some(0),
             message: ChatMessage::assistant(
-                Some("Status updated to 'ready' in src/service.rs adhering to &str signature.".to_string()),
+                Some(
+                    "Status updated to 'ready' in src/service.rs adhering to &str signature."
+                        .to_string(),
+                ),
                 None,
             ),
             finish_reason: Some("stop".to_string()),
@@ -426,9 +496,10 @@ async fn test_gate3_end_to_end_memory_augmented_agent_loop() {
     };
 
     let mock_llm = Arc::new(MockLlmClient::with_responses(vec![step1_resp, step2_resp]));
-    let mock_critic = Arc::new(MockCritic::with_reports(vec![
-        CriticReport::success("cargo check", 15),
-    ]));
+    let mock_critic = Arc::new(MockCritic::with_reports(vec![CriticReport::success(
+        "cargo check",
+        15,
+    )]));
 
     let agent_loop = AgentLoop::new(tools, mock_llm, Some(memory.clone()), root.clone(), config)
         .with_critic(mock_critic)
@@ -441,7 +512,10 @@ async fn test_gate3_end_to_end_memory_augmented_agent_loop() {
 
     // 1. Verify Agent Summary Metrics
     assert_eq!(summary.status, "completed");
-    assert!(summary.context_retrieved, "Gate 3 requires context packet pre-retrieval");
+    assert!(
+        summary.context_retrieved,
+        "Gate 3 requires context packet pre-retrieval"
+    );
     assert_eq!(summary.tool_calls_count, 1);
     assert_eq!(summary.touched_files, vec!["src/service.rs"]);
 

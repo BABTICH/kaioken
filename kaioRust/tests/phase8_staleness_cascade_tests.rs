@@ -1,12 +1,13 @@
-use std::fs;
 use sha2::{Digest, Sha256};
+use std::fs;
 use tempfile::tempdir;
 
 use kaioken::docs::{
-    DocFrontmatter, DocGenerateOptions, DocGenerator,
-    StalenessCascadeEngine, StalenessDetector,
+    DocFrontmatter, DocGenerateOptions, DocGenerator, StalenessCascadeEngine, StalenessDetector,
 };
-use kaioken::memory::{CommitRecord, CommitChangeRecord, DocRecord, FileRecord, MemoryEngine, RawImportRecord};
+use kaioken::memory::{
+    CommitChangeRecord, CommitRecord, DocRecord, FileRecord, MemoryEngine, RawImportRecord,
+};
 
 #[test]
 fn test_staleness_cascade_direct_and_one_hop() {
@@ -99,14 +100,15 @@ fn test_staleness_cascade_direct_and_one_hop() {
     memory.upsert_doc(&doc_c).unwrap();
 
     // Trigger staleness cascade with change to src/core.rs
-    let report = StalenessCascadeEngine::cascade_changes(
-        &repo_root,
-        &["src/core.rs".to_string()],
-        &memory,
-    ).unwrap();
+    let report =
+        StalenessCascadeEngine::cascade_changes(&repo_root, &["src/core.rs".to_string()], &memory)
+            .unwrap();
 
     assert_eq!(report.directly_stale, vec!["src/core.rs".to_string()]);
-    assert_eq!(report.maybe_stale_dependents, vec!["src/service.rs".to_string()]);
+    assert_eq!(
+        report.maybe_stale_dependents,
+        vec!["src/service.rs".to_string()]
+    );
     assert_eq!(report.cascade_depth, 1);
 
     // Verify DB states:
@@ -118,7 +120,10 @@ fn test_staleness_cascade_direct_and_one_hop() {
     // B must be maybe_stale
     let updated_b = memory.get_doc_by_file_id(id_b).unwrap().unwrap();
     assert_eq!(updated_b.status, "maybe_stale");
-    assert!(updated_b.stale_reason.unwrap().contains("Direct dependency"));
+    assert!(updated_b
+        .stale_reason
+        .unwrap()
+        .contains("Direct dependency"));
 
     // C must remain FRESH (no transitive runaway cascade!)
     let updated_c = memory.get_doc_by_file_id(id_c).unwrap().unwrap();
@@ -149,27 +154,31 @@ fn test_commit_recording_triggers_automatic_staleness_cascade() {
     ).unwrap();
 
     // Initial docs: fresh
-    memory.upsert_doc(&DocRecord {
-        id: None,
-        file_id: id1,
-        doc_path: "src/lib.md".to_string(),
-        doc_level: 0,
-        source_hash: Some("h1".to_string()),
-        status: "fresh".to_string(),
-        updated_at: "2026-10-08T10:00:00Z".to_string(),
-        stale_reason: None,
-    }).unwrap();
+    memory
+        .upsert_doc(&DocRecord {
+            id: None,
+            file_id: id1,
+            doc_path: "src/lib.md".to_string(),
+            doc_level: 0,
+            source_hash: Some("h1".to_string()),
+            status: "fresh".to_string(),
+            updated_at: "2026-10-08T10:00:00Z".to_string(),
+            stale_reason: None,
+        })
+        .unwrap();
 
-    memory.upsert_doc(&DocRecord {
-        id: None,
-        file_id: id2,
-        doc_path: "src/main.md".to_string(),
-        doc_level: 0,
-        source_hash: Some("h2".to_string()),
-        status: "fresh".to_string(),
-        updated_at: "2026-10-08T10:00:00Z".to_string(),
-        stale_reason: None,
-    }).unwrap();
+    memory
+        .upsert_doc(&DocRecord {
+            id: None,
+            file_id: id2,
+            doc_path: "src/main.md".to_string(),
+            doc_level: 0,
+            source_hash: Some("h2".to_string()),
+            status: "fresh".to_string(),
+            updated_at: "2026-10-08T10:00:00Z".to_string(),
+            stale_reason: None,
+        })
+        .unwrap();
 
     // Record a commit that modified src/lib.rs
     let commit = CommitRecord {
@@ -200,7 +209,10 @@ fn test_commit_recording_triggers_automatic_staleness_cascade() {
     // Verify dependent main.rs transitioned to maybe_stale
     let doc2 = memory.get_doc_by_file_id(id2).unwrap().unwrap();
     assert_eq!(doc2.status, "maybe_stale");
-    assert!(doc2.stale_reason.unwrap().contains("Dependency 'src/lib.rs' modified in commit"));
+    assert!(doc2
+        .stale_reason
+        .unwrap()
+        .contains("Dependency 'src/lib.rs' modified in commit"));
 }
 
 #[test]
@@ -249,18 +261,28 @@ fn test_incremental_doc_generation_stale_only() {
             generator: "deterministic".to_string(),
             status: initial_status.to_string(),
         };
-        fs::write(&doc_abs_path, format!("{}# {}\n", fm.to_yaml_header(), rel_path)).unwrap();
+        fs::write(
+            &doc_abs_path,
+            format!("{}# {}\n", fm.to_yaml_header(), rel_path),
+        )
+        .unwrap();
 
-        memory.upsert_doc(&DocRecord {
-            id: None,
-            file_id: fid,
-            doc_path: doc_rel_path,
-            doc_level: 0,
-            source_hash: Some(hash),
-            status: initial_status.to_string(),
-            updated_at: "2026-10-08T10:00:00Z".to_string(),
-            stale_reason: if *initial_status != "fresh" { Some("Stale test".to_string()) } else { None },
-        }).unwrap();
+        memory
+            .upsert_doc(&DocRecord {
+                id: None,
+                file_id: fid,
+                doc_path: doc_rel_path,
+                doc_level: 0,
+                source_hash: Some(hash),
+                status: initial_status.to_string(),
+                updated_at: "2026-10-08T10:00:00Z".to_string(),
+                stale_reason: if *initial_status != "fresh" {
+                    Some("Stale test".to_string())
+                } else {
+                    None
+                },
+            })
+            .unwrap();
     }
 
     // Run generate_all_docs with stale_only: true
@@ -346,7 +368,9 @@ fn test_staleness_detector_verify_and_clean_orphaned_docs() {
     let fid = memory.upsert_file(&file_rec).unwrap();
     let file_rec_with_id = memory.get_file_by_id(fid).unwrap().unwrap();
 
-    generator.generate_file_doc(&file_rec_with_id, &memory, &DocGenerateOptions::default()).unwrap();
+    generator
+        .generate_file_doc(&file_rec_with_id, &memory, &DocGenerateOptions::default())
+        .unwrap();
 
     let doc_abs_path = docs_root.join("src/temp_deleted.md");
     assert!(doc_abs_path.exists());
@@ -356,13 +380,15 @@ fn test_staleness_detector_verify_and_clean_orphaned_docs() {
     fs::remove_file(&abs_src).unwrap();
 
     // 1. Audit without clean
-    let audit_dry = StalenessDetector::audit_and_clean(&repo_root, &docs_root, &memory, false).unwrap();
+    let audit_dry =
+        StalenessDetector::audit_and_clean(&repo_root, &docs_root, &memory, false).unwrap();
     assert_eq!(audit_dry.orphaned_docs, 1);
     assert_eq!(audit_dry.cleaned_docs, 0);
     assert!(doc_abs_path.exists()); // Still exists
 
     // 2. Audit with clean = true
-    let audit_clean = StalenessDetector::audit_and_clean(&repo_root, &docs_root, &memory, true).unwrap();
+    let audit_clean =
+        StalenessDetector::audit_and_clean(&repo_root, &docs_root, &memory, true).unwrap();
     assert_eq!(audit_clean.orphaned_docs, 1);
     assert_eq!(audit_clean.cleaned_docs, 1);
 
@@ -408,7 +434,9 @@ fn test_used_by_population_in_rendered_documentation() {
     ).unwrap();
 
     // Generate doc for src/db.rs
-    let res = generator.generate_file_doc(&db_file_with_id, &memory, &DocGenerateOptions::default()).unwrap();
+    let res = generator
+        .generate_file_doc(&db_file_with_id, &memory, &DocGenerateOptions::default())
+        .unwrap();
     assert_eq!(res.relative_doc_path, "src/db.md");
 
     // Read generated markdown

@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ContextPacket {
@@ -162,7 +162,10 @@ impl ContextPacket {
                     (None, Some(sn)) => sn.clone(),
                     (None, None) => "workspace".to_string(),
                 };
-                out.push_str(&format!("- **[{}]** on `{}`: {}\n", f.error_type, location, f.message));
+                out.push_str(&format!(
+                    "- **[{}]** on `{}`: {}\n",
+                    f.error_type, location, f.message
+                ));
                 if let Some(fix) = &f.fix_summary {
                     out.push_str(&format!("  *Past Fix / Solution*: {}\n", fix));
                 }
@@ -195,16 +198,28 @@ impl ContextPacket {
 
         // 5. Dependency Graph
         let g = &self.dependency_graph_subset;
-        if !g.direct_callers.is_empty() || !g.direct_callees.is_empty() || !g.affected_tests.is_empty() {
+        if !g.direct_callers.is_empty()
+            || !g.direct_callees.is_empty()
+            || !g.affected_tests.is_empty()
+        {
             out.push_str("## 🕸️ Dependency Graph Neighbors\n");
             if !g.direct_callers.is_empty() {
-                out.push_str(&format!("- **Direct Callers**: {}\n", g.direct_callers.join(", ")));
+                out.push_str(&format!(
+                    "- **Direct Callers**: {}\n",
+                    g.direct_callers.join(", ")
+                ));
             }
             if !g.direct_callees.is_empty() {
-                out.push_str(&format!("- **Direct Callees**: {}\n", g.direct_callees.join(", ")));
+                out.push_str(&format!(
+                    "- **Direct Callees**: {}\n",
+                    g.direct_callees.join(", ")
+                ));
             }
             if !g.affected_tests.is_empty() {
-                out.push_str(&format!("- **Affected Tests**: {}\n", g.affected_tests.join(", ")));
+                out.push_str(&format!(
+                    "- **Affected Tests**: {}\n",
+                    g.affected_tests.join(", ")
+                ));
             }
             out.push('\n');
         }
@@ -213,7 +228,10 @@ impl ContextPacket {
         if !self.architectural_decisions.is_empty() {
             out.push_str("## 🏛️ Architectural Decisions (ADRs)\n");
             for adr in &self.architectural_decisions {
-                out.push_str(&format!("- **{}** (status: {}): {}\n", adr.title, adr.status, adr.description));
+                out.push_str(&format!(
+                    "- **{}** (status: {}): {}\n",
+                    adr.title, adr.status, adr.description
+                ));
             }
             out.push('\n');
         }

@@ -1,10 +1,10 @@
-use std::sync::Arc;
-use clap::{Args, Subcommand};
 use crate::agent::tools::ToolRegistry;
 use crate::agent::{AgentLoop, Planner};
 use crate::config::Config;
 use crate::llm::{LlmProvider, MockLlmClient, OpenRouterClient};
 use crate::memory::MemoryEngine;
+use clap::{Args, Subcommand};
+use std::sync::Arc;
 
 #[derive(Subcommand, Debug)]
 pub enum TaskCommands {
@@ -87,7 +87,9 @@ pub async fn handle_task_command(
             } else if let Some(key) = api_key {
                 Arc::new(OpenRouterClient::new(key))
             } else {
-                println!("   [Notice: OPENROUTER_API_KEY not set; using deterministic mock client]");
+                println!(
+                    "   [Notice: OPENROUTER_API_KEY not set; using deterministic mock client]"
+                );
                 Arc::new(MockLlmClient::new())
             };
 
@@ -117,11 +119,20 @@ pub async fn handle_task_command(
                 );
                 if !n.output_snippet.is_empty() {
                     let preview = n.output_snippet.replace('\n', " ");
-                    println!("          Output: {}", if preview.len() > 80 { format!("{}...", &preview[..80]) } else { preview });
+                    println!(
+                        "          Output: {}",
+                        if preview.len() > 80 {
+                            format!("{}...", &preview[..80])
+                        } else {
+                            preview
+                        }
+                    );
                 }
             });
 
-            let summary = agent_loop.execute_task(&args.prompt, Some(listener)).await?;
+            let summary = agent_loop
+                .execute_task(&args.prompt, Some(listener))
+                .await?;
 
             println!("\n✨ Task Finished (Status: {})", summary.status);
             println!("   Total Steps: {}", summary.total_steps);
@@ -131,7 +142,10 @@ pub async fn handle_task_command(
                 println!("   Memory Context: Retrieved and applied to prompt");
             }
             if !summary.touched_files.is_empty() {
-                println!("   Synchronized Files: {}", summary.touched_files.join(", "));
+                println!(
+                    "   Synchronized Files: {}",
+                    summary.touched_files.join(", ")
+                );
             }
             if !summary.final_response.is_empty() {
                 println!("\nSummary Conclusion:\n{}", summary.final_response);
@@ -141,9 +155,15 @@ pub async fn handle_task_command(
             let plan = if !args.no_retrieval {
                 if let Some(mem) = &memory {
                     let engine = crate::retrieval::RetrievalEngine::new(mem, &config, &repo_root);
-                    match engine.retrieve_context(&args.prompt, &crate::retrieval::RetrievalOptions::default()) {
+                    match engine.retrieve_context(
+                        &args.prompt,
+                        &crate::retrieval::RetrievalOptions::default(),
+                    ) {
                         Ok(ctx) => {
-                            println!("🧠 Retrieved Repository Memory Context ({} tokens budget used)\n", ctx.token_budget_report.total_tokens);
+                            println!(
+                                "🧠 Retrieved Repository Memory Context ({} tokens budget used)\n",
+                                ctx.token_budget_report.total_tokens
+                            );
                             Planner::create_plan_with_context(&args.prompt, &ctx)
                         }
                         Err(_) => Planner::create_plan(&args.prompt),

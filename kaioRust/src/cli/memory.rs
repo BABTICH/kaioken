@@ -1,8 +1,8 @@
-use clap::Subcommand;
 use crate::config::Config;
 use crate::error::KaiokenError;
 use crate::memory::{CommitAnalyzer, MemoryEngine};
 use crate::scanner::{ChangeType, FileInventory, FileInventoryOptions, GitScanner, ScanLock};
+use clap::Subcommand;
 
 #[derive(Subcommand)]
 pub enum MemoryCommands {
@@ -52,6 +52,39 @@ pub enum MemoryCommands {
         #[arg(long)]
         uninstall: bool,
     },
+    /// Explain the agent's internal memory and understanding of a file
+    Explain(MemoryExplainArgs),
+    /// Show recent commit memories and learned changes
+    Recent(MemoryRecentArgs),
+}
+
+#[derive(clap::Args, Debug, Clone, Default)]
+pub struct MemoryExplainArgs {
+    /// File path to explain (relative or absolute)
+    pub path: String,
+
+    /// Output as structured JSON
+    #[arg(long)]
+    pub json: bool,
+}
+
+#[derive(clap::Args, Debug, Clone, Default)]
+pub struct MemoryRecentArgs {
+    /// Number of recent commits to show
+    #[arg(long, default_value = "10")]
+    pub last: usize,
+
+    /// Filter by minimum risk level (low, medium, high, critical)
+    #[arg(long)]
+    pub min_risk: Option<String>,
+
+    /// Show only commits touching a specific file
+    #[arg(long)]
+    pub file: Option<String>,
+
+    /// Output as structured JSON
+    #[arg(long)]
+    pub json: bool,
 }
 
 pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenError> {
@@ -61,10 +94,16 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
             let repo_root = GitScanner::find_repo_root(&current_dir).unwrap_or(current_dir);
             let config = Config::default_config();
             config.save(&repo_root)?;
-            
-            tracing::info!("Initialized .agent directory and config.toml at {}", repo_root.display());
+
+            tracing::info!(
+                "Initialized .agent directory and config.toml at {}",
+                repo_root.display()
+            );
             println!("✅ KAIOKEN initialized successfully!");
-            println!("   Config created at: {}/.agent/config.toml", repo_root.display());
+            println!(
+                "   Config created at: {}/.agent/config.toml",
+                repo_root.display()
+            );
             println!("   Next step: Run `kaioken memory status` to verify.");
         }
         MemoryCommands::Status => {
@@ -79,7 +118,7 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
             println!("   Docs Output:   {}", config.docs.output);
             println!("   LLM Provider:  {}", config.llm.provider);
             println!("   Planner Model: {}", config.llm.planner_model);
-            
+
             let db_path = repo_root.join(&config.memory.database);
             if db_path.exists() {
                 match MemoryEngine::open(&db_path) {
@@ -90,8 +129,15 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
                         let c_count = mem.count_commits().unwrap_or(0);
                         let recent = mem.get_recent_commits(1).unwrap_or_default();
                         let commit_str = if let Some(latest) = recent.first() {
-                            let short_h = if latest.hash.len() >= 8 { &latest.hash[0..8] } else { &latest.hash };
-                            format!("{} commits indexed (latest: {} - \"{}\")", c_count, short_h, latest.message)
+                            let short_h = if latest.hash.len() >= 8 {
+                                &latest.hash[0..8]
+                            } else {
+                                &latest.hash
+                            };
+                            format!(
+                                "{} commits indexed (latest: {} - \"{}\")",
+                                c_count, short_h, latest.message
+                            )
                         } else {
                             format!("{} commits indexed", c_count)
                         };
@@ -105,7 +151,9 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
                     }
                 }
             } else {
-                println!("   Memory DB:     ⚠️  Not found (Run `kaioken memory scan` to initialize)");
+                println!(
+                    "   Memory DB:     ⚠️  Not found (Run `kaioken memory scan` to initialize)"
+                );
             }
 
             // Post-commit hook status
@@ -121,7 +169,12 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
                 println!("   Git Hook:      ⚪ Not installed (run `kaioken memory hook --install` to enable)");
             }
         }
-        MemoryCommands::Commit { hash, no_llm, hook, json } => {
+        MemoryCommands::Commit {
+            hash,
+            no_llm,
+            hook,
+            json,
+        } => {
             let current_dir = std::env::current_dir()?;
             let repo_root = GitScanner::find_repo_root(&current_dir).unwrap_or(current_dir);
             let agent_dir = repo_root.join(Config::AGENT_DIR);
@@ -145,7 +198,10 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
                 Some(ci) => ci,
                 None => {
                     if !hook {
-                        println!("⚠️  Commit '{}' not found or repository has no commits yet.", commit_ref);
+                        println!(
+                            "⚠️  Commit '{}' not found or repository has no commits yet.",
+                            commit_ref
+                        );
                     }
                     return Ok(());
                 }
@@ -179,12 +235,32 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
             println!("│           KAIOKEN AGENT: COMMIT MEMORY GENERATOR       │");
             println!("├────────────────────────────────────────────────────────┤");
             println!("│ Commit Hash:     {:<38} │", hash_short);
-            println!("│ Author:          {:<38} │", if commit_info.author_name.len() > 38 { &commit_info.author_name[0..35] } else { &commit_info.author_name });
-            println!("│ Risk Level:      {:<38} │", analysis.risk_level.to_uppercase());
+            println!(
+                "│ Author:          {:<38} │",
+                if commit_info.author_name.len() > 38 {
+                    &commit_info.author_name[0..35]
+                } else {
+                    &commit_info.author_name
+                }
+            );
+            println!(
+                "│ Risk Level:      {:<38} │",
+                analysis.risk_level.to_uppercase()
+            );
             println!("│ Changed Files:   {:<38} │", analysis.changed_files_count);
-            println!("│ Affected Symbols:{:<38} │", analysis.affected_symbols_count);
+            println!(
+                "│ Affected Symbols:{:<38} │",
+                analysis.affected_symbols_count
+            );
             println!("│ Database ID:     {:<38} │", commit_id);
-            println!("│ Mode:            {:<38} │", if no_llm { "Deterministic (--no-llm)" } else { "Standard" });
+            println!(
+                "│ Mode:            {:<38} │",
+                if no_llm {
+                    "Deterministic (--no-llm)"
+                } else {
+                    "Standard"
+                }
+            );
             println!("└────────────────────────────────────────────────────────┘");
 
             if !analysis.touched_symbols.is_empty() {
@@ -192,12 +268,20 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
                 for sym in &analysis.touched_symbols {
                     println!(
                         "  - `{}` ({} in `{}`:L{}-L{}, {})",
-                        sym.symbol_name, sym.symbol_kind, sym.file_path, sym.line_start, sym.line_end, sym.change_type
+                        sym.symbol_name,
+                        sym.symbol_kind,
+                        sym.file_path,
+                        sym.line_start,
+                        sym.line_end,
+                        sym.change_type
                     );
                 }
             }
 
-            println!("\n✅ Commit memory indexed to SQLite database (id: {}).", commit_id);
+            println!(
+                "\n✅ Commit memory indexed to SQLite database (id: {}).",
+                commit_id
+            );
             if hook {
                 println!("   (Generated automatically via git post-commit hook)");
             }
@@ -205,51 +289,58 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
         MemoryCommands::Hook { install, uninstall } => {
             let current_dir = std::env::current_dir()?;
             let repo_root = GitScanner::find_repo_root(&current_dir).unwrap_or(current_dir);
-            let git_hooks_dir = repo_root.join(".git").join("hooks");
-
-            if !git_hooks_dir.exists() {
-                let _ = std::fs::create_dir_all(&git_hooks_dir);
-            }
-
-            let post_commit_file = git_hooks_dir.join("post-commit");
 
             if uninstall {
-                if post_commit_file.exists() {
-                    std::fs::remove_file(&post_commit_file)?;
-                    println!("✅ Git post-commit hook removed from {}", post_commit_file.display());
-                } else {
-                    println!("ℹ️  No post-commit hook was found at {}", post_commit_file.display());
+                let outcome = crate::hook::HookManager::uninstall(&repo_root)?;
+                match outcome {
+                    crate::hook::UninstallOutcome::RemovedAndDeletedFile(path) => {
+                        println!("✅ Git post-commit hook removed from {}", path.display());
+                    }
+                    crate::hook::UninstallOutcome::RemovedBlock(path) => {
+                        println!(
+                            "✅ Kaioken hook block removed from {} (other hooks preserved)",
+                            path.display()
+                        );
+                    }
+                    crate::hook::UninstallOutcome::NotInstalled(path) => {
+                        println!("ℹ️  No Kaioken hook was found at {}", path.display());
+                    }
+                    crate::hook::UninstallOutcome::FileNotFound(path) => {
+                        println!("ℹ️  No post-commit hook was found at {}", path.display());
+                    }
                 }
                 return Ok(());
             }
 
             if install {
-                let script_content = "#!/bin/sh\n# KAIOKEN Agent post-commit hook (auto-generated)\nkaioken memory commit --hook || true\n";
-                std::fs::write(&post_commit_file, script_content)?;
-                #[cfg(unix)]
-                {
-                    use std::os::unix::fs::PermissionsExt;
-                    let _ = std::fs::set_permissions(&post_commit_file, std::fs::Permissions::from_mode(0o755));
+                let outcome = crate::hook::HookManager::install(&repo_root, false, "/bin/sh")?;
+                match outcome {
+                    crate::hook::InstallOutcome::InstalledFresh(path)
+                    | crate::hook::InstallOutcome::Appended(path)
+                    | crate::hook::InstallOutcome::Replaced(path) => {
+                        println!("✅ Git post-commit hook installed successfully!");
+                        println!("   Location: {}", path.display());
+                        println!("   After each commit, KAIOKEN will automatically update commit memory and touched symbols.");
+                    }
+                    crate::hook::InstallOutcome::AlreadyInstalled(path) => {
+                        println!(
+                            "ℹ️  Git post-commit hook is already installed at {}",
+                            path.display()
+                        );
+                    }
                 }
-                println!("✅ Git post-commit hook installed successfully!");
-                println!("   Location: {}", post_commit_file.display());
-                println!("   After each commit, KAIOKEN will automatically update commit memory and touched symbols.");
                 return Ok(());
             }
 
             // Status check
-            if post_commit_file.exists() {
-                let content = std::fs::read_to_string(&post_commit_file).unwrap_or_default();
-                if content.contains("kaioken") {
-                    println!("✅ Git post-commit hook is active at {}", post_commit_file.display());
-                } else {
-                    println!("⚠️  A post-commit hook exists at {} but does not invoke kaioken.", post_commit_file.display());
-                }
-            } else {
-                println!("ℹ️  Git post-commit hook is not installed. Run `kaioken memory hook --install` to activate.");
-            }
+            let status = crate::hook::HookManager::status(&repo_root)?;
+            println!("{}", status.render_terminal());
         }
-        MemoryCommands::Scan { changed, no_llm, json } => {
+        MemoryCommands::Scan {
+            changed,
+            no_llm,
+            json,
+        } => {
             let current_dir = std::env::current_dir()?;
             let repo_root = GitScanner::find_repo_root(&current_dir).unwrap_or(current_dir);
             let agent_dir = repo_root.join(Config::AGENT_DIR);
@@ -292,35 +383,74 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
                 println!("┌────────────────────────────────────────────────────────┐");
                 println!("│           KAIOKEN AGENT: GIT CHANGE DETECTION          │");
                 println!("├────────────────────────────────────────────────────────┤");
-                println!("│ Repo Root:       {:<38} │", repo_root.file_name().unwrap_or_default().to_string_lossy());
+                println!(
+                    "│ Repo Root:       {:<38} │",
+                    repo_root.file_name().unwrap_or_default().to_string_lossy()
+                );
                 if let Some(c) = &commit_info {
-                    println!("│ HEAD Commit:     {:<38} │", &c.hash[0..8.min(c.hash.len())]);
+                    println!(
+                        "│ HEAD Commit:     {:<38} │",
+                        &c.hash[0..8.min(c.hash.len())]
+                    );
                     println!("│ Author:          {:<38} │", c.author_name);
-                    println!("│ Commit Msg:      {:<38} │", if c.message.len() > 38 { &c.message[0..35] } else { &c.message });
+                    println!(
+                        "│ Commit Msg:      {:<38} │",
+                        if c.message.len() > 38 {
+                            &c.message[0..35]
+                        } else {
+                            &c.message
+                        }
+                    );
                 } else {
-                    println!("│ HEAD Commit:     {:<38} │", "No commits yet (Fresh repository)");
+                    println!(
+                        "│ HEAD Commit:     {:<38} │",
+                        "No commits yet (Fresh repository)"
+                    );
                 }
                 println!("│ Changed Files:   {:<38} │", changed_files.len());
                 if let Some(ref ca) = commit_analysis {
                     println!("│ Risk Level:      {:<38} │", ca.risk_level.to_uppercase());
                     println!("│ Affected Symbols:{:<38} │", ca.affected_symbols_count);
                 }
-                println!("│ Scan Mode:       {:<38} │", if no_llm { "Deterministic (--no-llm)" } else { "Standard" });
+                println!(
+                    "│ Scan Mode:       {:<38} │",
+                    if no_llm {
+                        "Deterministic (--no-llm)"
+                    } else {
+                        "Standard"
+                    }
+                );
                 println!("└────────────────────────────────────────────────────────┘");
 
                 if changed_files.is_empty() {
-                    println!("\nNo modified, staged, or untracked files detected in this repository.");
+                    println!(
+                        "\nNo modified, staged, or untracked files detected in this repository."
+                    );
                 } else {
                     println!("\nDetected Changed Files (Working Tree & Recent Commit):");
                     for f in &changed_files {
                         let path_str = f.path.to_string_lossy();
                         match f.change_type {
                             ChangeType::Renamed => {
-                                let old_str = f.old_path.as_ref().map(|p| p.to_string_lossy().to_string()).unwrap_or_default();
-                                println!("  {} {} (renamed from {})", f.change_type.badge(), path_str, old_str);
+                                let old_str = f
+                                    .old_path
+                                    .as_ref()
+                                    .map(|p| p.to_string_lossy().to_string())
+                                    .unwrap_or_default();
+                                println!(
+                                    "  {} {} (renamed from {})",
+                                    f.change_type.badge(),
+                                    path_str,
+                                    old_str
+                                );
                             }
                             _ => {
-                                println!("  {} {} ({})", f.change_type.badge(), path_str, f.change_type.description());
+                                println!(
+                                    "  {} {} ({})",
+                                    f.change_type.badge(),
+                                    path_str,
+                                    f.change_type.description()
+                                );
                             }
                         }
                     }
@@ -332,12 +462,19 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
                         for sym in &ca.touched_symbols {
                             println!(
                                 "  - `{}` ({} in `{}`:L{}-L{}, {})",
-                                sym.symbol_name, sym.symbol_kind, sym.file_path, sym.line_start, sym.line_end, sym.change_type
+                                sym.symbol_name,
+                                sym.symbol_kind,
+                                sym.file_path,
+                                sym.line_start,
+                                sym.line_end,
+                                sym.change_type
                             );
                         }
                     }
                 }
-                println!("\n✓ Commit memory and changed files synchronized to SQLite memory database.");
+                println!(
+                    "\n✓ Commit memory and changed files synchronized to SQLite memory database."
+                );
             } else {
                 // Full repository inventory walk
                 let config = Config::load(&repo_root).unwrap_or_else(|_| Config::default_config());
@@ -377,11 +514,21 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
                 println!("┌────────────────────────────────────────────────────────┐");
                 println!("│           KAIOKEN AGENT: REPOSITORY INVENTORY          │");
                 println!("├────────────────────────────────────────────────────────┤");
-                println!("│ Workspace Root:  {:<38} │", repo_root.file_name().unwrap_or_default().to_string_lossy());
+                println!(
+                    "│ Workspace Root:  {:<38} │",
+                    repo_root.file_name().unwrap_or_default().to_string_lossy()
+                );
                 println!("│ Total Files:     {:<38} │", summary.total_files);
                 println!("│ Total Symbols:   {:<38} │", summary.total_symbols);
                 println!("│ Total Size:      {:<38} │", size_str);
-                println!("│ Scan Mode:       {:<38} │", if no_llm { "Deterministic (--no-llm)" } else { "Standard" });
+                println!(
+                    "│ Scan Mode:       {:<38} │",
+                    if no_llm {
+                        "Deterministic (--no-llm)"
+                    } else {
+                        "Standard"
+                    }
+                );
                 println!("├────────────────────────────────────────────────────────┤");
                 println!("│ Breakdown by Language:                                 │");
                 for (lang, count) in &summary.files_by_language {
@@ -397,7 +544,11 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
                 // Preview first 15 files
                 println!("\nSample Discovered Files (Pre-filtered, Hashed & Parsed):");
                 for file in summary.files.iter().take(15) {
-                    let hash_preview = file.file_hash.as_ref().map(|h| &h[0..8.min(h.len())]).unwrap_or("-");
+                    let hash_preview = file
+                        .file_hash
+                        .as_ref()
+                        .map(|h| &h[0..8.min(h.len())])
+                        .unwrap_or("-");
                     let size_kb = (file.size as f64) / 1024.0;
                     let sym_info = if !file.symbols.is_empty() {
                         format!(", {} symbols", file.symbols.len())
@@ -426,6 +577,91 @@ pub async fn handle_memory_command(cmd: MemoryCommands) -> Result<(), KaiokenErr
                     sync_stats.imports_synced,
                     config.memory.database
                 );
+            }
+        }
+        MemoryCommands::Explain(args) => {
+            let current_dir = std::env::current_dir()?;
+            let repo_root = GitScanner::find_repo_root(&current_dir).unwrap_or(current_dir);
+            let config = Config::load(&repo_root).unwrap_or_else(|_| Config::default_config());
+            let db_path = repo_root.join(&config.memory.database);
+
+            if !db_path.exists() {
+                if args.json {
+                    let err_json = serde_json::json!({
+                        "error": "not_scanned",
+                        "message": "File not yet scanned — run `kaioken memory scan` first."
+                    });
+                    println!("{}", serde_json::to_string_pretty(&err_json).unwrap());
+                } else {
+                    println!("⚠️  File not yet scanned — run `kaioken memory scan` first.");
+                }
+                return Ok(());
+            }
+
+            let memory = MemoryEngine::open(&db_path)?;
+            let normalized_path = crate::memory::normalize_file_path(&args.path, &repo_root);
+
+            match memory.explain_file(&normalized_path) {
+                Ok(explanation) => {
+                    if args.json {
+                        let json_str = serde_json::to_string_pretty(&explanation)
+                            .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+                        println!("{}", json_str);
+                    } else {
+                        println!("{}", explanation.render_terminal());
+                    }
+                }
+                Err(_) => {
+                    if args.json {
+                        let err_json = serde_json::json!({
+                            "error": "file_not_found",
+                            "file": normalized_path,
+                            "message": "File not yet scanned — run `kaioken memory scan` first."
+                        });
+                        println!("{}", serde_json::to_string_pretty(&err_json).unwrap());
+                    } else {
+                        println!("⚠️  File not yet scanned — run `kaioken memory scan` first.");
+                    }
+                }
+            }
+        }
+        MemoryCommands::Recent(args) => {
+            let current_dir = std::env::current_dir()?;
+            let repo_root = GitScanner::find_repo_root(&current_dir).unwrap_or(current_dir);
+            let config = Config::load(&repo_root).unwrap_or_else(|_| Config::default_config());
+            let db_path = repo_root.join(&config.memory.database);
+
+            if !db_path.exists() {
+                if args.json {
+                    let empty_res = crate::memory::MemoryRecentResult {
+                        total_commits: 0,
+                        shown_commits: 0,
+                        commits: Vec::new(),
+                    };
+                    println!("{}", serde_json::to_string_pretty(&empty_res).unwrap());
+                } else {
+                    println!("⚠️  Memory database not found. Run `kaioken memory scan` or `kaioken memory commit` first.");
+                }
+                return Ok(());
+            }
+
+            let memory = MemoryEngine::open(&db_path)?;
+            let norm_file = args
+                .file
+                .as_deref()
+                .map(|f| crate::memory::normalize_file_path(f, &repo_root));
+            let result = memory.get_recent_commits_filtered(
+                args.last,
+                args.min_risk.as_deref(),
+                norm_file.as_deref(),
+            )?;
+
+            if args.json {
+                let json_str = serde_json::to_string_pretty(&result)
+                    .map_err(|e| KaiokenError::MemoryError(e.to_string()))?;
+                println!("{}", json_str);
+            } else {
+                println!("{}", result.render_terminal());
             }
         }
     }

@@ -12,8 +12,7 @@ pub use budget::{BudgetConfig, BudgetManager, TokenEstimator};
 pub use cache::RetrievalCacheStore;
 pub use context_packet::{
     CommitSummarySnippet, ContextPacket, DecisionSnippet, DocStalenessWarning,
-    FailureMemorySnippet, FileContextSnippet, GraphSubset, SymbolContextSummary,
-    TokenBudgetReport,
+    FailureMemorySnippet, FileContextSnippet, GraphSubset, SymbolContextSummary, TokenBudgetReport,
 };
 pub use doc_lookup::DocLookup;
 pub use failure_lookup::FailureLookup;

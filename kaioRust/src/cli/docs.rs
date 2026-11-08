@@ -95,9 +95,12 @@ pub async fn handle_docs_command(cmd: DocsCommands) -> Result<()> {
 
             if let Some(target_path) = path {
                 let normalized = target_path.replace('\\', "/");
-                let file_rec = memory
-                    .get_file_by_path(&normalized)?
-                    .ok_or_else(|| KaiokenError::DocError(format!("File '{}' not found in memory database. Run `kaioken memory scan` first.", normalized)))?;
+                let file_rec = memory.get_file_by_path(&normalized)?.ok_or_else(|| {
+                    KaiokenError::DocError(format!(
+                        "File '{}' not found in memory database. Run `kaioken memory scan` first.",
+                        normalized
+                    ))
+                })?;
 
                 let res = generator.generate_file_doc(&file_rec, &memory, &options)?;
 
@@ -138,10 +141,23 @@ pub async fn handle_docs_command(cmd: DocsCommands) -> Result<()> {
             println!("┌────────────────────────────────────────────────────────┐");
             println!("│           KAIOKEN AGENT: DOCUMENTATION GENERATOR       │");
             println!("├────────────────────────────────────────────────────────┤");
-            println!("│ Repository Root: {:<38} │", repo_root.file_name().unwrap_or_default().to_string_lossy());
+            println!(
+                "│ Repository Root: {:<38} │",
+                repo_root.file_name().unwrap_or_default().to_string_lossy()
+            );
             println!("│ Output Path:     {:<38} │", config.docs.output);
-            println!("│ Target Level:    {:<38} │", format!("Level {} (Raw Facts)", level));
-            println!("│ Mode:            {:<38} │", if no_llm { "Deterministic (--no-llm)" } else { "Standard" });
+            println!(
+                "│ Target Level:    {:<38} │",
+                format!("Level {} (Raw Facts)", level)
+            );
+            println!(
+                "│ Mode:            {:<38} │",
+                if no_llm {
+                    "Deterministic (--no-llm)"
+                } else {
+                    "Standard"
+                }
+            );
             println!("├────────────────────────────────────────────────────────┤");
             println!("│ Total Processed: {:<38} │", summary.total_processed);
             println!("│ Newly Generated: {:<38} │", summary.generated);
@@ -214,7 +230,8 @@ pub async fn handle_docs_command(cmd: DocsCommands) -> Result<()> {
             let db_path = repo_root.join(&config.memory.database);
 
             let memory = MemoryEngine::open(&db_path)?;
-            let report = StalenessDetector::audit_and_clean(&repo_root, &docs_root, &memory, clean)?;
+            let report =
+                StalenessDetector::audit_and_clean(&repo_root, &docs_root, &memory, clean)?;
 
             if json {
                 let json_str = serde_json::to_string_pretty(&report)
@@ -239,15 +256,25 @@ pub async fn handle_docs_command(cmd: DocsCommands) -> Result<()> {
                 println!("\nDetected Issues:");
                 for item in &report.items {
                     if !item.is_valid {
-                        println!("  - {} -> {:?} ({})", item.file_path, item.status, item.doc_path);
+                        println!(
+                            "  - {} -> {:?} ({})",
+                            item.file_path, item.status, item.doc_path
+                        );
                     }
                 }
                 if clean {
-                    println!("\n🧹 Cleaned {} orphaned documentation files.", report.cleaned_docs);
+                    println!(
+                        "\n🧹 Cleaned {} orphaned documentation files.",
+                        report.cleaned_docs
+                    );
                 } else {
-                    println!("\nRun `kaioken docs generate --stale` to refresh stale documentation.");
+                    println!(
+                        "\nRun `kaioken docs generate --stale` to refresh stale documentation."
+                    );
                     if report.orphaned_docs > 0 {
-                        println!("Run `kaioken docs verify --clean` to remove orphaned documentation.");
+                        println!(
+                            "Run `kaioken docs verify --clean` to remove orphaned documentation."
+                        );
                     }
                 }
             } else {
@@ -275,7 +302,10 @@ pub async fn handle_docs_command(cmd: DocsCommands) -> Result<()> {
             println!("├────────────────────────────────────────────────────────┤");
             println!("│ Changed Files:   {:<38} │", report.changed_files.len());
             println!("│ Directly Stale:  {:<38} │", report.directly_stale.len());
-            println!("│ 1-Hop Dependents:{:<38} │", report.maybe_stale_dependents.len());
+            println!(
+                "│ 1-Hop Dependents:{:<38} │",
+                report.maybe_stale_dependents.len()
+            );
             println!("│ Cascade Depth:   {:<38} │", report.cascade_depth);
             println!("└────────────────────────────────────────────────────────┘");
 

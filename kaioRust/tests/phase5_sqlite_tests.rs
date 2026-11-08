@@ -1,12 +1,10 @@
-use std::sync::Arc;
-use std::thread;
-use tempfile::tempdir;
-use kaioken::memory::{
-    EdgeRecord, FileRecord, MemoryEngine, SymbolRecord,
-};
+use kaioken::memory::{EdgeRecord, FileRecord, MemoryEngine, SymbolRecord};
 use kaioken::scanner::{
     DiscoveredFile, ExtractedSymbol, InventorySummary, Language, ParseStatus, SymbolKind,
 };
+use std::sync::Arc;
+use std::thread;
+use tempfile::tempdir;
 
 #[test]
 fn test_sqlite_schema_init_and_pragmas() {
@@ -17,15 +15,21 @@ fn test_sqlite_schema_init_and_pragmas() {
     let conn = engine.db().connection();
 
     // Verify WAL mode
-    let journal_mode: String = conn.query_row("PRAGMA journal_mode;", [], |r| r.get(0)).unwrap();
+    let journal_mode: String = conn
+        .query_row("PRAGMA journal_mode;", [], |r| r.get(0))
+        .unwrap();
     assert_eq!(journal_mode.to_lowercase(), "wal");
 
     // Verify foreign keys enabled
-    let foreign_keys: i32 = conn.query_row("PRAGMA foreign_keys;", [], |r| r.get(0)).unwrap();
+    let foreign_keys: i32 = conn
+        .query_row("PRAGMA foreign_keys;", [], |r| r.get(0))
+        .unwrap();
     assert_eq!(foreign_keys, 1);
 
     // Verify busy timeout
-    let busy_timeout: i32 = conn.query_row("PRAGMA busy_timeout;", [], |r| r.get(0)).unwrap();
+    let busy_timeout: i32 = conn
+        .query_row("PRAGMA busy_timeout;", [], |r| r.get(0))
+        .unwrap();
     assert_eq!(busy_timeout, 5000);
 }
 
@@ -94,7 +98,9 @@ fn test_sqlite_foreign_key_cascade_deletion() {
 
     let sym = SymbolRecord::new(file_id, "temporary", "function", 1, 10);
     engine.insert_symbols(file_id, &[sym]).unwrap();
-    engine.insert_raw_imports(file_id, &["use std::io;".to_string()]).unwrap();
+    engine
+        .insert_raw_imports(file_id, &["use std::io;".to_string()])
+        .unwrap();
 
     assert_eq!(engine.count_files().unwrap(), 1);
     assert_eq!(engine.count_symbols().unwrap(), 1);
@@ -105,8 +111,16 @@ fn test_sqlite_foreign_key_cascade_deletion() {
 
     // Verify cascade deleted associated symbols and imports
     assert_eq!(engine.count_files().unwrap(), 0);
-    assert_eq!(engine.count_symbols().unwrap(), 0, "Symbols must be cascade deleted");
-    assert_eq!(engine.count_raw_imports().unwrap(), 0, "Imports must be cascade deleted");
+    assert_eq!(
+        engine.count_symbols().unwrap(),
+        0,
+        "Symbols must be cascade deleted"
+    );
+    assert_eq!(
+        engine.count_raw_imports().unwrap(),
+        0,
+        "Imports must be cascade deleted"
+    );
 }
 
 #[test]
@@ -145,17 +159,15 @@ fn test_sqlite_sync_inventory_bridge() {
         file_hash: Some("hash1".to_string()),
         parse_status: ParseStatus::Ok,
         last_modified: Some("2026-10-08T19:00:00Z".to_string()),
-        symbols: vec![
-            ExtractedSymbol {
-                name: "main".to_string(),
-                kind: SymbolKind::Function,
-                line_start: 1,
-                line_end: 10,
-                visibility: "pub".to_string(),
-                signature: Some("pub fn main()".to_string()),
-                parent: None,
-            },
-        ],
+        symbols: vec![ExtractedSymbol {
+            name: "main".to_string(),
+            kind: SymbolKind::Function,
+            line_start: 1,
+            line_end: 10,
+            visibility: "pub".to_string(),
+            signature: Some("pub fn main()".to_string()),
+            parent: None,
+        }],
         imports_raw: vec!["use std::path::Path;".to_string()],
         imports: vec!["std::path::Path".to_string()],
         exports: vec!["main".to_string()],
@@ -196,8 +208,16 @@ fn test_sqlite_sync_inventory_bridge() {
     // Re-running sync updates existing records idempotently
     let stats2 = engine.sync_inventory(&summary).unwrap();
     assert_eq!(stats2.files_synced, 2);
-    assert_eq!(engine.count_files().unwrap(), 2, "File count must remain 2 after re-sync");
-    assert_eq!(engine.count_symbols().unwrap(), 1, "Symbol count must remain 1 after re-sync");
+    assert_eq!(
+        engine.count_files().unwrap(),
+        2,
+        "File count must remain 2 after re-sync"
+    );
+    assert_eq!(
+        engine.count_symbols().unwrap(),
+        1,
+        "Symbol count must remain 1 after re-sync"
+    );
 }
 
 #[test]
@@ -247,5 +267,9 @@ fn test_sqlite_concurrency_readers_and_writer() {
 
     let final_engine = MemoryEngine::open(&db_path).unwrap();
     let final_count = final_engine.count_files().unwrap();
-    assert_eq!(final_count, 1 + (2 * 10), "Must contain initial file plus all writer insertions");
+    assert_eq!(
+        final_count,
+        1 + (2 * 10),
+        "Must contain initial file plus all writer insertions"
+    );
 }
