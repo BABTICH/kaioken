@@ -14,7 +14,7 @@
   <a href=".kaio/kaiopi/docs/roadmap/README.md"><img src="https://img.shields.io/badge/Roadmap-2%2C000%20Features%20Complete-brightgreen.svg" alt="Roadmap"></a>
   <a href="#testing--quality-assurance"><img src="https://img.shields.io/badge/Tests-2%2C078%2B%20Offline%20Passing-brightgreen.svg" alt="Tests"></a>
   <a href="https://kaioken.vercel.app"><img src="https://img.shields.io/badge/Docs%20%26%20Showcase-Live-purple.svg" alt="Website"></a>
-  <a href="#license--authors"><img src="https://img.shields.io/badge/License-License%20Zero-yellow.svg" alt="License"></a>
+  <a href="#contributing--license"><img src="https://img.shields.io/badge/License-License%20Zero-yellow.svg" alt="License"></a>
 </p>
 
 ---
